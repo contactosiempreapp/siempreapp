@@ -169,6 +169,24 @@
     border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px;
   }
 
+  /* Aspirina — indicación */
+  .asp-indicacion { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, #EEF2FB, #F6F1FC); border-radius: 14px; padding: 16px; }
+  .asp-moon {
+    width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0; position: relative;
+    background: radial-gradient(circle at 35% 30%, #2E3B6B, #131A38 75%);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: inset -3px -3px 6px rgba(0,0,0,0.35), 0 4px 10px -4px rgba(19,26,56,0.5);
+  }
+  .asp-moon svg { width: 26px; height: 26px; }
+  .asp-star { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #F4D998; }
+  .asp-star-1 { top: 8px; right: 6px; }
+  .asp-star-2 { bottom: 10px; right: 2px; width: 2px; height: 2px; }
+  .asp-indicacion-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 16px; color: var(--gray-900); }
+  .asp-indicacion-sub { font-size: 13px; color: var(--gray-600); font-weight: 600; margin-top: 2px; }
+  .banner-ok { background: var(--teal-light); border: 1.5px solid var(--teal); color: var(--teal-dark); border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
+  .banner-warn { background: var(--coral-light); border: 1.5px solid var(--coral); color: #8A2E22; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
+  .semana-actual-text { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); margin: 0; }
+
   /* MDPA */
   .alerta-severa { background: #FDEDEB; border: 1.5px solid var(--pink); color: #8A2E22; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
   .mdpa-table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -335,9 +353,28 @@
 
     <!-- ASPIRINA -->
     <div class="panel" id="panel-aspirina">
+      <div class="card" id="aspirina-indicacion-card">
+        <div class="asp-indicacion">
+          <div class="asp-moon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M17.5 3.5a9 9 0 1 0 3 15.6A9.5 9.5 0 0 1 17.5 3.5z" fill="#F4D998"/></svg>
+            <span class="asp-star asp-star-1"></span>
+            <span class="asp-star asp-star-2"></span>
+          </div>
+          <div>
+            <div class="asp-indicacion-title">Aspirina 100–150 mg</div>
+            <div class="asp-indicacion-sub">1 comprimido a la noche</div>
+          </div>
+        </div>
+        <p class="helper" style="margin-top:12px; margin-bottom:0;">Se te indicó como prevención de preeclampsia. Tomala siempre a la misma hora, junto con la cena o antes de dormir.</p>
+      </div>
+
+      <div class="card" id="aspirina-semana-card">
+        <div id="asp-semana-info"><p class="helper" style="margin-bottom:0;">Cargando información de tu embarazo...</p></div>
+      </div>
+
       <div class="card" id="aspirina-card">
         <h2>Aspirina <span class="pill-teal" id="aspirina-mes-label">—</span></h2>
-        <p class="helper">Tocá el día de hoy para marcar si tomaste tu aspirina. Un toque = tomada (verde), dos toques = no tomada (rosa).</p>
+        <p class="helper">Tocá el día de hoy para marcar si tomaste tu aspirina. Un toque = tomada (verde), dos toques = no tomada (rosa). Todo lo que registres queda guardado en tu historial: nada se borra, y tu médica lo va a poder ver.</p>
         <div class="cal-grid" id="cal-dow-row"></div>
         <div class="cal-grid" id="cal-grid" style="margin-top:6px;"></div>
         <div class="legend">
@@ -1031,27 +1068,48 @@
     renderPrevios();
   });
 
-  function calcularEdadGestacional(fum, fppObstetra) {
+  let semanaGestacionalActual = null;
+
+  function calcularSemanas(fum, fppObstetra) {
     const base = fppObstetra ? new Date(fppObstetra) : (fum ? new Date(new Date(fum).getTime() + 280 * 86400000) : null);
     if (!base) return null;
     const hoy = new Date();
     const diasRestantes = Math.round((base - hoy) / 86400000);
     const diasTranscurridos = 280 - diasRestantes;
     if (diasTranscurridos < 0) return null;
-    const semanas = Math.floor(diasTranscurridos / 7);
-    const dias = diasTranscurridos % 7;
-    return `${semanas}s ${dias}d`;
+    return { semanas: Math.floor(diasTranscurridos / 7), dias: diasTranscurridos % 7 };
+  }
+  function calcularEdadGestacional(fum, fppObstetra) {
+    const r = calcularSemanas(fum, fppObstetra);
+    return r ? `${r.semanas}s ${r.dias}d` : null;
+  }
+  function renderAspirinaGestInfo() {
+    const cont = document.getElementById("asp-semana-info");
+    if (!cont) return;
+    if (semanaGestacionalActual == null) {
+      cont.innerHTML = `<p class="helper" style="margin-bottom:0;">Cargá la fecha de tu última menstruación en la solapa "Embarazos" para ver en qué semana estás y recibir avisos sobre tu aspirina.</p>`;
+      return;
+    }
+    let html = `<p class="semana-actual-text">Estás en la semana ${semanaGestacionalActual} de embarazo</p>`;
+    if (semanaGestacionalActual >= 12 && semanaGestacionalActual <= 18) {
+      html += `<div class="banner-ok">✓ Estás en la ventana recomendada (semana 12 a 18) para iniciar la aspirina, si tu médica te lo indicó.</div>`;
+    }
+    if (semanaGestacionalActual >= 36) {
+      html += `<div class="banner-warn">⚠ Estás en la semana 36 o más. Consultá con tu médica para reevaluar si corresponde continuar con la aspirina.</div>`;
+    }
+    cont.innerHTML = html;
   }
 
   async function initEmbarazos() {
     previosList = [];
     renderPrevios();
     const { data, error } = await sb.rpc("obtener_embarazos", { p_token: session.token });
-    if (error || !data || !data.ok) return;
+    if (error || !data || !data.ok) { semanaGestacionalActual = null; renderAspirinaGestInfo(); return; }
 
     previosList = data.previos || [];
     renderPrevios();
 
+    semanaGestacionalActual = null;
     if (data.actual && data.actual !== null) {
       const a = data.actual;
       if (a.fum) document.getElementById("ge-fum").value = a.fum;
@@ -1063,7 +1121,11 @@
       const eg = calcularEdadGestacional(a.fum, a.fpp_obstetra);
       const badge = document.getElementById("edad-gestacional-badge");
       if (eg) { badge.textContent = "Edad gestacional actual: " + eg; badge.style.display = "inline-block"; }
+
+      const r = calcularSemanas(a.fum, a.fpp_obstetra);
+      semanaGestacionalActual = r ? r.semanas : null;
     }
+    renderAspirinaGestInfo();
   }
   document.getElementById("guardar-embarazos-btn").addEventListener("click", async () => {
     const actual = {
