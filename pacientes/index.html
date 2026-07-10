@@ -169,6 +169,22 @@
     border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px;
   }
 
+  /* Embarazo actual — card cálida */
+  .embarazo-actual-card { background: linear-gradient(160deg, #FBEEE3 0%, #FDF8F3 100%); border-color: #F0D8C2; }
+  .emb-actual-header { display: flex; align-items: center; gap: 14px; }
+  .emb-illus { width: 62px; height: 62px; flex-shrink: 0; }
+  .emb-illus svg { width: 100%; height: 100%; }
+  .emb-actual-sub { font-size: 12px; color: #9C6B45; font-weight: 600; }
+  .fuente-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .fuente-opcion {
+    border: 1.5px solid var(--gray-300); border-radius: 12px; padding: 10px 12px; cursor: pointer;
+    display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--gray-900);
+    background: white; transition: border-color 0.15s, background 0.15s;
+  }
+  .fuente-opcion:has(input:checked) { border-color: #C77B4A; background: #FBEEE3; }
+  .fuente-opcion input { margin-top: 2px; accent-color: #C77B4A; }
+  .fuente-opcion small { font-weight: 500; color: var(--gray-600); }
+
   /* Presentación */
   .welcome-hero { text-align: center; padding: 26px 20px; background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
   .welcome-hero-msg { font-family: 'Fraunces', serif; font-weight: 600; font-size: 20px; color: var(--violet-deep); margin-bottom: 10px; }
@@ -204,6 +220,7 @@
   }
   .cal-pill-badge svg { width: 26px; height: 26px; }
   .banner-ok { background: var(--teal-light); border: 1.5px solid var(--teal); color: var(--teal-dark); border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
+  .banner-wait { background: var(--amber-light); border: 1.5px solid var(--amber); color: #6B4A0E; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
   .banner-warn { background: var(--coral-light); border: 1.5px solid var(--coral); color: #8A2E22; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
   .semana-actual-text { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); margin: 0; }
 
@@ -241,6 +258,14 @@
   .week-day-label { font-size: 10px; text-align: center; color: var(--gray-600); font-weight: 600; }
   .week-toggle { aspect-ratio: 1; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .week-toggle.on { background: var(--teal); border-color: var(--teal); }
+  .dia-actividad-row {
+    display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--gray-100);
+  }
+  .dia-actividad-row:last-child { border-bottom: none; }
+  .dia-actividad-row .dia-label { width: 58px; flex-shrink: 0; font-size: 12.5px; font-weight: 700; color: var(--gray-900); }
+  .dia-actividad-row select { flex: 1; margin: 0; padding: 9px 10px; font-size: 13px; }
+  .dia-actividad-row input[type="number"] { width: 64px; flex-shrink: 0; margin: 0; padding: 9px 6px; font-size: 13px; text-align: center; }
+  .dia-actividad-row .min-label { font-size: 11px; color: var(--gray-600); flex-shrink: 0; }
 
   /* info panels */
   .info-text { font-size: 14px; line-height: 1.7; color: var(--gray-900); white-space: pre-wrap; }
@@ -355,18 +380,51 @@
 
     <!-- EMBARAZOS -->
     <div class="panel" id="panel-embarazos">
-      <div class="card">
-        <h2>Embarazo actual</h2>
-        <p class="helper">Cargá la fecha de tu última menstruación y, si ya tenés la ecografía datante, esos datos. Con eso calculamos automáticamente en qué semana estás.</p>
-        <label for="ge-fum">Fecha de última menstruación (FUM)</label>
-        <input type="date" id="ge-fum">
-        <label for="ge-fecha-eco">Fecha de la ecografía datante</label>
-        <input type="date" id="ge-fecha-eco">
-        <div class="fila-2col">
-          <div><label for="ge-eco-sem">Semanas (en la eco)</label><input type="number" id="ge-eco-sem" min="0" max="42"></div>
-          <div><label for="ge-eco-dias">Días</label><input type="number" id="ge-eco-dias" min="0" max="6"></div>
+      <div class="card embarazo-actual-card">
+        <div class="emb-actual-header">
+          <div class="emb-illus">
+            <svg viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="56" r="30" fill="#FBEAD9" stroke="#C77B4A" stroke-width="2"/>
+              <path d="M50 47c-4-6-14-6-14 3 0 7 14 15 14 15s14-8 14-15c0-9-10-9-14-3z" fill="#E3986A" stroke="#C77B4A" stroke-width="1.3"/>
+              <circle cx="28" cy="28" r="2" fill="#E3986A"/>
+              <circle cx="74" cy="24" r="1.6" fill="#E3986A"/>
+              <circle cx="80" cy="46" r="1.3" fill="#E3986A"/>
+            </svg>
+          </div>
+          <div>
+            <h2 style="margin-bottom:2px;">Mi embarazo actual</h2>
+            <div class="emb-actual-sub">La info que va guiando el resto de la app</div>
+          </div>
         </div>
-        <label for="ge-fpp">Fecha probable de parto (indicada por tu obstetra)</label>
+
+        <p class="helper" style="margin-top:14px;">Elegí cómo calculamos tu semana de embarazo. Si tenés la fecha de tu última menstruación (FUM), usamos esa — es el dato más preciso.</p>
+
+        <div class="fuente-selector">
+          <label class="fuente-opcion">
+            <input type="radio" name="fuente-fecha" value="fum" id="fuente-fum" checked>
+            <span>Sé mi FUM<br><small>Fecha de última menstruación</small></span>
+          </label>
+          <label class="fuente-opcion">
+            <input type="radio" name="fuente-fecha" value="eco" id="fuente-eco">
+            <span>Solo tengo la eco<br><small>Semana que indicó la ecografía</small></span>
+          </label>
+        </div>
+
+        <div id="fum-block">
+          <label for="ge-fum">Fecha de última menstruación (FUM)</label>
+          <input type="date" id="ge-fum">
+        </div>
+
+        <div id="eco-block" style="display:none;">
+          <label for="ge-fecha-eco">Fecha en que te hicieron la ecografía</label>
+          <input type="date" id="ge-fecha-eco">
+          <div class="fila-2col">
+            <div><label for="ge-eco-sem">Semana que dice la eco</label><input type="number" id="ge-eco-sem" min="0" max="42"></div>
+            <div><label for="ge-eco-dias">Días</label><input type="number" id="ge-eco-dias" min="0" max="6"></div>
+          </div>
+        </div>
+
+        <label for="ge-fpp">Fecha probable de parto (si tu obstetra ya te la indicó)</label>
         <input type="date" id="ge-fpp">
         <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
       </div>
@@ -375,7 +433,7 @@
         <h2>Embarazos previos</h2>
         <p class="helper">Agregá uno por cada embarazo anterior, aunque no haya tenido complicaciones. Es información importante para tu seguimiento.</p>
         <div id="previos-list"></div>
-        <button type="button" class="tertiary" id="add-previo-btn">+ Agregar embarazo previo</button>
+        <button type="button" class="tertiary" id="add-previo-btn">+ Agregar otro embarazo previo</button>
         <button class="primary" id="guardar-embarazos-btn">Guardar</button>
         <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
       </div>
@@ -483,20 +541,29 @@
     <!-- ACTIVIDAD FÍSICA -->
     <div class="panel" id="panel-actividad-fisica">
       <div class="card"><h2>Actividad física recomendada</h2><div class="info-text" id="info-actividad-text">Cargando...</div></div>
+
+      <div class="card">
+        <h2>Pasos diarios</h2>
+        <div class="toggle-row"><span>¿Contás tus pasos diarios?</span><button class="switch" id="pasos-switch"></button></div>
+        <div id="pasos-input-wrap" style="display:none; margin-top:6px;">
+          <label for="pasos-promedio">Promedio de pasos por día</label>
+          <input type="number" id="pasos-promedio" min="0" step="100" placeholder="Ej: 5000">
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Trabajo</h2>
+        <div class="toggle-row"><span>¿Tu trabajo es sedentario?</span><button class="switch" id="sedentario-switch"></button></div>
+        <div id="pausas-wrap" style="display:none;">
+          <div class="toggle-row"><span>¿Hacés pausas activas?</span><button class="switch" id="pausas-switch"></button></div>
+        </div>
+      </div>
+
       <div class="card">
         <h2>Esta semana</h2>
-        <p class="helper">Elegí qué actividad estás haciendo y marcá los días en que la realizaste, de lunes a domingo.</p>
-        <label for="tipo-actividad-select">¿Qué actividad estás haciendo?</label>
-        <select id="tipo-actividad-select">
-          <option value="">Seleccioná una opción</option>
-          <option value="caminata">Caminata</option>
-          <option value="natacion">Natación</option>
-          <option value="yoga">Yoga / elongación</option>
-          <option value="gimnasia">Gimnasia para embarazadas</option>
-          <option value="bicicleta_fija">Bicicleta fija</option>
-          <option value="otra">Otra</option>
-        </select>
-        <div class="week-grid" id="week-grid"></div>
+        <p class="helper">Por cada día, elegí qué actividad hiciste y cuántos minutos. Si no hiciste nada ese día, dejalo en "Ninguna".</p>
+        <div id="dias-actividad-resumen" class="pill-teal" style="margin-bottom:12px; display:inline-block;">0 de 7 días activos</div>
+        <div id="dias-actividad-list"></div>
         <button class="secondary" id="guardar-actividad-btn" style="margin-top:14px;">Guardar semana</button>
       </div>
     </div>
@@ -1027,8 +1094,17 @@
 
   // ================= ACTIVIDAD FÍSICA =================
   const DIAS_SEMANA = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
-  const DIAS_SEMANA_LABEL = ["L", "M", "M", "J", "V", "S", "D"];
-  let actividadDias = {};
+  const DIAS_SEMANA_LABEL = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+  const OPCIONES_ACTIVIDAD = [
+    { id: "", label: "Ninguna" },
+    { id: "caminata", label: "Caminata" },
+    { id: "natacion", label: "Natación" },
+    { id: "yoga", label: "Yoga / elongación" },
+    { id: "gimnasia", label: "Gimnasia para embarazadas" },
+    { id: "bicicleta_fija", label: "Bicicleta fija" },
+    { id: "otra", label: "Otra" }
+  ];
+  let diasActividad = {}; // { lunes: { actividad: "caminata", minutos: 30 }, ... }
 
   function lunesDeEstaSemana() {
     const hoy = new Date();
@@ -1037,35 +1113,106 @@
     lunes.setDate(hoy.getDate() - diff);
     return lunes.toISOString().slice(0, 10);
   }
+
   async function initActividadFisica() {
-    DIAS_SEMANA.forEach(d => { actividadDias[d] = false; });
+    DIAS_SEMANA.forEach(d => { diasActividad[d] = { actividad: "", minutos: "" }; });
+
     const semanaInicio = lunesDeEstaSemana();
     const { data, error } = await sb.rpc("obtener_actividad_semana", { p_token: session.token, p_semana_inicio: semanaInicio });
+
     if (!error && data && data.ok) {
-      if (data.tipo_actividad) document.getElementById("tipo-actividad-select").value = data.tipo_actividad;
-      if (data.dias) Object.assign(actividadDias, data.dias);
+      if (data.dias) {
+        Object.keys(data.dias).forEach(d => {
+          if (diasActividad[d] && data.dias[d]) {
+            diasActividad[d] = { actividad: data.dias[d].actividad || "", minutos: data.dias[d].minutos ?? "" };
+          }
+        });
+      }
+      if (data.contabiliza_pasos) {
+        document.getElementById("pasos-switch").classList.add("on");
+        document.getElementById("pasos-input-wrap").style.display = "block";
+        if (data.pasos_promedio != null) document.getElementById("pasos-promedio").value = data.pasos_promedio;
+      }
+      if (data.trabajo_sedentario) {
+        document.getElementById("sedentario-switch").classList.add("on");
+        document.getElementById("pausas-wrap").style.display = "block";
+        if (data.pausas_activas) document.getElementById("pausas-switch").classList.add("on");
+      }
     }
-    renderWeekGrid();
+    renderDiasActividad();
   }
-  function renderWeekGrid() {
-    const grid = document.getElementById("week-grid");
-    grid.innerHTML = "";
-    DIAS_SEMANA.forEach((d, i) => { grid.innerHTML += `<div class="week-day-label">${DIAS_SEMANA_LABEL[i]}</div>`; });
-    DIAS_SEMANA.forEach(d => {
-      grid.innerHTML += `<div class="week-toggle ${actividadDias[d] ? 'on' : ''}" data-dia="${d}"></div>`;
-    });
-    grid.querySelectorAll(".week-toggle").forEach(el => {
-      el.addEventListener("click", () => {
-        const d = el.dataset.dia;
-        actividadDias[d] = !actividadDias[d];
-        el.classList.toggle("on", actividadDias[d]);
+
+  function renderDiasActividad() {
+    const cont = document.getElementById("dias-actividad-list");
+    cont.innerHTML = DIAS_SEMANA.map((d, i) => {
+      const est = diasActividad[d];
+      return `
+      <div class="dia-actividad-row">
+        <div class="dia-label">${DIAS_SEMANA_LABEL[i]}</div>
+        <select data-dia="${d}">
+          ${OPCIONES_ACTIVIDAD.map(o => `<option value="${o.id}" ${est.actividad === o.id ? "selected" : ""}>${o.label}</option>`).join("")}
+        </select>
+        <input type="number" data-dia="${d}" min="0" step="5" placeholder="0" value="${est.minutos}">
+        <span class="min-label">min</span>
+      </div>`;
+    }).join("");
+
+    cont.querySelectorAll("select").forEach(sel => {
+      sel.addEventListener("change", () => {
+        diasActividad[sel.dataset.dia].actividad = sel.value;
+        actualizarResumenDias();
       });
     });
+    cont.querySelectorAll('input[type="number"]').forEach(inp => {
+      inp.addEventListener("input", () => {
+        diasActividad[inp.dataset.dia].minutos = inp.value;
+      });
+    });
+    actualizarResumenDias();
   }
+
+  function actualizarResumenDias() {
+    const activos = DIAS_SEMANA.filter(d => diasActividad[d].actividad !== "").length;
+    document.getElementById("dias-actividad-resumen").textContent = `${activos} de 7 días activos`;
+  }
+
+  document.getElementById("pasos-switch").addEventListener("click", () => {
+    const sw = document.getElementById("pasos-switch");
+    sw.classList.toggle("on");
+    document.getElementById("pasos-input-wrap").style.display = sw.classList.contains("on") ? "block" : "none";
+  });
+  document.getElementById("sedentario-switch").addEventListener("click", () => {
+    const sw = document.getElementById("sedentario-switch");
+    sw.classList.toggle("on");
+    document.getElementById("pausas-wrap").style.display = sw.classList.contains("on") ? "block" : "none";
+    if (!sw.classList.contains("on")) document.getElementById("pausas-switch").classList.remove("on");
+  });
+  document.getElementById("pausas-switch").addEventListener("click", () => {
+    document.getElementById("pausas-switch").classList.toggle("on");
+  });
+
   document.getElementById("guardar-actividad-btn").addEventListener("click", async () => {
-    const tipo = document.getElementById("tipo-actividad-select").value;
     const semanaInicio = lunesDeEstaSemana();
-    await sb.rpc("guardar_actividad_semana", { p_token: session.token, p_semana_inicio: semanaInicio, p_tipo_actividad: tipo, p_dias: actividadDias });
+    const diasParaGuardar = {};
+    DIAS_SEMANA.forEach(d => {
+      diasParaGuardar[d] = {
+        actividad: diasActividad[d].actividad || null,
+        minutos: diasActividad[d].minutos ? parseInt(diasActividad[d].minutos) : null
+      };
+    });
+    const contabilizaPasos = document.getElementById("pasos-switch").classList.contains("on");
+    const pasosPromedio = document.getElementById("pasos-promedio").value || null;
+    const trabajoSedentario = document.getElementById("sedentario-switch").classList.contains("on");
+    const pausasActivas = document.getElementById("pausas-switch").classList.contains("on");
+
+    const btn = document.getElementById("guardar-actividad-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await sb.rpc("guardar_actividad_semana", {
+      p_token: session.token, p_semana_inicio: semanaInicio, p_dias: diasParaGuardar,
+      p_contabiliza_pasos: contabilizaPasos, p_pasos_promedio: pasosPromedio ? parseInt(pasosPromedio) : null,
+      p_trabajo_sedentario: trabajoSedentario, p_pausas_activas: pausasActivas
+    });
+    btn.disabled = false; btn.textContent = "Guardar semana";
   });
 
   // ================= MIS DATOS =================
@@ -1213,7 +1360,7 @@
     cont.innerHTML = previosList.map((p, i) => `
       <div class="gesta-block">
         <div class="fila-2col">
-          <div><label>Gesta N°</label><input type="number" data-i="${i}" data-f="numero_gesta" value="${p.numero_gesta || ''}"></div>
+          <div><label>Embarazo N°</label><input type="number" data-i="${i}" data-f="numero_gesta" value="${p.numero_gesta || ''}"></div>
           <div><label>Año</label><input type="number" data-i="${i}" data-f="anio" value="${p.anio || ''}"></div>
         </div>
         <div class="check-row"><input type="checkbox" data-i="${i}" data-f="hta_gestacional" ${p.hta_gestacional ? "checked" : ""}><label style="margin:0;">Hipertensión gestacional</label></div>
@@ -1221,7 +1368,25 @@
         <div class="check-row"><input type="checkbox" data-i="${i}" data-f="diabetes_gestacional" ${p.diabetes_gestacional ? "checked" : ""}><label style="margin:0;">Diabetes gestacional</label></div>
         <div class="check-row"><input type="checkbox" data-i="${i}" data-f="rciu" ${p.rciu ? "checked" : ""}><label style="margin:0;">Restricción de crecimiento (RCIU)</label></div>
         <div class="check-row"><input type="checkbox" data-i="${i}" data-f="parto_prematuro" ${p.parto_prematuro ? "checked" : ""}><label style="margin:0;">Parto prematuro</label></div>
-        <label>Semana de finalización</label><input type="number" data-i="${i}" data-f="semana_finalizacion" value="${p.semana_finalizacion || ''}">
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="desprendimiento_placenta" ${p.desprendimiento_placenta ? "checked" : ""}><label style="margin:0;">Desprendimiento de placenta</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="mortinato" ${p.mortinato ? "checked" : ""}><label style="margin:0;">Mortinato (bebé nacido sin vida)</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="aborto_espontaneo" ${p.aborto_espontaneo ? "checked" : ""}><label style="margin:0;">Aborto espontáneo</label></div>
+        <label>¿En qué trimestre? (si tuvo aborto espontáneo)</label>
+        <select data-i="${i}" data-f="aborto_espontaneo_trimestre">
+          <option value="">—</option>
+          <option value="1" ${String(p.aborto_espontaneo_trimestre) === '1' ? 'selected' : ''}>1er trimestre</option>
+          <option value="2" ${String(p.aborto_espontaneo_trimestre) === '2' ? 'selected' : ''}>2do trimestre</option>
+          <option value="3" ${String(p.aborto_espontaneo_trimestre) === '3' ? 'selected' : ''}>3er trimestre</option>
+        </select>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="aborto_inducido" ${p.aborto_inducido ? "checked" : ""}><label style="margin:0;">Aborto inducido</label></div>
+        <label>¿En qué trimestre? (si tuvo aborto inducido)</label>
+        <select data-i="${i}" data-f="aborto_inducido_trimestre">
+          <option value="">—</option>
+          <option value="1" ${String(p.aborto_inducido_trimestre) === '1' ? 'selected' : ''}>1er trimestre</option>
+          <option value="2" ${String(p.aborto_inducido_trimestre) === '2' ? 'selected' : ''}>2do trimestre</option>
+          <option value="3" ${String(p.aborto_inducido_trimestre) === '3' ? 'selected' : ''}>3er trimestre</option>
+        </select>
+        <label>Semana de finalización (si el embarazo llegó a término o casi)</label><input type="number" data-i="${i}" data-f="semana_finalizacion" value="${p.semana_finalizacion || ''}">
         <label>Vía de finalización</label>
         <select data-i="${i}" data-f="via_finalizacion">
           <option value="">—</option>
@@ -1236,37 +1401,72 @@
     cont.querySelectorAll("[data-remove]").forEach(el => el.addEventListener("click", () => { previosList.splice(parseInt(el.dataset.remove), 1); renderPrevios(); }));
   }
   document.getElementById("add-previo-btn").addEventListener("click", () => {
-    previosList.push({ numero_gesta: previosList.length + 1, anio: "", hta_gestacional: false, preeclampsia: false, diabetes_gestacional: false, rciu: false, parto_prematuro: false, semana_finalizacion: "", via_finalizacion: "" });
+    previosList.push({
+      numero_gesta: previosList.length + 1, anio: "", hta_gestacional: false, preeclampsia: false,
+      diabetes_gestacional: false, rciu: false, parto_prematuro: false,
+      desprendimiento_placenta: false, mortinato: false,
+      aborto_espontaneo: false, aborto_espontaneo_trimestre: "",
+      aborto_inducido: false, aborto_inducido_trimestre: "",
+      semana_finalizacion: "", via_finalizacion: ""
+    });
     renderPrevios();
   });
 
   let semanaGestacionalActual = null;
+  let diasGestacionalesActual = null;
+  let fuenteGestacionalActual = null;
 
-  function calcularSemanas(fum, fppObstetra) {
-    const base = fppObstetra ? new Date(fppObstetra) : (fum ? new Date(new Date(fum).getTime() + 280 * 86400000) : null);
+  document.querySelectorAll('input[name="fuente-fecha"]').forEach(radio => {
+    radio.addEventListener("change", () => {
+      const esFum = document.getElementById("fuente-fum").checked;
+      document.getElementById("fum-block").style.display = esFum ? "block" : "none";
+      document.getElementById("eco-block").style.display = esFum ? "none" : "block";
+    });
+  });
+
+  function calcularSemanas(fum, fppObstetra, fechaEco, ecoSemanas, ecoDias) {
+    let base = null;
+    let fuente = null;
+    if (fppObstetra) {
+      base = new Date(fppObstetra);
+      fuente = "OBSTETRA";
+    } else if (fum) {
+      base = new Date(new Date(fum).getTime() + 280 * 86400000);
+      fuente = "FUM";
+    } else if (fechaEco && ecoSemanas != null && ecoSemanas !== "") {
+      const diasEnEco = parseInt(ecoSemanas) * 7 + (parseInt(ecoDias) || 0);
+      base = new Date(new Date(fechaEco).getTime() + (280 - diasEnEco) * 86400000);
+      fuente = "ECO";
+    }
     if (!base) return null;
     const hoy = new Date();
     const diasRestantes = Math.round((base - hoy) / 86400000);
     const diasTranscurridos = 280 - diasRestantes;
     if (diasTranscurridos < 0) return null;
-    return { semanas: Math.floor(diasTranscurridos / 7), dias: diasTranscurridos % 7 };
+    return { semanas: Math.floor(diasTranscurridos / 7), dias: diasTranscurridos % 7, fuente };
   }
-  function calcularEdadGestacional(fum, fppObstetra) {
-    const r = calcularSemanas(fum, fppObstetra);
+  function calcularEdadGestacional(fum, fppObstetra, fechaEco, ecoSemanas, ecoDias) {
+    const r = calcularSemanas(fum, fppObstetra, fechaEco, ecoSemanas, ecoDias);
     return r ? `${r.semanas}s ${r.dias}d` : null;
   }
+  const FUENTE_LABEL = { FUM: "según tu FUM", ECO: "según la ecografía", OBSTETRA: "según la fecha indicada por tu obstetra" };
   function renderAspirinaGestInfo() {
     const cont = document.getElementById("asp-semana-info");
     if (!cont) return;
     if (semanaGestacionalActual == null) {
-      cont.innerHTML = `<p class="helper" style="margin-bottom:0;">Cargá la fecha de tu última menstruación en la solapa "Embarazos" para ver en qué semana estás y recibir avisos sobre tu aspirina.</p>`;
+      cont.innerHTML = `<p class="helper" style="margin-bottom:0;">Cargá la fecha de tu última menstruación (o la ecografía) en la solapa "Embarazos" para ver en qué semana estás y recibir avisos sobre tu aspirina.</p>`;
       return;
     }
-    let html = `<p class="semana-actual-text">Estás en la semana ${semanaGestacionalActual} de embarazo</p>`;
-    if (semanaGestacionalActual >= 12 && semanaGestacionalActual <= 18) {
+    const fuenteTxt = FUENTE_LABEL[fuenteGestacionalActual] || "";
+    let html = `<p class="semana-actual-text">Estás en la semana ${semanaGestacionalActual}, día ${diasGestacionalesActual}${fuenteTxt ? ` <span style="font-weight:500;color:var(--gray-600);">(${fuenteTxt})</span>` : ""}</p>`;
+
+    if (semanaGestacionalActual < 12) {
+      html += `<div class="banner-wait">⏳ Todavía no llegaste a la semana 12. La ventana habitual para iniciar la aspirina es entre la semana 12 y 18 — esperá la indicación de tu médica.</div>`;
+    } else if (semanaGestacionalActual >= 12 && semanaGestacionalActual <= 18) {
       html += `<div class="banner-ok">✓ Estás en la ventana recomendada (semana 12 a 18) para iniciar la aspirina, si tu médica te lo indicó.</div>`;
-    }
-    if (semanaGestacionalActual >= 36) {
+    } else if (semanaGestacionalActual >= 34 && semanaGestacionalActual < 36) {
+      html += `<div class="banner-wait">📅 Te estás acercando a la semana 36. Pronto vas a tener que consultar con tu médica para evaluar si corresponde continuar o suspender la aspirina.</div>`;
+    } else if (semanaGestacionalActual >= 36) {
       html += `<div class="banner-warn">⚠ Estás en la semana 36 o más. Consultá con tu médica para reevaluar si corresponde continuar con la aspirina.</div>`;
     }
     cont.innerHTML = html;
@@ -1290,23 +1490,35 @@
       if (a.eco_dias != null) document.getElementById("ge-eco-dias").value = a.eco_dias;
       if (a.fpp_obstetra) document.getElementById("ge-fpp").value = a.fpp_obstetra;
 
-      const eg = calcularEdadGestacional(a.fum, a.fpp_obstetra);
+      // Si ya tenía cargado solo eco (sin FUM), dejamos seleccionado ese modo
+      if (!a.fum && a.fecha_eco_datante) {
+        document.getElementById("fuente-eco").checked = true;
+        document.getElementById("fum-block").style.display = "none";
+        document.getElementById("eco-block").style.display = "block";
+      }
+
+      const eg = calcularEdadGestacional(a.fum, a.fpp_obstetra, a.fecha_eco_datante, a.eco_semanas, a.eco_dias);
       const badge = document.getElementById("edad-gestacional-badge");
       if (eg) { badge.textContent = "Edad gestacional actual: " + eg; badge.style.display = "inline-block"; }
 
-      const r = calcularSemanas(a.fum, a.fpp_obstetra);
+      const r = calcularSemanas(a.fum, a.fpp_obstetra, a.fecha_eco_datante, a.eco_semanas, a.eco_dias);
       semanaGestacionalActual = r ? r.semanas : null;
+      diasGestacionalesActual = r ? r.dias : null;
+      fuenteGestacionalActual = r ? r.fuente : null;
     }
     renderAspirinaGestInfo();
   }
   document.getElementById("guardar-embarazos-btn").addEventListener("click", async () => {
+    const fum = document.getElementById("ge-fum").value;
+    const fpp = document.getElementById("ge-fpp").value;
+    const fechaEco = document.getElementById("ge-fecha-eco").value;
     const actual = {
-      fum: document.getElementById("ge-fum").value || null,
-      fecha_eco_datante: document.getElementById("ge-fecha-eco").value || null,
+      fum: fum || null,
+      fecha_eco_datante: fechaEco || null,
       eco_semanas: document.getElementById("ge-eco-sem").value || null,
       eco_dias: document.getElementById("ge-eco-dias").value || null,
-      fpp_obstetra: document.getElementById("ge-fpp").value || null,
-      fuente_fpp_vigente: document.getElementById("ge-fpp").value ? "OBSTETRA" : (document.getElementById("ge-fum").value ? "FUM" : null)
+      fpp_obstetra: fpp || null,
+      fuente_fpp_vigente: fpp ? "OBSTETRA" : (fum ? "FUM" : (fechaEco ? "ECO" : null))
     };
     const btn = document.getElementById("guardar-embarazos-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
