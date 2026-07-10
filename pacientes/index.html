@@ -342,6 +342,10 @@
     background: var(--teal-light); color: var(--teal-dark); font-size: 12.5px; font-weight: 700;
     padding: 9px 12px; border-radius: 10px; margin-top: 12px;
   }
+  .mdpa-cancelar-btn {
+    display: block; background: none; border: none; color: var(--gray-600); font-size: 11.5px;
+    text-decoration: underline; cursor: pointer; margin-top: 12px; padding: 0;
+  }
 
   /* Tratamiento y tomas sueltas */
   .tratamiento-activo-card {
@@ -1591,7 +1595,6 @@
       cont.innerHTML = `<p style="font-size:13px; color:var(--gray-600); margin-bottom:10px;">No tenés un monitoreo ${tipo === 'posparto' ? 'posparto' : ''} activo. Si tu médica te indicó hacer un MDPA, iniciálo acá.</p>
         <label for="${pref}mdpa-duracion-select">¿Cuántos días te indicaron?</label>
         <select id="${pref}mdpa-duracion-select">
-          <option value="1">1 día</option>
           <option value="2">2 días</option>
           <option value="3">3 días</option>
           <option value="4" selected>4 días (protocolo corto)</option>
@@ -1706,6 +1709,7 @@
     } else {
       resumenHtml += `<p class="helper" style="margin-top:10px;">Completá los ${e.duracion_dias} días indicados para poder generar el informe.</p>`;
     }
+    resumenHtml += `<button class="mdpa-cancelar-btn" id="${pref}cancelar-mdpa-btn">Cancelar este monitoreo</button>`;
     document.getElementById(pref + "mdpa-content").innerHTML = resumenHtml;
 
     document.getElementById(pref + "toggle-mdpa-tabla-btn").addEventListener("click", () => {
@@ -1714,6 +1718,12 @@
       wrap.style.display = abierta ? "none" : "block";
       document.getElementById(pref + "toggle-mdpa-tabla-btn").textContent = abierta ? "Cargar mediciones" : "Ocultar tabla";
       if (!abierta) renderMdpaInputTable(ctx);
+    });
+
+    document.getElementById(pref + "cancelar-mdpa-btn").addEventListener("click", async () => {
+      if (!confirm("¿Cancelar este monitoreo? Se van a borrar las mediciones cargadas y vas a poder iniciar uno nuevo.")) return;
+      await sb.rpc("cancelar_mdpa", { p_token: session.token, p_estudio_id: e.id });
+      initMdpa(ctx);
     });
 
     if (completo) {
