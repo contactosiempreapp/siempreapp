@@ -432,6 +432,8 @@
   .md-icon-indigo { background: var(--indigo-light); color: var(--indigo); }
   .md-icon-pink { background: var(--pink-light); color: var(--pink-dark); }
   .mis-datos-hero { background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
+  .sodio-banner.sodio-si { border-color: var(--amber); }
+  .sodio-banner.sodio-no { border-color: var(--indigo); }
   .edad-badge { margin-top: 4px; }
 
   /* Mis datos / Embarazos — grupos colapsables */
@@ -688,6 +690,7 @@
         <label for="ge-fpp">Fecha probable de parto (si tu obstetra ya te la indicó)</label>
         <input type="date" id="ge-fpp">
         <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
+        <div class="check-row" style="margin-top:10px;"><input type="checkbox" id="ge-hta-gestacional"><label for="ge-hta-gestacional" style="margin:0;">Me diagnosticaron hipertensión gestacional en este embarazo</label></div>
       </div>
 
       <div class="card">
@@ -800,6 +803,7 @@
 
     <!-- ALIMENTACIÓN -->
     <div class="panel" id="panel-alimentacion">
+      <div id="alimentacion-sodio-banner"></div>
       <div class="card"><h2>Alimentación</h2><div class="info-text" id="info-alimentacion-text">Cargando...</div></div>
     </div>
 
@@ -918,12 +922,30 @@
         <details class="grupo" id="tratamiento-form-details">
           <summary id="tratamiento-form-summary">Cargar mi tratamiento</summary>
           <div class="grupo-body">
-            <label for="pa-farmaco-select">Medicación</label>
-            <select id="pa-farmaco-select"><option value="">Cargando...</option></select>
-            <label for="pa-dosis">Dosis</label>
-            <input type="text" id="pa-dosis" placeholder="Ej: 500 mg">
-            <label for="pa-frecuencia">Frecuencia</label>
-            <input type="text" id="pa-frecuencia" placeholder="Ej: cada 8 horas">
+            <div class="fuente-selector">
+              <label class="fuente-opcion">
+                <input type="radio" name="pa-trat-tipo" value="sin" id="pa-trat-sin" checked>
+                <span>Sin tratamiento farmacológico</span>
+              </label>
+              <label class="fuente-opcion">
+                <input type="radio" name="pa-trat-tipo" value="con" id="pa-trat-con">
+                <span>Con tratamiento</span>
+              </label>
+            </div>
+            <div id="pa-trat-con-block" style="display:none;">
+              <label for="pa-farmaco-select">Medicación</label>
+              <select id="pa-farmaco-select"><option value="">Cargando...</option></select>
+              <label for="pa-dosis">Dosis</label>
+              <input type="text" id="pa-dosis" placeholder="Ej: 500 mg">
+              <label for="pa-frecuencia-select">Frecuencia</label>
+              <select id="pa-frecuencia-select">
+                <option value="Una vez al día">Una vez al día</option>
+                <option value="Cada 12 horas (2 veces al día)">Cada 12 horas (2 veces al día)</option>
+                <option value="Cada 8 horas (3 veces al día)">Cada 8 horas (3 veces al día)</option>
+                <option value="Cada 6 horas (4 veces al día)">Cada 6 horas (4 veces al día)</option>
+                <option value="Según necesidad">Según necesidad</option>
+              </select>
+            </div>
             <button class="secondary" id="guardar-tratamiento-btn" style="margin-top:8px;">Guardar tratamiento</button>
           </div>
         </details>
@@ -1117,6 +1139,7 @@
     });
     initPaSuelta();
     initInfoPanels();
+    initRecomendacionSodio();
     initCurvaPonderal();
     initActividadFisica();
     initCuartoTrimestre();
@@ -1480,9 +1503,8 @@
       </div>`;
       document.getElementById("tratamiento-form-summary").textContent = "Modificar tratamiento";
     } else {
-      cont.innerHTML = `<p class="helper" style="margin-bottom:10px;">No tenés un tratamiento cargado todavía.</p>`;
+      cont.innerHTML = `<p class="helper" style="margin-bottom:10px;">Sin tratamiento farmacológico registrado.</p>`;
       document.getElementById("tratamiento-form-summary").textContent = "Cargar mi tratamiento";
-      document.getElementById("tratamiento-form-details").open = true;
     }
 
     const hist = (data.historial || []).filter(h => h.fecha_fin);
@@ -1496,17 +1518,27 @@
     }
   }
 
+  document.querySelectorAll('input[name="pa-trat-tipo"]').forEach(radio => {
+    radio.addEventListener("change", () => {
+      document.getElementById("pa-trat-con-block").style.display = document.getElementById("pa-trat-con").checked ? "block" : "none";
+    });
+  });
   document.getElementById("guardar-tratamiento-btn").addEventListener("click", async () => {
-    const farmacoId = document.getElementById("pa-farmaco-select").value;
-    if (!farmacoId) return;
-    const dosis = document.getElementById("pa-dosis").value;
-    const frecuencia = document.getElementById("pa-frecuencia").value;
     const btn = document.getElementById("guardar-tratamiento-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
-    await sb.rpc("guardar_tratamiento_pa", { p_token: session.token, p_farmaco_id: farmacoId, p_dosis: dosis, p_frecuencia: frecuencia });
+
+    if (document.getElementById("pa-trat-con").checked) {
+      const farmacoId = document.getElementById("pa-farmaco-select").value;
+      if (!farmacoId) { btn.disabled = false; btn.textContent = "Guardar tratamiento"; return; }
+      const dosis = document.getElementById("pa-dosis").value;
+      const frecuencia = document.getElementById("pa-frecuencia-select").value;
+      await sb.rpc("guardar_tratamiento_pa", { p_token: session.token, p_farmaco_id: farmacoId, p_dosis: dosis, p_frecuencia: frecuencia });
+      document.getElementById("pa-dosis").value = "";
+    } else {
+      await sb.rpc("marcar_sin_tratamiento_pa", { p_token: session.token });
+    }
+
     btn.disabled = false; btn.textContent = "Guardar tratamiento";
-    document.getElementById("pa-dosis").value = "";
-    document.getElementById("pa-frecuencia").value = "";
     document.getElementById("tratamiento-form-details").open = false;
     initTratamientoPA();
   });
@@ -1842,6 +1874,26 @@
     document.getElementById("info-actividad-text").textContent = data.info_actividad_fisica || "";
     document.getElementById("info-pautas-text").textContent = data.info_pautas_alarma || "";
     document.getElementById("info-general-text").textContent = data.info_general || "";
+  }
+
+  async function initRecomendacionSodio() {
+    const { data, error } = await sb.rpc("obtener_recomendacion_sodio", { p_token: session.token });
+    const cont = document.getElementById("alimentacion-sodio-banner");
+    if (error || !data || !data.ok) { cont.innerHTML = ""; return; }
+
+    if (data.hta_cronica) {
+      cont.innerHTML = `<div class="card sodio-banner sodio-si">
+        <h2><span class="md-icon" style="background:var(--amber-light); color:var(--amber);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8z"/></svg></span>Dieta hiposódica</h2>
+        <p class="helper" style="margin-bottom:0;">Por tu hipertensión crónica, se recomienda reducir el sodio en tus comidas (evitar sal agregada, fiambres, snacks salados y caldos concentrados).</p>
+      </div>`;
+    } else if (data.hta_gestacional) {
+      cont.innerHTML = `<div class="card sodio-banner sodio-no">
+        <h2><span class="md-icon" style="background:var(--indigo-light); color:var(--indigo);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg></span>Sobre la sal en tu dieta</h2>
+        <p class="helper" style="margin-bottom:0;">Por tener hipertensión gestacional, <strong>no</strong> se recomienda restringir el sodio — seguí una alimentación normal en sal, salvo que tu médica te indique lo contrario.</p>
+      </div>`;
+    } else {
+      cont.innerHTML = "";
+    }
   }
 
   // ================= CURVA PONDERAL =================
@@ -2379,6 +2431,7 @@
     const msg = document.getElementById("datos-guardado-msg");
     msg.style.display = "block";
     setTimeout(() => { msg.style.display = "none"; }, 2500);
+    initRecomendacionSodio();
   });
 
   // ================= EMBARAZOS =================
@@ -2517,6 +2570,7 @@
       if (a.eco_semanas != null) document.getElementById("ge-eco-sem").value = a.eco_semanas;
       if (a.eco_dias != null) document.getElementById("ge-eco-dias").value = a.eco_dias;
       if (a.fpp_obstetra) document.getElementById("ge-fpp").value = a.fpp_obstetra;
+      document.getElementById("ge-hta-gestacional").checked = !!a.hipertension_gestacional_actual;
 
       // Si ya tenía cargado solo eco (sin FUM), dejamos seleccionado ese modo
       if (!a.fum && a.fecha_eco_datante) {
@@ -2546,7 +2600,8 @@
       eco_semanas: document.getElementById("ge-eco-sem").value || null,
       eco_dias: document.getElementById("ge-eco-dias").value || null,
       fpp_obstetra: fpp || null,
-      fuente_fpp_vigente: fpp ? "OBSTETRA" : (fum ? "FUM" : (fechaEco ? "ECO" : null))
+      fuente_fpp_vigente: fpp ? "OBSTETRA" : (fum ? "FUM" : (fechaEco ? "ECO" : null)),
+      hipertension_gestacional_actual: document.getElementById("ge-hta-gestacional").checked
     };
     const btn = document.getElementById("guardar-embarazos-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
@@ -2556,6 +2611,7 @@
     msg.style.display = "block";
     setTimeout(() => { msg.style.display = "none"; }, 2500);
     initEmbarazos();
+    initRecomendacionSodio();
   });
 
   // ---------- Arranque ----------
