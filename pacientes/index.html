@@ -113,6 +113,18 @@
   }
   .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
   .tab-btn.active { background: var(--tab-accent); border-color: var(--tab-accent); color: white; box-shadow: 0 4px 12px -4px var(--tab-accent); }
+  .tab-btn-especial {
+    background: linear-gradient(135deg, #C79A4B 0%, #8B5CB8 100%);
+    border-color: transparent; color: white; font-weight: 800;
+    box-shadow: 0 3px 10px -3px rgba(139,92,184,0.5);
+    position: relative;
+  }
+  .tab-btn-especial svg { animation: sparkle 2.4s ease-in-out infinite; }
+  @keyframes sparkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.85); } }
+  .tab-btn-especial.active {
+    background: linear-gradient(135deg, #D4A94F 0%, #7C4E9E 100%);
+    box-shadow: 0 4px 14px -3px rgba(139,92,184,0.7);
+  }
 
   main { padding: 18px 20px 24px; flex: 1; }
   .panel { display: none; }
@@ -246,18 +258,64 @@
   @keyframes rotatehint { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } }
   .mdpa-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .alerta-severa { background: #FDEDEB; border: 1.5px solid var(--pink); color: #8A2E22; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
-  .mdpa-table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 12px; }
-  .mdpa-table th { font-size: 10px; font-weight: 700; text-align: center; padding: 6px 2px; border-radius: 6px 6px 0 0; }
-  .mdpa-table th .momento-icon { display: block; margin: 0 auto 2px; width: 16px; height: 16px; }
-  .th-matutina { background: var(--amber-light); color: #6B4A0E; }
-  .th-postprandial { background: var(--green-light); color: #3E6E3B; }
-  .th-vespertina { background: var(--indigo-light); color: #454890; }
-  .mdpa-table td { text-align: center; padding: 3px 2px; }
-  .mdpa-day-label { font-size: 11px; font-weight: 700; color: var(--violet-dark); text-align: left !important; }
-  .mdpa-input { width: 34px; padding: 4px 2px; border: 1.5px solid var(--gray-300); border-radius: 6px; font-size: 12px; text-align: center; }
+  .mdpa-day-card { border: 1px solid var(--gray-300); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+  .mdpa-day-card summary {
+    padding: 12px 14px; font-size: 13.5px; font-weight: 700; cursor: pointer; background: var(--gray-100);
+    color: var(--violet-dark); list-style: none; display: flex; align-items: center; justify-content: space-between;
+  }
+  .mdpa-day-card summary::-webkit-details-marker { display: none; }
+  .mdpa-day-card[open] summary { border-bottom: 1px solid var(--gray-300); }
+  .mdpa-day-status { font-size: 11px; font-weight: 700; color: var(--amber); background: var(--amber-light); padding: 2px 9px; border-radius: 20px; }
+  .mdpa-day-status.completo { color: var(--teal-dark); background: var(--teal-light); }
+  .mdpa-day-body { padding: 12px 14px; }
+  .mdpa-momento-block { margin-bottom: 14px; }
+  .mdpa-momento-block:last-child { margin-bottom: 0; }
+  .momento-block-title {
+    display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; padding: 5px 10px;
+    border-radius: 8px; margin-bottom: 8px; width: fit-content;
+  }
+  .momento-block-title svg { width: 15px; height: 15px; }
+  .momento-matutina .momento-block-title { background: var(--amber-light); color: #6B4A0E; }
+  .momento-postprandial .momento-block-title { background: var(--green-light); color: #3E6E3B; }
+  .momento-vespertina .momento-block-title { background: var(--indigo-light); color: #454890; }
+  .mdpa-toma-row { display: flex; align-items: center; gap: 8px; padding: 5px 0 5px 8px; }
+  .mdpa-toma-row .toma-label { font-size: 12px; font-weight: 600; color: var(--gray-600); width: 52px; flex-shrink: 0; }
+  .mdpa-sep { color: var(--gray-600); font-size: 13px; }
+  .mdpa-input { width: 56px; padding: 7px 6px; border: 1.5px solid var(--gray-300); border-radius: 8px; font-size: 13px; text-align: center; }
   .mdpa-input.alarma { border-color: var(--pink); background: var(--pink-light); color: var(--pink); font-weight: 700; }
 
-  /* Mis datos — íconos de sección */
+  /* Cuarto trimestre */
+  .ct-hero-card { background: linear-gradient(135deg, #B8873F 0%, #6B3F94 100%); border: none; }
+  .ct-hero-header { display: flex; align-items: center; gap: 14px; }
+  .ct-hero-icon {
+    width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .ct-hero-icon svg { width: 26px; height: 26px; }
+  .ct-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.85); font-weight: 600; }
+  .ct-dias-badge {
+    display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 12px; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px; margin-top: 12px;
+  }
+  .ct-categoria-title {
+    font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 800; color: var(--violet-dark);
+    margin: 18px 0 8px; text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .ct-categoria-title:first-child { margin-top: 0; }
+  .ct-item-row {
+    display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 10px; margin-bottom: 6px;
+    border: 1.5px solid var(--gray-300); background: white; opacity: 0.55;
+  }
+  .ct-item-row.vigente { opacity: 1; border-color: #C79A4B; background: #FBF6EC; }
+  .ct-item-row.cumplido { border-color: var(--teal); background: var(--teal-light); opacity: 1; }
+  .ct-item-check {
+    width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--gray-300); background: white;
+    flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .ct-item-check.on { background: var(--teal); border-color: var(--teal); color: white; }
+  .ct-item-check svg { width: 14px; height: 14px; }
+  .ct-item-text { font-size: 13px; color: var(--gray-900); line-height: 1.4; }
+  .ct-item-tag { font-size: 10.5px; color: var(--gray-600); font-weight: 600; margin-top: 2px; }
   .md-icon {
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
@@ -362,6 +420,10 @@
     <button class="tab-btn" data-tab="actividad-fisica"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.2" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 6.5l-2 4 3 2-1.2 5.3"/><path d="M11.5 10.3l-4 2"/><path d="M14.5 12.5l3 1 1 4.2"/></svg>Actividad física</button>
     <button class="tab-btn" data-tab="presion-arterial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Presión</button>
     <button class="tab-btn" data-tab="curva-ponderal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg>Curva ponderal</button>
+    <button class="tab-btn tab-btn-especial" data-tab="cuarto-trimestre">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
+      Cuarto trimestre
+    </button>
     <button class="tab-btn" data-tab="pautas-alarma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l9.5 17.1H2.5L12 3.2z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="17.2" r="0.9" fill="currentColor" stroke="none"/></svg>Pautas de alarma</button>
     <button class="tab-btn" data-tab="informacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>Información</button>
   </nav>
@@ -714,6 +776,32 @@
       </div>
     </div>
 
+    <!-- CUARTO TRIMESTRE -->
+    <div class="panel" id="panel-cuarto-trimestre">
+      <div class="card ct-hero-card">
+        <div class="ct-hero-header">
+          <div class="ct-hero-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
+          </div>
+          <div>
+            <h2 style="color:white; margin-bottom:2px;">Cuarto trimestre</h2>
+            <div class="ct-hero-sub">Tu seguimiento después del parto</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="ct-setup-card" style="display:none;">
+        <h2>¿Ya nació tu bebé?</h2>
+        <p class="helper">Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.</p>
+        <label for="ct-fecha-parto">Fecha de parto</label>
+        <input type="date" id="ct-fecha-parto">
+        <div class="check-row"><input type="checkbox" id="ct-tuvo-the"><label for="ct-tuvo-the" style="margin:0;">Tuve hipertensión del embarazo o preeclampsia en este embarazo</label></div>
+        <button class="primary" id="ct-guardar-parto-btn" style="margin-top:10px;">Activar mi seguimiento</button>
+      </div>
+
+      <div id="ct-content"></div>
+    </div>
+
     <!-- PAUTAS DE ALARMA -->
     <div class="panel" id="panel-pautas-alarma">
       <div class="card"><h2>Pautas de alarma — cuándo consultar</h2><div class="info-text" id="info-pautas-text">Cargando...</div></div>
@@ -807,6 +895,7 @@
     initInfoPanels();
     initCurvaPonderal();
     initActividadFisica();
+    initCuartoTrimestre();
     initMisDatos();
     initEmbarazos();
     document.getElementById("mis-datos-shortcut").addEventListener("click", () => {
@@ -833,6 +922,7 @@
     "actividad-fisica": ["#DDA23F", "#95611A"],
     "presion-arterial": ["#E37870", "#AD3C33"],
     "curva-ponderal":   ["#7477C2", "#454890"],
+    "cuarto-trimestre": ["#B8873F", "#6B3F94"],
     "pautas-alarma":    ["#E2665B", "#A5382E"],
     "informacion":      ["#9482BE", "#5D4A85"]
   };
@@ -1111,31 +1201,49 @@
     postprandial: '<svg class="momento-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7a2 2 0 0 0 4 0V2M9 9v13M17 2c-1.5 1-2.5 3-2.5 6s1 5 2.5 6v7"/></svg>',
     vespertina: '<svg class="momento-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>'
   };
+  const LABEL_MOMENTO = { matutina: "Mañana", postprandial: "Después de comer", vespertina: "Noche" };
+
+  function diaCompleto(dia, momentos) {
+    return momentos.every(m => getRegistro(dia, m, 1) && getRegistro(dia, m, 2));
+  }
+
   function renderMdpaInputTable() {
     const e = estudioActivo;
     const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
-    const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
 
-    let html = `<div class="mdpa-rotate-hint">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
-        Girá tu celular en horizontal para ver la tabla más cómoda
-      </div>
-      <div class="mdpa-table-scroll"><table class="mdpa-table"><thead><tr><th style="text-align:left;">Día</th>`;
-    momentos.forEach(m => { html += `<th colspan="2" class="th-${m}">${ICONO_MOMENTO[m]}${labelMomento[m]}</th>`; });
-    html += `</tr></thead><tbody>`;
+    // Abrimos automáticamente el primer día que todavía no está completo
+    let primerPendiente = null;
     for (let dia = 1; dia <= e.duracion_dias; dia++) {
-      for (let toma = 1; toma <= 2; toma++) {
-        html += `<tr>` + (toma === 1 ? `<td class="mdpa-day-label" rowspan="2">Día ${dia}</td>` : "");
-        momentos.forEach(m => {
+      if (!diaCompleto(dia, momentos)) { primerPendiente = dia; break; }
+    }
+
+    let html = "";
+    for (let dia = 1; dia <= e.duracion_dias; dia++) {
+      const completo = diaCompleto(dia, momentos);
+      const abrir = dia === (primerPendiente || 1);
+      html += `<details class="mdpa-day-card" ${abrir ? "open" : ""}>
+        <summary>Día ${dia} <span class="mdpa-day-status ${completo ? 'completo' : ''}">${completo ? '✓ completo' : 'pendiente'}</span></summary>
+        <div class="mdpa-day-body">`;
+
+      momentos.forEach(m => {
+        html += `<div class="mdpa-momento-block momento-${m}">
+          <div class="momento-block-title">${ICONO_MOMENTO[m]}${LABEL_MOMENTO[m]}</div>`;
+        for (let toma = 1; toma <= 2; toma++) {
           const r = getRegistro(dia, m, toma);
           const isAlarma = r && (r.sistolica >= e.umbral_alarma_sis || r.diastolica >= e.umbral_alarma_dia);
-          html += `<td><input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="SIS" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="sistolica" value="${r ? r.sistolica : ''}"></td>
-                   <td><input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="DIA" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="diastolica" value="${r ? r.diastolica : ''}"></td>`;
-        });
-        html += `</tr>`;
-      }
+          html += `<div class="mdpa-toma-row">
+            <span class="toma-label">Toma ${toma}</span>
+            <input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="SIS" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="sistolica" value="${r ? r.sistolica : ''}">
+            <span class="mdpa-sep">/</span>
+            <input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="DIA" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="diastolica" value="${r ? r.diastolica : ''}">
+          </div>`;
+        }
+        html += `</div>`;
+      });
+
+      html += `</div></details>`;
     }
-    html += `</tbody></table></div>`;
+
     document.getElementById("mdpa-tabla-wrap").innerHTML = html;
     document.querySelectorAll(".mdpa-input").forEach(input => input.addEventListener("change", () => guardarTomaMdpa(input)));
   }
@@ -1361,6 +1469,73 @@
       p_trabajo_sedentario: trabajoSedentario, p_pausas_activas: pausasActivas
     });
     btn.disabled = false; btn.textContent = "Guardar semana";
+  });
+
+  // ================= CUARTO TRIMESTRE =================
+  const CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
+
+  async function initCuartoTrimestre() {
+    const { data, error } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
+    const cont = document.getElementById("ct-content");
+    const setupCard = document.getElementById("ct-setup-card");
+
+    if (error || !data || !data.ok) {
+      cont.innerHTML = `<div class="card"><p style="font-size:13px;color:var(--gray-600);">No pudimos cargar esta sección.</p></div>`;
+      return;
+    }
+
+    if (!data.fecha_parto) {
+      setupCard.style.display = "block";
+      cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
+      return;
+    }
+
+    setupCard.style.display = "none";
+
+    const grupos = {};
+    data.items.forEach(it => {
+      if (!grupos[it.categoria]) grupos[it.categoria] = [];
+      grupos[it.categoria].push(it);
+    });
+
+    let html = `<div class="card"><div class="ct-dias-badge">Día ${data.dias_desde_parto} desde el parto</div>`;
+    Object.keys(grupos).forEach(cat => {
+      html += `<div class="ct-categoria-title">${CATEGORIA_LABEL[cat] || cat}</div>`;
+      grupos[cat].forEach(it => {
+        const cls = it.cumplido ? "cumplido" : (it.vigente ? "vigente" : "");
+        html += `<div class="ct-item-row ${cls}">
+          <button class="ct-item-check ${it.cumplido ? 'on' : ''}" data-id="${it.id}">
+            ${it.cumplido ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>' : ''}
+          </button>
+          <div>
+            <div class="ct-item-text">${it.item}</div>
+            <div class="ct-item-tag">${it.vigente ? 'Vigente ahora' : (it.cumplido ? 'Cumplido' : 'Todavía no corresponde')}</div>
+          </div>
+        </div>`;
+      });
+    });
+    html += `</div>`;
+    cont.innerHTML = html;
+
+    cont.querySelectorAll(".ct-item-check").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const nuevo = !btn.classList.contains("on");
+        btn.classList.toggle("on", nuevo);
+        await sb.rpc("marcar_item_cuarto_trimestre", { p_token: session.token, p_plan_item_id: btn.dataset.id, p_cumplido: nuevo });
+        initCuartoTrimestre();
+      });
+    });
+  }
+
+  document.getElementById("ct-guardar-parto-btn").addEventListener("click", async () => {
+    const fecha = document.getElementById("ct-fecha-parto").value;
+    if (!fecha) return;
+    const tuvoThe = document.getElementById("ct-tuvo-the").checked;
+    const btn = document.getElementById("ct-guardar-parto-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await sb.rpc("guardar_fecha_parto", { p_token: session.token, p_fecha_parto: fecha, p_tuvo_the: tuvoThe });
+    btn.disabled = false; btn.textContent = "Activar mi seguimiento";
+    initCuartoTrimestre();
   });
 
   // ================= MIS DATOS =================
