@@ -235,7 +235,7 @@
 
   /* MDPA */
   .mdpa-illus { text-align: center; margin-bottom: 14px; }
-  .mdpa-illus svg { width: 130px; height: auto; }
+  .mdpa-illus svg { width: 170px; height: auto; }
   .mdpa-tips { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--gray-900); line-height: 1.7; }
   .mdpa-tips li { margin-bottom: 6px; }
   .mdpa-rotate-hint {
@@ -256,6 +256,20 @@
   .mdpa-day-label { font-size: 11px; font-weight: 700; color: var(--violet-dark); text-align: left !important; }
   .mdpa-input { width: 34px; padding: 4px 2px; border: 1.5px solid var(--gray-300); border-radius: 6px; font-size: 12px; text-align: center; }
   .mdpa-input.alarma { border-color: var(--pink); background: var(--pink-light); color: var(--pink); font-weight: 700; }
+
+  /* Mis datos — íconos de sección */
+  .md-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  }
+  .md-icon svg { width: 16px; height: 16px; }
+  .md-icon-violet { background: var(--violet-light); color: var(--violet-dark); }
+  .md-icon-coral { background: var(--coral-light); color: var(--coral); }
+  .md-icon-blue { background: var(--blue-light); color: var(--blue); }
+  .md-icon-indigo { background: var(--indigo-light); color: var(--indigo); }
+  .md-icon-pink { background: var(--pink-light); color: var(--pink-dark); }
+  .mis-datos-hero { background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
+  .edad-badge { margin-top: 4px; }
 
   /* Mis datos / Embarazos — grupos colapsables */
   details.grupo { border: 1px solid var(--gray-300); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
@@ -328,9 +342,14 @@
         <div class="greeting">Hola,</div>
         <div class="name" id="patient-name">—</div>
       </div>
-      <button class="profile-btn" id="mis-datos-shortcut" aria-label="Ir a Mis datos" title="Mis datos">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg>
-      </button>
+      <div style="display:flex; gap:8px;">
+        <button class="profile-btn" id="mis-datos-shortcut" aria-label="Ir a Mis datos" title="Mis datos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg>
+        </button>
+        <button class="profile-btn" id="header-logout-btn" aria-label="Cerrar sesión" title="Cerrar sesión">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -360,43 +379,69 @@
 
     <!-- MIS DATOS -->
     <div class="panel" id="panel-mis-datos">
-      <div class="card">
+      <div class="card mis-datos-hero">
         <h2>Mis datos</h2>
         <p class="helper">Completá esta sección una vez al empezar. Podés volver cuando quieras a modificarla — tu médica va a ver siempre la información más reciente.</p>
-        <label for="md-telefono">Teléfono</label>
-        <input type="text" id="md-telefono">
+      </div>
+
+      <!-- 1. Datos filiatorios -->
+      <div class="card">
+        <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Mis datos personales</h2>
+        <label for="md-whatsapp">WhatsApp</label>
+        <input type="text" id="md-whatsapp" inputmode="tel" placeholder="Ej: 11 2345 6789">
+        <label for="md-email">Correo electrónico</label>
+        <input type="text" id="md-email" inputmode="email" placeholder="tunombre@mail.com">
         <label for="md-fecha-nac">Fecha de nacimiento</label>
         <input type="date" id="md-fecha-nac">
+        <div class="edad-badge pill-teal" id="edad-badge" style="display:none;"></div>
+        <label for="md-ocupacion" style="margin-top:14px;">Ocupación</label>
+        <input type="text" id="md-ocupacion" placeholder="Ej: docente, comerciante, ama de casa...">
+      </div>
 
-        <details class="grupo" open>
-          <summary>Antecedentes propios</summary>
-          <div class="grupo-body" id="grupo-clinicos"></div>
-        </details>
+      <!-- 2. Antecedentes de enfermedades previas -->
+      <div class="card">
+        <h2><span class="md-icon md-icon-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-9.5-8.6C.7 8.7 3.2 5 6.8 5c2 0 3.6 1.4 5.2 3.4C13.6 6.4 15.2 5 17.2 5c3.6 0 6.1 3.7 4.3 7.4C19 16.6 12 21 12 21z"/></svg></span>Enfermedades previas</h2>
+        <p class="helper">Marcá las que tuviste antes de este embarazo.</p>
+        <div id="grupo-clinicos"></div>
+      </div>
 
+      <!-- Altura y peso antes del embarazo -->
+      <div class="card">
+        <h2><span class="md-icon md-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg></span>Antes de empezar el embarazo</h2>
+        <p class="helper">Con esto calculamos tu IMC pregestacional y tu objetivo de aumento de peso — se usa después en la solapa "Curva ponderal".</p>
+        <div class="fila-2col">
+          <div><label for="md-altura">Altura (cm)</label><input type="number" id="md-altura" step="0.1"></div>
+          <div><label for="md-peso-preg">Peso (kg)</label><input type="number" id="md-peso-preg" step="0.1"></div>
+        </div>
+        <div class="imc-badge" id="imc-preview-badge" style="display:none;"></div>
+      </div>
+
+      <!-- 3. Antecedentes del papá del bebé -->
+      <div class="card">
+        <h2><span class="md-icon md-icon-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Antecedentes del papá del bebé</h2>
+        <div class="check-row"><input type="checkbox" id="fam-papa-nacio-pe"><label for="fam-papa-nacio-pe" style="margin:0;">¿Sabés si el papá del bebé nació de un embarazo con preeclampsia?</label></div>
+
+        <p class="helper" style="margin-top:14px;">¿Tuvo otras parejas en las que hubo preeclampsia o hipertensión del embarazo? Agregá cada caso.</p>
+        <div id="paternos-list"></div>
+        <button type="button" class="tertiary" id="add-paterno-btn">+ Agregar otra pareja con este antecedente</button>
+      </div>
+
+      <!-- 4. Antecedentes familiares -->
+      <div class="card">
+        <h2><span class="md-icon md-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg></span>Antecedentes familiares</h2>
+        <p class="helper">De tu mamá y tus hermanas.</p>
+        <div class="check-row"><input type="checkbox" id="fam-madre-the"><label for="fam-madre-the" style="margin:0;">Mamá con hipertensión del embarazo</label></div>
+        <div class="check-row"><input type="checkbox" id="fam-madre-pe"><label for="fam-madre-pe" style="margin:0;">Mamá con preeclampsia</label></div>
+        <div class="check-row"><input type="checkbox" id="fam-hermana-the"><label for="fam-hermana-the" style="margin:0;">Hermana con hipertensión del embarazo</label></div>
+        <div class="check-row"><input type="checkbox" id="fam-hermana-pe"><label for="fam-hermana-pe" style="margin:0;">Hermana con preeclampsia</label></div>
+      </div>
+
+      <div class="card">
         <details class="grupo">
-          <summary>Antecedentes del papá del bebé</summary>
-          <div class="grupo-body">
-            <div id="paternos-list"></div>
-            <button type="button" class="tertiary" id="add-paterno-btn">+ Agregar embarazo previo del papá</button>
-          </div>
-        </details>
-
-        <details class="grupo">
-          <summary>Antecedentes familiares</summary>
-          <div class="grupo-body">
-            <div class="check-row"><input type="checkbox" id="fam-madre-the"><label for="fam-madre-the" style="margin:0;">Mamá con hipertensión del embarazo</label></div>
-            <div class="check-row"><input type="checkbox" id="fam-madre-pe"><label for="fam-madre-pe" style="margin:0;">Mamá con preeclampsia</label></div>
-            <div class="check-row"><input type="checkbox" id="fam-hermana-the"><label for="fam-hermana-the" style="margin:0;">Hermana con hipertensión del embarazo</label></div>
-            <div class="check-row"><input type="checkbox" id="fam-hermana-pe"><label for="fam-hermana-pe" style="margin:0;">Hermana con preeclampsia</label></div>
-          </div>
-        </details>
-
-        <details class="grupo">
-          <summary>Estilo de vida</summary>
+          <summary>Otros datos de estilo de vida</summary>
           <div class="grupo-body" id="grupo-estilo"></div>
         </details>
-
-        <button class="primary" id="guardar-datos-btn" style="margin-top:8px;">Guardar mis datos</button>
+        <button class="primary" id="guardar-datos-btn" style="margin-top:14px;">Guardar mis datos</button>
         <p id="datos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Datos guardados ✓</p>
       </div>
     </div>
@@ -602,17 +647,38 @@
           <summary>Cómo tomar la presión correctamente</summary>
           <div class="grupo-body">
             <div class="mdpa-illus">
-              <svg viewBox="0 0 160 140" fill="none">
-                <ellipse cx="80" cy="128" rx="46" ry="6" fill="#EFEAF9"/>
-                <rect x="34" y="96" width="30" height="34" rx="4" fill="#D8CDEF"/>
-                <circle cx="80" cy="46" r="15" fill="#F0C9A0"/>
-                <path d="M62 60c-10 3-14 12-14 22v20c0 4 3 6 7 6h50c4 0 7-2 7-6v-20c0-10-4-19-14-22-8 14-28 14-36 0z" fill="#6B4FA0"/>
-                <path d="M58 92c6 10 22 5 28-6" stroke="#4B3585" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <circle cx="60" cy="98" r="9" fill="none" stroke="#E85D8A" stroke-width="2.5"/>
-                <path d="M60 92v-14" stroke="#E85D8A" stroke-width="2.5" stroke-linecap="round"/>
-                <rect x="52" y="76" width="16" height="8" rx="2" fill="#E85D8A"/>
-                <path d="M52 106c-8 4-12 10-12 18" stroke="#F0C9A0" stroke-width="6" stroke-linecap="round"/>
-                <path d="M100 106c6 4 9 10 9 18" stroke="#F0C9A0" stroke-width="6" stroke-linecap="round"/>
+              <svg viewBox="0 0 160 170" fill="none">
+                <!-- silla -->
+                <rect x="50" y="128" width="60" height="8" rx="3" fill="#E4DCF5"/>
+                <rect x="54" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
+                <rect x="100" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
+                <!-- piernas -->
+                <rect x="64" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
+                <rect x="85" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
+                <ellipse cx="70" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
+                <ellipse cx="91" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
+                <!-- cuerpo (remera) -->
+                <path d="M58 48c-9 5-13 15-13 25v38c0 6 5 10 11 10h48c6 0 11-4 11-10V73c0-10-4-20-13-25-3 8-9 13-17 13s-14-5-17-13z" fill="#6B4FA0"/>
+                <!-- pancita embarazada -->
+                <ellipse cx="80" cy="94" rx="30" ry="26" fill="#7C5CC4"/>
+                <path d="M56 88a24 24 0 0 0 48 0" stroke="#4B3585" stroke-width="1.5" fill="none" opacity="0.4"/>
+                <!-- brazo izquierdo apoyado -->
+                <path d="M58 54c-9 6-13 16-11 28" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
+                <!-- brazo derecho con manguito -->
+                <path d="M102 54c9 5 13 13 12 22" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
+                <rect x="104" y="58" width="16" height="11" rx="3" fill="#E85D8A" transform="rotate(18 112 63)"/>
+                <path d="M118 66c6 3 9 9 9 16" stroke="#E85D8A" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <!-- mesa con tensiómetro -->
+                <rect x="118" y="98" width="34" height="5" rx="2" fill="#EFEAF9"/>
+                <rect x="121" y="103" width="3" height="24" fill="#EFEAF9"/>
+                <rect x="146" y="103" width="3" height="24" fill="#EFEAF9"/>
+                <rect x="126" y="85" width="20" height="14" rx="3" fill="#4B3585"/>
+                <circle cx="136" cy="92" r="3" fill="#F4D998"/>
+                <!-- cabeza y cabello -->
+                <circle cx="80" cy="32" r="15" fill="#F0C9A0"/>
+                <path d="M65 30c-1-11 8-19 15-19s16 8 15 19c-2-6-8-9-15-9s-13 3-15 9z" fill="#3E2A69"/>
+                <path d="M65 30c0 6 1 11 4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M95 30c0 6-1 11-4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
               </svg>
             </div>
             <ul class="mdpa-tips">
@@ -639,10 +705,8 @@
     <div class="panel" id="panel-curva-ponderal">
       <div class="card">
         <h2>Curva ponderal</h2>
-        <p class="helper">Cargá tu altura una sola vez. Después, pesate y registralo periódicamente para ver tu evolución frente al objetivo recomendado.</p>
+        <p class="helper">Tu altura se toma de "Mis datos". Acá solo tenés que pesarte y registrarlo periódicamente para ver tu evolución frente al objetivo recomendado.</p>
         <div id="imc-info"></div>
-        <label for="cp-altura">Altura (cm) — se carga una sola vez</label>
-        <input type="number" id="cp-altura" step="0.1">
         <label for="cp-peso">Peso de hoy (kg)</label>
         <input type="number" id="cp-peso" step="0.1">
         <button class="secondary" id="guardar-peso-btn">Guardar peso</button>
@@ -702,13 +766,15 @@
     e.preventDefault();
     doLogin(document.getElementById("dni").value.trim(), document.getElementById("password").value);
   });
-  document.getElementById("logout-btn").addEventListener("click", () => {
+  function cerrarSesion() {
     localStorage.removeItem("siempre_session");
     session = null;
     homeScreen.style.display = "none";
     loginScreen.classList.add("show");
     loginForm.reset();
-  });
+  }
+  document.getElementById("logout-btn").addEventListener("click", cerrarSesion);
+  document.getElementById("header-logout-btn").addEventListener("click", cerrarSesion);
 
   // ---------- WELCOME ----------
   async function goToWelcome() {
@@ -1121,15 +1187,40 @@
   async function initCurvaPonderal() {
     const { data, error } = await sb.rpc("obtener_curva_ponderal", { p_token: session.token });
     if (error || !data || !data.ok) return;
-    if (data.altura_cm) document.getElementById("cp-altura").value = data.altura_cm;
 
     const clasif = clasificarIMC(data.imc_pregestacional);
     const imcInfo = document.getElementById("imc-info");
-    if (clasif) {
-      imcInfo.innerHTML = `<div class="imc-badge">${clasif.cat}</div><p style="font-size:12px;color:var(--gray-600);margin-top:0;">Según guías (IOM), tu objetivo de aumento total de peso en el embarazo es de ${clasif.min} a ${clasif.max} kg.</p>`;
-    } else {
-      imcInfo.innerHTML = `<p style="font-size:12px;color:var(--gray-600);">Completá tus datos en "Mis datos" (IMC pregestacional) para ver tu objetivo de aumento de peso.</p>`;
+    let html = "";
+
+    if (data.altura_cm || data.peso_pregestacional_kg) {
+      html += `<p style="font-size:12px;color:var(--gray-600);margin:0 0 10px;">Punto de partida: `;
+      if (data.altura_cm) html += `<strong>${data.altura_cm} cm</strong>`;
+      if (data.altura_cm && data.peso_pregestacional_kg) html += `, `;
+      if (data.peso_pregestacional_kg) html += `<strong>${data.peso_pregestacional_kg} kg</strong> antes del embarazo`;
+      html += `</p>`;
     }
+
+    if (clasif) {
+      html += `<div class="imc-badge">${clasif.cat}</div>`;
+      html += `<p style="font-size:12.5px;color:var(--gray-900);line-height:1.6;">El aumento de peso ideal depende de tu IMC antes del embarazo. Para un embarazo único, se recomienda un aumento de <strong>${clasif.min} a ${clasif.max} kg</strong> si tenías ${clasif.cat.toLowerCase()}.</p>`;
+
+      // Progreso actual vs objetivo
+      const ultimoPeso = data.registros && data.registros.length ? data.registros[data.registros.length - 1].peso_kg : null;
+      if (ultimoPeso != null && data.peso_pregestacional_kg) {
+        const aumento = (ultimoPeso - data.peso_pregestacional_kg);
+        let estadoTxt, estadoClase;
+        if (aumento < clasif.min) { estadoTxt = "por debajo del objetivo por ahora"; estadoClase = "banner-wait"; }
+        else if (aumento > clasif.max) { estadoTxt = "por encima del objetivo por ahora"; estadoClase = "banner-wait"; }
+        else { estadoTxt = "dentro del objetivo"; estadoClase = "banner-ok"; }
+        html += `<div class="${estadoClase}">Llevás un aumento de <strong>${aumento.toFixed(1)} kg</strong> — ${estadoTxt}.</div>`;
+      }
+
+      html += `<p class="helper" style="margin-top:10px;">Esto no es motivo de preocupación: es información para vos y tu equipo médico, así saben cuándo conviene charlarlo en una consulta. El sobrepeso y la obesidad aumentan el riesgo de hipertensión del embarazo, por eso este seguimiento ayuda a anticiparse.</p>`;
+    } else {
+      html += `<p style="font-size:12px;color:var(--gray-600);">Completá tu altura y peso en "Mis datos" para ver tu objetivo de aumento de peso.</p>`;
+    }
+
+    imcInfo.innerHTML = html;
 
     const hist = document.getElementById("peso-historial");
     if (data.registros && data.registros.length) {
@@ -1141,11 +1232,10 @@
     }
   }
   document.getElementById("guardar-peso-btn").addEventListener("click", async () => {
-    const altura = document.getElementById("cp-altura").value;
     const peso = document.getElementById("cp-peso").value;
     if (!peso) return;
     const fecha = new Date().toISOString().slice(0, 10);
-    await sb.rpc("guardar_peso", { p_token: session.token, p_altura_cm: altura ? parseFloat(altura) : null, p_peso_kg: parseFloat(peso), p_fecha: fecha });
+    await sb.rpc("guardar_peso", { p_token: session.token, p_peso_kg: parseFloat(peso), p_fecha: fecha });
     document.getElementById("cp-peso").value = "";
     initCurvaPonderal();
   });
@@ -1286,13 +1376,10 @@
       <div class="check-row"><input type="checkbox" id="ac-nuliparidad"><label style="margin:0;" for="ac-nuliparidad">Primer embarazo (nuliparidad)</label></div>
       <div class="check-row"><input type="checkbox" id="ac-intervalo"><label style="margin:0;" for="ac-intervalo">Más de 10 años desde el último embarazo</label></div>
       <div class="check-row"><input type="checkbox" id="ac-reprod"><label style="margin:0;" for="ac-reprod">Reproducción asistida</label></div>
-      <label for="ac-edad">Edad</label><input type="number" id="ac-edad" min="10" max="60">
-      <label for="ac-imc">IMC pregestacional</label><input type="number" id="ac-imc" step="0.1">
-      <label for="ac-otros">Otros antecedentes</label><textarea id="ac-otros"></textarea>`;
+      <label for="ac-otros" style="margin-top:10px;">Otras enfermedades (opcional)</label><textarea id="ac-otros" placeholder="Contanos si tenés alguna otra"></textarea>`;
   }
   function renderGrupoEstilo() {
     document.getElementById("grupo-estilo").innerHTML = `
-      <label for="es-ocupacion">Ocupación</label><input type="text" id="es-ocupacion">
       <label for="es-alimentacion">Tipo de alimentación</label>
       <select id="es-alimentacion">
         <option value="omnivora">Omnívora</option><option value="vegetariana">Vegetariana</option>
@@ -1311,10 +1398,9 @@
     const cont = document.getElementById("paternos-list");
     cont.innerHTML = paternosList.map((p, i) => `
       <div class="gesta-block">
-        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="fue_con_pareja_actual" ${p.fue_con_pareja_actual ? "checked" : ""}><label style="margin:0;">Con pareja actual</label></div>
         <div class="check-row"><input type="checkbox" data-i="${i}" data-f="the" ${p.the ? "checked" : ""}><label style="margin:0;">Hipertensión del embarazo</label></div>
         <div class="check-row"><input type="checkbox" data-i="${i}" data-f="preeclampsia" ${p.preeclampsia ? "checked" : ""}><label style="margin:0;">Preeclampsia</label></div>
-        <label>Año</label><input type="number" data-i="${i}" data-f="anio" value="${p.anio || ''}">
+        <label>Año (aproximado)</label><input type="number" data-i="${i}" data-f="anio" value="${p.anio || ''}">
         <button type="button" class="remove-gesta" data-remove="${i}">Quitar</button>
       </div>`).join("") || "<p style='font-size:12px;color:var(--gray-600);'>Sin registros todavía.</p>";
     cont.querySelectorAll("input[type=checkbox]").forEach(el => el.addEventListener("change", () => { paternosList[el.dataset.i][el.dataset.f] = el.checked; }));
@@ -1322,9 +1408,35 @@
     cont.querySelectorAll("[data-remove]").forEach(el => el.addEventListener("click", () => { paternosList.splice(parseInt(el.dataset.remove), 1); renderPaternos(); }));
   }
   document.getElementById("add-paterno-btn").addEventListener("click", () => {
-    paternosList.push({ fue_con_pareja_actual: true, the: false, preeclampsia: false, anio: "" });
+    paternosList.push({ fue_con_pareja_actual: false, the: false, preeclampsia: false, anio: "" });
     renderPaternos();
   });
+
+  function actualizarEdad() {
+    const fecha = document.getElementById("md-fecha-nac").value;
+    const badge = document.getElementById("edad-badge");
+    if (!fecha) { badge.style.display = "none"; return; }
+    const nacimiento = new Date(fecha);
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) edad--;
+    badge.textContent = `Tenés ${edad} años`;
+    badge.style.display = "inline-block";
+  }
+  document.getElementById("md-fecha-nac").addEventListener("change", actualizarEdad);
+
+  function actualizarImcPreview() {
+    const altura = parseFloat(document.getElementById("md-altura").value);
+    const peso = parseFloat(document.getElementById("md-peso-preg").value);
+    const badge = document.getElementById("imc-preview-badge");
+    if (!altura || !peso) { badge.style.display = "none"; return; }
+    const imc = peso / Math.pow(altura / 100, 2);
+    badge.textContent = `Tu IMC pregestacional: ${imc.toFixed(1)}`;
+    badge.style.display = "inline-block";
+  }
+  document.getElementById("md-altura").addEventListener("input", actualizarImcPreview);
+  document.getElementById("md-peso-preg").addEventListener("input", actualizarImcPreview);
 
   async function initMisDatos() {
     renderGrupoClinicos();
@@ -1333,8 +1445,9 @@
     const { data, error } = await sb.rpc("obtener_mis_datos", { p_token: session.token });
     if (error || !data || !data.ok) return;
 
-    if (data.telefono) document.getElementById("md-telefono").value = data.telefono;
-    if (data.fecha_nacimiento) document.getElementById("md-fecha-nac").value = data.fecha_nacimiento;
+    if (data.telefono) document.getElementById("md-whatsapp").value = data.telefono;
+    if (data.email) document.getElementById("md-email").value = data.email;
+    if (data.fecha_nacimiento) { document.getElementById("md-fecha-nac").value = data.fecha_nacimiento; actualizarEdad(); }
 
     const c = data.clinicos || {};
     document.getElementById("ac-preeclampsia-previa").checked = !!c.preeclampsia_previa;
@@ -1347,18 +1460,20 @@
     document.getElementById("ac-nuliparidad").checked = !!c.nuliparidad;
     document.getElementById("ac-intervalo").checked = !!c.intervalo_embarazos_mayor_10;
     document.getElementById("ac-reprod").checked = !!c.reproduccion_asistida;
-    if (c.edad_materna) document.getElementById("ac-edad").value = c.edad_materna;
-    if (c.imc_pregestacional) document.getElementById("ac-imc").value = c.imc_pregestacional;
     if (c.otros_antecedentes) document.getElementById("ac-otros").value = c.otros_antecedentes;
+    if (c.altura_pregestacional_cm) document.getElementById("md-altura").value = c.altura_pregestacional_cm;
+    if (c.peso_pregestacional_kg) document.getElementById("md-peso-preg").value = c.peso_pregestacional_kg;
+    actualizarImcPreview();
 
     const fam = data.familiares || {};
     document.getElementById("fam-madre-the").checked = !!fam.madre_the;
     document.getElementById("fam-madre-pe").checked = !!fam.madre_pe;
     document.getElementById("fam-hermana-the").checked = !!fam.hermana_the;
     document.getElementById("fam-hermana-pe").checked = !!fam.hermana_pe;
+    document.getElementById("fam-papa-nacio-pe").checked = !!fam.papa_nacio_de_pe;
 
     const es = data.estilo_vida || {};
-    if (es.ocupacion) document.getElementById("es-ocupacion").value = es.ocupacion;
+    if (es.ocupacion) document.getElementById("md-ocupacion").value = es.ocupacion;
     if (es.tipo_alimentacion) document.getElementById("es-alimentacion").value = es.tipo_alimentacion;
     if (es.tabaquismo) document.getElementById("es-tabaquismo").value = es.tabaquismo;
     document.getElementById("es-actividad-previa").checked = !!es.actividad_fisica_previa;
@@ -1369,6 +1484,15 @@
   }
 
   document.getElementById("guardar-datos-btn").addEventListener("click", async () => {
+    const fechaNac = document.getElementById("md-fecha-nac").value;
+    let edadCalculada = "";
+    if (fechaNac) {
+      const nacimiento = new Date(fechaNac);
+      const hoy = new Date();
+      edadCalculada = hoy.getFullYear() - nacimiento.getFullYear();
+      const m = hoy.getMonth() - nacimiento.getMonth();
+      if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) edadCalculada--;
+    }
     const clinicos = {
       preeclampsia_previa: document.getElementById("ac-preeclampsia-previa").checked,
       hta_cronica: document.getElementById("ac-hta-cronica").checked,
@@ -1380,18 +1504,20 @@
       nuliparidad: document.getElementById("ac-nuliparidad").checked,
       intervalo_embarazos_mayor_10: document.getElementById("ac-intervalo").checked,
       reproduccion_asistida: document.getElementById("ac-reprod").checked,
-      edad_materna: document.getElementById("ac-edad").value,
-      imc_pregestacional: document.getElementById("ac-imc").value,
-      otros_antecedentes: document.getElementById("ac-otros").value
+      edad_materna: edadCalculada,
+      otros_antecedentes: document.getElementById("ac-otros").value,
+      altura_pregestacional_cm: document.getElementById("md-altura").value,
+      peso_pregestacional_kg: document.getElementById("md-peso-preg").value
     };
     const familiares = {
       madre_the: document.getElementById("fam-madre-the").checked,
       madre_pe: document.getElementById("fam-madre-pe").checked,
       hermana_the: document.getElementById("fam-hermana-the").checked,
-      hermana_pe: document.getElementById("fam-hermana-pe").checked
+      hermana_pe: document.getElementById("fam-hermana-pe").checked,
+      papa_nacio_de_pe: document.getElementById("fam-papa-nacio-pe").checked
     };
     const estiloVida = {
-      ocupacion: document.getElementById("es-ocupacion").value,
+      ocupacion: document.getElementById("md-ocupacion").value,
       tipo_alimentacion: document.getElementById("es-alimentacion").value,
       tabaquismo: document.getElementById("es-tabaquismo").value,
       actividad_fisica_previa: document.getElementById("es-actividad-previa").checked,
@@ -1401,8 +1527,9 @@
     btn.disabled = true; btn.textContent = "Guardando...";
     await sb.rpc("guardar_mis_datos", {
       p_token: session.token,
-      p_telefono: document.getElementById("md-telefono").value,
-      p_fecha_nacimiento: document.getElementById("md-fecha-nac").value || null,
+      p_telefono: document.getElementById("md-whatsapp").value,
+      p_email: document.getElementById("md-email").value,
+      p_fecha_nacimiento: fechaNac || null,
       p_clinicos: clinicos, p_familiares: familiares, p_estilo_vida: estiloVida, p_paternos: paternosList
     });
     btn.disabled = false; btn.textContent = "Guardar mis datos";
