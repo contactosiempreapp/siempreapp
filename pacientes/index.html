@@ -4,193 +4,202 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIEMPRE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   :root {
     --violet: #5B3E96;
-    --violet-dark: #3E2A69;
+    --violet-dark: #382461;
+    --violet-deep: #241847;
     --violet-light: #EFEAF9;
     --pink: #E85D8A;
+    --pink-dark: #C43F69;
     --pink-light: #FCEAF0;
     --teal: #0F8C68;
+    --teal-dark: #0B6E52;
     --teal-light: #E1F5EE;
-    --gray-900: #2B2B2E;
-    --gray-600: #6B6A70;
-    --gray-300: #DAD8E0;
-    --gray-100: #F5F4F8;
-    --bg: #FBFAFD;
-    --radius: 14px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --blue: #3568B0;
+    --blue-light: #E8EFF9;
+    --green: #4C8C4A;
+    --green-light: #EAF3E8;
+    --amber: #C17A1F;
+    --amber-light: #FBF0DF;
+    --coral: #D9544A;
+    --coral-light: #FBEAE8;
+    --indigo: #5B5FA8;
+    --indigo-light: #EDEDF7;
+    --plum: #7C4E7A;
+    --plum-light: #F5EAF4;
+    --gray-900: #221F2B;
+    --gray-600: #6E6A78;
+    --gray-300: #DEDAE6;
+    --gray-100: #F5F3F9;
+    --bg: #FAF9FC;
+    --radius: 16px;
+    --tab-accent: var(--violet);
+    --tab-accent-dark: var(--violet-dark);
+    --shadow-card: 0 1px 2px rgba(34, 24, 60, 0.04), 0 6px 20px -8px rgba(34, 24, 60, 0.12);
+    --shadow-soft: 0 4px 14px -6px rgba(34, 24, 60, 0.18);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--gray-900);
-    min-height: 100vh;
-  }
-  .screen {
-    max-width: 420px;
-    margin: 0 auto;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+  body { margin: 0; background: var(--bg); color: var(--gray-900); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  .screen { max-width: 460px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
 
-  /* ---------- LOGIN ---------- */
-  #login-screen {
-    justify-content: center;
-    padding: 32px 24px;
-  }
+  /* ---------- LOGIN / WELCOME (compartido) ---------- */
+  #login-screen, #welcome-screen { justify-content: center; padding: 32px 24px; display: none; }
+  #login-screen.show, #welcome-screen.show { display: flex; }
   .logo-mark {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, var(--violet), var(--violet-dark));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-    font-size: 22px;
-    margin: 0 auto 20px;
+    width: 60px; height: 60px; border-radius: 18px;
+    background: linear-gradient(155deg, #7C5CC4 0%, var(--violet) 45%, var(--violet-deep) 100%);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600; font-family: 'Fraunces', serif; font-size: 24px; margin: 0 auto 22px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
   }
-  h1.brand {
-    text-align: center;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--violet-dark);
-    margin: 0 0 4px;
-    letter-spacing: -0.02em;
+  .logo-mark::after {
+    content: ""; position: absolute; inset: 0; border-radius: 18px;
+    background: linear-gradient(155deg, rgba(255,255,255,0.25), transparent 60%);
   }
-  p.tagline {
-    text-align: center;
-    color: var(--gray-600);
-    font-size: 14px;
-    margin: 0 0 32px;
+  h1.brand { text-align: center; font-family: 'Fraunces', serif; font-weight: 600; font-size: 30px; color: var(--violet-deep); margin: 0 0 6px; letter-spacing: -0.01em; }
+  p.tagline { text-align: center; color: var(--gray-600); font-size: 13.5px; margin: 0 0 32px; line-height: 1.6; letter-spacing: 0.01em; }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-900); margin-bottom: 6px; font-family: 'Manrope', sans-serif; }
+  input[type="text"], input[type="password"], input[type="date"], input[type="number"], select {
+    width: 100%; padding: 13px 14px; border: 1.5px solid var(--gray-300); border-radius: 12px;
+    font-size: 16px; margin-bottom: 14px; background: white; font-family: inherit; transition: border-color 0.15s, box-shadow 0.15s;
   }
-  label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gray-900);
-    margin-bottom: 6px;
-  }
-  input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 13px 14px;
-    border: 1.5px solid var(--gray-300);
-    border-radius: 10px;
-    font-size: 16px;
-    margin-bottom: 18px;
-    background: white;
-  }
-  input:focus {
-    outline: none;
-    border-color: var(--violet);
-  }
+  input:focus, select:focus { outline: none; border-color: var(--violet); box-shadow: 0 0 0 3px rgba(91,62,150,0.12); }
   button.primary {
-    width: 100%;
-    padding: 14px;
-    background: var(--violet);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
+    width: 100%; padding: 14px; background: linear-gradient(135deg, var(--violet), var(--violet-deep)); color: white; border: none;
+    border-radius: 12px; font-size: 15.5px; font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer;
+    box-shadow: var(--shadow-soft); transition: transform 0.1s, box-shadow 0.15s;
   }
-  button.primary:active { background: var(--violet-dark); }
+  button.primary:active { transform: translateY(1px); box-shadow: none; }
   button.primary:disabled { opacity: 0.6; }
-  #login-error {
-    color: var(--pink);
-    background: var(--pink-light);
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    margin-bottom: 16px;
-    display: none;
-  }
+  #login-error { color: var(--pink-dark); background: var(--pink-light); padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
+
+  .welcome-msg { font-family: 'Fraunces', serif; font-weight: 600; font-size: 23px; color: var(--violet-deep); text-align: center; margin-bottom: 14px; }
+  .welcome-explain { font-size: 14px; color: var(--gray-600); text-align: center; line-height: 1.65; margin-bottom: 28px; }
 
   /* ---------- HOME ---------- */
   #home-screen { display: none; }
   header.top {
-    background: var(--violet);
-    color: white;
-    padding: 20px 20px 24px;
-    border-radius: 0 0 24px 24px;
+    background: linear-gradient(135deg, var(--tab-accent) 0%, var(--tab-accent-dark) 100%);
+    color: white; padding: 22px 20px 18px; border-radius: 0 0 26px 26px;
+    transition: background 0.5s ease; box-shadow: 0 8px 24px -12px rgba(34,24,60,0.35);
   }
-  header.top .greeting { font-size: 13px; opacity: 0.8; }
-  header.top .name { font-size: 20px; font-weight: 700; margin-top: 2px; }
+  header.top .greeting { font-size: 12.5px; opacity: 0.85; letter-spacing: 0.02em; }
+  header.top .name { font-family: 'Fraunces', serif; font-size: 21px; font-weight: 600; margin-top: 3px; }
 
-  main { padding: 20px; flex: 1; }
+  nav.tabs {
+    display: flex; gap: 8px; overflow-x: auto; padding: 16px 16px 4px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 9px 14px 9px 11px; border-radius: 22px; border: 1.5px solid var(--gray-300);
+    background: white; color: var(--gray-600); font-size: 12.5px; font-weight: 600; font-family: 'Manrope', sans-serif;
+    cursor: pointer; white-space: nowrap; transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .tab-btn.active { background: var(--tab-accent); border-color: var(--tab-accent); color: white; box-shadow: 0 4px 12px -4px var(--tab-accent); }
 
-  .card {
-    background: white;
-    border-radius: var(--radius);
-    padding: 18px;
-    margin-bottom: 16px;
-    border: 1px solid var(--gray-300);
-  }
-  .card h2 {
-    font-size: 15px;
-    font-weight: 700;
-    margin: 0 0 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .pill-teal {
-    background: var(--teal-light);
-    color: var(--teal);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
+  main { padding: 18px 20px 24px; flex: 1; }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadein 0.25s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-  }
-  .cal-dow {
-    font-size: 11px;
-    color: var(--gray-600);
-    text-align: center;
-    font-weight: 600;
-  }
+  .card { background: white; border-radius: var(--radius); padding: 20px; margin-bottom: 16px; border: 1px solid var(--gray-300); box-shadow: var(--shadow-card); }
+  .card h2 { font-family: 'Manrope', sans-serif; font-size: 15.5px; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; color: var(--gray-900); }
+  .helper { font-size: 12.5px; color: var(--gray-600); line-height: 1.55; margin: 0 0 14px; }
+  .pill-teal { background: var(--teal-light); color: var(--teal-dark); font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 20px; font-family: 'Manrope', sans-serif; }
+
+  /* calendarios (aspirina / calcio) */
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .cal-dow { font-size: 11px; color: var(--gray-600); text-align: center; font-weight: 600; }
   .cal-day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    font-size: 13px;
-    cursor: pointer;
-    border: 1.5px solid var(--gray-300);
-    background: white;
-    color: var(--gray-900);
-    user-select: none;
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 8px;
+    font-size: 13px; cursor: pointer; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-900); user-select: none;
   }
   .cal-day.empty { visibility: hidden; cursor: default; }
-  .cal-day.tomada { background: var(--teal); border-color: var(--teal); color: white; font-weight: 700; }
-  .cal-day.no-tomada { background: var(--pink-light); border-color: var(--pink); color: var(--pink); font-weight: 700; }
+  .cal-day.tomada, .cal-day.suficiente { background: var(--teal); border-color: var(--teal); color: white; font-weight: 700; }
+  .cal-day.no-tomada, .cal-day.insuficiente { background: var(--pink-light); border-color: var(--pink); color: var(--pink); font-weight: 700; }
   .cal-day.today { box-shadow: 0 0 0 2px var(--violet); }
-
-  .legend { display: flex; gap: 14px; margin-top: 12px; font-size: 12px; color: var(--gray-600); }
+  .legend { display: flex; gap: 14px; margin-top: 12px; font-size: 12px; color: var(--gray-600); flex-wrap: wrap; }
   .legend span { display: inline-flex; align-items: center; gap: 5px; }
   .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
 
-  button.logout {
-    background: none;
-    border: none;
-    color: var(--gray-600);
-    font-size: 13px;
-    text-decoration: underline;
-    cursor: pointer;
-    padding: 0;
+  /* calcio */
+  .food-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100); }
+  .food-row:last-child { border-bottom: none; }
+  .food-name { font-size: 13px; font-weight: 600; }
+  .food-unit { font-size: 11px; color: var(--gray-600); }
+  .food-qty { display: flex; align-items: center; gap: 8px; }
+  .qty-btn {
+    width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white;
+    font-size: 16px; font-weight: 700; color: var(--violet); cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;
   }
+  .qty-val { min-width: 18px; text-align: center; font-size: 14px; font-weight: 700; }
+  .aporte-resumen { display: flex; align-items: baseline; justify-content: space-between; background: var(--violet-light); border-radius: 10px; padding: 12px 14px; margin: 14px 0; }
+  .aporte-mg { font-size: 22px; font-weight: 800; color: var(--violet-dark); }
+  .aporte-label { font-size: 12px; color: var(--gray-600); }
+  .aporte-resumen.ok .aporte-mg { color: var(--teal); }
+  .aporte-resumen.falta .aporte-mg { color: var(--pink); }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; font-size: 13px; font-weight: 600; }
+  .switch { width: 40px; height: 22px; background: var(--gray-300); border-radius: 20px; position: relative; cursor: pointer; border: none; }
+  .switch.on { background: var(--teal); }
+  .switch::after { content: ""; width: 18px; height: 18px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: left 0.15s; }
+  .switch.on::after { left: 20px; }
+  textarea {
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--gray-300); border-radius: 10px; font-size: 14px;
+    font-family: inherit; resize: vertical; min-height: 50px; margin-top: 8px; margin-bottom: 14px;
+  }
+  button.secondary {
+    width: 100%; padding: 12px; background: var(--violet-light); color: var(--violet-dark); border: none;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px;
+  }
+
+  /* MDPA */
+  .alerta-severa { background: #FDEDEB; border: 1.5px solid var(--pink); color: #8A2E22; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+  .mdpa-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .mdpa-table th { font-size: 10px; color: var(--gray-600); font-weight: 700; text-align: center; padding: 4px 2px; }
+  .mdpa-table td { text-align: center; padding: 3px 2px; }
+  .mdpa-day-label { font-size: 11px; font-weight: 700; color: var(--violet-dark); text-align: left !important; }
+  .mdpa-input { width: 32px; padding: 4px 2px; border: 1.5px solid var(--gray-300); border-radius: 6px; font-size: 12px; text-align: center; }
+  .mdpa-input.alarma { border-color: var(--pink); background: var(--pink-light); color: var(--pink); font-weight: 700; }
+
+  /* Mis datos / Embarazos — grupos colapsables */
+  details.grupo { border: 1px solid var(--gray-300); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  details.grupo summary {
+    padding: 12px 14px; font-size: 13px; font-weight: 700; cursor: pointer; background: var(--gray-100); color: var(--violet-dark); list-style: none;
+  }
+  details.grupo summary::-webkit-details-marker { display: none; }
+  details.grupo[open] summary { border-bottom: 1px solid var(--gray-300); }
+  .grupo-body { padding: 14px; }
+  .check-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13px; }
+  .check-row input[type="checkbox"] { width: 18px; height: 18px; margin: 0; flex-shrink: 0; }
+  .gesta-block { border: 1px dashed var(--gray-300); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .gesta-block .check-row { padding: 5px 0; }
+  button.tertiary { background: none; border: 1.5px dashed var(--violet); color: var(--violet); border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; width: 100%; cursor: pointer; margin-bottom: 10px; }
+  button.remove-gesta { background: none; border: none; color: var(--pink); font-size: 12px; font-weight: 700; cursor: pointer; padding: 4px 0; }
+  .fila-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* curva ponderal */
+  .imc-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; background: var(--teal-light); color: var(--teal); margin-bottom: 10px; }
+  .peso-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
+
+  /* actividad física */
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 10px; }
+  .week-day-label { font-size: 10px; text-align: center; color: var(--gray-600); font-weight: 600; }
+  .week-toggle { aspect-ratio: 1; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .week-toggle.on { background: var(--teal); border-color: var(--teal); }
+
+  /* info panels */
+  .info-text { font-size: 14px; line-height: 1.7; color: var(--gray-900); white-space: pre-wrap; }
+
+  button.logout { background: none; border: none; color: var(--gray-600); font-size: 13px; text-decoration: underline; cursor: pointer; padding: 0; }
   footer.foot { text-align: center; padding: 12px; }
 </style>
 </head>
@@ -200,18 +209,21 @@
   <div class="logo-mark">S</div>
   <h1 class="brand">SIEMPRE</h1>
   <p class="tagline">Seguimiento integral del embarazo, maternidad, prevención de riesgo y evolución</p>
-
   <div id="login-error"></div>
-
   <form id="login-form">
     <label for="dni">Documento (DNI)</label>
     <input type="text" id="dni" inputmode="numeric" placeholder="Sin puntos, sin espacios" required>
-
     <label for="password">Contraseña</label>
     <input type="password" id="password" required>
-
     <button type="submit" class="primary" id="login-btn">Ingresar</button>
   </form>
+</div>
+
+<div class="screen" id="welcome-screen">
+  <div class="logo-mark">S</div>
+  <div class="welcome-msg" id="welcome-msg">—</div>
+  <div class="welcome-explain" id="welcome-explain">—</div>
+  <button class="primary" id="continuar-btn">Continuar</button>
 </div>
 
 <div class="screen" id="home-screen">
@@ -220,93 +232,300 @@
     <div class="name" id="patient-name">—</div>
   </header>
 
+  <nav class="tabs" id="tabs-nav">
+    <button class="tab-btn" data-tab="mis-datos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg>Mis datos</button>
+    <button class="tab-btn" data-tab="embarazos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg>Embarazos</button>
+    <button class="tab-btn" data-tab="aspirina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg>Aspirina</button>
+    <button class="tab-btn" data-tab="calcio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>Calcio</button>
+    <button class="tab-btn" data-tab="alimentacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6.2"/><path d="M12 8V5.2"/><path d="M12 5.2c1-1.2 2.2-1.4 3.4-1.2"/></svg>Alimentación</button>
+    <button class="tab-btn" data-tab="actividad-fisica"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.2" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 6.5l-2 4 3 2-1.2 5.3"/><path d="M11.5 10.3l-4 2"/><path d="M14.5 12.5l3 1 1 4.2"/></svg>Actividad física</button>
+    <button class="tab-btn" data-tab="presion-arterial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Presión</button>
+    <button class="tab-btn" data-tab="curva-ponderal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg>Curva ponderal</button>
+    <button class="tab-btn" data-tab="pautas-alarma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l9.5 17.1H2.5L12 3.2z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="17.2" r="0.9" fill="currentColor" stroke="none"/></svg>Pautas de alarma</button>
+    <button class="tab-btn" data-tab="informacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>Información</button>
+  </nav>
+
   <main>
-    <div class="card" id="aspirina-card">
-      <h2>Aspirina <span class="pill-teal" id="aspirina-mes-label">—</span></h2>
-      <div class="cal-grid" id="cal-dow-row"></div>
-      <div class="cal-grid" id="cal-grid" style="margin-top:6px;"></div>
-      <div class="legend">
-        <span><span class="dot" style="background:var(--teal)"></span> Tomada</span>
-        <span><span class="dot" style="background:var(--pink)"></span> No tomada</span>
-        <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
+
+    <!-- MIS DATOS -->
+    <div class="panel" id="panel-mis-datos">
+      <div class="card">
+        <h2>Mis datos</h2>
+        <p class="helper">Completá esta sección una vez al empezar. Podés volver cuando quieras a modificarla — tu médica va a ver siempre la información más reciente.</p>
+        <label for="md-telefono">Teléfono</label>
+        <input type="text" id="md-telefono">
+        <label for="md-fecha-nac">Fecha de nacimiento</label>
+        <input type="date" id="md-fecha-nac">
+
+        <details class="grupo" open>
+          <summary>Antecedentes propios</summary>
+          <div class="grupo-body" id="grupo-clinicos"></div>
+        </details>
+
+        <details class="grupo">
+          <summary>Antecedentes del papá del bebé</summary>
+          <div class="grupo-body">
+            <div id="paternos-list"></div>
+            <button type="button" class="tertiary" id="add-paterno-btn">+ Agregar embarazo previo del papá</button>
+          </div>
+        </details>
+
+        <details class="grupo">
+          <summary>Antecedentes familiares</summary>
+          <div class="grupo-body">
+            <div class="check-row"><input type="checkbox" id="fam-madre-the"><label for="fam-madre-the" style="margin:0;">Mamá con hipertensión del embarazo</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-madre-pe"><label for="fam-madre-pe" style="margin:0;">Mamá con preeclampsia</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-hermana-the"><label for="fam-hermana-the" style="margin:0;">Hermana con hipertensión del embarazo</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-hermana-pe"><label for="fam-hermana-pe" style="margin:0;">Hermana con preeclampsia</label></div>
+          </div>
+        </details>
+
+        <details class="grupo">
+          <summary>Estilo de vida</summary>
+          <div class="grupo-body" id="grupo-estilo"></div>
+        </details>
+
+        <button class="primary" id="guardar-datos-btn" style="margin-top:8px;">Guardar mis datos</button>
+        <p id="datos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Datos guardados ✓</p>
       </div>
     </div>
+
+    <!-- EMBARAZOS -->
+    <div class="panel" id="panel-embarazos">
+      <div class="card">
+        <h2>Embarazo actual</h2>
+        <p class="helper">Cargá la fecha de tu última menstruación y, si ya tenés la ecografía datante, esos datos. Con eso calculamos automáticamente en qué semana estás.</p>
+        <label for="ge-fum">Fecha de última menstruación (FUM)</label>
+        <input type="date" id="ge-fum">
+        <label for="ge-fecha-eco">Fecha de la ecografía datante</label>
+        <input type="date" id="ge-fecha-eco">
+        <div class="fila-2col">
+          <div><label for="ge-eco-sem">Semanas (en la eco)</label><input type="number" id="ge-eco-sem" min="0" max="42"></div>
+          <div><label for="ge-eco-dias">Días</label><input type="number" id="ge-eco-dias" min="0" max="6"></div>
+        </div>
+        <label for="ge-fpp">Fecha probable de parto (indicada por tu obstetra)</label>
+        <input type="date" id="ge-fpp">
+        <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Embarazos previos</h2>
+        <p class="helper">Agregá uno por cada embarazo anterior, aunque no haya tenido complicaciones. Es información importante para tu seguimiento.</p>
+        <div id="previos-list"></div>
+        <button type="button" class="tertiary" id="add-previo-btn">+ Agregar embarazo previo</button>
+        <button class="primary" id="guardar-embarazos-btn">Guardar</button>
+        <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
+      </div>
+    </div>
+
+    <!-- ASPIRINA -->
+    <div class="panel" id="panel-aspirina">
+      <div class="card" id="aspirina-card">
+        <h2>Aspirina <span class="pill-teal" id="aspirina-mes-label">—</span></h2>
+        <p class="helper">Tocá el día de hoy para marcar si tomaste tu aspirina. Un toque = tomada (verde), dos toques = no tomada (rosa).</p>
+        <div class="cal-grid" id="cal-dow-row"></div>
+        <div class="cal-grid" id="cal-grid" style="margin-top:6px;"></div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--teal)"></span> Tomada</span>
+          <span><span class="dot" style="background:var(--pink)"></span> No tomada</span>
+          <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALCIO -->
+    <div class="panel" id="panel-calcio">
+      <div class="card" id="calcio-card">
+        <h2>Calcio <span class="pill-teal">1000 mg/día</span></h2>
+        <p class="helper">Sumá con + cada porción de estos alimentos que consumiste hoy. Te vamos a mostrar cuánto calcio total llevás y si te conviene el suplemento.</p>
+        <div class="aporte-resumen" id="aporte-resumen">
+          <div><div class="aporte-mg" id="aporte-mg">0 mg</div><div class="aporte-label">de hoy</div></div>
+          <div class="aporte-label" id="aporte-estado">Cargá lo que consumiste</div>
+        </div>
+        <div id="calcio-foods"></div>
+        <div class="toggle-row"><span>Usé suplemento hoy</span><button class="switch" id="suplemento-switch"></button></div>
+        <label for="efecto-adverso" style="margin-top:8px;">¿Algún efecto adverso? (opcional)</label>
+        <textarea id="efecto-adverso" placeholder="Ej: constipación, distensión abdominal..."></textarea>
+        <button class="secondary" id="guardar-calcio-btn">Guardar registro de hoy</button>
+      </div>
+      <div class="card" id="calcio-cal-card">
+        <h2>Calendario de calcio <span class="pill-teal" id="calcio-mes-label">—</span></h2>
+        <div class="cal-grid" id="calcio-dow-row"></div>
+        <div class="cal-grid" id="calcio-cal-grid" style="margin-top:6px;"></div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--teal)"></span> ≥1000mg</span>
+          <span><span class="dot" style="background:var(--pink)"></span> &lt;1000mg</span>
+          <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALIMENTACIÓN -->
+    <div class="panel" id="panel-alimentacion">
+      <div class="card"><h2>Alimentación</h2><div class="info-text" id="info-alimentacion-text">Cargando...</div></div>
+    </div>
+
+    <!-- ACTIVIDAD FÍSICA -->
+    <div class="panel" id="panel-actividad-fisica">
+      <div class="card"><h2>Actividad física recomendada</h2><div class="info-text" id="info-actividad-text">Cargando...</div></div>
+      <div class="card">
+        <h2>Esta semana</h2>
+        <p class="helper">Elegí qué actividad estás haciendo y marcá los días en que la realizaste, de lunes a domingo.</p>
+        <label for="tipo-actividad-select">¿Qué actividad estás haciendo?</label>
+        <select id="tipo-actividad-select">
+          <option value="">Seleccioná una opción</option>
+          <option value="caminata">Caminata</option>
+          <option value="natacion">Natación</option>
+          <option value="yoga">Yoga / elongación</option>
+          <option value="gimnasia">Gimnasia para embarazadas</option>
+          <option value="bicicleta_fija">Bicicleta fija</option>
+          <option value="otra">Otra</option>
+        </select>
+        <div class="week-grid" id="week-grid"></div>
+        <button class="secondary" id="guardar-actividad-btn" style="margin-top:14px;">Guardar semana</button>
+      </div>
+    </div>
+
+    <!-- PRESIÓN ARTERIAL -->
+    <div class="panel" id="panel-presion-arterial">
+      <div class="card" id="mdpa-card">
+        <h2>Presión arterial <span class="pill-teal">MDPA</span></h2>
+        <p class="helper">Cargá cada medición en el momento del día que corresponda (mañana, después de comer, noche). Si tu médica te indicó el estudio, tocá "Cargar mediciones".</p>
+        <div id="mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
+      </div>
+    </div>
+
+    <!-- CURVA PONDERAL -->
+    <div class="panel" id="panel-curva-ponderal">
+      <div class="card">
+        <h2>Curva ponderal</h2>
+        <p class="helper">Cargá tu altura una sola vez. Después, pesate y registralo periódicamente para ver tu evolución frente al objetivo recomendado.</p>
+        <div id="imc-info"></div>
+        <label for="cp-altura">Altura (cm) — se carga una sola vez</label>
+        <input type="number" id="cp-altura" step="0.1">
+        <label for="cp-peso">Peso de hoy (kg)</label>
+        <input type="number" id="cp-peso" step="0.1">
+        <button class="secondary" id="guardar-peso-btn">Guardar peso</button>
+        <div id="peso-historial" style="margin-top:16px;"></div>
+      </div>
+    </div>
+
+    <!-- PAUTAS DE ALARMA -->
+    <div class="panel" id="panel-pautas-alarma">
+      <div class="card"><h2>Pautas de alarma — cuándo consultar</h2><div class="info-text" id="info-pautas-text">Cargando...</div></div>
+    </div>
+
+    <!-- INFORMACIÓN -->
+    <div class="panel" id="panel-informacion">
+      <div class="card"><h2>Información</h2><div class="info-text" id="info-general-text">Cargando...</div></div>
+    </div>
+
   </main>
 
-  <footer class="foot">
-    <button class="logout" id="logout-btn">Cerrar sesión</button>
-  </footer>
+  <footer class="foot"><button class="logout" id="logout-btn">Cerrar sesión</button></footer>
 </div>
 
 <script>
-  // --- Configuración de conexión a Supabase ---
   const SUPABASE_URL = "https://bvxeiihvlczztuvjgzyz.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2eGVpaWh2bGN6enR1dmpnenl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTUwNTksImV4cCI6MjA5OTI3MTA1OX0.xjf75zfJIgxTWSzJ8UMtnq1XNk7yMfbCijgUdIkxhCQ";
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const loginScreen = document.getElementById("login-screen");
+  const welcomeScreen = document.getElementById("welcome-screen");
   const homeScreen = document.getElementById("home-screen");
+
+  let session = JSON.parse(localStorage.getItem("siempre_session") || "null");
+
+  // ---------- LOGIN ----------
   const loginForm = document.getElementById("login-form");
   const loginError = document.getElementById("login-error");
   const loginBtn = document.getElementById("login-btn");
-
-  // Sesión guardada en este dispositivo (no es dato sensible en sí,
-  // es solo el token de sesión — igual que cualquier app que te
-  // mantiene logueada).
-  let session = JSON.parse(localStorage.getItem("siempre_session") || "null");
-
-  function showHome(data) {
-    document.getElementById("patient-name").textContent = data.nombre + " " + data.apellido;
-    loginScreen.style.display = "none";
-    homeScreen.style.display = "flex";
-    homeScreen.style.flexDirection = "column";
-    loadAspirinaCalendar();
-  }
 
   async function doLogin(dni, password) {
     loginError.style.display = "none";
     loginBtn.disabled = true;
     loginBtn.textContent = "Ingresando...";
-
     const { data, error } = await sb.rpc("login_paciente", { p_dni: dni, p_password: password });
-
     loginBtn.disabled = false;
     loginBtn.textContent = "Ingresar";
-
-    if (error) {
-      loginError.textContent = "No pudimos conectar. Probá de nuevo en un momento.";
-      loginError.style.display = "block";
-      return;
-    }
+    if (error) { loginError.textContent = "No pudimos conectar. Probá de nuevo."; loginError.style.display = "block"; return; }
     if (!data.ok) {
-      loginError.textContent = data.error === "DNI no encontrado"
-        ? "No encontramos ese documento. Verificalo con tu médica."
-        : "Contraseña incorrecta.";
+      loginError.textContent = data.error === "DNI no encontrado" ? "No encontramos ese documento." : "Contraseña incorrecta.";
       loginError.style.display = "block";
       return;
     }
-
     session = data;
     localStorage.setItem("siempre_session", JSON.stringify(session));
-    showHome(session);
+    goToWelcome();
   }
-
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const dni = document.getElementById("dni").value.trim();
-    const password = document.getElementById("password").value;
-    doLogin(dni, password);
+    doLogin(document.getElementById("dni").value.trim(), document.getElementById("password").value);
   });
-
   document.getElementById("logout-btn").addEventListener("click", () => {
     localStorage.removeItem("siempre_session");
     session = null;
     homeScreen.style.display = "none";
-    loginScreen.style.display = "flex";
+    loginScreen.classList.add("show");
     loginForm.reset();
   });
 
-  // --- Calendario de aspirina ---
+  // ---------- WELCOME ----------
+  async function goToWelcome() {
+    loginScreen.classList.remove("show");
+    const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
+    document.getElementById("welcome-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida!";
+    document.getElementById("welcome-explain").textContent = (data && data.mensaje_explicativo) || "";
+    welcomeScreen.classList.add("show");
+  }
+  document.getElementById("continuar-btn").addEventListener("click", () => {
+    welcomeScreen.classList.remove("show");
+    showHome();
+  });
+
+  // ---------- HOME + TABS ----------
+  function showHome() {
+    document.getElementById("patient-name").textContent = session.nombre + " " + session.apellido;
+    homeScreen.style.display = "flex";
+    homeScreen.style.flexDirection = "column";
+    setupTabs();
+    loadAspirinaCalendar();
+    initCalcio();
+    initMdpa();
+    initInfoPanels();
+    initCurvaPonderal();
+    initActividadFisica();
+    initMisDatos();
+    initEmbarazos();
+  }
+
+  function setupTabs() {
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => activarTab(btn.dataset.tab));
+    });
+    activarTab("aspirina");
+  }
+  const TAB_COLORS = {
+    "mis-datos":        ["#7C5CC4", "#4B3585"],
+    "embarazos":        ["#EC7FA0", "#C43F69"],
+    "aspirina":         ["#28A67F", "#0B6E52"],
+    "calcio":           ["#5B8FD6", "#2C4F87"],
+    "alimentacion":     ["#72B06C", "#3E6E3B"],
+    "actividad-fisica": ["#DDA23F", "#95611A"],
+    "presion-arterial": ["#E37870", "#AD3C33"],
+    "curva-ponderal":   ["#7477C2", "#454890"],
+    "pautas-alarma":    ["#E2665B", "#A5382E"],
+    "informacion":      ["#9482BE", "#5D4A85"]
+  };
+  function activarTab(tab) {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+    document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + tab));
+    const colores = TAB_COLORS[tab] || ["#5B3E96", "#382461"];
+    document.documentElement.style.setProperty("--tab-accent", colores[0]);
+    document.documentElement.style.setProperty("--tab-accent-dark", colores[1]);
+  }
+
+  // ================= ASPIRINA =================
   const DOW = ["D", "L", "M", "M", "J", "V", "S"];
   const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 
@@ -314,60 +533,541 @@
     const hoy = new Date();
     const anio = hoy.getFullYear();
     const mes = hoy.getMonth() + 1;
-
     document.getElementById("aspirina-mes-label").textContent = MESES[mes - 1] + " " + anio;
+    document.getElementById("cal-dow-row").innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
 
-    const dowRow = document.getElementById("cal-dow-row");
-    dowRow.innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
-
-    const { data, error } = await sb.rpc("obtener_calendario_aspirina", {
-      p_token: session.token, p_anio: anio, p_mes: mes
-    });
-
+    const { data, error } = await sb.rpc("obtener_calendario_aspirina", { p_token: session.token, p_anio: anio, p_mes: mes });
     const registros = {};
-    if (!error && data && data.ok) {
-      data.registros.forEach(r => { registros[r.dia.slice(8, 10)] = r.tomada; });
-    }
+    if (!error && data && data.ok) data.registros.forEach(r => { registros[r.dia.slice(8, 10)] = r.tomada; });
 
     const primerDia = new Date(anio, mes - 1, 1).getDay();
     const diasEnMes = new Date(anio, mes, 0).getDate();
     const grid = document.getElementById("cal-grid");
     grid.innerHTML = "";
-
-    for (let i = 0; i < primerDia; i++) {
-      grid.innerHTML += `<div class="cal-day empty"></div>`;
-    }
-
+    for (let i = 0; i < primerDia; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
     for (let d = 1; d <= diasEnMes; d++) {
       const dd = String(d).padStart(2, "0");
-      const isToday = d === hoy.getDate();
-      let cls = "cal-day";
-      if (isToday) cls += " today";
-      if (registros[dd] === true) cls += " tomada";
-      else if (registros[dd] === false) cls += " no-tomada";
+      let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
+      if (registros[dd] === true) cls += " tomada"; else if (registros[dd] === false) cls += " no-tomada";
       grid.innerHTML += `<div class="${cls}" data-day="${dd}">${d}</div>`;
     }
-
-    grid.querySelectorAll(".cal-day:not(.empty)").forEach(el => {
-      el.addEventListener("click", () => toggleAspirina(el, anio, mes));
-    });
+    grid.querySelectorAll(".cal-day:not(.empty)").forEach(el => el.addEventListener("click", () => toggleAspirina(el, anio, mes)));
   }
-
   async function toggleAspirina(el, anio, mes) {
     const dd = el.dataset.day;
-    const yaEstaTomada = el.classList.contains("tomada");
-    const nuevoValor = !yaEstaTomada;
+    const nuevoValor = !el.classList.contains("tomada");
     const fecha = `${anio}-${String(mes).padStart(2, "0")}-${dd}`;
-
     el.classList.remove("tomada", "no-tomada");
     el.classList.add(nuevoValor ? "tomada" : "no-tomada");
-
     await sb.rpc("registrar_aspirina", { p_token: session.token, p_dia: fecha, p_tomada: nuevoValor });
   }
 
-  // Si ya había sesión guardada, entrar directo
+  // ================= CALCIO =================
+  let catalogoCalcio = [];
+  let cantidades = {};
+
+  async function initCalcio() {
+    const { data, error } = await sb.rpc("obtener_catalogo_calcio");
+    if (error || !data) return;
+    catalogoCalcio = data;
+    catalogoCalcio.forEach(f => { cantidades[f.id] = 0; });
+    renderFoods();
+    loadCalcioCalendar();
+  }
+  function renderFoods() {
+    const cont = document.getElementById("calcio-foods");
+    cont.innerHTML = catalogoCalcio.map(f => `
+      <div class="food-row">
+        <div><div class="food-name">${f.nombre}</div><div class="food-unit">${f.unidad_porcion}</div></div>
+        <div class="food-qty">
+          <button class="qty-btn" data-action="menos" data-id="${f.id}">−</button>
+          <span class="qty-val" id="qty-${f.id}">0</span>
+          <button class="qty-btn" data-action="mas" data-id="${f.id}">+</button>
+        </div>
+      </div>`).join("");
+    cont.querySelectorAll(".qty-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.id;
+        cantidades[id] = Math.max(0, cantidades[id] + (btn.dataset.action === "mas" ? 1 : -1));
+        document.getElementById("qty-" + id).textContent = cantidades[id];
+        actualizarAporte();
+      });
+    });
+  }
+  function actualizarAporte() {
+    let total = 0;
+    catalogoCalcio.forEach(f => { total += f.mg_calcio_por_porcion * cantidades[f.id]; });
+    const resumen = document.getElementById("aporte-resumen");
+    document.getElementById("aporte-mg").textContent = total + " mg";
+    const estado = document.getElementById("aporte-estado");
+    resumen.classList.remove("ok", "falta");
+    if (total === 0) estado.textContent = "Cargá lo que consumiste";
+    else if (total >= 1000) { resumen.classList.add("ok"); estado.textContent = "¡Llegaste a tu objetivo diario!"; }
+    else { resumen.classList.add("falta"); estado.textContent = `Te faltan ${1000 - total} mg`; }
+  }
+  const suplementoSwitch = document.getElementById("suplemento-switch");
+  let suplementoOn = false;
+  suplementoSwitch.addEventListener("click", () => {
+    suplementoOn = !suplementoOn;
+    suplementoSwitch.classList.toggle("on", suplementoOn);
+  });
+  document.getElementById("guardar-calcio-btn").addEventListener("click", async () => {
+    const fecha = new Date().toISOString().slice(0, 10);
+    const porciones = catalogoCalcio.filter(f => cantidades[f.id] > 0).map(f => ({ alimento_id: f.id, cantidad: cantidades[f.id] }));
+    const efectoAdverso = document.getElementById("efecto-adverso").value.trim();
+    const btn = document.getElementById("guardar-calcio-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await sb.rpc("registrar_calcio", { p_token: session.token, p_dia: fecha, p_porciones: porciones, p_uso_suplemento: suplementoOn, p_efecto_adverso: efectoAdverso });
+    btn.disabled = false; btn.textContent = "Guardar registro de hoy";
+    loadCalcioCalendar();
+  });
+  async function loadCalcioCalendar() {
+    const hoy = new Date();
+    const anio = hoy.getFullYear(); const mes = hoy.getMonth() + 1;
+    document.getElementById("calcio-mes-label").textContent = MESES[mes - 1] + " " + anio;
+    document.getElementById("calcio-dow-row").innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
+    const { data, error } = await sb.rpc("obtener_calendario_calcio", { p_token: session.token, p_anio: anio, p_mes: mes });
+    const registros = {};
+    if (!error && data && data.ok) data.registros.forEach(r => { registros[r.dia.slice(8, 10)] = r.aporte_calculado_mg; });
+    const primerDia = new Date(anio, mes - 1, 1).getDay();
+    const diasEnMes = new Date(anio, mes, 0).getDate();
+    const grid = document.getElementById("calcio-cal-grid");
+    grid.innerHTML = "";
+    for (let i = 0; i < primerDia; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
+    for (let d = 1; d <= diasEnMes; d++) {
+      const dd = String(d).padStart(2, "0");
+      let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
+      if (registros[dd] !== undefined) cls += registros[dd] >= 1000 ? " suficiente" : " insuficiente";
+      grid.innerHTML += `<div class="${cls}">${d}</div>`;
+    }
+  }
+
+  // ================= MDPA =================
+  let estudioActivo = null;
+  async function initMdpa() {
+    const { data, error } = await sb.rpc("obtener_mdpa_activo", { p_token: session.token });
+    const cont = document.getElementById("mdpa-content");
+    if (error || !data || !data.ok) { cont.innerHTML = `<p style="font-size:13px;color:var(--gray-600);">No pudimos cargar la información.</p>`; return; }
+    if (!data.estudio) {
+      cont.innerHTML = `<p style="font-size:13px; color:var(--gray-600); margin-bottom:12px;">No tenés un monitoreo activo. Si tu médica te indicó hacer un MDPA, iniciálo acá.</p>
+        <button class="secondary" id="iniciar-mdpa-btn">Iniciar monitoreo (4 días)</button>`;
+      document.getElementById("iniciar-mdpa-btn").addEventListener("click", async () => {
+        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: 4, p_incluye_postprandial: true });
+        initMdpa();
+      });
+      return;
+    }
+    estudioActivo = data.estudio;
+    renderMdpaTable();
+  }
+  function getRegistro(dia, momento, toma) {
+    return estudioActivo.registros.find(r => r.dia === dia && r.momento === momento && r.toma === toma);
+  }
+  function renderMdpaTable() {
+    const e = estudioActivo;
+    const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
+    const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
+    const hayAlarmaSevera = e.registros.some(r => r.sistolica >= e.umbral_severo_sis || r.diastolica >= e.umbral_severo_dia);
+
+    const hoy = new Date();
+    const inicio = new Date(e.fecha_inicio + "T00:00:00");
+    const diaActual = Math.min(e.duracion_dias, Math.max(1, Math.floor((hoy - inicio) / 86400000) + 1));
+    const totalTomas = e.duracion_dias * momentos.length * 2;
+    const tomasCargadas = e.registros.length;
+
+    let resumenHtml = "";
+    if (hayAlarmaSevera) resumenHtml += `<div class="alerta-severa">⚠ Detectamos valores de presión muy elevados (≥${e.umbral_severo_sis}/${e.umbral_severo_dia}). Repetí la medición en 15 minutos y, si se confirma, consultá cuanto antes.</div>`;
+    resumenHtml += `
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:4px;">Monitoreo en curso — día ${diaActual} de ${e.duracion_dias}</p>
+      <p style="font-size:12px; color:var(--gray-600); margin-top:0;">${tomasCargadas} de ${totalTomas} tomas cargadas</p>
+      <button class="secondary" id="toggle-mdpa-tabla-btn">Cargar mediciones</button>
+      <div id="mdpa-tabla-wrap" style="display:none; margin-top:14px;"></div>
+    `;
+    document.getElementById("mdpa-content").innerHTML = resumenHtml;
+
+    document.getElementById("toggle-mdpa-tabla-btn").addEventListener("click", () => {
+      const wrap = document.getElementById("mdpa-tabla-wrap");
+      const abierta = wrap.style.display !== "none";
+      wrap.style.display = abierta ? "none" : "block";
+      document.getElementById("toggle-mdpa-tabla-btn").textContent = abierta ? "Cargar mediciones" : "Ocultar tabla";
+      if (!abierta) renderMdpaInputTable();
+    });
+  }
+
+  function renderMdpaInputTable() {
+    const e = estudioActivo;
+    const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
+    const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
+
+    let html = `<table class="mdpa-table"><thead><tr><th style="text-align:left;">Día</th>`;
+    momentos.forEach(m => { html += `<th colspan="2">${labelMomento[m]}</th>`; });
+    html += `</tr></thead><tbody>`;
+    for (let dia = 1; dia <= e.duracion_dias; dia++) {
+      for (let toma = 1; toma <= 2; toma++) {
+        html += `<tr>` + (toma === 1 ? `<td class="mdpa-day-label" rowspan="2">Día ${dia}</td>` : "");
+        momentos.forEach(m => {
+          const r = getRegistro(dia, m, toma);
+          const isAlarma = r && (r.sistolica >= e.umbral_alarma_sis || r.diastolica >= e.umbral_alarma_dia);
+          html += `<td><input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="SIS" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="sistolica" value="${r ? r.sistolica : ''}"></td>
+                   <td><input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="DIA" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="diastolica" value="${r ? r.diastolica : ''}"></td>`;
+        });
+        html += `</tr>`;
+      }
+    }
+    html += `</tbody></table>`;
+    document.getElementById("mdpa-tabla-wrap").innerHTML = html;
+    document.querySelectorAll(".mdpa-input").forEach(input => input.addEventListener("change", () => guardarTomaMdpa(input)));
+  }
+  async function guardarTomaMdpa(input) {
+    const dia = parseInt(input.dataset.dia), momento = input.dataset.momento, toma = parseInt(input.dataset.toma), campo = input.dataset.campo;
+    const otroCampo = campo === "sistolica" ? "diastolica" : "sistolica";
+    const otroInput = document.querySelector(`.mdpa-input[data-dia="${dia}"][data-momento="${momento}"][data-toma="${toma}"][data-campo="${otroCampo}"]`);
+    const sistolica = campo === "sistolica" ? input.value : otroInput.value;
+    const diastolica = campo === "diastolica" ? input.value : otroInput.value;
+    if (!sistolica || !diastolica) return;
+    const { data } = await sb.rpc("registrar_toma_mdpa", { p_token: session.token, p_estudio_id: estudioActivo.id, p_dia: dia, p_momento: momento, p_toma: toma, p_sistolica: parseInt(sistolica), p_diastolica: parseInt(diastolica) });
+    if (data && data.ok) {
+      // Actualiza el registro en memoria sin recargar toda la pantalla (así la tabla queda abierta)
+      const idx = estudioActivo.registros.findIndex(r => r.dia === dia && r.momento === momento && r.toma === toma);
+      const nuevoReg = { dia, momento, toma, sistolica: parseInt(sistolica), diastolica: parseInt(diastolica) };
+      if (idx >= 0) estudioActivo.registros[idx] = nuevoReg; else estudioActivo.registros.push(nuevoReg);
+
+      if (data.es_alarma) {
+        input.classList.add("alarma");
+        otroInput.classList.add("alarma");
+      }
+      if (data.es_severa) {
+        await initMdpa(); // recarga completa para mostrar el cartel de alarma severa arriba
+        const wrap = document.getElementById("mdpa-tabla-wrap");
+        if (wrap) { wrap.style.display = "block"; renderMdpaInputTable(); document.getElementById("toggle-mdpa-tabla-btn").textContent = "Ocultar tabla"; }
+      }
+    }
+  }
+
+  // ================= INFO PANELS =================
+  async function initInfoPanels() {
+    const claves = ["info_alimentacion", "info_actividad_fisica", "info_pautas_alarma", "info_general"];
+    const { data } = await sb.rpc("obtener_config", { p_claves: claves });
+    if (!data) return;
+    document.getElementById("info-alimentacion-text").textContent = data.info_alimentacion || "";
+    document.getElementById("info-actividad-text").textContent = data.info_actividad_fisica || "";
+    document.getElementById("info-pautas-text").textContent = data.info_pautas_alarma || "";
+    document.getElementById("info-general-text").textContent = data.info_general || "";
+  }
+
+  // ================= CURVA PONDERAL =================
+  function clasificarIMC(imc) {
+    if (imc == null) return null;
+    if (imc < 18.5) return { cat: "Bajo peso", min: 12.5, max: 18 };
+    if (imc < 25) return { cat: "Normopeso", min: 11.5, max: 16 };
+    if (imc < 30) return { cat: "Sobrepeso", min: 7, max: 11.5 };
+    return { cat: "Obesidad", min: 5, max: 9 };
+  }
+  async function initCurvaPonderal() {
+    const { data, error } = await sb.rpc("obtener_curva_ponderal", { p_token: session.token });
+    if (error || !data || !data.ok) return;
+    if (data.altura_cm) document.getElementById("cp-altura").value = data.altura_cm;
+
+    const clasif = clasificarIMC(data.imc_pregestacional);
+    const imcInfo = document.getElementById("imc-info");
+    if (clasif) {
+      imcInfo.innerHTML = `<div class="imc-badge">${clasif.cat}</div><p style="font-size:12px;color:var(--gray-600);margin-top:0;">Según guías (IOM), tu objetivo de aumento total de peso en el embarazo es de ${clasif.min} a ${clasif.max} kg.</p>`;
+    } else {
+      imcInfo.innerHTML = `<p style="font-size:12px;color:var(--gray-600);">Completá tus datos en "Mis datos" (IMC pregestacional) para ver tu objetivo de aumento de peso.</p>`;
+    }
+
+    const hist = document.getElementById("peso-historial");
+    if (data.registros && data.registros.length) {
+      hist.innerHTML = "<h2 style='font-size:13px;'>Historial</h2>" + data.registros.slice().reverse().map(r =>
+        `<div class="peso-item"><span>${r.fecha}</span><span>${r.peso_kg} kg</span></div>`
+      ).join("");
+    } else {
+      hist.innerHTML = "";
+    }
+  }
+  document.getElementById("guardar-peso-btn").addEventListener("click", async () => {
+    const altura = document.getElementById("cp-altura").value;
+    const peso = document.getElementById("cp-peso").value;
+    if (!peso) return;
+    const fecha = new Date().toISOString().slice(0, 10);
+    await sb.rpc("guardar_peso", { p_token: session.token, p_altura_cm: altura ? parseFloat(altura) : null, p_peso_kg: parseFloat(peso), p_fecha: fecha });
+    document.getElementById("cp-peso").value = "";
+    initCurvaPonderal();
+  });
+
+  // ================= ACTIVIDAD FÍSICA =================
+  const DIAS_SEMANA = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
+  const DIAS_SEMANA_LABEL = ["L", "M", "M", "J", "V", "S", "D"];
+  let actividadDias = {};
+
+  function lunesDeEstaSemana() {
+    const hoy = new Date();
+    const diff = (hoy.getDay() + 6) % 7; // 0 = lunes
+    const lunes = new Date(hoy);
+    lunes.setDate(hoy.getDate() - diff);
+    return lunes.toISOString().slice(0, 10);
+  }
+  async function initActividadFisica() {
+    DIAS_SEMANA.forEach(d => { actividadDias[d] = false; });
+    const semanaInicio = lunesDeEstaSemana();
+    const { data, error } = await sb.rpc("obtener_actividad_semana", { p_token: session.token, p_semana_inicio: semanaInicio });
+    if (!error && data && data.ok) {
+      if (data.tipo_actividad) document.getElementById("tipo-actividad-select").value = data.tipo_actividad;
+      if (data.dias) Object.assign(actividadDias, data.dias);
+    }
+    renderWeekGrid();
+  }
+  function renderWeekGrid() {
+    const grid = document.getElementById("week-grid");
+    grid.innerHTML = "";
+    DIAS_SEMANA.forEach((d, i) => { grid.innerHTML += `<div class="week-day-label">${DIAS_SEMANA_LABEL[i]}</div>`; });
+    DIAS_SEMANA.forEach(d => {
+      grid.innerHTML += `<div class="week-toggle ${actividadDias[d] ? 'on' : ''}" data-dia="${d}"></div>`;
+    });
+    grid.querySelectorAll(".week-toggle").forEach(el => {
+      el.addEventListener("click", () => {
+        const d = el.dataset.dia;
+        actividadDias[d] = !actividadDias[d];
+        el.classList.toggle("on", actividadDias[d]);
+      });
+    });
+  }
+  document.getElementById("guardar-actividad-btn").addEventListener("click", async () => {
+    const tipo = document.getElementById("tipo-actividad-select").value;
+    const semanaInicio = lunesDeEstaSemana();
+    await sb.rpc("guardar_actividad_semana", { p_token: session.token, p_semana_inicio: semanaInicio, p_tipo_actividad: tipo, p_dias: actividadDias });
+  });
+
+  // ================= MIS DATOS =================
+  function renderGrupoClinicos() {
+    document.getElementById("grupo-clinicos").innerHTML = `
+      <div class="check-row"><input type="checkbox" id="ac-preeclampsia-previa"><label style="margin:0;" for="ac-preeclampsia-previa">Preeclampsia en embarazo previo</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-hta-cronica"><label style="margin:0;" for="ac-hta-cronica">Hipertensión crónica</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-diabetes"><label style="margin:0;" for="ac-diabetes">Diabetes pregestacional</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-renal"><label style="margin:0;" for="ac-renal">Enfermedad renal crónica</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-autoinmune"><label style="margin:0;" for="ac-autoinmune">Enfermedad autoinmune</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-sop"><label style="margin:0;" for="ac-sop">Síndrome de ovario poliquístico</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-multiple"><label style="margin:0;" for="ac-multiple">Embarazo múltiple</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-nuliparidad"><label style="margin:0;" for="ac-nuliparidad">Primer embarazo (nuliparidad)</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-intervalo"><label style="margin:0;" for="ac-intervalo">Más de 10 años desde el último embarazo</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-reprod"><label style="margin:0;" for="ac-reprod">Reproducción asistida</label></div>
+      <label for="ac-edad">Edad</label><input type="number" id="ac-edad" min="10" max="60">
+      <label for="ac-imc">IMC pregestacional</label><input type="number" id="ac-imc" step="0.1">
+      <label for="ac-otros">Otros antecedentes</label><textarea id="ac-otros"></textarea>`;
+  }
+  function renderGrupoEstilo() {
+    document.getElementById("grupo-estilo").innerHTML = `
+      <label for="es-ocupacion">Ocupación</label><input type="text" id="es-ocupacion">
+      <label for="es-alimentacion">Tipo de alimentación</label>
+      <select id="es-alimentacion">
+        <option value="omnivora">Omnívora</option><option value="vegetariana">Vegetariana</option>
+        <option value="vegana">Vegana</option><option value="otra">Otra</option>
+      </select>
+      <label for="es-tabaquismo">Tabaquismo</label>
+      <select id="es-tabaquismo">
+        <option value="nunca">Nunca fumé</option><option value="exfumadora">Exfumadora</option><option value="actual">Fumo actualmente</option>
+      </select>
+      <div class="check-row"><input type="checkbox" id="es-actividad-previa"><label style="margin:0;" for="es-actividad-previa">Hacía actividad física antes del embarazo</label></div>
+      <div class="check-row"><input type="checkbox" id="es-alcohol"><label style="margin:0;" for="es-alcohol">Consumo de alcohol</label></div>`;
+  }
+
+  let paternosList = [];
+  function renderPaternos() {
+    const cont = document.getElementById("paternos-list");
+    cont.innerHTML = paternosList.map((p, i) => `
+      <div class="gesta-block">
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="fue_con_pareja_actual" ${p.fue_con_pareja_actual ? "checked" : ""}><label style="margin:0;">Con pareja actual</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="the" ${p.the ? "checked" : ""}><label style="margin:0;">Hipertensión del embarazo</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="preeclampsia" ${p.preeclampsia ? "checked" : ""}><label style="margin:0;">Preeclampsia</label></div>
+        <label>Año</label><input type="number" data-i="${i}" data-f="anio" value="${p.anio || ''}">
+        <button type="button" class="remove-gesta" data-remove="${i}">Quitar</button>
+      </div>`).join("") || "<p style='font-size:12px;color:var(--gray-600);'>Sin registros todavía.</p>";
+    cont.querySelectorAll("input[type=checkbox]").forEach(el => el.addEventListener("change", () => { paternosList[el.dataset.i][el.dataset.f] = el.checked; }));
+    cont.querySelectorAll("input[type=number]").forEach(el => el.addEventListener("input", () => { paternosList[el.dataset.i][el.dataset.f] = el.value; }));
+    cont.querySelectorAll("[data-remove]").forEach(el => el.addEventListener("click", () => { paternosList.splice(parseInt(el.dataset.remove), 1); renderPaternos(); }));
+  }
+  document.getElementById("add-paterno-btn").addEventListener("click", () => {
+    paternosList.push({ fue_con_pareja_actual: true, the: false, preeclampsia: false, anio: "" });
+    renderPaternos();
+  });
+
+  async function initMisDatos() {
+    renderGrupoClinicos();
+    renderGrupoEstilo();
+    renderPaternos();
+    const { data, error } = await sb.rpc("obtener_mis_datos", { p_token: session.token });
+    if (error || !data || !data.ok) return;
+
+    if (data.telefono) document.getElementById("md-telefono").value = data.telefono;
+    if (data.fecha_nacimiento) document.getElementById("md-fecha-nac").value = data.fecha_nacimiento;
+
+    const c = data.clinicos || {};
+    document.getElementById("ac-preeclampsia-previa").checked = !!c.preeclampsia_previa;
+    document.getElementById("ac-hta-cronica").checked = !!c.hta_cronica;
+    document.getElementById("ac-diabetes").checked = !!c.diabetes_pregestacional;
+    document.getElementById("ac-renal").checked = !!c.enfermedad_renal_cronica;
+    document.getElementById("ac-autoinmune").checked = !!c.enfermedad_autoinmune;
+    document.getElementById("ac-sop").checked = !!c.sindrome_ovario_poliquistico;
+    document.getElementById("ac-multiple").checked = !!c.embarazo_multiple;
+    document.getElementById("ac-nuliparidad").checked = !!c.nuliparidad;
+    document.getElementById("ac-intervalo").checked = !!c.intervalo_embarazos_mayor_10;
+    document.getElementById("ac-reprod").checked = !!c.reproduccion_asistida;
+    if (c.edad_materna) document.getElementById("ac-edad").value = c.edad_materna;
+    if (c.imc_pregestacional) document.getElementById("ac-imc").value = c.imc_pregestacional;
+    if (c.otros_antecedentes) document.getElementById("ac-otros").value = c.otros_antecedentes;
+
+    const fam = data.familiares || {};
+    document.getElementById("fam-madre-the").checked = !!fam.madre_the;
+    document.getElementById("fam-madre-pe").checked = !!fam.madre_pe;
+    document.getElementById("fam-hermana-the").checked = !!fam.hermana_the;
+    document.getElementById("fam-hermana-pe").checked = !!fam.hermana_pe;
+
+    const es = data.estilo_vida || {};
+    if (es.ocupacion) document.getElementById("es-ocupacion").value = es.ocupacion;
+    if (es.tipo_alimentacion) document.getElementById("es-alimentacion").value = es.tipo_alimentacion;
+    if (es.tabaquismo) document.getElementById("es-tabaquismo").value = es.tabaquismo;
+    document.getElementById("es-actividad-previa").checked = !!es.actividad_fisica_previa;
+    document.getElementById("es-alcohol").checked = !!es.consumo_alcohol;
+
+    paternosList = data.paternos || [];
+    renderPaternos();
+  }
+
+  document.getElementById("guardar-datos-btn").addEventListener("click", async () => {
+    const clinicos = {
+      preeclampsia_previa: document.getElementById("ac-preeclampsia-previa").checked,
+      hta_cronica: document.getElementById("ac-hta-cronica").checked,
+      diabetes_pregestacional: document.getElementById("ac-diabetes").checked,
+      enfermedad_renal_cronica: document.getElementById("ac-renal").checked,
+      enfermedad_autoinmune: document.getElementById("ac-autoinmune").checked,
+      sindrome_ovario_poliquistico: document.getElementById("ac-sop").checked,
+      embarazo_multiple: document.getElementById("ac-multiple").checked,
+      nuliparidad: document.getElementById("ac-nuliparidad").checked,
+      intervalo_embarazos_mayor_10: document.getElementById("ac-intervalo").checked,
+      reproduccion_asistida: document.getElementById("ac-reprod").checked,
+      edad_materna: document.getElementById("ac-edad").value,
+      imc_pregestacional: document.getElementById("ac-imc").value,
+      otros_antecedentes: document.getElementById("ac-otros").value
+    };
+    const familiares = {
+      madre_the: document.getElementById("fam-madre-the").checked,
+      madre_pe: document.getElementById("fam-madre-pe").checked,
+      hermana_the: document.getElementById("fam-hermana-the").checked,
+      hermana_pe: document.getElementById("fam-hermana-pe").checked
+    };
+    const estiloVida = {
+      ocupacion: document.getElementById("es-ocupacion").value,
+      tipo_alimentacion: document.getElementById("es-alimentacion").value,
+      tabaquismo: document.getElementById("es-tabaquismo").value,
+      actividad_fisica_previa: document.getElementById("es-actividad-previa").checked,
+      consumo_alcohol: document.getElementById("es-alcohol").checked
+    };
+    const btn = document.getElementById("guardar-datos-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await sb.rpc("guardar_mis_datos", {
+      p_token: session.token,
+      p_telefono: document.getElementById("md-telefono").value,
+      p_fecha_nacimiento: document.getElementById("md-fecha-nac").value || null,
+      p_clinicos: clinicos, p_familiares: familiares, p_estilo_vida: estiloVida, p_paternos: paternosList
+    });
+    btn.disabled = false; btn.textContent = "Guardar mis datos";
+    const msg = document.getElementById("datos-guardado-msg");
+    msg.style.display = "block";
+    setTimeout(() => { msg.style.display = "none"; }, 2500);
+  });
+
+  // ================= EMBARAZOS =================
+  let previosList = [];
+  function renderPrevios() {
+    const cont = document.getElementById("previos-list");
+    cont.innerHTML = previosList.map((p, i) => `
+      <div class="gesta-block">
+        <div class="fila-2col">
+          <div><label>Gesta N°</label><input type="number" data-i="${i}" data-f="numero_gesta" value="${p.numero_gesta || ''}"></div>
+          <div><label>Año</label><input type="number" data-i="${i}" data-f="anio" value="${p.anio || ''}"></div>
+        </div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="hta_gestacional" ${p.hta_gestacional ? "checked" : ""}><label style="margin:0;">Hipertensión gestacional</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="preeclampsia" ${p.preeclampsia ? "checked" : ""}><label style="margin:0;">Preeclampsia</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="diabetes_gestacional" ${p.diabetes_gestacional ? "checked" : ""}><label style="margin:0;">Diabetes gestacional</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="rciu" ${p.rciu ? "checked" : ""}><label style="margin:0;">Restricción de crecimiento (RCIU)</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="parto_prematuro" ${p.parto_prematuro ? "checked" : ""}><label style="margin:0;">Parto prematuro</label></div>
+        <label>Semana de finalización</label><input type="number" data-i="${i}" data-f="semana_finalizacion" value="${p.semana_finalizacion || ''}">
+        <label>Vía de finalización</label>
+        <select data-i="${i}" data-f="via_finalizacion">
+          <option value="">—</option>
+          <option value="vaginal" ${p.via_finalizacion === 'vaginal' ? 'selected' : ''}>Vaginal</option>
+          <option value="cesarea" ${p.via_finalizacion === 'cesarea' ? 'selected' : ''}>Cesárea</option>
+        </select>
+        <button type="button" class="remove-gesta" data-remove="${i}">Quitar</button>
+      </div>`).join("") || "<p style='font-size:12px;color:var(--gray-600);'>Sin embarazos previos cargados.</p>";
+    cont.querySelectorAll("input[type=checkbox]").forEach(el => el.addEventListener("change", () => { previosList[el.dataset.i][el.dataset.f] = el.checked; }));
+    cont.querySelectorAll("input[type=number]").forEach(el => el.addEventListener("input", () => { previosList[el.dataset.i][el.dataset.f] = el.value; }));
+    cont.querySelectorAll("select").forEach(el => el.addEventListener("change", () => { previosList[el.dataset.i][el.dataset.f] = el.value; }));
+    cont.querySelectorAll("[data-remove]").forEach(el => el.addEventListener("click", () => { previosList.splice(parseInt(el.dataset.remove), 1); renderPrevios(); }));
+  }
+  document.getElementById("add-previo-btn").addEventListener("click", () => {
+    previosList.push({ numero_gesta: previosList.length + 1, anio: "", hta_gestacional: false, preeclampsia: false, diabetes_gestacional: false, rciu: false, parto_prematuro: false, semana_finalizacion: "", via_finalizacion: "" });
+    renderPrevios();
+  });
+
+  function calcularEdadGestacional(fum, fppObstetra) {
+    const base = fppObstetra ? new Date(fppObstetra) : (fum ? new Date(new Date(fum).getTime() + 280 * 86400000) : null);
+    if (!base) return null;
+    const hoy = new Date();
+    const diasRestantes = Math.round((base - hoy) / 86400000);
+    const diasTranscurridos = 280 - diasRestantes;
+    if (diasTranscurridos < 0) return null;
+    const semanas = Math.floor(diasTranscurridos / 7);
+    const dias = diasTranscurridos % 7;
+    return `${semanas}s ${dias}d`;
+  }
+
+  async function initEmbarazos() {
+    previosList = [];
+    renderPrevios();
+    const { data, error } = await sb.rpc("obtener_embarazos", { p_token: session.token });
+    if (error || !data || !data.ok) return;
+
+    previosList = data.previos || [];
+    renderPrevios();
+
+    if (data.actual && data.actual !== null) {
+      const a = data.actual;
+      if (a.fum) document.getElementById("ge-fum").value = a.fum;
+      if (a.fecha_eco_datante) document.getElementById("ge-fecha-eco").value = a.fecha_eco_datante;
+      if (a.eco_semanas != null) document.getElementById("ge-eco-sem").value = a.eco_semanas;
+      if (a.eco_dias != null) document.getElementById("ge-eco-dias").value = a.eco_dias;
+      if (a.fpp_obstetra) document.getElementById("ge-fpp").value = a.fpp_obstetra;
+
+      const eg = calcularEdadGestacional(a.fum, a.fpp_obstetra);
+      const badge = document.getElementById("edad-gestacional-badge");
+      if (eg) { badge.textContent = "Edad gestacional actual: " + eg; badge.style.display = "inline-block"; }
+    }
+  }
+  document.getElementById("guardar-embarazos-btn").addEventListener("click", async () => {
+    const actual = {
+      fum: document.getElementById("ge-fum").value || null,
+      fecha_eco_datante: document.getElementById("ge-fecha-eco").value || null,
+      eco_semanas: document.getElementById("ge-eco-sem").value || null,
+      eco_dias: document.getElementById("ge-eco-dias").value || null,
+      fpp_obstetra: document.getElementById("ge-fpp").value || null,
+      fuente_fpp_vigente: document.getElementById("ge-fpp").value ? "OBSTETRA" : (document.getElementById("ge-fum").value ? "FUM" : null)
+    };
+    const btn = document.getElementById("guardar-embarazos-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await sb.rpc("guardar_embarazos", { p_token: session.token, p_previos: previosList, p_actual: actual });
+    btn.disabled = false; btn.textContent = "Guardar";
+    const msg = document.getElementById("embarazos-guardado-msg");
+    msg.style.display = "block";
+    setTimeout(() => { msg.style.display = "none"; }, 2500);
+    initEmbarazos();
+  });
+
+  // ---------- Arranque ----------
   if (session && session.token) {
-    showHome(session);
+    showHome();
+  } else {
+    loginScreen.classList.add("show");
   }
 </script>
 
