@@ -608,9 +608,38 @@
     const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
     const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
     const hayAlarmaSevera = e.registros.some(r => r.sistolica >= e.umbral_severo_sis || r.diastolica >= e.umbral_severo_dia);
-    let html = "";
-    if (hayAlarmaSevera) html += `<div class="alerta-severa">⚠ Detectamos valores de presión muy elevados (≥${e.umbral_severo_sis}/${e.umbral_severo_dia}). Repetí la medición en 15 minutos y, si se confirma, consultá cuanto antes.</div>`;
-    html += `<table class="mdpa-table"><thead><tr><th style="text-align:left;">Día</th>`;
+
+    const hoy = new Date();
+    const inicio = new Date(e.fecha_inicio + "T00:00:00");
+    const diaActual = Math.min(e.duracion_dias, Math.max(1, Math.floor((hoy - inicio) / 86400000) + 1));
+    const totalTomas = e.duracion_dias * momentos.length * 2;
+    const tomasCargadas = e.registros.length;
+
+    let resumenHtml = "";
+    if (hayAlarmaSevera) resumenHtml += `<div class="alerta-severa">⚠ Detectamos valores de presión muy elevados (≥${e.umbral_severo_sis}/${e.umbral_severo_dia}). Repetí la medición en 15 minutos y, si se confirma, consultá cuanto antes.</div>`;
+    resumenHtml += `
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:4px;">Monitoreo en curso — día ${diaActual} de ${e.duracion_dias}</p>
+      <p style="font-size:12px; color:var(--gray-600); margin-top:0;">${tomasCargadas} de ${totalTomas} tomas cargadas</p>
+      <button class="secondary" id="toggle-mdpa-tabla-btn">Cargar mediciones</button>
+      <div id="mdpa-tabla-wrap" style="display:none; margin-top:14px;"></div>
+    `;
+    document.getElementById("mdpa-content").innerHTML = resumenHtml;
+
+    document.getElementById("toggle-mdpa-tabla-btn").addEventListener("click", () => {
+      const wrap = document.getElementById("mdpa-tabla-wrap");
+      const abierta = wrap.style.display !== "none";
+      wrap.style.display = abierta ? "none" : "block";
+      document.getElementById("toggle-mdpa-tabla-btn").textContent = abierta ? "Cargar mediciones" : "Ocultar tabla";
+      if (!abierta) renderMdpaInputTable();
+    });
+  }
+
+  function renderMdpaInputTable() {
+    const e = estudioActivo;
+    const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
+    const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
+
+    let html = `<table class="mdpa-table"><thead><tr><th style="text-align:left;">Día</th>`;
     momentos.forEach(m => { html += `<th colspan="2">${labelMomento[m]}</th>`; });
     html += `</tr></thead><tbody>`;
     for (let dia = 1; dia <= e.duracion_dias; dia++) {
@@ -626,7 +655,7 @@
       }
     }
     html += `</tbody></table>`;
-    document.getElementById("mdpa-content").innerHTML = html;
+    document.getElementById("mdpa-tabla-wrap").innerHTML = html;
     document.querySelectorAll(".mdpa-input").forEach(input => input.addEventListener("change", () => guardarTomaMdpa(input)));
   }
   async function guardarTomaMdpa(input) {
@@ -637,7 +666,22 @@
     const diastolica = campo === "diastolica" ? input.value : otroInput.value;
     if (!sistolica || !diastolica) return;
     const { data } = await sb.rpc("registrar_toma_mdpa", { p_token: session.token, p_estudio_id: estudioActivo.id, p_dia: dia, p_momento: momento, p_toma: toma, p_sistolica: parseInt(sistolica), p_diastolica: parseInt(diastolica) });
-    if (data && data.ok) initMdpa();
+    if (data && data.ok) {
+      // Actualiza el registro en memoria sin recargar toda la pantalla (así la tabla queda abierta)
+      const idx = estudioActivo.registros.findIndex(r => r.dia === dia && r.momento === momento && r.toma === toma);
+      const nuevoReg = { dia, momento, toma, sistolica: parseInt(sistolica), diastolica: parseInt(diastolica) };
+      if (idx >= 0) estudioActivo.registros[idx] = nuevoReg; else estudioActivo.registros.push(nuevoReg);
+
+      if (data.es_alarma) {
+        input.classList.add("alarma");
+        otroInput.classList.add("alarma");
+      }
+      if (data.es_severa) {
+        await initMdpa(); // recarga completa para mostrar el cartel de alarma severa arriba
+        const wrap = document.getElementById("mdpa-tabla-wrap");
+        if (wrap) { wrap.style.display = "block"; renderMdpaInputTable(); document.getElementById("toggle-mdpa-tabla-btn").textContent = "Ocultar tabla"; }
+      }
+    }
   }
 
   // ================= INFO PANELS =================
