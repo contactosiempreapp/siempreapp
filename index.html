@@ -284,6 +284,18 @@
   .mdpa-input { width: 56px; padding: 7px 6px; border: 1.5px solid var(--gray-300); border-radius: 8px; font-size: 13px; text-align: center; }
   .mdpa-input.alarma { border-color: var(--pink); background: var(--pink-light); color: var(--pink); font-weight: 700; }
 
+  .mdpa-informe { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--gray-300); }
+  .mdpa-informe-resultado {
+    font-size: 12.5px; font-weight: 700; padding: 9px 11px; border-radius: 10px; margin-bottom: 10px; line-height: 1.4;
+  }
+  .mdpa-informe-resultado.ok { background: var(--teal-light); color: var(--teal-dark); }
+  .mdpa-informe-resultado.atencion { background: var(--coral-light); color: #8A2E22; }
+  .mdpa-informe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mdpa-informe-item {
+    background: var(--gray-100); border-radius: 10px; padding: 8px 10px; font-size: 11px; color: var(--gray-600);
+  }
+  .mdpa-informe-item strong { display: block; font-size: 14px; color: var(--violet-dark); font-family: 'Manrope', sans-serif; margin-top: 2px; }
+
   /* Tratamiento y tomas sueltas */
   .tratamiento-activo-card {
     border: 1.5px solid var(--gray-300); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
@@ -826,6 +838,16 @@
       <div class="card">
         <h2>Tomas del día</h2>
         <p class="helper">¿Querés cargar una medición suelta de hoy, sin hacer el MDPA completo? Usá esto.</p>
+        <div class="fuente-selector">
+          <label class="fuente-opcion">
+            <input type="radio" name="pa-contexto" value="embarazo" id="pa-ctx-embarazo" checked>
+            <span>Estoy embarazada</span>
+          </label>
+          <label class="fuente-opcion">
+            <input type="radio" name="pa-contexto" value="posparto" id="pa-ctx-posparto">
+            <span>Estoy en posparto</span>
+          </label>
+        </div>
         <div class="fila-2col">
           <div><label for="pa-suelta-sis">Sistólica</label><input type="number" id="pa-suelta-sis"></div>
           <div><label for="pa-suelta-dia">Diastólica</label><input type="number" id="pa-suelta-dia"></div>
@@ -880,6 +902,12 @@
       </div>
 
       <div id="ct-content"></div>
+
+      <div class="card" id="pp-mdpa-card" style="display:none;">
+        <h2>Presión arterial <span class="pill-teal">MDPA posparto</span></h2>
+        <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
+        <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
+      </div>
     </div>
 
     <!-- PAUTAS DE ALARMA -->
@@ -972,7 +1000,7 @@
     loadAspirinaCalendar();
     initCalcio();
     initTratamientoPA();
-    initMdpa();
+    initMdpa("embarazo");
     initPaSuelta();
     initInfoPanels();
     initCurvaPonderal();
@@ -1274,6 +1302,33 @@
     </div>`;
   }
 
+  // Clasificación simplificada para posparto (umbrales provisorios, a confirmar)
+  function clasificarPAPosparto(sis, dia) {
+    const alto = sis > 140 || dia > 90;
+    const bajo = sis < 110 || dia < 70;
+    if (alto) {
+      return {
+        nivel: "alto", urgente: true, label: "Por encima del rango esperado", color: "#B23B32", bg: "#FBEAE8",
+        siguiente: "Sentate en silencio 5 minutos y volvé a medir la presión.",
+        consultar: "Consultá con tu médica lo antes posible.",
+        control: "Medí todos los días hasta que te indiquen lo contrario."
+      };
+    }
+    if (bajo) {
+      return {
+        nivel: "bajo", urgente: false, label: "Por debajo del rango esperado", color: "#5B5FA8", bg: "#ECEAF7",
+        siguiente: "Si tenés mareos o te sentís mal, sentate y volvé a medir en unos minutos.",
+        consultar: "Si persiste o tenés síntomas, consultá con tu médica.",
+        control: "Según las indicaciones de tu médica."
+      };
+    }
+    return {
+      nivel: "normal", urgente: false, label: "Dentro del rango esperado", color: "#4C8C4A", bg: "#EFF8EA",
+      siguiente: "Seguí con tu control habitual.",
+      consultar: "Según las indicaciones de tu médica.",
+      control: "Según las indicaciones de tu médica."
+    };
+  }
   // ================= MI TRATAMIENTO =================
   let catalogoAntihipertensivos = [];
 
@@ -1337,7 +1392,7 @@
     const cont = document.getElementById("pa-suelta-lista");
     if (!tomas.length) { cont.innerHTML = ""; return; }
     cont.innerHTML = `<div class="ct-categoria-title">Tomas de hoy</div>` + tomas.map(t => {
-      const c = clasificarPA(t.sistolica, t.diastolica);
+      const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
       const hora = new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
       return `<div class="pa-suelta-item"><span><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${t.sistolica}/${t.diastolica} — ${c.label}</span><span>${hora}</span></div>`;
     }).join("");
@@ -1346,23 +1401,28 @@
     const sis = parseInt(document.getElementById("pa-suelta-sis").value);
     const dia = parseInt(document.getElementById("pa-suelta-dia").value);
     if (!sis || !dia) return;
+    const contexto = document.getElementById("pa-ctx-posparto").checked ? "posparto" : "embarazo";
     const btn = document.getElementById("guardar-pa-suelta-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
-    await sb.rpc("registrar_pa_suelta", { p_token: session.token, p_sistolica: sis, p_diastolica: dia });
+    await sb.rpc("registrar_pa_suelta", { p_token: session.token, p_sistolica: sis, p_diastolica: dia, p_contexto: contexto });
     btn.disabled = false; btn.textContent = "Guardar toma";
 
-    const clasif = clasificarPA(sis, dia);
+    const clasif = contexto === "posparto" ? clasificarPAPosparto(sis, dia) : clasificarPA(sis, dia);
     document.getElementById("pa-suelta-resultado").innerHTML = renderNivelBanner(clasif);
     document.getElementById("pa-suelta-sis").value = "";
     document.getElementById("pa-suelta-dia").value = "";
     initPaSuelta();
   });
 
-  // ================= MDPA =================
-  let estudioActivo = null;
-  async function initMdpa() {
-    const { data, error } = await sb.rpc("obtener_mdpa_activo", { p_token: session.token });
-    const cont = document.getElementById("mdpa-content");
+  // ================= MDPA (embarazo y posparto) =================
+  const mdpaState = { embarazo: null, posparto: null };
+  const mdpaPrefix = { embarazo: "", posparto: "pp-" };
+
+  async function initMdpa(ctx) {
+    const pref = mdpaPrefix[ctx];
+    const { data, error } = await sb.rpc("obtener_mdpa_activo", { p_token: session.token, p_tipo: ctx });
+    const cont = document.getElementById(pref + "mdpa-content");
+    if (!cont) return;
     if (error) {
       console.error("Error en obtener_mdpa_activo:", error);
       cont.innerHTML = `<p style="font-size:13px;color:var(--pink);">No pudimos cargar la presión arterial.<br><span style="font-size:11px;color:var(--gray-600);">${error.message || error.code || 'Ver consola (F12) para más detalle.'}</span></p>`;
@@ -1373,9 +1433,10 @@
       return;
     }
     if (!data.estudio) {
-      cont.innerHTML = `<p style="font-size:13px; color:var(--gray-600); margin-bottom:12px;">No tenés un monitoreo activo. Si tu médica te indicó hacer un MDPA, iniciálo acá.</p>
-        <label for="mdpa-duracion-select">¿Cuántos días te indicaron?</label>
-        <select id="mdpa-duracion-select">
+      cont.innerHTML = `<p style="font-size:13px; color:var(--gray-600); margin-bottom:10px;">No tenés un monitoreo ${ctx === 'posparto' ? 'posparto' : ''} activo. Si tu médica te indicó hacer un MDPA, iniciálo acá.</p>
+        <div class="helper" style="background:var(--gray-100); padding:8px 10px; border-radius:8px; margin-bottom:10px;">💡 Fijate de elegir bien esta solapa: este monitoreo es para ${ctx === 'posparto' ? 'después del parto (posparto)' : 'durante el embarazo'}. El de ${ctx === 'posparto' ? 'embarazo está en la solapa "Presión arterial"' : 'posparto vas a encontrarlo en "Cuarto trimestre"'}.</div>
+        <label for="${pref}mdpa-duracion-select">¿Cuántos días te indicaron?</label>
+        <select id="${pref}mdpa-duracion-select">
           <option value="1">1 día</option>
           <option value="2">2 días</option>
           <option value="3">3 días</option>
@@ -1384,24 +1445,75 @@
           <option value="6">6 días</option>
           <option value="7">7 días (protocolo largo)</option>
         </select>
-        <button class="secondary" id="iniciar-mdpa-btn" style="margin-top:6px;">Iniciar monitoreo</button>`;
-      document.getElementById("iniciar-mdpa-btn").addEventListener("click", async () => {
-        const duracion = parseInt(document.getElementById("mdpa-duracion-select").value);
-        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: duracion, p_incluye_postprandial: true });
-        initMdpa();
+        <button class="secondary" id="${pref}iniciar-mdpa-btn" style="margin-top:6px;">Iniciar monitoreo</button>`;
+      document.getElementById(pref + "iniciar-mdpa-btn").addEventListener("click", async () => {
+        const duracion = parseInt(document.getElementById(pref + "mdpa-duracion-select").value);
+        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: duracion, p_incluye_postprandial: true, p_tipo: ctx });
+        initMdpa(ctx);
       });
       return;
     }
-    estudioActivo = data.estudio;
-    renderMdpaTable();
+    mdpaState[ctx] = data.estudio;
+    renderMdpaTable(ctx);
   }
-  function getRegistro(dia, momento, toma) {
-    return estudioActivo.registros.find(r => r.dia === dia && r.momento === momento && r.toma === toma);
+
+  function getRegistro(ctx, dia, momento, toma) {
+    return mdpaState[ctx].registros.find(r => r.dia === dia && r.momento === momento && r.toma === toma);
   }
-  function renderMdpaTable() {
-    const e = estudioActivo;
+
+  function calcularInformeMdpa(registros) {
+    function prom(lista, campo) {
+      if (!lista.length) return null;
+      return lista.reduce((acc, r) => acc + r[campo], 0) / lista.length;
+    }
+    const sinDia1 = registros.filter(r => r.dia !== 1);
+    const matutinaSinDia1 = sinDia1.filter(r => r.momento === "matutina");
+    const vespertinaSinDia1 = sinDia1.filter(r => r.momento === "vespertina");
+    const postprandialSinDia1 = sinDia1.filter(r => r.momento === "postprandial");
+    return {
+      totalSis: prom(registros, "sistolica"), totalDia: prom(registros, "diastolica"),
+      totalSinDia1Sis: prom(sinDia1, "sistolica"), totalSinDia1Dia: prom(sinDia1, "diastolica"),
+      matutinaSis: prom(matutinaSinDia1, "sistolica"), matutinaDia: prom(matutinaSinDia1, "diastolica"),
+      vespertinaSis: prom(vespertinaSinDia1, "sistolica"), vespertinaDia: prom(vespertinaSinDia1, "diastolica"),
+      postprandialSis: prom(postprandialSinDia1, "sistolica"), postprandialDia: prom(postprandialSinDia1, "diastolica")
+    };
+  }
+
+  function renderInformeMdpa(e) {
+    if (!e.registros.length) return "";
+    const inf = calcularInformeMdpa(e.registros);
+    const fmt = v => v == null ? "—" : v.toFixed(1);
+    const umbralSis = e.umbral_alarma_sis, umbralDia = e.umbral_alarma_dia;
+    const dentroObjetivo = inf.totalSinDia1Sis != null && inf.totalSinDia1Sis < umbralSis && inf.totalSinDia1Dia < umbralDia;
+
+    let html = `<div class="mdpa-informe">
+      <div class="ct-categoria-title" style="margin-top:0;">Informe</div>`;
+
+    if (inf.totalSinDia1Sis != null) {
+      html += `<div class="mdpa-informe-resultado ${dentroObjetivo ? 'ok' : 'atencion'}">
+        ${dentroObjetivo ? '✓ Presión domiciliaria dentro de objetivo' : '⚠ Presión domiciliaria por encima del objetivo'}
+        <span style="font-weight:400;">(promedio sin día 1, objetivo &lt;${umbralSis}/${umbralDia})</span>
+      </div>`;
+    }
+
+    html += `<div class="mdpa-informe-grid">
+      <div class="mdpa-informe-item"><span>Promedio total (todos los valores)</span><strong>${fmt(inf.totalSis)}/${fmt(inf.totalDia)}</strong></div>
+      <div class="mdpa-informe-item"><span>Promedio total (sin día 1)</span><strong>${fmt(inf.totalSinDia1Sis)}/${fmt(inf.totalSinDia1Dia)}</strong></div>
+      <div class="mdpa-informe-item"><span>Promedio matutina (sin día 1)</span><strong>${fmt(inf.matutinaSis)}/${fmt(inf.matutinaDia)}</strong></div>
+      <div class="mdpa-informe-item"><span>Promedio vespertina (sin día 1)</span><strong>${fmt(inf.vespertinaSis)}/${fmt(inf.vespertinaDia)}</strong></div>`;
+    if (e.incluye_postprandial) {
+      html += `<div class="mdpa-informe-item"><span>Promedio postprandial (sin día 1)</span><strong>${fmt(inf.postprandialSis)}/${fmt(inf.postprandialDia)}</strong></div>`;
+    }
+    html += `</div>
+      <p class="helper" style="margin-top:8px; margin-bottom:0;">El objetivo usado por ahora es el mismo para embarazo y posparto — todavía no está diferenciado. Fijate de estar en la solapa correcta (embarazo o posparto) al cargar tus mediciones.</p>
+    </div>`;
+    return html;
+  }
+
+  function renderMdpaTable(ctx) {
+    const pref = mdpaPrefix[ctx];
+    const e = mdpaState[ctx];
     const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
-    const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
     const hayAlarmaSevera = e.registros.some(r => clasificarPA(r.sistolica, r.diastolica).nivel === "muy_alto");
 
     const hoy = new Date();
@@ -1415,17 +1527,18 @@
     resumenHtml += `
       <p style="font-size:13px; color:var(--gray-600); margin-bottom:4px;">Monitoreo en curso — día ${diaActual} de ${e.duracion_dias}</p>
       <p style="font-size:12px; color:var(--gray-600); margin-top:0;">${tomasCargadas} de ${totalTomas} tomas cargadas</p>
-      <button class="secondary" id="toggle-mdpa-tabla-btn">Cargar mediciones</button>
-      <div id="mdpa-tabla-wrap" style="display:none; margin-top:14px;"></div>
+      <button class="secondary" id="${pref}toggle-mdpa-tabla-btn">Cargar mediciones</button>
+      <div id="${pref}mdpa-tabla-wrap" style="display:none; margin-top:14px;"></div>
+      ${renderInformeMdpa(e)}
     `;
-    document.getElementById("mdpa-content").innerHTML = resumenHtml;
+    document.getElementById(pref + "mdpa-content").innerHTML = resumenHtml;
 
-    document.getElementById("toggle-mdpa-tabla-btn").addEventListener("click", () => {
-      const wrap = document.getElementById("mdpa-tabla-wrap");
+    document.getElementById(pref + "toggle-mdpa-tabla-btn").addEventListener("click", () => {
+      const wrap = document.getElementById(pref + "mdpa-tabla-wrap");
       const abierta = wrap.style.display !== "none";
       wrap.style.display = abierta ? "none" : "block";
-      document.getElementById("toggle-mdpa-tabla-btn").textContent = abierta ? "Cargar mediciones" : "Ocultar tabla";
-      if (!abierta) renderMdpaInputTable();
+      document.getElementById(pref + "toggle-mdpa-tabla-btn").textContent = abierta ? "Cargar mediciones" : "Ocultar tabla";
+      if (!abierta) renderMdpaInputTable(ctx);
     });
   }
 
@@ -1436,23 +1549,23 @@
   };
   const LABEL_MOMENTO = { matutina: "Mañana", postprandial: "Después de comer", vespertina: "Noche" };
 
-  function diaCompleto(dia, momentos) {
-    return momentos.every(m => getRegistro(dia, m, 1) && getRegistro(dia, m, 2));
+  function diaCompleto(ctx, dia, momentos) {
+    return momentos.every(m => getRegistro(ctx, dia, m, 1) && getRegistro(ctx, dia, m, 2));
   }
 
-  function renderMdpaInputTable() {
-    const e = estudioActivo;
+  function renderMdpaInputTable(ctx) {
+    const pref = mdpaPrefix[ctx];
+    const e = mdpaState[ctx];
     const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
 
-    // Abrimos automáticamente el primer día que todavía no está completo
     let primerPendiente = null;
     for (let dia = 1; dia <= e.duracion_dias; dia++) {
-      if (!diaCompleto(dia, momentos)) { primerPendiente = dia; break; }
+      if (!diaCompleto(ctx, dia, momentos)) { primerPendiente = dia; break; }
     }
 
     let html = "";
     for (let dia = 1; dia <= e.duracion_dias; dia++) {
-      const completo = diaCompleto(dia, momentos);
+      const completo = diaCompleto(ctx, dia, momentos);
       const abrir = dia === (primerPendiente || 1);
       html += `<details class="mdpa-day-card" ${abrir ? "open" : ""}>
         <summary>Día ${dia} <span class="mdpa-day-status ${completo ? 'completo' : ''}">${completo ? '✓ completo' : 'pendiente'}</span></summary>
@@ -1462,13 +1575,13 @@
         html += `<div class="mdpa-momento-block momento-${m}">
           <div class="momento-block-title">${ICONO_MOMENTO[m]}${LABEL_MOMENTO[m]}</div>`;
         for (let toma = 1; toma <= 2; toma++) {
-          const r = getRegistro(dia, m, toma);
+          const r = getRegistro(ctx, dia, m, toma);
           const isAlarma = r && clasificarPA(r.sistolica, r.diastolica).urgente;
           html += `<div class="mdpa-toma-row">
             <span class="toma-label">Toma ${toma}</span>
-            <input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="SIS" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="sistolica" value="${r ? r.sistolica : ''}">
+            <input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="SIS" data-ctx="${ctx}" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="sistolica" value="${r ? r.sistolica : ''}">
             <span class="mdpa-sep">/</span>
-            <input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="DIA" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="diastolica" value="${r ? r.diastolica : ''}">
+            <input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="DIA" data-ctx="${ctx}" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="diastolica" value="${r ? r.diastolica : ''}">
           </div>`;
         }
         html += `</div>`;
@@ -1477,22 +1590,24 @@
       html += `</div></details>`;
     }
 
-    document.getElementById("mdpa-tabla-wrap").innerHTML = html;
-    document.querySelectorAll(".mdpa-input").forEach(input => input.addEventListener("change", () => guardarTomaMdpa(input)));
+    document.getElementById(pref + "mdpa-tabla-wrap").innerHTML = html;
+    document.getElementById(pref + "mdpa-tabla-wrap").querySelectorAll(".mdpa-input").forEach(input => input.addEventListener("change", () => guardarTomaMdpa(input)));
   }
+
   async function guardarTomaMdpa(input) {
+    const ctx = input.dataset.ctx;
+    const pref = mdpaPrefix[ctx];
     const dia = parseInt(input.dataset.dia), momento = input.dataset.momento, toma = parseInt(input.dataset.toma), campo = input.dataset.campo;
     const otroCampo = campo === "sistolica" ? "diastolica" : "sistolica";
-    const otroInput = document.querySelector(`.mdpa-input[data-dia="${dia}"][data-momento="${momento}"][data-toma="${toma}"][data-campo="${otroCampo}"]`);
+    const otroInput = document.querySelector(`.mdpa-input[data-ctx="${ctx}"][data-dia="${dia}"][data-momento="${momento}"][data-toma="${toma}"][data-campo="${otroCampo}"]`);
     const sistolica = campo === "sistolica" ? input.value : otroInput.value;
     const diastolica = campo === "diastolica" ? input.value : otroInput.value;
     if (!sistolica || !diastolica) return;
-    const { data } = await sb.rpc("registrar_toma_mdpa", { p_token: session.token, p_estudio_id: estudioActivo.id, p_dia: dia, p_momento: momento, p_toma: toma, p_sistolica: parseInt(sistolica), p_diastolica: parseInt(diastolica) });
+    const { data } = await sb.rpc("registrar_toma_mdpa", { p_token: session.token, p_estudio_id: mdpaState[ctx].id, p_dia: dia, p_momento: momento, p_toma: toma, p_sistolica: parseInt(sistolica), p_diastolica: parseInt(diastolica) });
     if (data && data.ok) {
-      // Actualiza el registro en memoria sin recargar toda la pantalla (así la tabla queda abierta)
-      const idx = estudioActivo.registros.findIndex(r => r.dia === dia && r.momento === momento && r.toma === toma);
+      const idx = mdpaState[ctx].registros.findIndex(r => r.dia === dia && r.momento === momento && r.toma === toma);
       const nuevoReg = { dia, momento, toma, sistolica: parseInt(sistolica), diastolica: parseInt(diastolica) };
-      if (idx >= 0) estudioActivo.registros[idx] = nuevoReg; else estudioActivo.registros.push(nuevoReg);
+      if (idx >= 0) mdpaState[ctx].registros[idx] = nuevoReg; else mdpaState[ctx].registros.push(nuevoReg);
 
       const clasif = clasificarPA(parseInt(sistolica), parseInt(diastolica));
       if (clasif.urgente) {
@@ -1500,9 +1615,13 @@
         otroInput.classList.add("alarma");
       }
       if (clasif.nivel === "muy_alto") {
-        await initMdpa(); // recarga completa para mostrar el cartel de alarma severa arriba
-        const wrap = document.getElementById("mdpa-tabla-wrap");
-        if (wrap) { wrap.style.display = "block"; renderMdpaInputTable(); document.getElementById("toggle-mdpa-tabla-btn").textContent = "Ocultar tabla"; }
+        await initMdpa(ctx);
+        const wrap = document.getElementById(pref + "mdpa-tabla-wrap");
+        if (wrap) { wrap.style.display = "block"; renderMdpaInputTable(ctx); document.getElementById(pref + "toggle-mdpa-tabla-btn").textContent = "Ocultar tabla"; }
+      } else {
+        renderMdpaTable(ctx); // refresca el informe con el nuevo valor, sin recargar de la base
+        const wrap = document.getElementById(pref + "mdpa-tabla-wrap");
+        if (wrap) { wrap.style.display = "block"; renderMdpaInputTable(ctx); document.getElementById(pref + "toggle-mdpa-tabla-btn").textContent = "Ocultar tabla"; }
       }
     }
   }
@@ -1826,10 +1945,13 @@
     if (!data.fecha_parto) {
       setupCard.style.display = "block";
       cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
+      document.getElementById("pp-mdpa-card").style.display = "none";
       return;
     }
 
     setupCard.style.display = "none";
+    document.getElementById("pp-mdpa-card").style.display = "block";
+    initMdpa("posparto");
 
     const grupos = {};
     data.items.forEach(it => {
