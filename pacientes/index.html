@@ -348,6 +348,27 @@
   /* curva ponderal */
   .imc-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; background: var(--teal-light); color: var(--teal); margin-bottom: 10px; }
   .peso-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
+
+  .peso-inicio-objetivo {
+    display: flex; align-items: center; gap: 10px; background: var(--violet-light); border-radius: 14px;
+    padding: 14px; margin-bottom: 14px;
+  }
+  .peso-punto { flex: 1; text-align: center; }
+  .peso-punto-label { font-size: 11px; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 3px; }
+  .peso-punto-valor { font-family: 'Manrope', sans-serif; font-size: 17px; font-weight: 800; color: var(--violet-dark); }
+  .peso-punto-objetivo .peso-punto-valor { color: var(--teal-dark); }
+  .peso-flecha { color: var(--violet); flex-shrink: 0; }
+  .peso-flecha svg { width: 20px; height: 20px; }
+
+  .imc-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+  .imc-cat-card {
+    border: 1.5px solid var(--gray-300); border-radius: 10px; padding: 8px 4px; text-align: center; background: white;
+    opacity: 0.55; position: relative;
+  }
+  .imc-cat-card.activa { opacity: 1; border-color: var(--teal); background: var(--teal-light); box-shadow: 0 3px 8px -3px rgba(15,140,104,0.3); }
+  .imc-cat-vos { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); background: var(--teal); color: white; font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 10px; white-space: nowrap; }
+  .imc-cat-nombre { font-size: 10.5px; font-weight: 700; color: var(--gray-900); margin-top: 4px; }
+  .imc-cat-rango { font-size: 10px; color: var(--gray-600); margin-top: 2px; }
   #curva-chart-wrap { margin: 14px 0; }
   #curva-chart-wrap svg { width: 100%; height: auto; display: block; }
   .curva-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; font-size: 11px; color: var(--gray-600); }
@@ -1369,7 +1390,21 @@
     const imcInfo = document.getElementById("imc-info");
     let html = "";
 
-    if (data.altura_cm || data.peso_pregestacional_kg) {
+    if (data.peso_pregestacional_kg && clasif) {
+      html += `<div class="peso-inicio-objetivo">
+        <div class="peso-punto">
+          <div class="peso-punto-label">Arrancás de acá</div>
+          <div class="peso-punto-valor">${data.peso_pregestacional_kg} kg</div>
+        </div>
+        <div class="peso-flecha">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>
+        </div>
+        <div class="peso-punto peso-punto-objetivo">
+          <div class="peso-punto-label">Tu objetivo</div>
+          <div class="peso-punto-valor">+${clasif.min}–${clasif.max} kg</div>
+        </div>
+      </div>`;
+    } else if (data.altura_cm || data.peso_pregestacional_kg) {
       html += `<p style="font-size:12px;color:var(--gray-600);margin:0 0 10px;">Punto de partida: `;
       if (data.altura_cm) html += `<strong>${data.altura_cm} cm</strong>`;
       if (data.altura_cm && data.peso_pregestacional_kg) html += `, `;
@@ -1378,7 +1413,22 @@
     }
 
     if (clasif) {
-      html += `<div class="imc-badge">${clasif.cat}</div>`;
+      const CATEGORIAS = [
+        { cat: "Bajo peso", min: 12.5, max: 18 },
+        { cat: "Normopeso", min: 11.5, max: 16 },
+        { cat: "Sobrepeso", min: 7, max: 11.5 },
+        { cat: "Obesidad", min: 5, max: 9 }
+      ];
+      html += `<div class="imc-cat-grid">`;
+      CATEGORIAS.forEach(c => {
+        const activa = c.cat === clasif.cat;
+        html += `<div class="imc-cat-card ${activa ? 'activa' : ''}">
+          ${activa ? '<div class="imc-cat-vos">Vos estás acá</div>' : ''}
+          <div class="imc-cat-nombre">${c.cat}</div>
+          <div class="imc-cat-rango">${c.min}–${c.max} kg</div>
+        </div>`;
+      });
+      html += `</div>`;
       html += `<p style="font-size:12.5px;color:var(--gray-900);line-height:1.6;">El aumento de peso ideal depende de tu IMC antes del embarazo. Para un embarazo único, se recomienda un aumento de <strong>${clasif.min} a ${clasif.max} kg</strong> si tenías ${clasif.cat.toLowerCase()}.</p>`;
 
       // Progreso actual vs objetivo
@@ -1398,7 +1448,19 @@
     }
 
     imcInfo.innerHTML = html;
-    document.getElementById("curva-chart-wrap").innerHTML = renderCurvaChart(data.peso_pregestacional_kg, data.registros, clasif);
+
+    const chartHtml = renderCurvaChart(data.peso_pregestacional_kg, data.registros, clasif);
+    if (chartHtml) {
+      document.getElementById("curva-chart-wrap").innerHTML = chartHtml;
+    } else {
+      const faltantes = [];
+      if (!data.peso_pregestacional_kg) faltantes.push("peso antes del embarazo");
+      if (!clasif) faltantes.push("altura (para calcular tu IMC)");
+      if (!data.registros || !data.registros.length) faltantes.push("al menos un peso registrado acá abajo");
+      document.getElementById("curva-chart-wrap").innerHTML = faltantes.length
+        ? `<p class="helper" style="background:var(--gray-100); padding:10px 12px; border-radius:10px;">Para ver tu gráfico, todavía falta: ${faltantes.join(", ")}.</p>`
+        : "";
+    }
 
     const hist = document.getElementById("peso-historial");
     if (data.registros && data.registros.length) {
