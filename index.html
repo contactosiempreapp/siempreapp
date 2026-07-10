@@ -281,6 +281,38 @@
     margin-top: 6px;
   }
 
+  .alerta-severa {
+    background: #FDEDEB;
+    border: 1.5px solid var(--pink);
+    color: #8A2E22;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .mdpa-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .mdpa-table th {
+    font-size: 10px;
+    color: var(--gray-600);
+    font-weight: 700;
+    text-align: center;
+    padding: 4px 2px;
+  }
+  .mdpa-table td { text-align: center; padding: 3px 2px; }
+  .mdpa-day-label { font-size: 11px; font-weight: 700; color: var(--violet-dark); text-align: left !important; }
+  .mdpa-input {
+    width: 32px;
+    padding: 4px 2px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 6px;
+    font-size: 12px;
+    text-align: center;
+  }
+  .mdpa-input.alarma { border-color: var(--pink); background: var(--pink-light); color: var(--pink); font-weight: 700; }
+  .mdpa-sep { color: var(--gray-600); font-size: 11px; }
+
   button.logout {
     background: none;
     border: none;
@@ -364,6 +396,12 @@
         <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
       </div>
     </div>
+    <div class="card" id="mdpa-card">
+      <h2>Presión arterial <span class="pill-teal">MDPA</span></h2>
+      <div id="mdpa-content">
+        <p style="font-size:13px; color:var(--gray-600);">Cargando...</p>
+      </div>
+    </div>
   </main>
 
   <footer class="foot">
@@ -395,6 +433,7 @@
     homeScreen.style.flexDirection = "column";
     loadAspirinaCalendar();
     initCalcio();
+    initMdpa();
   }
 
   async function doLogin(dni, password) {
@@ -625,6 +664,121 @@
         cls += registros[dd] >= 1000 ? " suficiente" : " insuficiente";
       }
       grid.innerHTML += `<div class="${cls}">${d}</div>`;
+    }
+  }
+
+  // --- MDPA (presión arterial) ---
+  let estudioActivo = null;
+
+  async function initMdpa() {
+    const { data, error } = await sb.rpc("obtener_mdpa_activo", { p_token: session.token });
+    const cont = document.getElementById("mdpa-content");
+
+    if (error || !data || !data.ok) {
+      cont.innerHTML = `<p style="font-size:13px;color:var(--gray-600);">No pudimos cargar la información.</p>`;
+      return;
+    }
+
+    if (!data.estudio) {
+      cont.innerHTML = `
+        <p style="font-size:13px; color:var(--gray-600); margin-bottom:12px;">
+          No tenés un monitoreo activo. Si tu médica te indicó hacer un MDPA, iniciálo acá.
+        </p>
+        <button class="secondary" id="iniciar-mdpa-btn">Iniciar monitoreo (4 días)</button>
+      `;
+      document.getElementById("iniciar-mdpa-btn").addEventListener("click", async () => {
+        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: 4, p_incluye_postprandial: true });
+        initMdpa();
+      });
+      return;
+    }
+
+    estudioActivo = data.estudio;
+    renderMdpaTable();
+  }
+
+  function getRegistro(dia, momento, toma) {
+    return estudioActivo.registros.find(r => r.dia === dia && r.momento === momento && r.toma === toma);
+  }
+
+  function renderMdpaTable() {
+    const e = estudioActivo;
+    const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
+    const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
+
+    const hayAlarmaSevera = e.registros.some(r =>
+      r.sistolica >= e.umbral_severo_sis || r.diastolica >= e.umbral_severo_dia
+    );
+
+    let html = "";
+    if (hayAlarmaSevera) {
+      html += `<div class="alerta-severa">⚠ Detectamos valores de presión muy elevados (≥${e.umbral_severo_sis}/${e.umbral_severo_dia}). Repetí la medición en 15 minutos y, si se confirma, consultá cuanto antes.</div>`;
+    }
+
+    html += `<table class="mdpa-table"><thead><tr><th style="text-align:left;">Día</th>`;
+    momentos.forEach(m => { html += `<th colspan="2">${labelMomento[m]}</th>`; });
+    html += `</tr></thead><tbody>`;
+
+    for (let dia = 1; dia <= e.duracion_dias; dia++) {
+      for (let toma = 1; toma <= 2; toma++) {
+        html += `<tr>`;
+        html += toma === 1
+          ? `<td class="mdpa-day-label" rowspan="2">Día ${dia}</td>`
+          : "";
+        momentos.forEach(m => {
+          const r = getRegistro(dia, m, toma);
+          const sisVal = r ? r.sistolica : "";
+          const diaVal = r ? r.diastolica : "";
+          const isAlarma = r && (r.sistolica >= e.umbral_alarma_sis || r.diastolica >= e.umbral_alarma_dia);
+          html += `
+            <td>
+              <input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="SIS"
+                data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="sistolica" value="${sisVal}">
+            </td>
+            <td>
+              <input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="DIA"
+                data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="diastolica" value="${diaVal}">
+            </td>`;
+        });
+        html += `</tr>`;
+      }
+    }
+    html += `</tbody></table>`;
+
+    document.getElementById("mdpa-content").innerHTML = html;
+
+    document.querySelectorAll(".mdpa-input").forEach(input => {
+      input.addEventListener("change", () => guardarTomaMdpa(input));
+    });
+  }
+
+  async function guardarTomaMdpa(input) {
+    const dia = parseInt(input.dataset.dia);
+    const momento = input.dataset.momento;
+    const toma = parseInt(input.dataset.toma);
+    const campo = input.dataset.campo;
+
+    const selectorOtro = campo === "sistolica" ? "diastolica" : "sistolica";
+    const otroInput = document.querySelector(
+      `.mdpa-input[data-dia="${dia}"][data-momento="${momento}"][data-toma="${toma}"][data-campo="${selectorOtro}"]`
+    );
+    const sistolica = campo === "sistolica" ? input.value : otroInput.value;
+    const diastolica = campo === "diastolica" ? input.value : otroInput.value;
+
+    if (!sistolica || !diastolica) return; // esperar a que carguen los dos valores
+
+    const { data } = await sb.rpc("registrar_toma_mdpa", {
+      p_token: session.token,
+      p_estudio_id: estudioActivo.id,
+      p_dia: dia,
+      p_momento: momento,
+      p_toma: toma,
+      p_sistolica: parseInt(sistolica),
+      p_diastolica: parseInt(diastolica)
+    });
+
+    if (data && data.ok) {
+      initMdpa(); // recarga para reflejar alarmas
     }
   }
 
