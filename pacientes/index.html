@@ -169,6 +169,20 @@
     border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px;
   }
 
+  /* Presentación */
+  .welcome-hero { text-align: center; padding: 26px 20px; background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
+  .welcome-hero-msg { font-family: 'Fraunces', serif; font-weight: 600; font-size: 20px; color: var(--violet-deep); margin-bottom: 10px; }
+  .welcome-hero-explain { font-size: 13.5px; color: var(--gray-600); line-height: 1.65; margin: 0; }
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .feature-card {
+    background: white; border-radius: 14px; padding: 14px; border: 1px solid var(--gray-300); box-shadow: var(--shadow-card);
+    cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 6px; transition: transform 0.1s;
+  }
+  .feature-card:active { transform: scale(0.97); }
+  .feature-card svg { width: 20px; height: 20px; color: var(--card-color, var(--violet)); }
+  .feature-card .feature-title { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13px; color: var(--gray-900); }
+  .feature-card .feature-desc { font-size: 11.5px; color: var(--gray-600); line-height: 1.4; }
+
   /* Aspirina — indicación */
   .asp-indicacion { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, #EEF2FB, #F6F1FC); border-radius: 14px; padding: 16px; }
   .asp-moon {
@@ -183,6 +197,12 @@
   .asp-star-2 { bottom: 10px; right: 2px; width: 2px; height: 2px; }
   .asp-indicacion-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 16px; color: var(--gray-900); }
   .asp-indicacion-sub { font-size: 13px; color: var(--gray-600); font-weight: 600; margin-top: 2px; }
+  .cal-pill-badge {
+    width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 35% 30%, #FFFFFF, #DCEBFB 75%);
+    box-shadow: inset -2px -2px 5px rgba(91,143,214,0.25), 0 4px 10px -4px rgba(53,104,176,0.4);
+  }
+  .cal-pill-badge svg { width: 26px; height: 26px; }
   .banner-ok { background: var(--teal-light); border: 1.5px solid var(--teal); color: var(--teal-dark); border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
   .banner-warn { background: var(--coral-light); border: 1.5px solid var(--coral); color: #8A2E22; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
   .semana-actual-text { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); margin: 0; }
@@ -266,7 +286,7 @@
   </header>
 
   <nav class="tabs" id="tabs-nav">
-    <button class="tab-btn" data-tab="mis-datos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg>Mis datos</button>
+    <button class="tab-btn" data-tab="bienvenida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>Presentación</button>
     <button class="tab-btn" data-tab="embarazos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg>Embarazos</button>
     <button class="tab-btn" data-tab="aspirina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg>Aspirina</button>
     <button class="tab-btn" data-tab="calcio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>Calcio</button>
@@ -279,6 +299,16 @@
   </nav>
 
   <main>
+
+    <!-- PRESENTACIÓN -->
+    <div class="panel" id="panel-bienvenida">
+      <div class="card welcome-hero">
+        <div class="logo-mark" style="margin: 0 auto 16px;">S</div>
+        <div class="welcome-hero-msg" id="bienvenida-msg">—</div>
+        <p class="welcome-hero-explain" id="bienvenida-explain">—</p>
+      </div>
+      <div class="feature-grid" id="feature-grid"></div>
+    </div>
 
     <!-- MIS DATOS -->
     <div class="panel" id="panel-mis-datos">
@@ -387,26 +417,59 @@
 
     <!-- CALCIO -->
     <div class="panel" id="panel-calcio">
+      <div class="card" id="calcio-info-card">
+        <div class="asp-indicacion" style="background: linear-gradient(135deg, #E7F0FC, #F5FAFF);">
+          <div class="cal-pill-badge">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.3" fill="#FFFFFF" stroke="#5B8FD6" stroke-width="1.4"/><line x1="12" y1="4" x2="12" y2="20" stroke="#5B8FD6" stroke-width="1.3"/></svg>
+          </div>
+          <div>
+            <div class="asp-indicacion-title">Calcio</div>
+            <div class="asp-indicacion-sub">Cómo tomarlo mejor</div>
+          </div>
+        </div>
+        <p class="helper" style="margin-top:12px; margin-bottom:0;">El carbonato de calcio se absorbe mejor junto con las comidas; otras formas, como el lactato de calcio, se pueden tomar con o sin alimentos. La OMS recomienda dividir la dosis diaria en tres tomas, separadas por algunas horas, y no tomarlas junto con el suplemento de hierro y ácido fólico.</p>
+      </div>
+
       <div class="card" id="calcio-card">
         <h2>Calcio <span class="pill-teal">1000 mg/día</span></h2>
-        <p class="helper">Sumá con + cada porción de estos alimentos que consumiste hoy. Te vamos a mostrar cuánto calcio total llevás y si te conviene el suplemento.</p>
+        <p class="helper">Sumá con + cada porción de estos alimentos que consumiste hoy. Calculamos cuánto calcio total llevás.</p>
         <div class="aporte-resumen" id="aporte-resumen">
           <div><div class="aporte-mg" id="aporte-mg">0 mg</div><div class="aporte-label">de hoy</div></div>
           <div class="aporte-label" id="aporte-estado">Cargá lo que consumiste</div>
         </div>
         <div id="calcio-foods"></div>
-        <div class="toggle-row"><span>Usé suplemento hoy</span><button class="switch" id="suplemento-switch"></button></div>
         <label for="efecto-adverso" style="margin-top:8px;">¿Algún efecto adverso? (opcional)</label>
         <textarea id="efecto-adverso" placeholder="Ej: constipación, distensión abdominal..."></textarea>
         <button class="secondary" id="guardar-calcio-btn">Guardar registro de hoy</button>
       </div>
+
       <div class="card" id="calcio-cal-card">
-        <h2>Calendario de calcio <span class="pill-teal" id="calcio-mes-label">—</span></h2>
+        <h2>Calendario de alimentación <span class="pill-teal" id="calcio-mes-label">—</span></h2>
+        <p class="helper">Refleja el aporte que llegaste a cubrir con comida cada día.</p>
         <div class="cal-grid" id="calcio-dow-row"></div>
         <div class="cal-grid" id="calcio-cal-grid" style="margin-top:6px;"></div>
         <div class="legend">
           <span><span class="dot" style="background:var(--teal)"></span> ≥1000mg</span>
           <span><span class="dot" style="background:var(--pink)"></span> &lt;1000mg</span>
+          <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
+        </div>
+      </div>
+
+      <div class="card" id="calcio-suplemento-card" style="display:none;">
+        <h2>Suplemento de calcio <span class="pill-teal" id="calcio-frecuencia-label">—</span></h2>
+        <div id="calcio-suplemento-mensaje" class="helper" style="margin-bottom:14px;"></div>
+        <div id="calcio-suplemento-toggles"></div>
+        <button class="secondary" id="guardar-suplemento-btn" style="margin-top:10px;">Guardar toma de hoy</button>
+      </div>
+
+      <div class="card" id="calcio-suplemento-cal-card" style="display:none;">
+        <h2>Calendario del suplemento <span class="pill-teal" id="calcio-sup-mes-label">—</span></h2>
+        <p class="helper">Se completa cuando marcás todas las tomas indicadas ese día.</p>
+        <div class="cal-grid" id="calcio-sup-dow-row"></div>
+        <div class="cal-grid" id="calcio-sup-cal-grid" style="margin-top:6px;"></div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--teal)"></span> Cumplido</span>
+          <span><span class="dot" style="background:var(--pink)"></span> Incompleto</span>
           <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
         </div>
       </div>
@@ -541,6 +604,7 @@
     homeScreen.style.display = "flex";
     homeScreen.style.flexDirection = "column";
     setupTabs();
+    initBienvenida();
     loadAspirinaCalendar();
     initCalcio();
     initMdpa();
@@ -561,9 +625,10 @@
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.addEventListener("click", () => activarTab(btn.dataset.tab));
     });
-    activarTab("aspirina");
+    activarTab("bienvenida");
   }
   const TAB_COLORS = {
+    "bienvenida":       ["#7C5CC4", "#4B3585"],
     "mis-datos":        ["#7C5CC4", "#4B3585"],
     "embarazos":        ["#EC7FA0", "#C43F69"],
     "aspirina":         ["#28A67F", "#0B6E52"],
@@ -581,6 +646,39 @@
     const colores = TAB_COLORS[tab] || ["#5B3E96", "#382461"];
     document.documentElement.style.setProperty("--tab-accent", colores[0]);
     document.documentElement.style.setProperty("--tab-accent-dark", colores[1]);
+  }
+
+  // ================= PRESENTACIÓN =================
+  const FEATURES = [
+    { tab: "embarazos", color: "#C43F69", title: "Embarazos", desc: "Tu embarazo actual y los previos", icon: '<path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/>' },
+    { tab: "aspirina", color: "#0B6E52", title: "Aspirina", desc: "Calendario y recordatorio diario", icon: '<g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g>' },
+    { tab: "calcio", color: "#2C4F87", title: "Calcio", desc: "Alimentación y suplemento", icon: '<path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/>' },
+    { tab: "alimentacion", color: "#3E6E3B", title: "Alimentación", desc: "Guía nutricional del embarazo", icon: '<circle cx="12" cy="14" r="6.2"/><path d="M12 8V5.2"/><path d="M12 5.2c1-1.2 2.2-1.4 3.4-1.2"/>' },
+    { tab: "actividad-fisica", color: "#95611A", title: "Actividad física", desc: "Recomendaciones y tu semana", icon: '<circle cx="14" cy="4.2" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 6.5l-2 4 3 2-1.2 5.3"/><path d="M11.5 10.3l-4 2"/><path d="M14.5 12.5l3 1 1 4.2"/>' },
+    { tab: "presion-arterial", color: "#AD3C33", title: "Presión arterial", desc: "Monitoreo domiciliario (MDPA)", icon: '<path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/>' },
+    { tab: "curva-ponderal", color: "#454890", title: "Curva ponderal", desc: "Tu peso y objetivo de aumento", icon: '<rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/>' },
+    { tab: "pautas-alarma", color: "#A5382E", title: "Pautas de alarma", desc: "Cuándo consultar sin demora", icon: '<path d="M12 3.2l9.5 17.1H2.5L12 3.2z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="17.2" r="0.9" fill="currentColor" stroke="none"/>' },
+    { tab: "informacion", color: "#5D4A85", title: "Información", desc: "Preguntas frecuentes", icon: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/>' }
+  ];
+  async function initBienvenida() {
+    const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
+    document.getElementById("bienvenida-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida a SIEMPRE!";
+    document.getElementById("bienvenida-explain").textContent = (data && data.mensaje_explicativo) || "";
+
+    const grid = document.getElementById("feature-grid");
+    grid.innerHTML = FEATURES.map(f => `
+      <div class="feature-card" style="--card-color:${f.color}" data-tab="${f.tab}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${f.icon}</svg>
+        <div class="feature-title">${f.title}</div>
+        <div class="feature-desc">${f.desc}</div>
+      </div>`).join("");
+    grid.querySelectorAll(".feature-card").forEach(card => {
+      card.addEventListener("click", () => {
+        activarTab(card.dataset.tab);
+        const btn = document.querySelector(`.tab-btn[data-tab="${card.dataset.tab}"]`);
+        if (btn) btn.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+      });
+    });
   }
 
   // ================= ASPIRINA =================
@@ -631,6 +729,7 @@
     catalogoCalcio.forEach(f => { cantidades[f.id] = 0; });
     renderFoods();
     loadCalcioCalendar();
+    initCalcioSuplemento();
   }
   function renderFoods() {
     const cont = document.getElementById("calcio-foods");
@@ -663,22 +762,27 @@
     else if (total >= 1000) { resumen.classList.add("ok"); estado.textContent = "¡Llegaste a tu objetivo diario!"; }
     else { resumen.classList.add("falta"); estado.textContent = `Te faltan ${1000 - total} mg`; }
   }
-  const suplementoSwitch = document.getElementById("suplemento-switch");
-  let suplementoOn = false;
-  suplementoSwitch.addEventListener("click", () => {
-    suplementoOn = !suplementoOn;
-    suplementoSwitch.classList.toggle("on", suplementoOn);
-  });
   document.getElementById("guardar-calcio-btn").addEventListener("click", async () => {
     const fecha = new Date().toISOString().slice(0, 10);
     const porciones = catalogoCalcio.filter(f => cantidades[f.id] > 0).map(f => ({ alimento_id: f.id, cantidad: cantidades[f.id] }));
     const efectoAdverso = document.getElementById("efecto-adverso").value.trim();
     const btn = document.getElementById("guardar-calcio-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
-    await sb.rpc("registrar_calcio", { p_token: session.token, p_dia: fecha, p_porciones: porciones, p_uso_suplemento: suplementoOn, p_efecto_adverso: efectoAdverso });
+    const total = catalogoCalcio.reduce((acc, f) => acc + f.mg_calcio_por_porcion * cantidades[f.id], 0);
+    await sb.rpc("registrar_calcio", { p_token: session.token, p_dia: fecha, p_porciones: porciones, p_uso_suplemento: false, p_efecto_adverso: efectoAdverso });
     btn.disabled = false; btn.textContent = "Guardar registro de hoy";
     loadCalcioCalendar();
+    actualizarMensajeSuplemento(total);
   });
+  function actualizarMensajeSuplemento(totalHoy) {
+    const msg = document.getElementById("calcio-suplemento-mensaje");
+    if (!msg) return;
+    if (totalHoy >= 1000) {
+      msg.innerHTML = `¡Buenísimo! Hoy llegaste a tu objetivo solo con la alimentación 🎉 Si tu médica te indicó tomar igual el suplemento, marcalo abajo.`;
+    } else {
+      msg.innerHTML = `Con la comida de hoy llegaste a ${totalHoy} mg, por debajo del objetivo. Te recomendamos tomar el suplemento indicado — marcá acá cada toma.`;
+    }
+  }
   async function loadCalcioCalendar() {
     const hoy = new Date();
     const anio = hoy.getFullYear(); const mes = hoy.getMonth() + 1;
@@ -696,6 +800,74 @@
       const dd = String(d).padStart(2, "0");
       let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
       if (registros[dd] !== undefined) cls += registros[dd] >= 1000 ? " suficiente" : " insuficiente";
+      grid.innerHTML += `<div class="${cls}">${d}</div>`;
+    }
+  }
+
+  // ---- Suplemento de calcio (solo si hay indicación) ----
+  let dosisHoy = {};
+  function initCalcioSuplemento() {
+    if (!session.indicacion_calcio) return; // sin indicación, no se muestra nada de esto
+
+    document.getElementById("calcio-suplemento-card").style.display = "block";
+    document.getElementById("calcio-suplemento-cal-card").style.display = "block";
+
+    const frecuencia = session.calcio_frecuencia_diaria || 1;
+    document.getElementById("calcio-frecuencia-label").textContent = frecuencia === 2 ? "2 veces al día" : "1 vez al día";
+
+    dosisHoy = {};
+    for (let i = 1; i <= frecuencia; i++) dosisHoy["dosis_" + i] = false;
+    renderDosisToggles(frecuencia);
+    actualizarMensajeSuplemento(0);
+    loadCalcioSuplementoCalendario();
+  }
+  function renderDosisToggles(frecuencia) {
+    const cont = document.getElementById("calcio-suplemento-toggles");
+    const labels = frecuencia === 2 ? ["Toma de la mañana", "Toma de la noche"] : ["Toma del día"];
+    cont.innerHTML = labels.map((lbl, i) => `
+      <div class="toggle-row">
+        <span>${lbl}</span>
+        <button class="switch" data-dosis="dosis_${i + 1}"></button>
+      </div>`).join("");
+    cont.querySelectorAll(".switch").forEach(sw => {
+      sw.addEventListener("click", () => {
+        const key = sw.dataset.dosis;
+        dosisHoy[key] = !dosisHoy[key];
+        sw.classList.toggle("on", dosisHoy[key]);
+      });
+    });
+  }
+  document.getElementById("guardar-suplemento-btn").addEventListener("click", async () => {
+    const fecha = new Date().toISOString().slice(0, 10);
+    const btn = document.getElementById("guardar-suplemento-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await sb.rpc("guardar_calcio_suplemento", { p_token: session.token, p_dia: fecha, p_dosis: dosisHoy });
+    btn.disabled = false; btn.textContent = "Guardar toma de hoy";
+    loadCalcioSuplementoCalendario();
+  });
+  async function loadCalcioSuplementoCalendario() {
+    const hoy = new Date();
+    const anio = hoy.getFullYear(); const mes = hoy.getMonth() + 1;
+    const frecuencia = session.calcio_frecuencia_diaria || 1;
+    document.getElementById("calcio-sup-mes-label").textContent = MESES[mes - 1] + " " + anio;
+    document.getElementById("calcio-sup-dow-row").innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
+    const { data, error } = await sb.rpc("obtener_calendario_calcio_suplemento", { p_token: session.token, p_anio: anio, p_mes: mes });
+    const registros = {};
+    if (!error && data && data.ok) {
+      data.registros.forEach(r => {
+        const tomasHechas = Object.values(r.dosis || {}).filter(v => v === true).length;
+        registros[r.dia.slice(8, 10)] = tomasHechas >= frecuencia;
+      });
+    }
+    const primerDia = new Date(anio, mes - 1, 1).getDay();
+    const diasEnMes = new Date(anio, mes, 0).getDate();
+    const grid = document.getElementById("calcio-sup-cal-grid");
+    grid.innerHTML = "";
+    for (let i = 0; i < primerDia; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
+    for (let d = 1; d <= diasEnMes; d++) {
+      const dd = String(d).padStart(2, "0");
+      let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
+      if (registros[dd] !== undefined) cls += registros[dd] ? " suficiente" : " insuficiente";
       grid.innerHTML += `<div class="${cls}">${d}</div>`;
     }
   }
