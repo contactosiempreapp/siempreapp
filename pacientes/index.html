@@ -219,6 +219,15 @@
     box-shadow: inset -2px -2px 5px rgba(91,143,214,0.25), 0 4px 10px -4px rgba(53,104,176,0.4);
   }
   .cal-pill-badge svg { width: 26px; height: 26px; }
+  .cal-foods-illus { display: flex; justify-content: center; gap: 14px; }
+  .food-icon {
+    width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px -4px rgba(53,104,176,0.3);
+  }
+  .food-icon svg { width: 24px; height: 24px; }
+  .food-icon-milk { background: linear-gradient(160deg, #EAF1FC, #D6E6FA); color: #4A76B8; }
+  .food-icon-cheese { background: linear-gradient(160deg, #FDF3DE, #FAE6B8); color: #B98A2A; }
+  .food-icon-yogurt { background: linear-gradient(160deg, #F1EAFB, #E1D2F6); color: #7C5CAE; }
   .banner-ok { background: var(--teal-light); border: 1.5px solid var(--teal); color: var(--teal-dark); border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
   .banner-wait { background: var(--amber-light); border: 1.5px solid var(--amber); color: #6B4A0E; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
   .banner-warn { background: var(--coral-light); border: 1.5px solid var(--coral); color: #8A2E22; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.5; }
@@ -327,12 +336,11 @@
 
     <!-- PRESENTACIÓN -->
     <div class="panel" id="panel-bienvenida">
-      <div class="card welcome-hero">
+      <div class="card welcome-hero" style="min-height: 260px;">
         <div class="logo-mark" style="margin: 0 auto 16px;">S</div>
         <div class="welcome-hero-msg" id="bienvenida-msg">—</div>
         <p class="welcome-hero-explain" id="bienvenida-explain">—</p>
       </div>
-      <div class="feature-grid" id="feature-grid"></div>
     </div>
 
     <!-- MIS DATOS -->
@@ -475,6 +483,35 @@
 
     <!-- CALCIO -->
     <div class="panel" id="panel-calcio">
+      <div class="card" id="calcio-foods-header-card">
+        <div class="cal-foods-illus">
+          <span class="food-icon food-icon-milk">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v3l2 4v9a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-9l2-4V3z"/><path d="M7 12h10"/></svg>
+          </span>
+          <span class="food-icon food-icon-cheese">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8z"/><circle cx="9" cy="15" r="0.8" fill="currentColor" stroke="none"/><circle cx="14" cy="13" r="0.8" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="food-icon food-icon-yogurt">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8l1 4-2 12H9L7 8l1-4z"/><path d="M7.5 9h9"/></svg>
+          </span>
+        </div>
+        <h2 style="text-align:center; margin-top:12px;">Alimentación rica en calcio por día</h2>
+        <p class="helper" style="text-align:center;">Objetivo: 1000 mg/día. Cargá abajo lo que fuiste comiendo.</p>
+      </div>
+
+      <div class="card" id="calcio-card">
+        <h2>Porciones de hoy</h2>
+        <p class="helper">Sumá con + cada porción de estos alimentos que consumiste. Calculamos cuánto calcio total llevás.</p>
+        <div class="aporte-resumen" id="aporte-resumen">
+          <div><div class="aporte-mg" id="aporte-mg">0 mg</div><div class="aporte-label">de hoy</div></div>
+          <div class="aporte-label" id="aporte-estado">Cargá lo que consumiste</div>
+        </div>
+        <div id="calcio-foods"></div>
+        <label for="efecto-adverso" style="margin-top:8px;">¿Algún efecto adverso? (opcional)</label>
+        <textarea id="efecto-adverso" placeholder="Ej: constipación, distensión abdominal..."></textarea>
+        <button class="secondary" id="guardar-calcio-btn">Guardar registro de hoy</button>
+      </div>
+
       <div class="card" id="calcio-info-card">
         <div class="asp-indicacion" style="background: linear-gradient(135deg, #E7F0FC, #F5FAFF);">
           <div class="cal-pill-badge">
@@ -488,31 +525,6 @@
         <p class="helper" style="margin-top:12px; margin-bottom:0;">El carbonato de calcio se absorbe mejor junto con las comidas; otras formas, como el lactato de calcio, se pueden tomar con o sin alimentos. La OMS recomienda dividir la dosis diaria en tres tomas, separadas por algunas horas, y no tomarlas junto con el suplemento de hierro y ácido fólico.</p>
       </div>
 
-      <div class="card" id="calcio-card">
-        <h2>Calcio <span class="pill-teal">1000 mg/día</span></h2>
-        <p class="helper">Sumá con + cada porción de estos alimentos que consumiste hoy. Calculamos cuánto calcio total llevás.</p>
-        <div class="aporte-resumen" id="aporte-resumen">
-          <div><div class="aporte-mg" id="aporte-mg">0 mg</div><div class="aporte-label">de hoy</div></div>
-          <div class="aporte-label" id="aporte-estado">Cargá lo que consumiste</div>
-        </div>
-        <div id="calcio-foods"></div>
-        <label for="efecto-adverso" style="margin-top:8px;">¿Algún efecto adverso? (opcional)</label>
-        <textarea id="efecto-adverso" placeholder="Ej: constipación, distensión abdominal..."></textarea>
-        <button class="secondary" id="guardar-calcio-btn">Guardar registro de hoy</button>
-      </div>
-
-      <div class="card" id="calcio-cal-card">
-        <h2>Calendario de alimentación <span class="pill-teal" id="calcio-mes-label">—</span></h2>
-        <p class="helper">Refleja el aporte que llegaste a cubrir con comida cada día.</p>
-        <div class="cal-grid" id="calcio-dow-row"></div>
-        <div class="cal-grid" id="calcio-cal-grid" style="margin-top:6px;"></div>
-        <div class="legend">
-          <span><span class="dot" style="background:var(--teal)"></span> ≥1000mg</span>
-          <span><span class="dot" style="background:var(--pink)"></span> &lt;1000mg</span>
-          <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
-        </div>
-      </div>
-
       <div class="card" id="calcio-suplemento-card" style="display:none;">
         <h2>Suplemento de calcio <span class="pill-teal" id="calcio-frecuencia-label">—</span></h2>
         <div id="calcio-suplemento-mensaje" class="helper" style="margin-bottom:14px;"></div>
@@ -521,8 +533,8 @@
       </div>
 
       <div class="card" id="calcio-suplemento-cal-card" style="display:none;">
-        <h2>Calendario del suplemento <span class="pill-teal" id="calcio-sup-mes-label">—</span></h2>
-        <p class="helper">Se completa cuando marcás todas las tomas indicadas ese día.</p>
+        <h2>Calendario del calcio <span class="pill-teal" id="calcio-sup-mes-label">—</span></h2>
+        <p class="helper">Este calendario es solo para marcar si tomaste los comprimidos indicados. Se completa cuando marcás todas las tomas del día.</p>
         <div class="cal-grid" id="calcio-sup-dow-row"></div>
         <div class="cal-grid" id="calcio-sup-cal-grid" style="margin-top:6px;"></div>
         <div class="legend">
@@ -655,9 +667,14 @@
   // ---------- WELCOME ----------
   async function goToWelcome() {
     loginScreen.classList.remove("show");
-    const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
-    document.getElementById("welcome-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida!";
-    document.getElementById("welcome-explain").textContent = (data && data.mensaje_explicativo) || "";
+    try {
+      const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
+      document.getElementById("welcome-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida!";
+      document.getElementById("welcome-explain").textContent = (data && data.mensaje_explicativo) || "";
+    } catch (e) {
+      document.getElementById("welcome-msg").textContent = "¡Bienvenida!";
+      document.getElementById("welcome-explain").textContent = "";
+    }
     welcomeScreen.classList.add("show");
   }
   document.getElementById("continuar-btn").addEventListener("click", () => {
@@ -728,24 +745,13 @@
     { tab: "informacion", color: "#5D4A85", title: "Información", desc: "Preguntas frecuentes", icon: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/>' }
   ];
   async function initBienvenida() {
-    const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
-    document.getElementById("bienvenida-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida a SIEMPRE!";
-    document.getElementById("bienvenida-explain").textContent = (data && data.mensaje_explicativo) || "";
-
-    const grid = document.getElementById("feature-grid");
-    grid.innerHTML = FEATURES.map(f => `
-      <div class="feature-card" style="--card-color:${f.color}" data-tab="${f.tab}">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${f.icon}</svg>
-        <div class="feature-title">${f.title}</div>
-        <div class="feature-desc">${f.desc}</div>
-      </div>`).join("");
-    grid.querySelectorAll(".feature-card").forEach(card => {
-      card.addEventListener("click", () => {
-        activarTab(card.dataset.tab);
-        const btn = document.querySelector(`.tab-btn[data-tab="${card.dataset.tab}"]`);
-        if (btn) btn.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-      });
-    });
+    try {
+      const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
+      document.getElementById("bienvenida-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida a SIEMPRE!";
+      document.getElementById("bienvenida-explain").textContent = (data && data.mensaje_explicativo) || "";
+    } catch (e) {
+      document.getElementById("bienvenida-msg").textContent = "¡Bienvenida a SIEMPRE!";
+    }
   }
 
   // ================= ASPIRINA =================
@@ -795,7 +801,6 @@
     catalogoCalcio = data;
     catalogoCalcio.forEach(f => { cantidades[f.id] = 0; });
     renderFoods();
-    loadCalcioCalendar();
     initCalcioSuplemento();
   }
   function renderFoods() {
@@ -838,7 +843,6 @@
     const total = catalogoCalcio.reduce((acc, f) => acc + f.mg_calcio_por_porcion * cantidades[f.id], 0);
     await sb.rpc("registrar_calcio", { p_token: session.token, p_dia: fecha, p_porciones: porciones, p_uso_suplemento: false, p_efecto_adverso: efectoAdverso });
     btn.disabled = false; btn.textContent = "Guardar registro de hoy";
-    loadCalcioCalendar();
     actualizarMensajeSuplemento(total);
   });
   function actualizarMensajeSuplemento(totalHoy) {
@@ -848,26 +852,6 @@
       msg.innerHTML = `¡Buenísimo! Hoy llegaste a tu objetivo solo con la alimentación 🎉 Si tu médica te indicó tomar igual el suplemento, marcalo abajo.`;
     } else {
       msg.innerHTML = `Con la comida de hoy llegaste a ${totalHoy} mg, por debajo del objetivo. Te recomendamos tomar el suplemento indicado — marcá acá cada toma.`;
-    }
-  }
-  async function loadCalcioCalendar() {
-    const hoy = new Date();
-    const anio = hoy.getFullYear(); const mes = hoy.getMonth() + 1;
-    document.getElementById("calcio-mes-label").textContent = MESES[mes - 1] + " " + anio;
-    document.getElementById("calcio-dow-row").innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
-    const { data, error } = await sb.rpc("obtener_calendario_calcio", { p_token: session.token, p_anio: anio, p_mes: mes });
-    const registros = {};
-    if (!error && data && data.ok) data.registros.forEach(r => { registros[r.dia.slice(8, 10)] = r.aporte_calculado_mg; });
-    const primerDia = new Date(anio, mes - 1, 1).getDay();
-    const diasEnMes = new Date(anio, mes, 0).getDate();
-    const grid = document.getElementById("calcio-cal-grid");
-    grid.innerHTML = "";
-    for (let i = 0; i < primerDia; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
-    for (let d = 1; d <= diasEnMes; d++) {
-      const dd = String(d).padStart(2, "0");
-      let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
-      if (registros[dd] !== undefined) cls += registros[dd] >= 1000 ? " suficiente" : " insuficiente";
-      grid.innerHTML += `<div class="${cls}">${d}</div>`;
     }
   }
 
@@ -1540,9 +1524,14 @@
   }
 
   async function mostrarBienvenidaConSesion() {
-    const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
-    document.getElementById("welcome-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida!";
-    document.getElementById("welcome-explain").textContent = (data && data.mensaje_explicativo) || "";
+    try {
+      const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
+      document.getElementById("welcome-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida!";
+      document.getElementById("welcome-explain").textContent = (data && data.mensaje_explicativo) || "";
+    } catch (e) {
+      document.getElementById("welcome-msg").textContent = "¡Bienvenida!";
+      document.getElementById("welcome-explain").textContent = "";
+    }
     welcomeScreen.classList.add("show");
   }
 </script>
