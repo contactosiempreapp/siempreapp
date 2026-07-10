@@ -371,6 +371,19 @@
   .pa-suelta-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
   .pa-suelta-nivel-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
 
+  .pa-alerta-item {
+    border: 1.5px solid var(--gray-300); border-radius: 12px; margin-top: 10px; overflow: hidden;
+  }
+  .pa-alerta-item summary {
+    padding: 10px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; background: var(--gray-100);
+    color: var(--gray-900); list-style: none; display: flex; align-items: center;
+  }
+  .pa-alerta-item summary::-webkit-details-marker { display: none; }
+  .pa-alerta-item[open] summary { border-bottom: 1px solid var(--gray-300); }
+  .pa-alerta-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px; flex-shrink: 0; }
+  .pa-alerta-body { padding: 10px 12px; }
+  .pa-alerta-body .pa-nivel-banner { margin-top: 0; }
+
   /* Cuarto trimestre */
   .ct-hero-card { background: linear-gradient(135deg, #B8873F 0%, #6B3F94 100%); border: none; }
   .pa-hero-card { background: linear-gradient(135deg, #C2554C 0%, #7A2A22 100%); border: none; }
@@ -1495,10 +1508,23 @@
   });
 
   // ================= TOMAS DEL DÍA =================
+  let alertasPaHoy = [];
+
   async function initPaSuelta() {
     const { data, error } = await sb.rpc("obtener_pa_suelta_hoy", { p_token: session.token });
     if (error || !data || !data.ok) return;
-    renderPaSueltaLista(data.tomas || []);
+    const tomas = data.tomas || [];
+    renderPaSueltaLista(tomas);
+
+    // Reconstruye las alertas del día (por si se recarga la página)
+    alertasPaHoy = tomas
+      .map(t => {
+        const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
+        return c.urgente ? { sis: t.sistolica, dia: t.diastolica, clasif: c, hora: new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) } : null;
+      })
+      .filter(Boolean)
+      .reverse(); // más antigua primero, para que la última quede al final (abierta)
+    renderAlertasPaHoy();
   }
   function renderPaSueltaLista(tomas) {
     const cont = document.getElementById("pa-suelta-lista");
@@ -1507,6 +1533,17 @@
       const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
       const hora = new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
       return `<div class="pa-suelta-item"><span><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${t.sistolica}/${t.diastolica} — ${c.label}</span><span>${hora}</span></div>`;
+    }).join("");
+  }
+  function renderAlertasPaHoy() {
+    const cont = document.getElementById("pa-suelta-resultado");
+    if (!alertasPaHoy.length) { cont.innerHTML = ""; return; }
+    cont.innerHTML = alertasPaHoy.map((a, i) => {
+      const esUltima = i === alertasPaHoy.length - 1;
+      return `<details class="pa-alerta-item" ${esUltima ? "open" : ""}>
+        <summary><span class="pa-alerta-dot" style="background:${a.clasif.color}"></span>${a.hora} — ${a.sis}/${a.dia} · ${a.clasif.label}</summary>
+        <div class="pa-alerta-body">${renderNivelBanner(a.clasif)}</div>
+      </details>`;
     }).join("");
   }
   document.getElementById("guardar-pa-suelta-btn").addEventListener("click", async () => {
@@ -1520,7 +1557,11 @@
     btn.disabled = false; btn.textContent = "Guardar toma";
 
     const clasif = contexto === "posparto" ? clasificarPAPosparto(sis, dia) : clasificarPA(sis, dia);
-    document.getElementById("pa-suelta-resultado").innerHTML = renderNivelBanner(clasif);
+    if (clasif.urgente) {
+      const hora = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+      alertasPaHoy.push({ sis, dia, clasif, hora });
+      renderAlertasPaHoy();
+    }
     document.getElementById("pa-suelta-sis").value = "";
     document.getElementById("pa-suelta-dia").value = "";
     initPaSuelta();
@@ -1561,7 +1602,7 @@
         <button class="secondary" id="${pref}iniciar-mdpa-btn" style="margin-top:6px;">Iniciar monitoreo</button>`;
       document.getElementById(pref + "iniciar-mdpa-btn").addEventListener("click", async () => {
         const duracion = parseInt(document.getElementById(pref + "mdpa-duracion-select").value);
-        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: duracion, p_incluye_postprandial: true, p_tipo: tipo });
+        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: duracion, p_incluye_postprandial: tipo === "embarazo", p_tipo: tipo });
         initMdpa(ctx);
       });
       cargarHistorialInformes(ctx);
@@ -1734,7 +1775,20 @@
     }
 
     document.getElementById(pref + "mdpa-tabla-wrap").innerHTML = html;
-    document.getElementById(pref + "mdpa-tabla-wrap").querySelectorAll(".mdpa-input").forEach(input => input.addEventListener("change", () => guardarTomaMdpa(input)));
+    const wrap = document.getElementById(pref + "mdpa-tabla-wrap");
+    const inputs = Array.from(wrap.querySelectorAll(".mdpa-input"));
+    inputs.forEach((input, i) => {
+      input.setAttribute("tabindex", i + 1);
+      input.addEventListener("change", () => guardarTomaMdpa(input));
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          input.blur();
+          const siguiente = inputs[i + 1];
+          if (siguiente) siguiente.focus();
+        }
+      });
+    });
   }
 
   async function guardarTomaMdpa(input) {
