@@ -371,6 +371,7 @@
   .pa-nivel-fila { font-size: 12.5px; margin-top: 5px; line-height: 1.5; }
   .pa-nivel-fila strong { font-weight: 700; }
   .pa-nivel-banner.urgente { animation: urgentpulse 1.6s ease-in-out infinite; }
+  .pa-objetivo-nota { margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(34,24,60,0.15); color: #7A5A1E; }
   @keyframes urgentpulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(178,59,50,0.25); } 50% { box-shadow: 0 0 0 8px rgba(178,59,50,0); } }
   .pa-suelta-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
   .pa-suelta-nivel-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
@@ -1428,13 +1429,21 @@
   });
 
   // ================= CLASIFICACIÓN DE PRESIÓN =================
-  // Basado en PAD (diastólica), con anulación si PAS ≥155.
+  // Escalera de alarma (cuándo consultar) basada en PAD (diastólica), con anulación si PAS ≥140.
   // Fuente: protocolo clínico compartido — Magee and von Dadelszen,
   // Maternal-Fetal Medicine (2021).
   let tomaMedicacionPA = false;
+  let riesgoAntecedentesPA = false;   // HTA crónica o preeclampsia previa (Mis datos)
+  let riesgoGestacionalPA = false;    // HTA gestacional en el embarazo actual (Embarazos)
+
+  // Pacientes medicadas o con factores de riesgo tienen un objetivo de control más
+  // estricto que el resto (NICE: <135/85 mmHg), aunque no estén en zona de alarma.
+  function esPacienteRiesgoPA() {
+    return riesgoAntecedentesPA || riesgoGestacionalPA || tomaMedicacionPA;
+  }
 
   function clasificarPA(sis, dia) {
-    const porPAS = sis != null && sis >= 155;
+    const porPAS = sis != null && sis >= 140;
     let nivel;
     if (porPAS || dia >= 105) nivel = "muy_alto";
     else if (dia >= 90) nivel = "alto";
@@ -1448,7 +1457,7 @@
       muy_alto: {
         label: "Muy alto", color: "#B23B32", bg: "#FBEAE8",
         siguiente: "Sentate en silencio 5 minutos y volvé a medir la presión.",
-        consultar: porPAS ? "Tu presión sistólica es ≥155 mmHg — consultá a GUARDIA en las próximas 4 horas." : "Consultá a GUARDIA en las próximas 4 horas.",
+        consultar: porPAS ? "Tu presión sistólica es ≥140 mmHg — consultá a GUARDIA en las próximas 4 horas." : "Consultá a GUARDIA en las próximas 4 horas.",
         control: "Medí todos los días."
       },
       alto: {
@@ -1482,16 +1491,29 @@
         control: conMed ? "Medí todos los días, o como te indique tu médica si te cambió el tratamiento." : "Según las indicaciones de tu médica."
       }
     };
-    return Object.assign({ nivel, urgente: nivel === "muy_alto" || nivel === "alto", porPAS }, tablas[nivel]);
+    const resultado = Object.assign({ nivel, urgente: nivel === "muy_alto" || nivel === "alto", porPAS }, tablas[nivel]);
+
+    // Objetivo de control más estricto para pacientes con factores de riesgo o medicadas.
+    // No es una alarma: es un aviso informativo de que la lectura no llega al objetivo
+    // recomendado por NICE (<135/85 mmHg) aunque no requiera consulta urgente.
+    if (!resultado.urgente && esPacienteRiesgoPA() && sis != null && dia != null && (sis >= 135 || dia > 85)) {
+      resultado.objetivoSuperado = true;
+      resultado.objetivoMsg = "Para tu perfil (con medicación o factores de riesgo), el objetivo de control recomendado es menos de 135/85 mmHg. Esta lectura no lo alcanza. No es urgente, pero comentaselo a tu médica en el próximo control.";
+    }
+    return resultado;
   }
 
   function renderNivelBanner(clasif) {
-    return `<div class="pa-nivel-banner ${clasif.urgente ? 'urgente' : ''}" style="background:${clasif.bg}; border-color:${clasif.color};">
+    let html = `<div class="pa-nivel-banner ${clasif.urgente ? 'urgente' : ''}" style="background:${clasif.bg}; border-color:${clasif.color};">
       <div class="pa-nivel-label" style="color:${clasif.color};">${clasif.label}${clasif.porPAS ? ' ⚠' : ''}</div>
       <div class="pa-nivel-fila"><strong>Próxima medición:</strong> ${clasif.siguiente}</div>
       <div class="pa-nivel-fila"><strong>Consultar con tu médica:</strong> ${clasif.consultar}</div>
-      <div class="pa-nivel-fila"><strong>Control:</strong> ${clasif.control}</div>
-    </div>`;
+      <div class="pa-nivel-fila"><strong>Control:</strong> ${clasif.control}</div>`;
+    if (clasif.objetivoSuperado) {
+      html += `<div class="pa-nivel-fila pa-objetivo-nota"><strong>Objetivo de control:</strong> ${clasif.objetivoMsg}</div>`;
+    }
+    html += `</div>`;
+    return html;
   }
 
   // Clasificación simplificada para posparto (umbrales provisorios, a confirmar)
@@ -1601,7 +1623,7 @@
     alertasPaHoy = tomas
       .map(t => {
         const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
-        return c.urgente ? { sis: t.sistolica, dia: t.diastolica, clasif: c, hora: new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) } : null;
+        return (c.urgente || c.objetivoSuperado) ? { sis: t.sistolica, dia: t.diastolica, clasif: c, hora: new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) } : null;
       })
       .filter(Boolean)
       .reverse(); // más antigua primero, para que la última quede al final (abierta)
@@ -1638,7 +1660,7 @@
     btn.disabled = false; btn.textContent = "Guardar toma";
 
     const clasif = contexto === "posparto" ? clasificarPAPosparto(sis, dia) : clasificarPA(sis, dia);
-    if (clasif.urgente) {
+    if (clasif.urgente || clasif.objetivoSuperado) {
       const hora = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
       alertasPaHoy.push({ sis, dia, clasif, hora });
       renderAlertasPaHoy();
@@ -2488,6 +2510,7 @@
     const c = data.clinicos || {};
     document.getElementById("ac-preeclampsia-previa").checked = !!c.preeclampsia_previa;
     document.getElementById("ac-hta-cronica").checked = !!c.hta_cronica;
+    riesgoAntecedentesPA = !!(c.preeclampsia_previa || c.hta_cronica);
     document.getElementById("ac-diabetes").checked = !!c.diabetes_pregestacional;
     document.getElementById("ac-renal").checked = !!c.enfermedad_renal_cronica;
     document.getElementById("ac-autoinmune").checked = !!c.enfermedad_autoinmune;
@@ -2569,6 +2592,7 @@
       p_clinicos: clinicos, p_familiares: familiares, p_estilo_vida: estiloVida, p_paternos: paternosList
     });
     btn.disabled = false; btn.textContent = "Guardar mis datos";
+    riesgoAntecedentesPA = !!(clinicos.preeclampsia_previa || clinicos.hta_cronica);
     const msg = document.getElementById("datos-guardado-msg");
     msg.style.display = "block";
     setTimeout(() => { msg.style.display = "none"; }, 2500);
@@ -2704,6 +2728,7 @@
     renderPrevios();
 
     semanaGestacionalActual = null;
+    riesgoGestacionalPA = false;
     if (data.actual && data.actual !== null) {
       const a = data.actual;
       if (a.fum) document.getElementById("ge-fum").value = a.fum;
@@ -2712,6 +2737,7 @@
       if (a.eco_dias != null) document.getElementById("ge-eco-dias").value = a.eco_dias;
       if (a.fpp_obstetra) document.getElementById("ge-fpp").value = a.fpp_obstetra;
       document.getElementById("ge-hta-gestacional").checked = !!a.hipertension_gestacional_actual;
+      riesgoGestacionalPA = !!a.hipertension_gestacional_actual;
 
       // Si ya tenía cargado solo eco (sin FUM), dejamos seleccionado ese modo
       if (!a.fum && a.fecha_eco_datante) {
