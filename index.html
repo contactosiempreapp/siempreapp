@@ -1055,13 +1055,24 @@
         <p class="helper" id="ct-info-riesgo" style="margin-bottom:0;">Cargando...</p>
       </div>
 
+      <div class="card" id="ct-fecha-actual-card" style="display:none;">
+        <h2 style="margin-bottom:10px;">Fecha de parto</h2>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <p class="helper" id="ct-fecha-actual-text" style="margin:0;"></p>
+          <button type="button" id="ct-editar-fecha-btn" style="flex-shrink:0; background:var(--violet-light); color:var(--violet-dark); border:none; border-radius:10px; padding:8px 14px; font-size:12.5px; font-weight:700; font-family:'Manrope',sans-serif; cursor:pointer;">Editar</button>
+        </div>
+      </div>
+
       <div class="card" id="ct-setup-card" style="display:none;">
-        <h2>¿Ya nació tu bebé?</h2>
-        <p class="helper">Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.</p>
+        <h2 id="ct-setup-titulo">¿Ya nació tu bebé?</h2>
+        <p class="helper" id="ct-setup-ayuda">Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.</p>
         <label for="ct-fecha-parto">Fecha de parto</label>
         <input type="date" id="ct-fecha-parto">
         <div class="check-row"><input type="checkbox" id="ct-tuvo-the"><label for="ct-tuvo-the" style="margin:0;">Tuve hipertensión del embarazo o preeclampsia en este embarazo</label></div>
-        <button class="primary" id="ct-guardar-parto-btn" style="margin-top:10px;">Activar mi seguimiento</button>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button class="primary" id="ct-guardar-parto-btn" style="flex:1;">Activar mi seguimiento</button>
+          <button type="button" id="ct-cancelar-edicion-btn" style="display:none; flex-shrink:0; background:var(--gray-100); color:var(--gray-600); border:none; border-radius:12px; padding:0 16px; font-size:13.5px; font-weight:700; font-family:'Manrope',sans-serif; cursor:pointer;">Cancelar</button>
+        </div>
       </div>
 
       <div id="ct-content"></div>
@@ -1417,13 +1428,13 @@
   });
 
   // ================= CLASIFICACIÓN DE PRESIÓN =================
-  // Basado en PAD (diastólica), con anulación si PAS ≥155.
+  // Basado en PAD (diastólica), con anulación si PAS ≥140.
   // Fuente: protocolo clínico compartido — Magee and von Dadelszen,
   // Maternal-Fetal Medicine (2021).
   let tomaMedicacionPA = false;
 
   function clasificarPA(sis, dia) {
-    const porPAS = sis != null && sis >= 155;
+    const porPAS = sis != null && sis >= 140;
     let nivel;
     if (porPAS || dia >= 105) nivel = "muy_alto";
     else if (dia >= 90) nivel = "alto";
@@ -1437,7 +1448,7 @@
       muy_alto: {
         label: "Muy alto", color: "#B23B32", bg: "#FBEAE8",
         siguiente: "Sentate en silencio 5 minutos y volvé a medir la presión.",
-        consultar: porPAS ? "Tu presión sistólica es ≥155 mmHg — consultá a GUARDIA en las próximas 4 horas." : "Consultá a GUARDIA en las próximas 4 horas.",
+        consultar: porPAS ? "Tu presión sistólica es ≥140 mmHg — consultá a GUARDIA en las próximas 4 horas." : "Consultá a GUARDIA en las próximas 4 horas.",
         control: "Medí todos los días."
       },
       alto: {
@@ -2224,6 +2235,42 @@
 
   // ================= CUARTO TRIMESTRE =================
   const CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
+  let ctDatosActuales = null;
+
+  function mostrarFormularioParto(esEdicion) {
+    const setupCard = document.getElementById("ct-setup-card");
+    const cancelarBtn = document.getElementById("ct-cancelar-edicion-btn");
+    const titulo = document.getElementById("ct-setup-titulo");
+    const ayuda = document.getElementById("ct-setup-ayuda");
+    const guardarBtn = document.getElementById("ct-guardar-parto-btn");
+
+    if (esEdicion) {
+      document.getElementById("ct-fecha-parto").value = (ctDatosActuales && ctDatosActuales.fecha_parto) || "";
+      document.getElementById("ct-tuvo-the").checked = !!(ctDatosActuales && ctDatosActuales.tuvo_the);
+      titulo.textContent = "Corregir fecha de parto";
+      ayuda.textContent = "Si te equivocaste al cargarla, modificala acá.";
+      guardarBtn.textContent = "Guardar cambios";
+      cancelarBtn.style.display = "inline-block";
+      document.getElementById("ct-fecha-actual-card").style.display = "none";
+    } else {
+      titulo.textContent = "¿Ya nació tu bebé?";
+      ayuda.textContent = "Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.";
+      guardarBtn.textContent = "Activar mi seguimiento";
+      cancelarBtn.style.display = "none";
+    }
+    setupCard.style.display = "block";
+  }
+
+  document.getElementById("ct-editar-fecha-btn").addEventListener("click", () => {
+    mostrarFormularioParto(true);
+  });
+
+  document.getElementById("ct-cancelar-edicion-btn").addEventListener("click", () => {
+    document.getElementById("ct-setup-card").style.display = "none";
+    if (ctDatosActuales && ctDatosActuales.fecha_parto) {
+      document.getElementById("ct-fecha-actual-card").style.display = "block";
+    }
+  });
 
   async function initCuartoTrimestre() {
     sb.rpc("obtener_config", { p_claves: ["info_cuarto_trimestre_riesgo"] }).then(({ data }) => {
@@ -2232,20 +2279,27 @@
     const { data, error } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
     const cont = document.getElementById("ct-content");
     const setupCard = document.getElementById("ct-setup-card");
+    const fechaActualCard = document.getElementById("ct-fecha-actual-card");
 
     if (error || !data || !data.ok) {
       cont.innerHTML = `<div class="card"><p style="font-size:13px;color:var(--gray-600);">No pudimos cargar esta sección.</p></div>`;
       return;
     }
 
+    ctDatosActuales = data;
+
     if (!data.fecha_parto) {
-      setupCard.style.display = "block";
+      fechaActualCard.style.display = "none";
+      mostrarFormularioParto(false);
       cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
       document.getElementById("pp-mdpa-card").style.display = "none";
       return;
     }
 
     setupCard.style.display = "none";
+    fechaActualCard.style.display = "block";
+    const fechaTexto = new Date(data.fecha_parto + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
+    document.getElementById("ct-fecha-actual-text").textContent = fechaTexto;
     document.getElementById("pp-mdpa-card").style.display = "block";
     initMdpa("pp");
 
@@ -2337,9 +2391,11 @@
     if (!fecha) return;
     const tuvoThe = document.getElementById("ct-tuvo-the").checked;
     const btn = document.getElementById("ct-guardar-parto-btn");
+    const textoOriginal = btn.textContent;
     btn.disabled = true; btn.textContent = "Guardando...";
     await sb.rpc("guardar_fecha_parto", { p_token: session.token, p_fecha_parto: fecha, p_tuvo_the: tuvoThe });
-    btn.disabled = false; btn.textContent = "Activar mi seguimiento";
+    btn.disabled = false; btn.textContent = textoOriginal;
+    document.getElementById("ct-cancelar-edicion-btn").style.display = "none";
     initCuartoTrimestre();
   });
 
