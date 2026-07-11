@@ -375,19 +375,34 @@
   @keyframes urgentpulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(178,59,50,0.25); } 50% { box-shadow: 0 0 0 8px rgba(178,59,50,0); } }
   .pa-suelta-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
   .pa-suelta-nivel-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .pa-suelta-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .pa-suelta-table th { text-align: left; padding: 8px 10px; background: var(--gray-100); color: var(--gray-600); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.02em; }
+  .pa-suelta-table td { padding: 8px 10px; border-bottom: 1px solid var(--gray-100); }
+  .pa-suelta-table tr:last-child td { border-bottom: none; }
 
   .pa-alerta-item {
     border: 1.5px solid var(--gray-300); border-radius: 12px; margin-top: 10px; overflow: hidden;
   }
   .pa-alerta-item summary {
     padding: 10px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; background: var(--gray-100);
-    color: var(--gray-900); list-style: none; display: flex; align-items: center;
+    color: var(--gray-900); list-style: none; display: flex; align-items: center; gap: 6px;
   }
   .pa-alerta-item summary::-webkit-details-marker { display: none; }
   .pa-alerta-item[open] summary { border-bottom: 1px solid var(--gray-300); }
   .pa-alerta-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px; flex-shrink: 0; }
   .pa-alerta-body { padding: 10px 12px; }
   .pa-alerta-body .pa-nivel-banner { margin-top: 0; }
+  .pa-ver-recomendacion { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--violet); text-decoration: underline; flex-shrink: 0; }
+  .pa-alerta-activa { border-color: var(--pink); }
+  .pa-alerta-activa .pa-alerta-header {
+    padding: 10px 12px; font-size: 12.5px; font-weight: 700; background: var(--pink-light);
+    color: var(--gray-900); display: flex; align-items: center; border-bottom: 1px solid var(--gray-300);
+  }
+  .pa-entendido-btn {
+    margin-top: 12px; width: 100%; padding: 11px; background: var(--violet); color: white; border: none;
+    border-radius: 10px; font-size: 13.5px; font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer;
+  }
+  .pa-entendido-btn:active { opacity: 0.85; }
 
   /* Cuarto trimestre */
   .ct-hero-card { background: linear-gradient(135deg, #B8873F 0%, #6B3F94 100%); border: none; }
@@ -1002,7 +1017,8 @@
         </div>
         <button class="secondary" id="guardar-pa-suelta-btn">Guardar toma</button>
         <div id="pa-suelta-resultado"></div>
-        <div id="pa-suelta-lista" style="margin-top:10px;"></div>
+        <button class="secondary" id="toggle-pa-suelta-lista-btn" style="margin-top:10px; display:none;">Ver tomas registradas en el día de hoy</button>
+        <div id="pa-suelta-lista-wrap" style="display:none; margin-top:10px;"></div>
       </div>
 
       <div class="card" id="mdpa-card">
@@ -1654,42 +1670,90 @@
 
   // ================= TOMAS DEL DÍA =================
   let alertasPaHoy = [];
+  let ultimasTomasHoy = [];
+  let paSueltaListaAbierta = false;
 
   async function initPaSuelta() {
     const { data, error } = await sb.rpc("obtener_pa_suelta_hoy", { p_token: session.token });
     if (error || !data || !data.ok) return;
     const tomas = data.tomas || [];
+    ultimasTomasHoy = tomas;
     renderPaSueltaLista(tomas);
 
-    // Reconstruye las alertas del día (por si se recarga la página)
+    // Reconstruye las alertas del día (por si se recarga la página).
+    // Se marcan como "leídas" todas menos la última, que siempre queda
+    // visible y pendiente de que la paciente confirme "Entendido".
     alertasPaHoy = tomas
       .map(t => {
         const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
         return (c.urgente || c.objetivoSuperado) ? { sis: t.sistolica, dia: t.diastolica, clasif: c, hora: new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) } : null;
       })
       .filter(Boolean)
-      .reverse(); // más antigua primero, para que la última quede al final (abierta)
+      .reverse(); // más antigua primero, para que la última quede al final
+    alertasPaHoy.forEach((a, i) => { a.leida = i !== alertasPaHoy.length - 1; });
     renderAlertasPaHoy();
   }
+
   function renderPaSueltaLista(tomas) {
-    const cont = document.getElementById("pa-suelta-lista");
-    if (!tomas.length) { cont.innerHTML = ""; return; }
-    cont.innerHTML = `<div class="ct-categoria-title">Tomas de hoy</div>` + tomas.map(t => {
+    const btn = document.getElementById("toggle-pa-suelta-lista-btn");
+    const wrap = document.getElementById("pa-suelta-lista-wrap");
+    if (!tomas.length) {
+      btn.style.display = "none";
+      wrap.style.display = "none";
+      wrap.innerHTML = "";
+      return;
+    }
+    btn.style.display = "block";
+    btn.textContent = paSueltaListaAbierta ? "Ocultar tomas de hoy" : `Ver tomas registradas en el día de hoy (${tomas.length})`;
+    wrap.style.display = paSueltaListaAbierta ? "block" : "none";
+    const filas = tomas.map(t => {
       const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
       const hora = new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
-      return `<div class="pa-suelta-item"><span><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${t.sistolica}/${t.diastolica} — ${c.label}</span><span>${hora}</span></div>`;
+      return `<tr>
+        <td>${hora}</td>
+        <td>${t.sistolica}/${t.diastolica}</td>
+        <td><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${c.label}</td>
+      </tr>`;
     }).join("");
+    wrap.innerHTML = `<div class="mdpa-table-scroll"><table class="pa-suelta-table">
+      <thead><tr><th>Hora</th><th>PA</th><th>Nivel</th></tr></thead>
+      <tbody>${filas}</tbody>
+    </table></div>`;
   }
+  document.getElementById("toggle-pa-suelta-lista-btn").addEventListener("click", () => {
+    paSueltaListaAbierta = !paSueltaListaAbierta;
+    renderPaSueltaLista(ultimasTomasHoy);
+  });
+
   function renderAlertasPaHoy() {
     const cont = document.getElementById("pa-suelta-resultado");
     if (!alertasPaHoy.length) { cont.innerHTML = ""; return; }
     cont.innerHTML = alertasPaHoy.map((a, i) => {
       const esUltima = i === alertasPaHoy.length - 1;
-      return `<details class="pa-alerta-item" ${esUltima ? "open" : ""}>
-        <summary><span class="pa-alerta-dot" style="background:${a.clasif.color}"></span>${a.hora} — ${a.sis}/${a.dia} · ${a.clasif.label}</summary>
+      if (esUltima && !a.leida) {
+        // La alerta vigente: siempre visible y desplegada hasta que la paciente confirme que la leyó.
+        return `<div class="pa-alerta-item pa-alerta-activa">
+          <div class="pa-alerta-header"><span class="pa-alerta-dot" style="background:${a.clasif.color}"></span>${a.hora} — ${a.sis}/${a.dia} · ${a.clasif.label}</div>
+          <div class="pa-alerta-body">${renderNivelBanner(a.clasif)}
+            <button class="pa-entendido-btn" data-idx="${i}">Entendido</button>
+          </div>
+        </div>`;
+      }
+      // Alertas anteriores (o ya confirmadas): minimizadas, se pueden reabrir para ver la recomendación.
+      return `<details class="pa-alerta-item">
+        <summary><span class="pa-alerta-dot" style="background:${a.clasif.color}"></span>${a.hora} — ${a.sis}/${a.dia} · ${a.clasif.label}<span class="pa-ver-recomendacion">Ver recomendación</span></summary>
         <div class="pa-alerta-body">${renderNivelBanner(a.clasif)}</div>
       </details>`;
     }).join("");
+
+    const btnEntendido = cont.querySelector(".pa-entendido-btn");
+    if (btnEntendido) {
+      btnEntendido.addEventListener("click", () => {
+        const idx = parseInt(btnEntendido.dataset.idx);
+        alertasPaHoy[idx].leida = true;
+        renderAlertasPaHoy();
+      });
+    }
   }
   document.getElementById("guardar-pa-suelta-btn").addEventListener("click", async () => {
     const sis = parseInt(document.getElementById("pa-suelta-sis").value);
@@ -1701,12 +1765,6 @@
     await sb.rpc("registrar_pa_suelta", { p_token: session.token, p_sistolica: sis, p_diastolica: dia, p_contexto: contexto });
     btn.disabled = false; btn.textContent = "Guardar toma";
 
-    const clasif = contexto === "posparto" ? clasificarPAPosparto(sis, dia) : clasificarPA(sis, dia);
-    if (clasif.urgente || clasif.objetivoSuperado) {
-      const hora = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
-      alertasPaHoy.push({ sis, dia, clasif, hora });
-      renderAlertasPaHoy();
-    }
     document.getElementById("pa-suelta-sis").value = "";
     document.getElementById("pa-suelta-dia").value = "";
     initPaSuelta();
