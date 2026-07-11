@@ -1021,6 +1021,8 @@
         <button class="secondary" id="guardar-pa-suelta-btn">Guardar toma</button>
         <div id="pa-suelta-resultado"></div>
         <div id="pa-suelta-lista" style="margin-top:10px;"></div>
+        <button class="mdpa-cancelar-btn" id="ver-pa-suelta-historial-btn" style="display:none;">Ver tomas previas</button>
+        <div id="pa-suelta-historial" style="display:none; margin-top:8px;"></div>
       </div>
 
       <div class="card mdpa-card-destacado" id="mdpa-card">
@@ -1037,7 +1039,8 @@
           </label>
         </div>
         <div id="mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
-        <div id="mdpa-informes-historial"></div>
+        <button class="mdpa-cancelar-btn" id="ver-mdpa-previos-btn" style="display:none;">Ver MDPA previos</button>
+        <div id="mdpa-informes-historial" style="display:none;"></div>
       </div>
     </div>
 
@@ -1092,7 +1095,8 @@
         <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Ambulatorio de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
         <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
         <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
-        <div id="pp-mdpa-informes-historial"></div>
+        <button class="mdpa-cancelar-btn" id="ver-pp-mdpa-previos-btn" style="display:none;">Ver MDPA previos</button>
+        <div id="pp-mdpa-informes-historial" style="display:none;"></div>
       </div>
     </div>
 
@@ -1603,13 +1607,15 @@
   let alertasPaHoy = [];
 
   async function initPaSuelta() {
-    const { data, error } = await sb.rpc("obtener_pa_suelta_hoy", { p_token: session.token });
-    if (error || !data || !data.ok) return;
-    const tomas = data.tomas || [];
-    renderPaSueltaLista(tomas);
+    const { data: recientes, error: errRecientes } = await sb.rpc("obtener_pa_suelta_recientes", { p_token: session.token, p_limite: 3 });
+    if (!errRecientes && recientes && recientes.ok) renderPaSueltaLista(recientes.tomas || []);
+
+    const { data: hoyData, error: errHoy } = await sb.rpc("obtener_pa_suelta_hoy", { p_token: session.token });
+    if (errHoy || !hoyData || !hoyData.ok) return;
+    const tomasHoy = hoyData.tomas || [];
 
     // Reconstruye las alertas del día (por si se recarga la página)
-    alertasPaHoy = tomas
+    alertasPaHoy = tomasHoy
       .map(t => {
         const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
         return c.urgente ? { sis: t.sistolica, dia: t.diastolica, clasif: c, hora: new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) } : null;
@@ -1618,12 +1624,33 @@
       .reverse(); // más antigua primero, para que la última quede al final (abierta)
     renderAlertasPaHoy();
   }
+  document.getElementById("ver-pa-suelta-historial-btn").addEventListener("click", async () => {
+    const wrap = document.getElementById("pa-suelta-historial");
+    const abierto = wrap.style.display !== "none";
+    if (abierto) {
+      wrap.style.display = "none";
+      document.getElementById("ver-pa-suelta-historial-btn").textContent = "Ver tomas previas";
+      return;
+    }
+    document.getElementById("ver-pa-suelta-historial-btn").textContent = "Ocultar tomas previas";
+    wrap.style.display = "block";
+    wrap.innerHTML = `<p class="helper">Cargando...</p>`;
+    const { data, error } = await sb.rpc("obtener_pa_suelta_historial", { p_token: session.token });
+    if (error || !data || !data.ok || !data.tomas.length) { wrap.innerHTML = `<p class="helper">Sin tomas previas.</p>`; return; }
+    wrap.innerHTML = data.tomas.map(t => {
+      const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
+      const fechaHora = new Date(t.fecha_hora).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+      return `<div class="pa-suelta-item"><span><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${t.sistolica}/${t.diastolica} — ${c.label}</span><span>${fechaHora}</span></div>`;
+    }).join("");
+  });
   function renderPaSueltaLista(tomas) {
     const cont = document.getElementById("pa-suelta-lista");
-    if (!tomas.length) { cont.innerHTML = ""; return; }
-    cont.innerHTML = `<div class="ct-categoria-title">Tomas de hoy</div>` + tomas.map(t => {
+    const btnHist = document.getElementById("ver-pa-suelta-historial-btn");
+    if (!tomas.length) { cont.innerHTML = ""; btnHist.style.display = "none"; return; }
+    btnHist.style.display = "block";
+    cont.innerHTML = `<div class="ct-categoria-title">Últimas mediciones</div>` + tomas.map(t => {
       const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
-      const hora = new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+      const hora = new Date(t.fecha_hora).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
       return `<div class="pa-suelta-item"><span><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${t.sistolica}/${t.diastolica} — ${c.label}</span><span>${hora}</span></div>`;
     }).join("");
   }
@@ -1752,10 +1779,17 @@
     const pref = mdpaPrefix[ctx];
     const tipo = mdpaTipoActual[ctx];
     const cont = document.getElementById(pref + "mdpa-informes-historial");
-    if (!cont) return;
+    const btn = document.getElementById(pref === "" ? "ver-mdpa-previos-btn" : "ver-pp-mdpa-previos-btn");
+    if (!cont || !btn) return;
     const { data, error } = await sb.rpc("obtener_informes_mdpa", { p_token: session.token, p_tipo: tipo });
-    if (error || !data || !data.ok || !data.informes.length) { cont.innerHTML = ""; return; }
+    if (error || !data || !data.ok || !data.informes.length) {
+      cont.innerHTML = ""; cont.style.display = "none"; btn.style.display = "none";
+      return;
+    }
 
+    btn.style.display = "block";
+    btn.textContent = "Ver MDPA previos";
+    cont.style.display = "none";
     cont.innerHTML = `<div class="ct-categoria-title">Informes anteriores</div>` +
       data.informes.map(i => {
         const inf = {
@@ -1768,6 +1802,12 @@
         const fecha = new Date(i.fecha_generado).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
         return renderInformeCard(inf, { fecha, dentroObjetivo: i.dentro_objetivo, incluyePostprandial: i.incluye_postprandial });
       }).join("");
+
+    btn.onclick = () => {
+      const abierto = cont.style.display !== "none";
+      cont.style.display = abierto ? "none" : "block";
+      btn.textContent = abierto ? "Ver MDPA previos" : "Ocultar MDPA previos";
+    };
   }
 
   function renderMdpaTable(ctx) {
