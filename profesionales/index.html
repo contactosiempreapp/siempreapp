@@ -69,14 +69,34 @@
 
   header.top-bar {
     background: linear-gradient(135deg, var(--violet), var(--violet-deep)); color: white;
-    padding: 20px 24px; display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 28px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 6px 18px -8px rgba(34,24,60,0.4);
   }
-  header.top-bar .titulo { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; }
-  header.top-bar .sub { font-size: 12px; opacity: 0.85; margin-top: 2px; }
-  header.top-bar button { background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
-  header.top-bar .top-nav { display: flex; gap: 8px; align-items: center; }
-  header.top-bar .top-nav-btn { background: none; border: none; color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 700; cursor: pointer; padding: 6px 4px; }
-  header.top-bar .top-nav-btn.activo { color: white; border-bottom: 2px solid white; }
+  .top-bar-brand { display: flex; align-items: center; gap: 14px; }
+  .mini-logo {
+    width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+    background: linear-gradient(155deg, rgba(255,255,255,0.35), rgba(255,255,255,0.05));
+    border: 1px solid rgba(255,255,255,0.35);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 17px; color: white;
+  }
+  .app-brand-name {
+    font-family: 'Manrope', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.65); text-transform: uppercase; margin-bottom: 1px;
+  }
+  header.top-bar .titulo { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; line-height: 1.25; }
+  header.top-bar .sub { font-size: 12px; opacity: 0.8; margin-top: 2px; font-weight: 500; }
+  header.top-bar button { background: rgba(255,255,255,0.15); border: none; color: white; padding: 9px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer; transition: background 0.15s; }
+  header.top-bar button:hover { background: rgba(255,255,255,0.25); }
+  header.top-bar .top-nav { display: flex; gap: 4px; align-items: center; }
+  header.top-bar .top-nav-btn {
+    background: none; border: 1.5px solid transparent; color: rgba(255,255,255,0.7); font-size: 13px;
+    font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer; padding: 8px 14px; border-radius: 20px;
+    transition: background 0.15s, color 0.15s;
+  }
+  header.top-bar .top-nav-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+  header.top-bar .top-nav-btn.activo { color: var(--violet-deep); background: white; }
+  header.top-bar .top-nav-btn.activo:hover { background: white; }
 
   main.dash-main { padding: 24px; }
   .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
@@ -111,9 +131,15 @@
   .back-btn { background: none; border: none; color: var(--violet); font-weight: 700; font-size: 13px; cursor: pointer; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; padding: 0; }
   .back-btn svg { width: 16px; height: 16px; }
 
-  .ficha-header { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 20px; }
-  .ficha-header .f-nombre { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--violet-deep); }
-  .ficha-header .f-detalle { font-size: 13px; color: var(--gray-600); margin-top: 4px; }
+  .ficha-header { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 20px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ficha-header .f-nombre { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; color: var(--violet-deep); letter-spacing: -0.01em; }
+  .ficha-header .f-detalle { font-size: 13px; color: var(--gray-600); margin-top: 5px; font-weight: 500; }
+  .gestacion-badge {
+    background: linear-gradient(135deg, var(--violet-light), #F5EFFC); border: 1.5px solid #D9C9F0;
+    border-radius: 14px; padding: 12px 18px; text-align: center; min-width: 160px;
+  }
+  .gestacion-badge .g-valor { font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800; color: var(--violet-dark); line-height: 1.1; }
+  .gestacion-badge .g-label { font-size: 11px; color: var(--gray-600); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 3px; }
 
   .resumen-card { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 16px; }
 
@@ -149,6 +175,18 @@
     border: none; border-radius: 20px; font-size: 12.5px; font-weight: 700; font-family: 'Manrope', sans-serif;
     cursor: pointer; padding: 8px 14px;
   }
+
+  .ct-card { border: none; background: linear-gradient(160deg, #FBF6E9 0%, #FFFFFF 100%); }
+  .ct-categoria-title { font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 800; color: #8A6A2E; text-transform: uppercase; letter-spacing: 0.03em; margin: 16px 0 8px; }
+  .ct-categoria-title:first-child { margin-top: 0; }
+  .ct-item-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 10px; margin-bottom: 6px; border: 1.5px solid var(--gray-300); background: white; opacity: 0.6; }
+  .ct-item-row.vigente { opacity: 1; border-color: #C79A4B; background: #FBF6EC; }
+  .ct-item-row.cumplido { border-color: var(--teal); background: var(--teal-light); opacity: 1; }
+  .ct-item-check { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--gray-300); background: white; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .ct-item-check.on { background: var(--teal); border-color: var(--teal); color: white; }
+  .ct-item-check svg { width: 14px; height: 14px; }
+  .ct-item-text { font-size: 13px; color: var(--gray-900); line-height: 1.4; font-weight: 600; }
+  .ct-item-fecha { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -202,12 +240,16 @@
 
 <div class="screen" id="dashboard-screen">
   <header class="top-bar">
-    <div>
-      <div class="titulo" id="dash-nombre">—</div>
-      <div class="sub" id="dash-institucion">—</div>
+    <div class="top-bar-brand">
+      <div class="mini-logo">S</div>
+      <div>
+        <div class="app-brand-name">SIEMPRE</div>
+        <div class="titulo" id="dash-nombre">—</div>
+        <div class="sub" id="dash-institucion">—</div>
+      </div>
     </div>
     <div class="top-nav">
-      <button class="top-nav-btn activo" id="nav-dashboard-btn">Dashboard</button>
+      <button class="top-nav-btn activo" id="nav-dashboard-btn">Vista general</button>
       <button class="top-nav-btn" id="nav-pacientes-btn">Pacientes</button>
       <button id="logout-btn">Cerrar sesión</button>
     </div>
@@ -283,12 +325,16 @@
 
 <div class="screen" id="pacientes-screen">
   <header class="top-bar">
-    <div>
-      <div class="titulo">Pacientes</div>
-      <div class="sub" id="pac-institucion-sub">—</div>
+    <div class="top-bar-brand">
+      <div class="mini-logo">S</div>
+      <div>
+        <div class="app-brand-name">SIEMPRE</div>
+        <div class="titulo">Pacientes</div>
+        <div class="sub" id="pac-institucion-sub">—</div>
+      </div>
     </div>
     <div class="top-nav">
-      <button class="top-nav-btn" id="nav-dashboard-btn-2">Dashboard</button>
+      <button class="top-nav-btn" id="nav-dashboard-btn-2">Vista general</button>
       <button class="top-nav-btn activo" id="nav-pacientes-btn-2">Pacientes</button>
       <button id="logout-btn-2">Cerrar sesión</button>
     </div>
@@ -304,8 +350,12 @@
 
 <div class="screen" id="ficha-screen">
   <header class="top-bar">
-    <div>
-      <div class="titulo">Ficha de paciente</div>
+    <div class="top-bar-brand">
+      <div class="mini-logo">S</div>
+      <div>
+        <div class="app-brand-name">SIEMPRE</div>
+        <div class="titulo">Ficha de paciente</div>
+      </div>
     </div>
     <div class="top-nav">
       <button id="logout-btn-3">Cerrar sesión</button>
@@ -318,6 +368,7 @@
     </button>
     <div class="ficha-header" id="ficha-header"></div>
     <div id="ficha-resumen-content"></div>
+    <div id="ficha-cuarto-trimestre"></div>
     <div id="ficha-resumenes-mensuales"></div>
   </main>
 </div>
@@ -633,6 +684,44 @@
     papa_nacio_de_pe: "Papá del bebé nació de embarazo con preeclampsia"
   };
 
+  function calcularSemanasProf(fum, fppObstetra, fechaEco, ecoSemanas, ecoDias) {
+    let base = null;
+    if (fppObstetra) base = new Date(fppObstetra);
+    else if (fum) base = new Date(new Date(fum).getTime() + 280 * 86400000);
+    else if (fechaEco && ecoSemanas != null) {
+      const diasEnEco = parseInt(ecoSemanas) * 7 + (parseInt(ecoDias) || 0);
+      base = new Date(new Date(fechaEco).getTime() + (280 - diasEnEco) * 86400000);
+    }
+    if (!base) return null;
+    const hoy = new Date();
+    const diasRestantes = Math.round((base - hoy) / 86400000);
+    const diasTranscurridos = 280 - diasRestantes;
+    if (diasTranscurridos < 0) return null;
+    return { semanas: Math.floor(diasTranscurridos / 7), dias: diasTranscurridos % 7 };
+  }
+
+  function renderGestacionBadge(g) {
+    if (!g) return "";
+    if (g.fecha_parto_real) {
+      const parto = new Date(g.fecha_parto_real + "T00:00:00");
+      const hoy = new Date();
+      const diasVida = Math.floor((hoy - parto) / 86400000);
+      let texto;
+      if (diasVida < 60) texto = diasVida + (diasVida === 1 ? " día" : " días");
+      else texto = Math.floor(diasVida / 30) + " meses";
+      return `<div class="gestacion-badge">
+        <div class="g-valor">${texto}</div>
+        <div class="g-label">Edad del bebé</div>
+      </div>`;
+    }
+    const r = calcularSemanasProf(g.fum, g.fpp_obstetra, g.fecha_eco_datante, g.eco_semanas, g.eco_dias);
+    if (!r) return "";
+    return `<div class="gestacion-badge">
+      <div class="g-valor">${r.semanas}s ${r.dias}d</div>
+      <div class="g-label">Semana de gestación</div>
+    </div>`;
+  }
+
   async function abrirFicha(pacienteId) {
     mostrarPantalla("ficha-screen");
     document.getElementById("ficha-header").innerHTML = `<p style="color:var(--gray-600); font-size:13px;">Cargando...</p>`;
@@ -650,9 +739,17 @@
       if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) edad--;
       edadTxt = edad + " años · ";
     }
+
+    const { data: gestacion } = await sb.from("gestacion_actual").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1);
+    const g = (gestacion && gestacion[0]) || null;
+    const gestacionBadge = renderGestacionBadge(g);
+
     document.getElementById("ficha-header").innerHTML = `
-      <div class="f-nombre">${paciente.apellido}, ${paciente.nombre}</div>
-      <div class="f-detalle">DNI ${paciente.dni} · ${edadTxt}Alta el ${paciente.fecha_alta ? paciente.fecha_alta.slice(0,10) : ''}</div>
+      <div>
+        <div class="f-nombre">${paciente.apellido}, ${paciente.nombre}</div>
+        <div class="f-detalle">DNI ${paciente.dni} · ${edadTxt}Alta el ${paciente.fecha_alta ? paciente.fecha_alta.slice(0,10) : ''}</div>
+      </div>
+      ${gestacionBadge}
     `;
 
     const [clinicos, familiares, paternos, medicamentos, tomasSueltas] = await Promise.all([
@@ -752,7 +849,56 @@
     toggleDetalle("ver-hist-tratamiento-btn", "hist-tratamiento-wrap", `Ver historial completo (${meds.length})`);
     toggleDetalle("ver-hist-mediciones-btn", "hist-mediciones-wrap", `Ver últimas ${tomas.length} mediciones`);
 
+    cargarCuartoTrimestreProf(pacienteId);
     cargarResumenesMensuales(pacienteId, paciente);
+  }
+
+  const CT_CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
+
+  async function cargarCuartoTrimestreProf(pacienteId) {
+    const cont = document.getElementById("ficha-cuarto-trimestre");
+    const { data, error } = await sb.rpc("obtener_cuarto_trimestre_prof", { p_paciente_id: pacienteId });
+    if (error || !data || !data.ok || !data.fecha_parto) { cont.innerHTML = ""; return; }
+
+    const fmtFecha = f => new Date(f + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const grupos = {};
+    data.items.forEach(it => { (grupos[it.categoria] = grupos[it.categoria] || []).push(it); });
+
+    let html = `<div class="resumen-card ct-card">
+      <div class="rc-header">
+        <div class="rc-icon" style="background:rgba(199,154,63,0.18); color:#8A6A2E;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
+        </div>
+        <div class="rc-titulo">Cuarto trimestre — día ${data.dias_desde_parto} desde el parto</div>
+      </div>`;
+
+    Object.keys(grupos).forEach(cat => {
+      html += `<div class="ct-categoria-title">${CT_CATEGORIA_LABEL[cat] || cat}</div>`;
+      grupos[cat].forEach(it => {
+        const cls = it.cumplido ? "cumplido" : (it.vigente ? "vigente" : "");
+        const rango = it.fecha_hasta ? `${fmtFecha(it.fecha_desde)} — ${fmtFecha(it.fecha_hasta)}` : `Desde ${fmtFecha(it.fecha_desde)}`;
+        html += `<div class="ct-item-row ${cls}">
+          <button class="ct-item-check ${it.cumplido ? 'on' : ''}" data-id="${it.id}">
+            ${it.cumplido ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>' : ''}
+          </button>
+          <div>
+            <div class="ct-item-text">${it.item}</div>
+            <div class="ct-item-fecha">${rango}</div>
+          </div>
+        </div>`;
+      });
+    });
+    html += `</div>`;
+    cont.innerHTML = html;
+
+    cont.querySelectorAll(".ct-item-check").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const nuevo = !btn.classList.contains("on");
+        btn.classList.toggle("on", nuevo);
+        await sb.rpc("marcar_item_cuarto_trimestre_prof", { p_paciente_id: pacienteId, p_plan_item_id: btn.dataset.id, p_cumplido: nuevo });
+        cargarCuartoTrimestreProf(pacienteId);
+      });
+    });
   }
 
   function primerYUltimoDiaDelMes() {
