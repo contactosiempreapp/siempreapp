@@ -132,13 +132,13 @@
   .back-btn svg { width: 16px; height: 16px; }
 
   .ficha-header { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 20px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-  .ficha-header .f-nombre { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; color: var(--violet-deep); letter-spacing: -0.01em; }
+  .ficha-header .f-nombre { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--violet-deep); letter-spacing: -0.01em; }
   .ficha-header .f-detalle { font-size: 13px; color: var(--gray-600); margin-top: 5px; font-weight: 500; }
   .gestacion-badge {
     background: linear-gradient(135deg, var(--violet-light), #F5EFFC); border: 1.5px solid #D9C9F0;
     border-radius: 14px; padding: 12px 18px; text-align: center; min-width: 160px;
   }
-  .gestacion-badge .g-valor { font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800; color: var(--violet-dark); line-height: 1.1; }
+  .gestacion-badge .g-valor { font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 800; color: var(--violet-dark); line-height: 1.1; }
   .gestacion-badge .g-label { font-size: 11px; color: var(--gray-600); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 3px; }
 
   .resumen-card { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 16px; }
@@ -187,6 +187,41 @@
   .ct-item-check svg { width: 14px; height: 14px; }
   .ct-item-text { font-size: 13px; color: var(--gray-900); line-height: 1.4; font-weight: 600; }
   .ct-item-fecha { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
+
+  .editar-datos-details { cursor: default; }
+  .editar-datos-summary {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13.5px; color: var(--violet);
+    cursor: pointer; list-style: none;
+  }
+  .editar-datos-summary::-webkit-details-marker { display: none; }
+  .editar-datos-body { margin-top: 16px; }
+  .editar-datos-body label { display: block; font-size: 12px; font-weight: 700; color: var(--gray-900); margin-bottom: 5px; }
+  .editar-datos-body input, .editar-datos-body textarea {
+    width: 100%; padding: 9px 12px; border: 1.5px solid var(--gray-300); border-radius: 8px; font-size: 13.5px;
+    margin-bottom: 12px; font-family: inherit;
+  }
+  .editar-datos-body textarea { min-height: 50px; resize: vertical; }
+  .fila-2col-prof { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .editar-subtitulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12px; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.03em; margin: 6px 0 10px; }
+  .check-grid-prof { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-bottom: 12px; }
+  .check-row-prof { display: flex; align-items: center; gap: 8px; font-size: 12.5px; padding: 4px 0; }
+  .check-row-prof input { width: 16px; height: 16px; margin: 0; flex-shrink: 0; }
+  .guardado-ok { display: none; color: var(--teal-dark); font-size: 12.5px; font-weight: 700; margin-top: 8px; }
+
+  .modal-backdrop-prof {
+    display: none; position: fixed; inset: 0; background: rgba(34,24,60,0.5); z-index: 1000;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-backdrop-prof.show { display: flex; }
+  .modal-card-prof {
+    background: white; border-radius: 18px; padding: 26px; max-width: 440px; width: 100%;
+    max-height: 90vh; overflow-y: auto; position: relative;
+  }
+  .modal-close-btn-prof {
+    position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; border: none;
+    background: var(--gray-100); color: var(--gray-600); display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .modal-close-btn-prof svg { width: 16px; height: 16px; }
 </style>
 </head>
 <body>
@@ -255,8 +290,39 @@
     </div>
   </header>
   <main class="dash-main">
+    <button class="primary" id="abrir-alta-paciente-btn" style="width:auto; padding:12px 22px; margin-bottom:20px;">+ Dar de alta paciente</button>
     <div class="stat-grid" id="dash-stats"></div>
     <div id="dash-instituciones-wrap"></div>
+
+    <div class="modal-backdrop-prof" id="alta-paciente-modal">
+      <div class="modal-card-prof">
+        <button class="modal-close-btn-prof" id="cerrar-alta-paciente-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <h2 class="section-title">Dar de alta paciente</h2>
+        <div class="msg-error" id="alta-paciente-error"></div>
+        <label>DNI</label><input type="text" id="alta-dni" inputmode="numeric">
+        <div class="fila-2col-prof">
+          <div><label>Nombre</label><input type="text" id="alta-nombre"></div>
+          <div><label>Apellido</label><input type="text" id="alta-apellido"></div>
+        </div>
+        <div id="alta-institucion-wrap" style="display:none;">
+          <label>Institución</label>
+          <select id="alta-institucion"></select>
+        </div>
+        <details class="editar-datos-details">
+          <summary class="editar-datos-summary">Agregar datos básicos ahora (opcional)</summary>
+          <div class="editar-datos-body">
+            <div class="fila-2col-prof">
+              <div><label>WhatsApp</label><input type="text" id="alta-whatsapp"></div>
+              <div><label>Email</label><input type="text" id="alta-email"></div>
+            </div>
+            <label>Fecha de nacimiento</label><input type="date" id="alta-fecha-nac">
+          </div>
+        </details>
+        <button class="primary" id="confirmar-alta-paciente-btn" style="margin-top:14px;">Dar de alta</button>
+      </div>
+    </div>
 
     <div class="chart-grid">
       <div class="resumen-card">
@@ -367,6 +433,35 @@
       Volver a pacientes
     </button>
     <div class="ficha-header" id="ficha-header"></div>
+
+    <details class="resumen-card editar-datos-details" id="editar-datos-details">
+      <summary class="editar-datos-summary">Editar datos personales y antecedentes</summary>
+      <div class="editar-datos-body">
+        <div class="fila-2col-prof">
+          <div><label>WhatsApp</label><input type="text" id="ed-whatsapp"></div>
+          <div><label>Email</label><input type="text" id="ed-email"></div>
+        </div>
+        <div class="fila-2col-prof">
+          <div><label>Fecha de nacimiento</label><input type="date" id="ed-fecha-nac"></div>
+          <div><label>Ocupación</label><input type="text" id="ed-ocupacion"></div>
+        </div>
+
+        <div class="editar-subtitulo">Antecedentes clínicos</div>
+        <div class="check-grid-prof" id="ed-clinicos-grid"></div>
+        <div class="fila-2col-prof">
+          <div><label>Altura pregestacional (cm)</label><input type="number" step="0.1" id="ed-altura"></div>
+          <div><label>Peso pregestacional (kg)</label><input type="number" step="0.1" id="ed-peso"></div>
+        </div>
+        <label>Otros antecedentes</label>
+        <textarea id="ed-otros"></textarea>
+
+        <div class="editar-subtitulo">Antecedentes familiares</div>
+        <div class="check-grid-prof" id="ed-familiares-grid"></div>
+
+        <button class="primary" id="guardar-editar-datos-btn" style="margin-top:12px;">Guardar cambios</button>
+        <p class="guardado-ok" id="editar-datos-guardado-msg">Guardado ✓</p>
+      </div>
+    </details>
     <div id="ficha-resumen-content"></div>
     <div id="ficha-cuarto-trimestre"></div>
     <div id="ficha-resumenes-mensuales"></div>
@@ -628,6 +723,59 @@
   document.getElementById("volver-a-lista-btn").addEventListener("click", () => mostrarPacientes());
 
   // ---------- Lista de pacientes ----------
+  document.getElementById("abrir-alta-paciente-btn").addEventListener("click", async () => {
+    document.getElementById("alta-paciente-error").style.display = "none";
+    document.getElementById("alta-dni").value = "";
+    document.getElementById("alta-nombre").value = "";
+    document.getElementById("alta-apellido").value = "";
+    document.getElementById("alta-whatsapp").value = "";
+    document.getElementById("alta-email").value = "";
+    document.getElementById("alta-fecha-nac").value = "";
+    if (miPerfil && miPerfil.es_super_admin) {
+      const { data } = await sb.rpc("obtener_instituciones_lista");
+      document.getElementById("alta-institucion").innerHTML = (data || []).map(i => `<option value="${i.id}">${i.nombre}</option>`).join("");
+      document.getElementById("alta-institucion-wrap").style.display = "block";
+    } else {
+      document.getElementById("alta-institucion-wrap").style.display = "none";
+    }
+    document.getElementById("alta-paciente-modal").classList.add("show");
+  });
+  document.getElementById("cerrar-alta-paciente-btn").addEventListener("click", () => {
+    document.getElementById("alta-paciente-modal").classList.remove("show");
+  });
+  document.getElementById("confirmar-alta-paciente-btn").addEventListener("click", async () => {
+    const errorBox = document.getElementById("alta-paciente-error");
+    errorBox.style.display = "none";
+    const dni = document.getElementById("alta-dni").value.trim();
+    const nombre = document.getElementById("alta-nombre").value.trim();
+    const apellido = document.getElementById("alta-apellido").value.trim();
+    if (!dni || !nombre || !apellido) {
+      errorBox.textContent = "DNI, nombre y apellido son obligatorios.";
+      errorBox.style.display = "block";
+      return;
+    }
+    const institucionId = (miPerfil && miPerfil.es_super_admin) ? document.getElementById("alta-institucion").value : null;
+
+    const btn = document.getElementById("confirmar-alta-paciente-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    const { data, error } = await sb.rpc("dar_alta_paciente", {
+      p_dni: dni, p_nombre: nombre, p_apellido: apellido,
+      p_telefono: document.getElementById("alta-whatsapp").value.trim() || null,
+      p_email: document.getElementById("alta-email").value.trim() || null,
+      p_fecha_nacimiento: document.getElementById("alta-fecha-nac").value || null,
+      p_institucion_id: institucionId
+    });
+    btn.disabled = false; btn.textContent = "Dar de alta";
+
+    if (error || !data || !data.ok) {
+      errorBox.textContent = (data && data.error) || "No pudimos dar de alta a la paciente.";
+      errorBox.style.display = "block";
+      return;
+    }
+    document.getElementById("alta-paciente-modal").classList.remove("show");
+    abrirFicha(data.paciente_id);
+  });
+
   async function mostrarPacientes() {
     document.querySelectorAll(".top-nav-btn").forEach(b => b.classList.remove("activo"));
     document.getElementById("nav-pacientes-btn").classList.add("activo");
@@ -722,6 +870,71 @@
     </div>`;
   }
 
+  function renderCheckGridProf(gridId, labels, prefix) {
+    document.getElementById(gridId).innerHTML = Object.keys(labels).map(k =>
+      `<div class="check-row-prof"><input type="checkbox" id="${prefix}-${k}"><label for="${prefix}-${k}" style="margin:0;">${labels[k]}</label></div>`
+    ).join("");
+  }
+  renderCheckGridProf("ed-clinicos-grid", LABEL_ANTECEDENTES, "ed-c");
+  renderCheckGridProf("ed-familiares-grid", LABEL_FAMILIARES, "ed-f");
+
+  function cargarFormularioEditable(pacienteId, paciente, clinicos, familiares, estilo) {
+    document.getElementById("ed-whatsapp").value = paciente.telefono || "";
+    document.getElementById("ed-email").value = paciente.email || "";
+    document.getElementById("ed-fecha-nac").value = paciente.fecha_nacimiento || "";
+    document.getElementById("ed-ocupacion").value = (estilo && estilo.ocupacion) || "";
+
+    const c = clinicos || {};
+    Object.keys(LABEL_ANTECEDENTES).forEach(k => {
+      const el = document.getElementById("ed-c-" + k);
+      if (el) el.checked = !!c[k];
+    });
+    document.getElementById("ed-altura").value = c.altura_pregestacional_cm || "";
+    document.getElementById("ed-peso").value = c.peso_pregestacional_kg || "";
+    document.getElementById("ed-otros").value = c.otros_antecedentes || "";
+
+    const f = familiares || {};
+    Object.keys(LABEL_FAMILIARES).forEach(k => {
+      const el = document.getElementById("ed-f-" + k);
+      if (el) el.checked = !!f[k];
+    });
+
+    document.getElementById("guardar-editar-datos-btn").onclick = async () => {
+      const btn = document.getElementById("guardar-editar-datos-btn");
+      btn.disabled = true; btn.textContent = "Guardando...";
+
+      await sb.from("pacientes").update({
+        telefono: document.getElementById("ed-whatsapp").value,
+        email: document.getElementById("ed-email").value,
+        fecha_nacimiento: document.getElementById("ed-fecha-nac").value || null
+      }).eq("id", pacienteId);
+
+      const clinicosPayload = { paciente_id: pacienteId };
+      Object.keys(LABEL_ANTECEDENTES).forEach(k => { clinicosPayload[k] = document.getElementById("ed-c-" + k).checked; });
+      clinicosPayload.altura_pregestacional_cm = document.getElementById("ed-altura").value || null;
+      clinicosPayload.peso_pregestacional_kg = document.getElementById("ed-peso").value || null;
+      clinicosPayload.otros_antecedentes = document.getElementById("ed-otros").value || null;
+      const { data: { user } } = await sb.auth.getUser();
+      clinicosPayload.profesional_id = user ? user.id : null;
+      await sb.from("antecedentes_clinicos").insert(clinicosPayload);
+
+      const familiaresPayload = { paciente_id: pacienteId, profesional_id: user ? user.id : null };
+      Object.keys(LABEL_FAMILIARES).forEach(k => { familiaresPayload[k] = document.getElementById("ed-f-" + k).checked; });
+      await sb.from("antecedentes_familiares").insert(familiaresPayload);
+
+      await sb.from("antecedentes_estilo_vida").insert({
+        paciente_id: pacienteId, profesional_id: user ? user.id : null,
+        ocupacion: document.getElementById("ed-ocupacion").value || null
+      });
+
+      btn.disabled = false; btn.textContent = "Guardar cambios";
+      const msg = document.getElementById("editar-datos-guardado-msg");
+      msg.style.display = "block";
+      setTimeout(() => { msg.style.display = "none"; }, 2500);
+      abrirFicha(pacienteId);
+    };
+  }
+
   async function abrirFicha(pacienteId) {
     mostrarPantalla("ficha-screen");
     document.getElementById("ficha-header").innerHTML = `<p style="color:var(--gray-600); font-size:13px;">Cargando...</p>`;
@@ -752,13 +965,16 @@
       ${gestacionBadge}
     `;
 
-    const [clinicos, familiares, paternos, medicamentos, tomasSueltas] = await Promise.all([
+    const [clinicos, familiares, paternos, medicamentos, tomasSueltas, estiloVida] = await Promise.all([
       sb.from("antecedentes_clinicos").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1),
       sb.from("antecedentes_familiares").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1),
       sb.from("antecedentes_paternos").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }),
       sb.from("paciente_medicamentos").select("*, catalogo_farmacos(nombre, grupo)").eq("paciente_id", pacienteId).order("fecha_inicio", { ascending: false }),
-      sb.from("presion_arterial_suelta").select("*").eq("paciente_id", pacienteId).order("fecha_hora", { ascending: false }).limit(5)
+      sb.from("presion_arterial_suelta").select("*").eq("paciente_id", pacienteId).order("fecha_hora", { ascending: false }).limit(5),
+      sb.from("antecedentes_estilo_vida").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1)
     ]);
+
+    cargarFormularioEditable(pacienteId, paciente, clinicos.data && clinicos.data[0], familiares.data && familiares.data[0], estiloVida.data && estiloVida.data[0]);
 
     // Antecedentes positivos
     const tags = [];
