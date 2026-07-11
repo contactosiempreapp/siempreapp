@@ -125,6 +125,15 @@
     background: linear-gradient(135deg, #D4A94F 0%, #7C4E9E 100%);
     box-shadow: 0 4px 14px -3px rgba(139,92,184,0.7);
   }
+  .tab-btn-roja {
+    background: linear-gradient(135deg, #E37870 0%, #A5382E 100%);
+    border-color: transparent; color: white; font-weight: 800;
+    box-shadow: 0 3px 10px -3px rgba(165,56,46,0.5);
+  }
+  .tab-btn-roja.active {
+    background: linear-gradient(135deg, #EF8A81 0%, #8E2E25 100%);
+    box-shadow: 0 4px 14px -3px rgba(165,56,46,0.7);
+  }
 
   main { padding: 18px 20px 24px; flex: 1; }
   .panel { display: none; }
@@ -196,6 +205,39 @@
   .fuente-opcion:has(input:checked) { border-color: #C77B4A; background: #FBEEE3; }
   .fuente-opcion input { margin-top: 2px; accent-color: #C77B4A; }
   .fuente-opcion small { font-weight: 500; color: var(--gray-600); }
+
+  /* Botón de tips + modal popup */
+  .pa-tips-btn {
+    width: 100%; display: flex; align-items: center; gap: 10px; padding: 13px 14px; border-radius: 12px;
+    border: 1.5px solid #F0D0CC; background: linear-gradient(135deg, #FDF3F2, #FFFFFF); color: var(--gray-900);
+    font-size: 13.5px; font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer; text-align: left;
+  }
+  .pa-tips-btn-icon {
+    width: 30px; height: 30px; border-radius: 50%; background: var(--coral-light); color: var(--coral);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .pa-tips-btn-icon svg { width: 16px; height: 16px; }
+  .pa-tips-btn-arrow { width: 16px; height: 16px; margin-left: auto; color: var(--gray-600); flex-shrink: 0; }
+
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0; background: rgba(34,24,60,0.5); z-index: 1000;
+    align-items: flex-end; justify-content: center;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal-card {
+    background: white; border-radius: 20px 20px 0 0; padding: 22px 20px 28px; max-width: 460px; width: 100%;
+    max-height: 85vh; overflow-y: auto; position: relative; animation: modalup 0.25s ease;
+  }
+  @keyframes modalup { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-close-btn {
+    position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; border: none;
+    background: var(--gray-100); color: var(--gray-600); display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .modal-close-btn svg { width: 16px; height: 16px; }
+  @media (min-width: 480px) {
+    .modal-backdrop { align-items: center; }
+    .modal-card { border-radius: 20px; }
+  }
 
   /* Presentación */
   .welcome-hero { text-align: center; padding: 26px 20px; background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
@@ -295,13 +337,30 @@
     background: var(--gray-100); border-radius: 10px; padding: 8px 10px; font-size: 11px; color: var(--gray-600);
   }
   .mdpa-informe-item strong { display: block; font-size: 14px; color: var(--violet-dark); font-family: 'Manrope', sans-serif; margin-top: 2px; }
+  .mdpa-informe-fecha { font-size: 11px; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 8px; }
+  .mdpa-completo-banner {
+    background: var(--teal-light); color: var(--teal-dark); font-size: 12.5px; font-weight: 700;
+    padding: 9px 12px; border-radius: 10px; margin-top: 12px;
+  }
+  .mdpa-cancelar-btn {
+    display: block; background: none; border: none; color: var(--gray-600); font-size: 11.5px;
+    text-decoration: underline; cursor: pointer; margin-top: 12px; padding: 0;
+  }
 
   /* Tratamiento y tomas sueltas */
   .tratamiento-activo-card {
-    border: 1.5px solid var(--gray-300); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 12px;
+    border: 1.5px solid #E4D4C9; border-radius: 14px; padding: 14px; margin-bottom: 10px;
+    background: linear-gradient(135deg, #FBF6F0 0%, #FFFFFF 100%);
   }
-  .tratamiento-activo-card .t-nombre { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: var(--violet-dark); }
-  .tratamiento-activo-card .t-detalle { font-size: 12.5px; color: var(--gray-600); margin-top: 2px; }
+  .t-pill-icon {
+    width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 35% 30%, #EDE4F9, #D9C9F0 75%); color: var(--indigo);
+  }
+  .t-pill-icon svg { width: 20px; height: 20px; }
+  .tratamiento-activo-card .t-nombre { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 14.5px; color: var(--gray-900); display: flex; align-items: center; gap: 6px; }
+  .t-vigente-badge { font-size: 9.5px; font-weight: 700; color: var(--teal-dark); background: var(--teal-light); padding: 2px 8px; border-radius: 20px; }
+  .tratamiento-activo-card .t-detalle { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
   .tratamiento-hist-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 12px; color: var(--gray-600); }
   .tratamiento-hist-item .t-hist-nombre { color: var(--gray-900); font-weight: 600; }
 
@@ -316,8 +375,22 @@
   .pa-suelta-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
   .pa-suelta-nivel-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
 
+  .pa-alerta-item {
+    border: 1.5px solid var(--gray-300); border-radius: 12px; margin-top: 10px; overflow: hidden;
+  }
+  .pa-alerta-item summary {
+    padding: 10px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; background: var(--gray-100);
+    color: var(--gray-900); list-style: none; display: flex; align-items: center;
+  }
+  .pa-alerta-item summary::-webkit-details-marker { display: none; }
+  .pa-alerta-item[open] summary { border-bottom: 1px solid var(--gray-300); }
+  .pa-alerta-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px; flex-shrink: 0; }
+  .pa-alerta-body { padding: 10px 12px; }
+  .pa-alerta-body .pa-nivel-banner { margin-top: 0; }
+
   /* Cuarto trimestre */
   .ct-hero-card { background: linear-gradient(135deg, #B8873F 0%, #6B3F94 100%); border: none; }
+  .pa-hero-card { background: linear-gradient(135deg, #C2554C 0%, #7A2A22 100%); border: none; }
   .ct-hero-header { display: flex; align-items: center; gap: 14px; }
   .ct-hero-icon {
     width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.2);
@@ -325,6 +398,7 @@
   }
   .ct-hero-icon svg { width: 26px; height: 26px; }
   .ct-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.85); font-weight: 600; }
+  .ct-riesgo-card { background: linear-gradient(135deg, #FBF3E1 0%, #FDFAF3 100%); border-color: #EEDCB0; }
   .ct-dias-badge {
     display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 12px; font-weight: 700;
     padding: 4px 12px; border-radius: 20px; margin-top: 12px;
@@ -348,6 +422,34 @@
   .ct-item-check svg { width: 14px; height: 14px; }
   .ct-item-text { font-size: 13px; color: var(--gray-900); line-height: 1.4; }
   .ct-item-tag { font-size: 10.5px; color: var(--gray-600); font-weight: 600; margin-top: 2px; }
+
+  .ct-hoy-banner {
+    background: #FBF3E1; border: 1.5px solid #EEDCB0; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px;
+  }
+  .ct-hoy-banner strong { color: #7A5A1E; }
+  .ct-hoy-banner ul { margin: 6px 0 0; padding-left: 18px; }
+  .ct-hoy-banner li { margin-bottom: 3px; }
+
+  .ct-timeline-wrap { margin: 4px 0 20px; }
+  .ct-timeline-track {
+    position: relative; height: 34px; border-radius: 10px; background: var(--gray-100); overflow: visible; margin: 0 4px;
+  }
+  .ct-timeline-zona { position: absolute; top: 0; height: 100%; opacity: 0.55; }
+  .ct-timeline-zona:first-child { border-radius: 10px 0 0 10px; }
+  .ct-timeline-marca {
+    position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: white;
+    border: 2px solid var(--gray-600); transform: translate(-50%, -50%); cursor: default;
+  }
+  .ct-timeline-marca.vigente { border-color: #B8873F; background: #F0D8A8; box-shadow: 0 0 0 3px rgba(184,135,63,0.25); }
+  .ct-timeline-marca.cumplido { border-color: var(--teal); background: var(--teal); }
+  .ct-timeline-hoy { position: absolute; top: -8px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+  .ct-timeline-hoy-dot {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--violet); border: 2px solid white;
+    box-shadow: 0 0 0 3px rgba(91,62,150,0.3); animation: hoyPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes hoyPulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(91,62,150,0.3); } 50% { box-shadow: 0 0 0 6px rgba(91,62,150,0.15); } }
+  .ct-timeline-hoy-label { font-size: 9px; font-weight: 800; color: var(--violet-dark); margin-top: 2px; white-space: nowrap; }
+  .ct-timeline-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--gray-600); margin-top: 6px; padding: 0 4px; }
   .md-icon {
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
@@ -359,6 +461,8 @@
   .md-icon-indigo { background: var(--indigo-light); color: var(--indigo); }
   .md-icon-pink { background: var(--pink-light); color: var(--pink-dark); }
   .mis-datos-hero { background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
+  .sodio-banner.sodio-si { border-color: var(--amber); }
+  .sodio-banner.sodio-no { border-color: var(--indigo); }
   .edad-badge { margin-top: 4px; }
 
   /* Mis datos / Embarazos — grupos colapsables */
@@ -476,7 +580,7 @@
     <button class="tab-btn" data-tab="calcio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>Calcio</button>
     <button class="tab-btn" data-tab="alimentacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6.2"/><path d="M12 8V5.2"/><path d="M12 5.2c1-1.2 2.2-1.4 3.4-1.2"/></svg>Alimentación</button>
     <button class="tab-btn" data-tab="actividad-fisica"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.2" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 6.5l-2 4 3 2-1.2 5.3"/><path d="M11.5 10.3l-4 2"/><path d="M14.5 12.5l3 1 1 4.2"/></svg>Actividad física</button>
-    <button class="tab-btn" data-tab="presion-arterial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Presión</button>
+    <button class="tab-btn tab-btn-roja" data-tab="presion-arterial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Presión</button>
     <button class="tab-btn" data-tab="curva-ponderal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg>Curva ponderal</button>
     <button class="tab-btn tab-btn-especial" data-tab="cuarto-trimestre">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
@@ -615,6 +719,7 @@
         <label for="ge-fpp">Fecha probable de parto (si tu obstetra ya te la indicó)</label>
         <input type="date" id="ge-fpp">
         <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
+        <div class="check-row" style="margin-top:10px;"><input type="checkbox" id="ge-hta-gestacional"><label for="ge-hta-gestacional" style="margin:0;">Me diagnosticaron hipertensión gestacional en este embarazo</label></div>
       </div>
 
       <div class="card">
@@ -727,6 +832,7 @@
 
     <!-- ALIMENTACIÓN -->
     <div class="panel" id="panel-alimentacion">
+      <div id="alimentacion-sodio-banner"></div>
       <div class="card"><h2>Alimentación</h2><div class="info-text" id="info-alimentacion-text">Cargando...</div></div>
     </div>
 
@@ -762,72 +868,113 @@
 
     <!-- PRESIÓN ARTERIAL -->
     <div class="panel" id="panel-presion-arterial">
-      <div class="card">
-        <details class="grupo" open>
-          <summary>Cómo tomar la presión correctamente</summary>
-          <div class="grupo-body">
-            <div class="mdpa-illus">
-              <svg viewBox="0 0 160 170" fill="none">
-                <!-- silla -->
-                <rect x="50" y="128" width="60" height="8" rx="3" fill="#E4DCF5"/>
-                <rect x="54" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
-                <rect x="100" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
-                <!-- piernas -->
-                <rect x="64" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
-                <rect x="85" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
-                <ellipse cx="70" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
-                <ellipse cx="91" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
-                <!-- cuerpo (remera) -->
-                <path d="M58 48c-9 5-13 15-13 25v38c0 6 5 10 11 10h48c6 0 11-4 11-10V73c0-10-4-20-13-25-3 8-9 13-17 13s-14-5-17-13z" fill="#6B4FA0"/>
-                <!-- pancita embarazada -->
-                <ellipse cx="80" cy="94" rx="30" ry="26" fill="#7C5CC4"/>
-                <path d="M56 88a24 24 0 0 0 48 0" stroke="#4B3585" stroke-width="1.5" fill="none" opacity="0.4"/>
-                <!-- brazo izquierdo apoyado -->
-                <path d="M58 54c-9 6-13 16-11 28" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
-                <!-- brazo derecho con manguito -->
-                <path d="M102 54c9 5 13 13 12 22" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
-                <rect x="104" y="58" width="16" height="11" rx="3" fill="#E85D8A" transform="rotate(18 112 63)"/>
-                <path d="M118 66c6 3 9 9 9 16" stroke="#E85D8A" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <!-- mesa con tensiómetro -->
-                <rect x="118" y="98" width="34" height="5" rx="2" fill="#EFEAF9"/>
-                <rect x="121" y="103" width="3" height="24" fill="#EFEAF9"/>
-                <rect x="146" y="103" width="3" height="24" fill="#EFEAF9"/>
-                <rect x="126" y="85" width="20" height="14" rx="3" fill="#4B3585"/>
-                <circle cx="136" cy="92" r="3" fill="#F4D998"/>
-                <!-- cabeza y cabello -->
-                <circle cx="80" cy="32" r="15" fill="#F0C9A0"/>
-                <path d="M65 30c-1-11 8-19 15-19s16 8 15 19c-2-6-8-9-15-9s-13 3-15 9z" fill="#3E2A69"/>
-                <path d="M65 30c0 6 1 11 4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path d="M95 30c0 6-1 11-4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <ul class="mdpa-tips">
-              <li>Medila en un lugar tranquilo y sin hablar durante la toma.</li>
-              <li>Sentate con la espalda apoyada, los pies apoyados en el piso y sin cruzar las piernas.</li>
-              <li>Apoyá el brazo sin ropa que apriete, a la altura del corazón, con el manguito del tamaño adecuado.</li>
-              <li>Vaciá la vejiga antes de medir y quedate en reposo, sentada, 5 minutos antes de la primera toma.</li>
-              <li>Medí antes del desayuno y antes de la cena, dos veces cada vez, y antes de tomar tu medicación antihipertensiva si la tenés indicada.</li>
-              <li>Usá un tensiómetro validado.</li>
-              <li>No suspendas tu medicación sin indicación médica.</li>
-            </ul>
+      <div class="card pa-hero-card">
+        <div class="ct-hero-header">
+          <div class="ct-hero-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>
           </div>
-        </details>
+          <div>
+            <h2 style="color:white; margin-bottom:2px;">Presión arterial</h2>
+            <div class="ct-hero-sub">Tu tratamiento, tus mediciones y el MDPA</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="pa-tips-btn" id="abrir-tips-pa-btn">
+          <span class="pa-tips-btn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>
+          </span>
+          Cómo tomar la presión correctamente
+          <svg class="pa-tips-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-backdrop" id="tips-pa-modal">
+        <div class="modal-card">
+          <button class="modal-close-btn" id="cerrar-tips-pa-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <h2 style="margin-bottom:10px;">Cómo tomar la presión correctamente</h2>
+          <div class="mdpa-illus">
+            <svg viewBox="0 0 160 170" fill="none">
+              <!-- silla -->
+              <rect x="50" y="128" width="60" height="8" rx="3" fill="#E4DCF5"/>
+              <rect x="54" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
+              <rect x="100" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
+              <!-- piernas -->
+              <rect x="64" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
+              <rect x="85" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
+              <ellipse cx="70" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
+              <ellipse cx="91" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
+              <!-- cuerpo (remera) -->
+              <path d="M58 48c-9 5-13 15-13 25v38c0 6 5 10 11 10h48c6 0 11-4 11-10V73c0-10-4-20-13-25-3 8-9 13-17 13s-14-5-17-13z" fill="#6B4FA0"/>
+              <!-- pancita embarazada -->
+              <ellipse cx="80" cy="94" rx="30" ry="26" fill="#7C5CC4"/>
+              <path d="M56 88a24 24 0 0 0 48 0" stroke="#4B3585" stroke-width="1.5" fill="none" opacity="0.4"/>
+              <!-- brazo izquierdo apoyado -->
+              <path d="M58 54c-9 6-13 16-11 28" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <!-- brazo derecho con manguito -->
+              <path d="M102 54c9 5 13 13 12 22" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <rect x="104" y="58" width="16" height="11" rx="3" fill="#E85D8A" transform="rotate(18 112 63)"/>
+              <path d="M118 66c6 3 9 9 9 16" stroke="#E85D8A" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- mesa con tensiómetro -->
+              <rect x="118" y="98" width="34" height="5" rx="2" fill="#EFEAF9"/>
+              <rect x="121" y="103" width="3" height="24" fill="#EFEAF9"/>
+              <rect x="146" y="103" width="3" height="24" fill="#EFEAF9"/>
+              <rect x="126" y="85" width="20" height="14" rx="3" fill="#4B3585"/>
+              <circle cx="136" cy="92" r="3" fill="#F4D998"/>
+              <!-- cabeza y cabello -->
+              <circle cx="80" cy="32" r="15" fill="#F0C9A0"/>
+              <path d="M65 30c-1-11 8-19 15-19s16 8 15 19c-2-6-8-9-15-9s-13 3-15 9z" fill="#3E2A69"/>
+              <path d="M65 30c0 6 1 11 4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M95 30c0 6-1 11-4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <ul class="mdpa-tips">
+            <li>Medila en un lugar tranquilo y sin hablar durante la toma.</li>
+            <li>Sentate con la espalda apoyada, los pies apoyados en el piso y sin cruzar las piernas.</li>
+            <li>Apoyá el brazo sin ropa que apriete, a la altura del corazón, con el manguito del tamaño adecuado.</li>
+            <li>Vaciá la vejiga antes de medir y quedate en reposo, sentada, 5 minutos antes de la primera toma.</li>
+            <li>Medí antes del desayuno y antes de la cena, dos veces cada vez, y antes de tomar tu medicación antihipertensiva si la tenés indicada.</li>
+            <li>Usá un tensiómetro validado.</li>
+            <li>No suspendas tu medicación sin indicación médica.</li>
+          </ul>
+        </div>
       </div>
 
       <!-- MI TRATAMIENTO -->
       <div class="card">
-        <h2>Mi tratamiento</h2>
+        <h2><span class="md-icon" style="background:var(--indigo-light); color:var(--indigo);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg></span>Mi tratamiento</h2>
         <p class="helper">Medicación indicada para tu presión, validada para el embarazo. Si cambia, cargá la nueva — la anterior queda guardada en tu historial.</p>
         <div id="tratamiento-actual"></div>
         <details class="grupo" id="tratamiento-form-details">
-          <summary>Cargar o modificar mi tratamiento</summary>
+          <summary id="tratamiento-form-summary">Cargar mi tratamiento</summary>
           <div class="grupo-body">
-            <label for="pa-farmaco-select">Medicación</label>
-            <select id="pa-farmaco-select"><option value="">Cargando...</option></select>
-            <label for="pa-dosis">Dosis</label>
-            <input type="text" id="pa-dosis" placeholder="Ej: 500 mg">
-            <label for="pa-frecuencia">Frecuencia</label>
-            <input type="text" id="pa-frecuencia" placeholder="Ej: cada 8 horas">
+            <div class="fuente-selector">
+              <label class="fuente-opcion">
+                <input type="radio" name="pa-trat-tipo" value="sin" id="pa-trat-sin" checked>
+                <span>Sin tratamiento farmacológico</span>
+              </label>
+              <label class="fuente-opcion">
+                <input type="radio" name="pa-trat-tipo" value="con" id="pa-trat-con">
+                <span>Con tratamiento</span>
+              </label>
+            </div>
+            <div id="pa-trat-con-block" style="display:none;">
+              <label for="pa-farmaco-select">Medicación</label>
+              <select id="pa-farmaco-select"><option value="">Cargando...</option></select>
+              <label for="pa-dosis">Dosis</label>
+              <input type="text" id="pa-dosis" placeholder="Ej: 500 mg">
+              <label for="pa-frecuencia-select">Frecuencia</label>
+              <select id="pa-frecuencia-select">
+                <option value="Una vez al día">Una vez al día</option>
+                <option value="Cada 12 horas (2 veces al día)">Cada 12 horas (2 veces al día)</option>
+                <option value="Cada 8 horas (3 veces al día)">Cada 8 horas (3 veces al día)</option>
+                <option value="Cada 6 horas (4 veces al día)">Cada 6 horas (4 veces al día)</option>
+                <option value="Según necesidad">Según necesidad</option>
+              </select>
+            </div>
             <button class="secondary" id="guardar-tratamiento-btn" style="margin-top:8px;">Guardar tratamiento</button>
           </div>
         </details>
@@ -836,7 +983,7 @@
 
       <!-- TOMAS DEL DÍA -->
       <div class="card">
-        <h2>Tomas del día</h2>
+        <h2><span class="md-icon" style="background:var(--amber-light); color:var(--amber);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>Tomas del día</h2>
         <p class="helper">¿Querés cargar una medición suelta de hoy, sin hacer el MDPA completo? Usá esto.</p>
         <div class="fuente-selector">
           <label class="fuente-opcion">
@@ -858,9 +1005,20 @@
       </div>
 
       <div class="card" id="mdpa-card">
-        <h2>Presión arterial <span class="pill-teal">MDPA</span></h2>
+        <h2><span class="md-icon" style="background:#FBEAE8; color:#B23B32;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg></span>Presión arterial <span class="pill-teal">MDPA</span></h2>
         <p class="helper">Cargá cada medición en el momento del día que corresponda. Si tu médica te indicó el estudio, tocá "Cargar mediciones".</p>
+        <div class="fuente-selector">
+          <label class="fuente-opcion">
+            <input type="radio" name="mdpa-main-ctx" value="embarazo" id="mdpa-main-ctx-embarazo" checked>
+            <span>Estoy embarazada</span>
+          </label>
+          <label class="fuente-opcion">
+            <input type="radio" name="mdpa-main-ctx" value="posparto" id="mdpa-main-ctx-posparto">
+            <span>Estoy en posparto</span>
+          </label>
+        </div>
         <div id="mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
+        <div id="mdpa-informes-historial"></div>
       </div>
     </div>
 
@@ -892,6 +1050,11 @@
         </div>
       </div>
 
+      <div class="card ct-riesgo-card">
+        <h2><span class="md-icon" style="background:rgba(255,255,255,0.25); color:#7A5A1E;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/></svg></span>Por qué seguir con los controles</h2>
+        <p class="helper" id="ct-info-riesgo" style="margin-bottom:0;">Cargando...</p>
+      </div>
+
       <div class="card" id="ct-setup-card" style="display:none;">
         <h2>¿Ya nació tu bebé?</h2>
         <p class="helper">Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.</p>
@@ -907,6 +1070,7 @@
         <h2>Presión arterial <span class="pill-teal">MDPA posparto</span></h2>
         <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
         <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
+        <div id="pp-mdpa-informes-historial"></div>
       </div>
     </div>
 
@@ -1000,9 +1164,16 @@
     loadAspirinaCalendar();
     initCalcio();
     initTratamientoPA();
-    initMdpa("embarazo");
+    initMdpa("main");
+    document.querySelectorAll('input[name="mdpa-main-ctx"]').forEach(radio => {
+      radio.addEventListener("change", () => {
+        mdpaTipoActual.main = document.getElementById("mdpa-main-ctx-posparto").checked ? "posparto" : "embarazo";
+        initMdpa("main");
+      });
+    });
     initPaSuelta();
     initInfoPanels();
+    initRecomendacionSodio();
     initCurvaPonderal();
     initActividadFisica();
     initCuartoTrimestre();
@@ -1030,7 +1201,7 @@
     "calcio":           ["#5B8FD6", "#2C4F87"],
     "alimentacion":     ["#72B06C", "#3E6E3B"],
     "actividad-fisica": ["#DDA23F", "#95611A"],
-    "presion-arterial": ["#E37870", "#AD3C33"],
+    "presion-arterial": ["#C2554C", "#7A2A22"],
     "curva-ponderal":   ["#7477C2", "#454890"],
     "cuarto-trimestre": ["#B8873F", "#6B3F94"],
     "pautas-alarma":    ["#E2665B", "#A5382E"],
@@ -1235,6 +1406,16 @@
     }
   }
 
+  document.getElementById("abrir-tips-pa-btn").addEventListener("click", () => {
+    document.getElementById("tips-pa-modal").classList.add("show");
+  });
+  document.getElementById("cerrar-tips-pa-btn").addEventListener("click", () => {
+    document.getElementById("tips-pa-modal").classList.remove("show");
+  });
+  document.getElementById("tips-pa-modal").addEventListener("click", (e) => {
+    if (e.target.id === "tips-pa-modal") document.getElementById("tips-pa-modal").classList.remove("show");
+  });
+
   // ================= CLASIFICACIÓN DE PRESIÓN =================
   // Basado en PAD (diastólica), con anulación si PAS ≥155.
   // Fuente: protocolo clínico compartido — Magee and von Dadelszen,
@@ -1347,13 +1528,17 @@
     const cont = document.getElementById("tratamiento-actual");
     if (actual) {
       cont.innerHTML = `<div class="tratamiento-activo-card">
-        <div class="t-nombre">${actual.nombre}</div>
-        <div class="t-detalle">${actual.dosis || ''} ${actual.frecuencia ? '· ' + actual.frecuencia : ''}</div>
-        <div class="t-detalle">Desde el ${actual.fecha_inicio}</div>
+        <div class="t-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg></div>
+        <div>
+          <div class="t-nombre">${actual.nombre} <span class="t-vigente-badge">Vigente</span></div>
+          <div class="t-detalle">${actual.dosis || ''}${actual.frecuencia ? ' · ' + actual.frecuencia : ''}</div>
+          <div class="t-detalle">Desde el ${actual.fecha_inicio}</div>
+        </div>
       </div>`;
+      document.getElementById("tratamiento-form-summary").textContent = "Modificar tratamiento";
     } else {
-      cont.innerHTML = `<p class="helper" style="margin-bottom:10px;">No tenés un tratamiento cargado todavía.</p>`;
-      document.getElementById("tratamiento-form-details").open = true;
+      cont.innerHTML = `<p class="helper" style="margin-bottom:10px;">Sin tratamiento farmacológico registrado.</p>`;
+      document.getElementById("tratamiento-form-summary").textContent = "Cargar mi tratamiento";
     }
 
     const hist = (data.historial || []).filter(h => h.fecha_fin);
@@ -1367,26 +1552,49 @@
     }
   }
 
+  document.querySelectorAll('input[name="pa-trat-tipo"]').forEach(radio => {
+    radio.addEventListener("change", () => {
+      document.getElementById("pa-trat-con-block").style.display = document.getElementById("pa-trat-con").checked ? "block" : "none";
+    });
+  });
   document.getElementById("guardar-tratamiento-btn").addEventListener("click", async () => {
-    const farmacoId = document.getElementById("pa-farmaco-select").value;
-    if (!farmacoId) return;
-    const dosis = document.getElementById("pa-dosis").value;
-    const frecuencia = document.getElementById("pa-frecuencia").value;
     const btn = document.getElementById("guardar-tratamiento-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
-    await sb.rpc("guardar_tratamiento_pa", { p_token: session.token, p_farmaco_id: farmacoId, p_dosis: dosis, p_frecuencia: frecuencia });
+
+    if (document.getElementById("pa-trat-con").checked) {
+      const farmacoId = document.getElementById("pa-farmaco-select").value;
+      if (!farmacoId) { btn.disabled = false; btn.textContent = "Guardar tratamiento"; return; }
+      const dosis = document.getElementById("pa-dosis").value;
+      const frecuencia = document.getElementById("pa-frecuencia-select").value;
+      await sb.rpc("guardar_tratamiento_pa", { p_token: session.token, p_farmaco_id: farmacoId, p_dosis: dosis, p_frecuencia: frecuencia });
+      document.getElementById("pa-dosis").value = "";
+    } else {
+      await sb.rpc("marcar_sin_tratamiento_pa", { p_token: session.token });
+    }
+
     btn.disabled = false; btn.textContent = "Guardar tratamiento";
-    document.getElementById("pa-dosis").value = "";
-    document.getElementById("pa-frecuencia").value = "";
     document.getElementById("tratamiento-form-details").open = false;
     initTratamientoPA();
   });
 
   // ================= TOMAS DEL DÍA =================
+  let alertasPaHoy = [];
+
   async function initPaSuelta() {
     const { data, error } = await sb.rpc("obtener_pa_suelta_hoy", { p_token: session.token });
     if (error || !data || !data.ok) return;
-    renderPaSueltaLista(data.tomas || []);
+    const tomas = data.tomas || [];
+    renderPaSueltaLista(tomas);
+
+    // Reconstruye las alertas del día (por si se recarga la página)
+    alertasPaHoy = tomas
+      .map(t => {
+        const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
+        return c.urgente ? { sis: t.sistolica, dia: t.diastolica, clasif: c, hora: new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) } : null;
+      })
+      .filter(Boolean)
+      .reverse(); // más antigua primero, para que la última quede al final (abierta)
+    renderAlertasPaHoy();
   }
   function renderPaSueltaLista(tomas) {
     const cont = document.getElementById("pa-suelta-lista");
@@ -1395,6 +1603,17 @@
       const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
       const hora = new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
       return `<div class="pa-suelta-item"><span><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${t.sistolica}/${t.diastolica} — ${c.label}</span><span>${hora}</span></div>`;
+    }).join("");
+  }
+  function renderAlertasPaHoy() {
+    const cont = document.getElementById("pa-suelta-resultado");
+    if (!alertasPaHoy.length) { cont.innerHTML = ""; return; }
+    cont.innerHTML = alertasPaHoy.map((a, i) => {
+      const esUltima = i === alertasPaHoy.length - 1;
+      return `<details class="pa-alerta-item" ${esUltima ? "open" : ""}>
+        <summary><span class="pa-alerta-dot" style="background:${a.clasif.color}"></span>${a.hora} — ${a.sis}/${a.dia} · ${a.clasif.label}</summary>
+        <div class="pa-alerta-body">${renderNivelBanner(a.clasif)}</div>
+      </details>`;
     }).join("");
   }
   document.getElementById("guardar-pa-suelta-btn").addEventListener("click", async () => {
@@ -1408,19 +1627,25 @@
     btn.disabled = false; btn.textContent = "Guardar toma";
 
     const clasif = contexto === "posparto" ? clasificarPAPosparto(sis, dia) : clasificarPA(sis, dia);
-    document.getElementById("pa-suelta-resultado").innerHTML = renderNivelBanner(clasif);
+    if (clasif.urgente) {
+      const hora = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+      alertasPaHoy.push({ sis, dia, clasif, hora });
+      renderAlertasPaHoy();
+    }
     document.getElementById("pa-suelta-sis").value = "";
     document.getElementById("pa-suelta-dia").value = "";
     initPaSuelta();
   });
 
   // ================= MDPA (embarazo y posparto) =================
-  const mdpaState = { embarazo: null, posparto: null };
-  const mdpaPrefix = { embarazo: "", posparto: "pp-" };
+  const mdpaState = { main: null, pp: null };
+  const mdpaPrefix = { main: "", pp: "pp-" };
+  let mdpaTipoActual = { main: "embarazo", pp: "posparto" };
 
   async function initMdpa(ctx) {
     const pref = mdpaPrefix[ctx];
-    const { data, error } = await sb.rpc("obtener_mdpa_activo", { p_token: session.token, p_tipo: ctx });
+    const tipo = mdpaTipoActual[ctx];
+    const { data, error } = await sb.rpc("obtener_mdpa_activo", { p_token: session.token, p_tipo: tipo });
     const cont = document.getElementById(pref + "mdpa-content");
     if (!cont) return;
     if (error) {
@@ -1433,11 +1658,9 @@
       return;
     }
     if (!data.estudio) {
-      cont.innerHTML = `<p style="font-size:13px; color:var(--gray-600); margin-bottom:10px;">No tenés un monitoreo ${ctx === 'posparto' ? 'posparto' : ''} activo. Si tu médica te indicó hacer un MDPA, iniciálo acá.</p>
-        <div class="helper" style="background:var(--gray-100); padding:8px 10px; border-radius:8px; margin-bottom:10px;">💡 Fijate de elegir bien esta solapa: este monitoreo es para ${ctx === 'posparto' ? 'después del parto (posparto)' : 'durante el embarazo'}. El de ${ctx === 'posparto' ? 'embarazo está en la solapa "Presión arterial"' : 'posparto vas a encontrarlo en "Cuarto trimestre"'}.</div>
+      cont.innerHTML = `<p style="font-size:13px; color:var(--gray-600); margin-bottom:10px;">No tenés un monitoreo ${tipo === 'posparto' ? 'posparto' : ''} activo. Si tu médica te indicó hacer un MDPA, iniciálo acá.</p>
         <label for="${pref}mdpa-duracion-select">¿Cuántos días te indicaron?</label>
         <select id="${pref}mdpa-duracion-select">
-          <option value="1">1 día</option>
           <option value="2">2 días</option>
           <option value="3">3 días</option>
           <option value="4" selected>4 días (protocolo corto)</option>
@@ -1448,13 +1671,15 @@
         <button class="secondary" id="${pref}iniciar-mdpa-btn" style="margin-top:6px;">Iniciar monitoreo</button>`;
       document.getElementById(pref + "iniciar-mdpa-btn").addEventListener("click", async () => {
         const duracion = parseInt(document.getElementById(pref + "mdpa-duracion-select").value);
-        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: duracion, p_incluye_postprandial: true, p_tipo: ctx });
+        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: duracion, p_incluye_postprandial: tipo === "embarazo", p_tipo: tipo });
         initMdpa(ctx);
       });
+      cargarHistorialInformes(ctx);
       return;
     }
     mdpaState[ctx] = data.estudio;
     renderMdpaTable(ctx);
+    cargarHistorialInformes(ctx);
   }
 
   function getRegistro(ctx, dia, momento, toma) {
@@ -1479,35 +1704,48 @@
     };
   }
 
-  function renderInformeMdpa(e) {
-    if (!e.registros.length) return "";
-    const inf = calcularInformeMdpa(e.registros);
-    const fmt = v => v == null ? "—" : v.toFixed(1);
-    const umbralSis = e.umbral_alarma_sis, umbralDia = e.umbral_alarma_dia;
-    const dentroObjetivo = inf.totalSinDia1Sis != null && inf.totalSinDia1Sis < umbralSis && inf.totalSinDia1Dia < umbralDia;
-
-    let html = `<div class="mdpa-informe">
-      <div class="ct-categoria-title" style="margin-top:0;">Informe</div>`;
-
+  function renderInformeCard(inf, opts) {
+    // inf: objeto con las mismas claves ya sea calculado en vivo o traído del historial
+    const fmt = v => (v == null ? "—" : Number(v).toFixed(1));
+    let html = `<div class="mdpa-informe">`;
+    if (opts.fecha) html += `<div class="mdpa-informe-fecha">Generado el ${opts.fecha}</div>`;
     if (inf.totalSinDia1Sis != null) {
-      html += `<div class="mdpa-informe-resultado ${dentroObjetivo ? 'ok' : 'atencion'}">
-        ${dentroObjetivo ? '✓ Presión domiciliaria dentro de objetivo' : '⚠ Presión domiciliaria por encima del objetivo'}
-        <span style="font-weight:400;">(promedio sin día 1, objetivo &lt;${umbralSis}/${umbralDia})</span>
+      html += `<div class="mdpa-informe-resultado ${opts.dentroObjetivo ? 'ok' : 'atencion'}">
+        ${opts.dentroObjetivo ? '✓ Presión domiciliaria dentro de objetivo' : '⚠ Presión domiciliaria por encima del objetivo'}
       </div>`;
     }
-
     html += `<div class="mdpa-informe-grid">
       <div class="mdpa-informe-item"><span>Promedio total (todos los valores)</span><strong>${fmt(inf.totalSis)}/${fmt(inf.totalDia)}</strong></div>
       <div class="mdpa-informe-item"><span>Promedio total (sin día 1)</span><strong>${fmt(inf.totalSinDia1Sis)}/${fmt(inf.totalSinDia1Dia)}</strong></div>
       <div class="mdpa-informe-item"><span>Promedio matutina (sin día 1)</span><strong>${fmt(inf.matutinaSis)}/${fmt(inf.matutinaDia)}</strong></div>
       <div class="mdpa-informe-item"><span>Promedio vespertina (sin día 1)</span><strong>${fmt(inf.vespertinaSis)}/${fmt(inf.vespertinaDia)}</strong></div>`;
-    if (e.incluye_postprandial) {
+    if (opts.incluyePostprandial) {
       html += `<div class="mdpa-informe-item"><span>Promedio postprandial (sin día 1)</span><strong>${fmt(inf.postprandialSis)}/${fmt(inf.postprandialDia)}</strong></div>`;
     }
-    html += `</div>
-      <p class="helper" style="margin-top:8px; margin-bottom:0;">El objetivo usado por ahora es el mismo para embarazo y posparto — todavía no está diferenciado. Fijate de estar en la solapa correcta (embarazo o posparto) al cargar tus mediciones.</p>
-    </div>`;
+    html += `</div></div>`;
     return html;
+  }
+
+  async function cargarHistorialInformes(ctx) {
+    const pref = mdpaPrefix[ctx];
+    const tipo = mdpaTipoActual[ctx];
+    const cont = document.getElementById(pref + "mdpa-informes-historial");
+    if (!cont) return;
+    const { data, error } = await sb.rpc("obtener_informes_mdpa", { p_token: session.token, p_tipo: tipo });
+    if (error || !data || !data.ok || !data.informes.length) { cont.innerHTML = ""; return; }
+
+    cont.innerHTML = `<div class="ct-categoria-title">Informes anteriores</div>` +
+      data.informes.map(i => {
+        const inf = {
+          totalSis: i.promedio_total_sis, totalDia: i.promedio_total_dia,
+          totalSinDia1Sis: i.promedio_sindia1_sis, totalSinDia1Dia: i.promedio_sindia1_dia,
+          matutinaSis: i.promedio_matutina_sis, matutinaDia: i.promedio_matutina_dia,
+          vespertinaSis: i.promedio_vespertina_sis, vespertinaDia: i.promedio_vespertina_dia,
+          postprandialSis: i.promedio_postprandial_sis, postprandialDia: i.promedio_postprandial_dia
+        };
+        const fecha = new Date(i.fecha_generado).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
+        return renderInformeCard(inf, { fecha, dentroObjetivo: i.dentro_objetivo, incluyePostprandial: i.incluye_postprandial });
+      }).join("");
   }
 
   function renderMdpaTable(ctx) {
@@ -1521,6 +1759,7 @@
     const diaActual = Math.min(e.duracion_dias, Math.max(1, Math.floor((hoy - inicio) / 86400000) + 1));
     const totalTomas = e.duracion_dias * momentos.length * 2;
     const tomasCargadas = e.registros.length;
+    const completo = tomasCargadas >= totalTomas;
 
     let resumenHtml = "";
     if (hayAlarmaSevera) resumenHtml += `<div class="alerta-severa">⚠ Detectamos valores de presión muy altos. Repetí la medición en 5-15 minutos y, si se confirma, consultá cuanto antes (ver el detalle en cada toma).</div>`;
@@ -1529,8 +1768,14 @@
       <p style="font-size:12px; color:var(--gray-600); margin-top:0;">${tomasCargadas} de ${totalTomas} tomas cargadas</p>
       <button class="secondary" id="${pref}toggle-mdpa-tabla-btn">Cargar mediciones</button>
       <div id="${pref}mdpa-tabla-wrap" style="display:none; margin-top:14px;"></div>
-      ${renderInformeMdpa(e)}
     `;
+    if (completo) {
+      resumenHtml += `<div class="mdpa-completo-banner">✓ Completaste todas las tomas indicadas.</div>
+        <button class="primary" id="${pref}generar-informe-btn" style="margin-top:8px;">Generar informe</button>`;
+    } else {
+      resumenHtml += `<p class="helper" style="margin-top:10px;">Completá los ${e.duracion_dias} días indicados para poder generar el informe.</p>`;
+    }
+    resumenHtml += `<button class="mdpa-cancelar-btn" id="${pref}cancelar-mdpa-btn">Cancelar este monitoreo</button>`;
     document.getElementById(pref + "mdpa-content").innerHTML = resumenHtml;
 
     document.getElementById(pref + "toggle-mdpa-tabla-btn").addEventListener("click", () => {
@@ -1540,6 +1785,21 @@
       document.getElementById(pref + "toggle-mdpa-tabla-btn").textContent = abierta ? "Cargar mediciones" : "Ocultar tabla";
       if (!abierta) renderMdpaInputTable(ctx);
     });
+
+    document.getElementById(pref + "cancelar-mdpa-btn").addEventListener("click", async () => {
+      if (!confirm("¿Cancelar este monitoreo? Se van a borrar las mediciones cargadas y vas a poder iniciar uno nuevo.")) return;
+      await sb.rpc("cancelar_mdpa", { p_token: session.token, p_estudio_id: e.id });
+      initMdpa(ctx);
+    });
+
+    if (completo) {
+      document.getElementById(pref + "generar-informe-btn").addEventListener("click", async () => {
+        const btn = document.getElementById(pref + "generar-informe-btn");
+        btn.disabled = true; btn.textContent = "Generando...";
+        await sb.rpc("generar_informe_mdpa", { p_token: session.token, p_estudio_id: e.id });
+        await initMdpa(ctx); // el estudio queda cerrado; recarga para mostrar "iniciar nuevo" + historial actualizado
+      });
+    }
   }
 
   const ICONO_MOMENTO = {
@@ -1591,7 +1851,20 @@
     }
 
     document.getElementById(pref + "mdpa-tabla-wrap").innerHTML = html;
-    document.getElementById(pref + "mdpa-tabla-wrap").querySelectorAll(".mdpa-input").forEach(input => input.addEventListener("change", () => guardarTomaMdpa(input)));
+    const wrap = document.getElementById(pref + "mdpa-tabla-wrap");
+    const inputs = Array.from(wrap.querySelectorAll(".mdpa-input"));
+    inputs.forEach((input, i) => {
+      input.setAttribute("tabindex", i + 1);
+      input.addEventListener("change", () => guardarTomaMdpa(input));
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          input.blur();
+          const siguiente = inputs[i + 1];
+          if (siguiente) siguiente.focus();
+        }
+      });
+    });
   }
 
   async function guardarTomaMdpa(input) {
@@ -1635,6 +1908,26 @@
     document.getElementById("info-actividad-text").textContent = data.info_actividad_fisica || "";
     document.getElementById("info-pautas-text").textContent = data.info_pautas_alarma || "";
     document.getElementById("info-general-text").textContent = data.info_general || "";
+  }
+
+  async function initRecomendacionSodio() {
+    const { data, error } = await sb.rpc("obtener_recomendacion_sodio", { p_token: session.token });
+    const cont = document.getElementById("alimentacion-sodio-banner");
+    if (error || !data || !data.ok) { cont.innerHTML = ""; return; }
+
+    if (data.hta_cronica) {
+      cont.innerHTML = `<div class="card sodio-banner sodio-si">
+        <h2><span class="md-icon" style="background:var(--amber-light); color:var(--amber);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8z"/></svg></span>Dieta hiposódica</h2>
+        <p class="helper" style="margin-bottom:0;">Por tu hipertensión crónica, se recomienda reducir el sodio en tus comidas (evitar sal agregada, fiambres, snacks salados y caldos concentrados).</p>
+      </div>`;
+    } else if (data.hta_gestacional) {
+      cont.innerHTML = `<div class="card sodio-banner sodio-no">
+        <h2><span class="md-icon" style="background:var(--indigo-light); color:var(--indigo);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg></span>Sobre la sal en tu dieta</h2>
+        <p class="helper" style="margin-bottom:0;">Por tener hipertensión gestacional, <strong>no</strong> se recomienda restringir el sodio — seguí una alimentación normal en sal, salvo que tu médica te indique lo contrario.</p>
+      </div>`;
+    } else {
+      cont.innerHTML = "";
+    }
   }
 
   // ================= CURVA PONDERAL =================
@@ -1933,6 +2226,9 @@
   const CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
 
   async function initCuartoTrimestre() {
+    sb.rpc("obtener_config", { p_claves: ["info_cuarto_trimestre_riesgo"] }).then(({ data }) => {
+      document.getElementById("ct-info-riesgo").textContent = (data && data.info_cuarto_trimestre_riesgo) || "";
+    });
     const { data, error } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
     const cont = document.getElementById("ct-content");
     const setupCard = document.getElementById("ct-setup-card");
@@ -1951,7 +2247,7 @@
 
     setupCard.style.display = "none";
     document.getElementById("pp-mdpa-card").style.display = "block";
-    initMdpa("posparto");
+    initMdpa("pp");
 
     const grupos = {};
     data.items.forEach(it => {
@@ -1959,7 +2255,20 @@
       grupos[it.categoria].push(it);
     });
 
-    let html = `<div class="card"><div class="ct-dias-badge">Día ${data.dias_desde_parto} desde el parto</div>`;
+    const vigentesAhora = data.items.filter(it => it.vigente && !it.cumplido);
+
+    let html = `<div class="card">
+      <div class="ct-dias-badge">Día ${data.dias_desde_parto} desde el parto</div>`;
+
+    if (vigentesAhora.length) {
+      html += `<div class="ct-hoy-banner">
+        <strong>Hoy te corresponde:</strong>
+        <ul>${vigentesAhora.map(it => `<li>${it.item}</li>`).join("")}</ul>
+      </div>`;
+    }
+
+    html += renderCtTimeline(data.dias_desde_parto, data.items);
+
     Object.keys(grupos).forEach(cat => {
       html += `<div class="ct-categoria-title">${CATEGORIA_LABEL[cat] || cat}</div>`;
       grupos[cat].forEach(it => {
@@ -1986,6 +2295,41 @@
         initCuartoTrimestre();
       });
     });
+  }
+
+  function renderCtTimeline(diasDesdeParto, items) {
+    // Escala de la línea: 0 a 365 días. Lo "continuo" (sin fin) se marca aparte.
+    const maxEscala = 365;
+    const diasClamp = Math.min(diasDesdeParto, maxEscala);
+    const pctHoy = (diasClamp / maxEscala) * 100;
+
+    const zonas = [
+      { desde: 0, hasta: 84, color: "#F0D8A8", label: "0-12 sem" },
+      { desde: 84, hasta: 365, color: "#D9C1E8", label: "12sem-1año" }
+    ];
+
+    const marcadores = items
+      .filter(it => it.ventana_inicio_dias != null)
+      .map(it => {
+        const inicioPct = (Math.min(it.ventana_inicio_dias, maxEscala) / maxEscala) * 100;
+        return { pct: inicioPct, item: it };
+      });
+
+    let html = `<div class="ct-timeline-wrap">
+      <div class="ct-timeline-track">`;
+    zonas.forEach(z => {
+      const left = (z.desde / maxEscala) * 100;
+      const width = ((z.hasta - z.desde) / maxEscala) * 100;
+      html += `<div class="ct-timeline-zona" style="left:${left}%; width:${width}%; background:${z.color};"></div>`;
+    });
+    marcadores.forEach(m => {
+      html += `<div class="ct-timeline-marca ${m.item.cumplido ? 'cumplido' : (m.item.vigente ? 'vigente' : '')}" style="left:${m.pct}%;" title="${m.item.item}"></div>`;
+    });
+    html += `<div class="ct-timeline-hoy" style="left:${pctHoy}%;"><span class="ct-timeline-hoy-dot"></span><span class="ct-timeline-hoy-label">Hoy</span></div>`;
+    html += `</div>
+      <div class="ct-timeline-labels"><span>Parto</span><span>3 meses</span><span>6 meses</span><span>1 año +</span></div>
+    </div>`;
+    return html;
   }
 
   document.getElementById("ct-guardar-parto-btn").addEventListener("click", async () => {
@@ -2172,6 +2516,7 @@
     const msg = document.getElementById("datos-guardado-msg");
     msg.style.display = "block";
     setTimeout(() => { msg.style.display = "none"; }, 2500);
+    initRecomendacionSodio();
   });
 
   // ================= EMBARAZOS =================
@@ -2310,6 +2655,7 @@
       if (a.eco_semanas != null) document.getElementById("ge-eco-sem").value = a.eco_semanas;
       if (a.eco_dias != null) document.getElementById("ge-eco-dias").value = a.eco_dias;
       if (a.fpp_obstetra) document.getElementById("ge-fpp").value = a.fpp_obstetra;
+      document.getElementById("ge-hta-gestacional").checked = !!a.hipertension_gestacional_actual;
 
       // Si ya tenía cargado solo eco (sin FUM), dejamos seleccionado ese modo
       if (!a.fum && a.fecha_eco_datante) {
@@ -2339,7 +2685,8 @@
       eco_semanas: document.getElementById("ge-eco-sem").value || null,
       eco_dias: document.getElementById("ge-eco-dias").value || null,
       fpp_obstetra: fpp || null,
-      fuente_fpp_vigente: fpp ? "OBSTETRA" : (fum ? "FUM" : (fechaEco ? "ECO" : null))
+      fuente_fpp_vigente: fpp ? "OBSTETRA" : (fum ? "FUM" : (fechaEco ? "ECO" : null)),
+      hipertension_gestacional_actual: document.getElementById("ge-hta-gestacional").checked
     };
     const btn = document.getElementById("guardar-embarazos-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
@@ -2349,6 +2696,7 @@
     msg.style.display = "block";
     setTimeout(() => { msg.style.display = "none"; }, 2500);
     initEmbarazos();
+    initRecomendacionSodio();
   });
 
   // ---------- Arranque ----------
