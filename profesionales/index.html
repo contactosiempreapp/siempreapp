@@ -6,6 +6,7 @@
 <title>SIEMPRE — Profesional</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -37,7 +38,7 @@
   body { margin: 0; background: var(--bg); color: var(--gray-900); min-height: 100vh; }
   .screen { max-width: 420px; margin: 0 auto; min-height: 100vh; display: none; flex-direction: column; justify-content: center; padding: 32px 24px; }
   .screen.show { display: flex; }
-  #dashboard-screen.show, #pacientes-screen.show, #ficha-screen.show { display: block; max-width: 900px; padding: 0; justify-content: flex-start; }
+  #dashboard-screen.show, #pacientes-screen.show, #ficha-screen.show, #estadisticas-screen.show { display: block; max-width: 900px; padding: 0; justify-content: flex-start; }
 
   .logo-mark {
     width: 56px; height: 56px; border-radius: 16px;
@@ -107,6 +108,8 @@
   .inst-table { width: 100%; background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); border-collapse: collapse; }
   .inst-table th { background: var(--gray-100); text-align: left; padding: 10px 16px; font-size: 12px; color: var(--gray-600); font-weight: 700; }
   .inst-table td { padding: 12px 16px; font-size: 13.5px; border-top: 1px solid var(--gray-100); }
+  .est-table td.est-n { font-weight: 800; color: var(--violet-dark); font-family: 'Manrope', sans-serif; text-align: right; width: 90px; }
+  .est-table td.est-label { color: var(--gray-900); }
   .section-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px; color: var(--gray-900); margin: 0 0 12px; }
 
   .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
@@ -308,6 +311,7 @@
     <div class="top-nav">
       <button class="top-nav-btn activo" id="nav-dashboard-btn">Vista general</button>
       <button class="top-nav-btn" id="nav-pacientes-btn">Pacientes</button>
+      <button class="top-nav-btn" id="nav-estadisticas-btn">Estadísticas</button>
       <button id="logout-btn">Cerrar sesión</button>
     </div>
   </header>
@@ -424,6 +428,7 @@
     <div class="top-nav">
       <button class="top-nav-btn" id="nav-dashboard-btn-2">Vista general</button>
       <button class="top-nav-btn activo" id="nav-pacientes-btn-2">Pacientes</button>
+      <button class="top-nav-btn" id="nav-estadisticas-btn-2">Estadísticas</button>
       <button id="logout-btn-2">Cerrar sesión</button>
     </div>
   </header>
@@ -433,6 +438,33 @@
       <button class="primary" id="pac-buscar-btn">Buscar</button>
     </div>
     <div class="pac-list" id="pac-lista"></div>
+  </main>
+</div>
+
+<div class="screen" id="estadisticas-screen">
+  <header class="top-bar">
+    <div class="top-bar-brand">
+      <div class="mini-logo">S</div>
+      <div>
+        <div class="app-brand-name">SIEMPRE</div>
+        <div class="titulo">Estadísticas</div>
+        <div class="sub" id="est-institucion-sub">—</div>
+      </div>
+    </div>
+    <div class="top-nav">
+      <button class="top-nav-btn" id="nav-dashboard-btn-3">Vista general</button>
+      <button class="top-nav-btn" id="nav-pacientes-btn-3">Pacientes</button>
+      <button class="top-nav-btn activo" id="nav-estadisticas-btn-3">Estadísticas</button>
+      <button id="logout-btn-4">Cerrar sesión</button>
+    </div>
+  </header>
+  <main class="dash-main">
+    <div class="resumen-card">
+      <div class="section-title">Exportar datos</div>
+      <p class="stat-secundario" style="margin-bottom:12px;">Descarga un Excel con hojas separadas: pacientes, antecedentes, aspirina, calcio, actividad física, presión arterial e informes de MDPA. Solo incluye lo que tu cuenta puede ver.</p>
+      <button class="primary" id="exportar-excel-btn" style="width:auto; padding:12px 22px;">Descargar Excel completo</button>
+    </div>
+    <div id="est-tablas"></div>
   </main>
 </div>
 
@@ -748,6 +780,12 @@
   document.getElementById("nav-dashboard-btn-2").addEventListener("click", () => mostrarDashboard(miPerfil));
   document.getElementById("nav-pacientes-btn").addEventListener("click", () => mostrarPacientes());
   document.getElementById("nav-pacientes-btn-2").addEventListener("click", () => mostrarPacientes());
+  document.getElementById("nav-estadisticas-btn").addEventListener("click", () => mostrarEstadisticas());
+  document.getElementById("nav-estadisticas-btn-2").addEventListener("click", () => mostrarEstadisticas());
+  document.getElementById("nav-estadisticas-btn-3").addEventListener("click", () => mostrarEstadisticas());
+  document.getElementById("nav-dashboard-btn-3").addEventListener("click", () => mostrarDashboard(miPerfil));
+  document.getElementById("nav-pacientes-btn-3").addEventListener("click", () => mostrarPacientes());
+  document.getElementById("logout-btn-4").addEventListener("click", () => cerrarSesion());
   document.getElementById("volver-a-lista-btn").addEventListener("click", () => mostrarPacientes());
 
   // ---------- Lista de pacientes ----------
@@ -802,6 +840,126 @@
     }
     document.getElementById("alta-paciente-modal").classList.remove("show");
     abrirFicha(data.paciente_id);
+  });
+
+  async function mostrarEstadisticas() {
+    document.querySelectorAll(".top-nav-btn").forEach(b => b.classList.remove("activo"));
+    document.getElementById("nav-estadisticas-btn").classList.add("activo");
+    document.getElementById("nav-estadisticas-btn-2").classList.add("activo");
+    document.getElementById("nav-estadisticas-btn-3").classList.add("activo");
+    document.getElementById("est-institucion-sub").textContent = miPerfil && miPerfil.es_super_admin
+      ? "Todas las instituciones" : (miPerfil ? miPerfil.institucion_nombre : "");
+    mostrarPantalla("estadisticas-screen");
+
+    const cont = document.getElementById("est-tablas");
+    cont.innerHTML = `<p style="color:var(--gray-600); font-size:13px;">Calculando...</p>`;
+    const { data, error } = await sb.rpc("obtener_estadisticas_cohorte");
+    if (error || !data || !data.ok) {
+      cont.innerHTML = `<p style="color:#B23B32; font-size:13px;">No pudimos calcular las estadísticas.</p>`;
+      return;
+    }
+
+    const fmtN = v => v == null ? "—" : v;
+    const fmtPct = v => v == null ? "—" : v + "%";
+    const a = data.antecedentes, ct = data.cuarto_trimestre;
+
+    cont.innerHTML = `
+      <div class="resumen-card">
+        <div class="section-title">Población general (N = ${data.n_total})</div>
+        <table class="inst-table est-table">
+          <tbody>
+            <tr><td class="est-label">Edad promedio</td><td class="est-n">${fmtN(data.edad_promedio)} años</td></tr>
+            <tr><td class="est-label">Rango de edad</td><td class="est-n">${fmtN(data.edad_min)}–${fmtN(data.edad_max)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="resumen-card">
+        <div class="section-title">Adherencia</div>
+        <table class="inst-table est-table">
+          <tbody>
+            <tr><td class="est-label">Con indicación de aspirina (N)</td><td class="est-n">${fmtN(data.n_con_aspirina)}</td></tr>
+            <tr><td class="est-label">Adherencia promedio a aspirina</td><td class="est-n">${fmtPct(data.adherencia_aspirina_promedio)}</td></tr>
+            <tr><td class="est-label">Con indicación de calcio (N)</td><td class="est-n">${fmtN(data.n_con_calcio)}</td></tr>
+            <tr><td class="est-label">Adherencia promedio a calcio</td><td class="est-n">${fmtPct(data.adherencia_calcio_promedio)}</td></tr>
+            <tr><td class="est-label">Con registros de actividad física (N)</td><td class="est-n">${fmtN(data.n_con_actividad)}</td></tr>
+            <tr><td class="est-label">Promedio días activos/semana</td><td class="est-n">${fmtN(data.actividad_promedio_dias_semana)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="resumen-card">
+        <div class="section-title">Presión arterial</div>
+        <table class="inst-table est-table">
+          <tbody>
+            <tr><td class="est-label">Con tratamiento antihipertensivo (N)</td><td class="est-n">${fmtN(data.n_con_tratamiento_hta)}</td></tr>
+            <tr><td class="est-label">% en objetivo (último MDPA)</td><td class="est-n">${fmtPct(data.hta_pct_en_objetivo)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="resumen-card">
+        <div class="section-title">Antecedentes (N sobre el total de la población)</div>
+        <table class="inst-table est-table">
+          <tbody>
+            <tr><td class="est-label">Preeclampsia previa</td><td class="est-n">${fmtN(a.preeclampsia_previa)}</td></tr>
+            <tr><td class="est-label">Hipertensión crónica</td><td class="est-n">${fmtN(a.hta_cronica)}</td></tr>
+            <tr><td class="est-label">Diabetes pregestacional</td><td class="est-n">${fmtN(a.diabetes_pregestacional)}</td></tr>
+            <tr><td class="est-label">Enfermedad renal crónica</td><td class="est-n">${fmtN(a.enfermedad_renal_cronica)}</td></tr>
+            <tr><td class="est-label">Enfermedad autoinmune</td><td class="est-n">${fmtN(a.enfermedad_autoinmune)}</td></tr>
+            <tr><td class="est-label">Síndrome de ovario poliquístico</td><td class="est-n">${fmtN(a.sindrome_ovario_poliquistico)}</td></tr>
+            <tr><td class="est-label">Embarazo múltiple</td><td class="est-n">${fmtN(a.embarazo_multiple)}</td></tr>
+            <tr><td class="est-label">Nuliparidad</td><td class="est-n">${fmtN(a.nuliparidad)}</td></tr>
+            <tr><td class="est-label">Reproducción asistida</td><td class="est-n">${fmtN(a.reproduccion_asistida)}</td></tr>
+            <tr><td class="est-label">Madre con THE o preeclampsia</td><td class="est-n">${fmtN(a.madre_the_o_pe)}</td></tr>
+            <tr><td class="est-label">Hermana con THE o preeclampsia</td><td class="est-n">${fmtN(a.hermana_the_o_pe)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="resumen-card">
+        <div class="section-title">Cuarto trimestre — retención</div>
+        <table class="inst-table est-table">
+          <tbody>
+            <tr><td class="est-label">Dieron a luz</td><td class="est-n">${fmtN(ct.dieron_a_luz)}</td></tr>
+            <tr><td class="est-label">Siguen interactuando (30 días)</td><td class="est-n">${fmtN(ct.interactuando)}</td></tr>
+            <tr><td class="est-label">Tienen PA posparto registrada</td><td class="est-n">${fmtN(ct.con_pa_posparto)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  document.getElementById("exportar-excel-btn").addEventListener("click", async () => {
+    const btn = document.getElementById("exportar-excel-btn");
+    btn.disabled = true; btn.textContent = "Generando...";
+
+    const tablas = [
+      { nombre: "Pacientes", query: sb.from("pacientes").select("id,dni,nombre,apellido,fecha_alta,activa,indicacion_aspirina,indicacion_calcio,rama_cuarto_trimestre") },
+      { nombre: "AntecedentesClinicos", query: sb.from("antecedentes_clinicos").select("*") },
+      { nombre: "AntecedentesFamiliares", query: sb.from("antecedentes_familiares").select("*") },
+      { nombre: "AntecedentesObstetricos", query: sb.from("antecedentes_obstetricos").select("*") },
+      { nombre: "Tratamientos", query: sb.from("paciente_medicamentos").select("*, catalogo_farmacos(nombre, grupo)") },
+      { nombre: "Aspirina", query: sb.from("aspirina_log").select("*") },
+      { nombre: "Calcio", query: sb.from("calcio_log").select("*") },
+      { nombre: "ActividadFisica", query: sb.from("actividad_fisica_semana").select("*") },
+      { nombre: "PresionSuelta", query: sb.from("presion_arterial_suelta").select("*") },
+      { nombre: "InformesMDPA", query: sb.from("mdpa_informes").select("*") }
+    ];
+
+    const wb = XLSX.utils.book_new();
+    for (const t of tablas) {
+      const { data, error } = await t.query;
+      let filas = data || [];
+      if (t.nombre === "Tratamientos") {
+        filas = filas.map(f => ({ ...f, farmaco_nombre: f.catalogo_farmacos ? f.catalogo_farmacos.nombre : "", farmaco_grupo: f.catalogo_farmacos ? f.catalogo_farmacos.grupo : "", catalogo_farmacos: undefined }));
+      }
+      const ws = XLSX.utils.json_to_sheet(filas.length ? filas : [{ sin_datos: true }]);
+      XLSX.utils.book_append_sheet(wb, ws, t.nombre.slice(0, 31));
+    }
+
+    XLSX.writeFile(wb, `SIEMPRE_export_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    btn.disabled = false; btn.textContent = "Descargar Excel completo";
   });
 
   async function mostrarPacientes() {
