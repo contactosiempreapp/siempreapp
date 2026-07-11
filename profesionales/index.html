@@ -110,6 +110,26 @@
   .inst-table td { padding: 12px 16px; font-size: 13.5px; border-top: 1px solid var(--gray-100); }
   .est-table td.est-n { font-weight: 800; color: var(--violet-dark); font-family: 'Manrope', sans-serif; text-align: right; width: 90px; }
   .est-table td.est-label { color: var(--gray-900); }
+
+  .mensajes-hilo { max-height: 260px; overflow-y: auto; margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .msg-bubble { max-width: 78%; padding: 9px 13px; border-radius: 14px; font-size: 13px; line-height: 1.4; }
+  .msg-bubble.prof { align-self: flex-end; background: var(--violet); color: white; border-bottom-right-radius: 4px; }
+  .msg-bubble.pac { align-self: flex-start; background: var(--gray-100); color: var(--gray-900); border-bottom-left-radius: 4px; }
+  .msg-fecha { font-size: 10px; opacity: 0.7; margin-top: 4px; }
+  .mensajes-input-row { display: flex; gap: 8px; align-items: flex-end; }
+  .mensajes-input-row textarea { flex: 1; min-height: 42px; max-height: 90px; padding: 10px 12px; border: 1.5px solid var(--gray-300); border-radius: 10px; font-size: 13px; font-family: inherit; resize: vertical; }
+
+  .alerta-item {
+    display: flex; align-items: center; justify-content: space-between; padding: 12px 16px;
+    border-top: 1px solid var(--gray-100); cursor: pointer;
+  }
+  .alerta-item:first-child { border-top: none; }
+  .alerta-item:hover { background: var(--pink-light); }
+  .alerta-item .a-nombre { font-weight: 700; font-size: 13.5px; color: var(--gray-900); }
+  .alerta-item .a-detalle { font-size: 11.5px; color: var(--gray-600); margin-top: 2px; }
+  .alerta-item .a-valor { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 16px; }
+  .alerta-item .a-valor.severa { color: #B23B32; }
+  .alerta-item .a-valor.alta { color: #A6690E; }
   .section-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px; color: var(--gray-900); margin: 0 0 12px; }
 
   .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
@@ -318,6 +338,7 @@
   <main class="dash-main">
     <button class="primary" id="abrir-alta-paciente-btn" style="width:auto; padding:12px 22px; margin-bottom:20px;">+ Dar de alta paciente</button>
     <div class="stat-grid" id="dash-stats"></div>
+    <div id="dash-alertas-wrap"></div>
     <div id="dash-instituciones-wrap"></div>
 
     <div class="modal-backdrop-prof" id="alta-paciente-modal">
@@ -461,7 +482,7 @@
   <main class="dash-main">
     <div class="resumen-card">
       <div class="section-title">Exportar datos</div>
-      <p class="stat-secundario" style="margin-bottom:12px;">Descarga un Excel con hojas separadas: pacientes, antecedentes, aspirina, calcio, actividad física, presión arterial e informes de MDPA. Solo incluye lo que tu cuenta puede ver.</p>
+      <p class="stat-secundario" style="margin-bottom:12px;">Descarga un Excel con una hoja principal de resumen (una fila por paciente: antecedentes, % de adherencia histórica a aspirina y calcio, tratamiento, PA, etc.) más hojas con los registros crudos de cada módulo. Se identifica por DNI, sin nombre ni ID interno.</p>
       <button class="primary" id="exportar-excel-btn" style="width:auto; padding:12px 22px;">Descargar Excel completo</button>
     </div>
     <div id="est-tablas"></div>
@@ -516,6 +537,22 @@
         <p class="guardado-ok" id="editar-datos-guardado-msg">Guardado ✓</p>
       </div>
     </details>
+
+    <div class="resumen-card">
+      <div class="rc-header">
+        <div class="rc-icon" style="background:var(--violet-light); color:var(--violet-dark);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        </div>
+        <div class="rc-titulo">Mensajes con la paciente</div>
+      </div>
+      <div class="mensajes-hilo" id="mensajes-hilo"></div>
+      <div class="mensajes-input-row">
+        <textarea id="mensaje-nuevo" placeholder="Escribí un mensaje..."></textarea>
+        <button class="primary" id="enviar-mensaje-btn" style="width:auto; padding:10px 18px;">Enviar</button>
+      </div>
+      <p class="stat-secundario" style="margin-top:8px;">La paciente lo ve la próxima vez que abra la app — todavía no hay notificación push al celular.</p>
+    </div>
+
     <div id="ficha-cuarto-trimestre"></div>
 
     <details class="resumen-card editar-datos-details" id="ficha-embarazo-details">
@@ -669,7 +706,36 @@
       wrap.innerHTML = "";
     }
 
+    cargarAlertasRecientes();
     cargarGraficosDashboard();
+  }
+
+  async function cargarAlertasRecientes() {
+    const wrap = document.getElementById("dash-alertas-wrap");
+    const { data, error } = await sb.rpc("obtener_alertas_recientes", { p_dias: 7 });
+    if (error || !data || !data.ok || !data.alertas.length) { wrap.innerHTML = ""; return; }
+
+    wrap.innerHTML = `<div class="resumen-card">
+      <div class="rc-header">
+        <div class="rc-icon" style="background:#FBEAE8; color:#B23B32;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l9.5 17.1H2.5L12 3.2z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="17.2" r="0.9" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div class="rc-titulo">Alertas de presión — últimos 7 días</div>
+      </div>
+      ${data.alertas.map(a => `
+        <div class="alerta-item" data-id="${a.paciente_id}">
+          <div>
+            <div class="a-nombre">${a.apellido}, ${a.nombre}</div>
+            <div class="a-detalle">${a.origen} · ${a.contexto} · ${new Date(a.fecha_hora).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</div>
+          </div>
+          <div class="a-valor ${a.es_severa ? 'severa' : 'alta'}">${a.sistolica}/${a.diastolica}</div>
+        </div>
+      `).join("")}
+    </div>`;
+
+    wrap.querySelectorAll(".alerta-item").forEach(item => {
+      item.addEventListener("click", () => abrirFicha(item.dataset.id));
+    });
   }
 
   // ---------- Gráficos del dashboard ----------
@@ -934,8 +1000,32 @@
     const btn = document.getElementById("exportar-excel-btn");
     btn.disabled = true; btn.textContent = "Generando...";
 
+    const wb = XLSX.utils.book_new();
+
+    // 1. Hoja principal: resumen calculado, una fila por paciente
+    const { data: resumenData, error: resumenErr } = await sb.rpc("obtener_resumen_export");
+    const filasResumen = (!resumenErr && resumenData && resumenData.ok) ? resumenData.filas : [];
+    const wsResumen = XLSX.utils.json_to_sheet(filasResumen.length ? filasResumen : [{ sin_datos: true }]);
+    XLSX.utils.book_append_sheet(wb, wsResumen, "ResumenPorPaciente");
+
+    // 2. Diccionario paciente_id -> dni (para reemplazar el ID interno en el resto de las hojas)
+    const { data: pacientesDni } = await sb.from("pacientes").select("id, dni");
+    const dniPorId = {};
+    (pacientesDni || []).forEach(p => { dniPorId[p.id] = p.dni; });
+
+    function limpiarFilas(filas, opts = {}) {
+      return filas.map(f => {
+        const nueva = { dni: dniPorId[f.paciente_id] || "" };
+        Object.keys(f).forEach(k => {
+          if (["id", "paciente_id", "nombre", "apellido", "telefono", "email"].includes(k)) return;
+          if (opts.omitir && opts.omitir.includes(k)) return;
+          nueva[k] = f[k];
+        });
+        return nueva;
+      });
+    }
+
     const tablas = [
-      { nombre: "Pacientes", query: sb.from("pacientes").select("id,dni,nombre,apellido,fecha_alta,activa,indicacion_aspirina,indicacion_calcio,rama_cuarto_trimestre") },
       { nombre: "AntecedentesClinicos", query: sb.from("antecedentes_clinicos").select("*") },
       { nombre: "AntecedentesFamiliares", query: sb.from("antecedentes_familiares").select("*") },
       { nombre: "AntecedentesObstetricos", query: sb.from("antecedentes_obstetricos").select("*") },
@@ -947,13 +1037,13 @@
       { nombre: "InformesMDPA", query: sb.from("mdpa_informes").select("*") }
     ];
 
-    const wb = XLSX.utils.book_new();
     for (const t of tablas) {
       const { data, error } = await t.query;
       let filas = data || [];
       if (t.nombre === "Tratamientos") {
         filas = filas.map(f => ({ ...f, farmaco_nombre: f.catalogo_farmacos ? f.catalogo_farmacos.nombre : "", farmaco_grupo: f.catalogo_farmacos ? f.catalogo_farmacos.grupo : "", catalogo_farmacos: undefined }));
       }
+      filas = limpiarFilas(filas);
       const ws = XLSX.utils.json_to_sheet(filas.length ? filas : [{ sin_datos: true }]);
       XLSX.utils.book_append_sheet(wb, ws, t.nombre.slice(0, 31));
     }
@@ -1265,6 +1355,43 @@
 
     cargarCuartoTrimestreProf(pacienteId);
     cargarResumenesMensuales(pacienteId, paciente);
+    cargarMensajes(pacienteId);
+  }
+
+  async function cargarMensajes(pacienteId) {
+    const hilo = document.getElementById("mensajes-hilo");
+    const { data, error } = await sb.from("mensajes").select("*").eq("paciente_id", pacienteId).order("fecha_envio");
+    if (error) { hilo.innerHTML = `<p class="sin-antecedentes">No pudimos cargar los mensajes.</p>`; return; }
+
+    const mensajes = data || [];
+    if (!mensajes.length) {
+      hilo.innerHTML = `<p class="sin-antecedentes">Todavía no hay mensajes con esta paciente.</p>`;
+    } else {
+      hilo.innerHTML = mensajes.map(m => `
+        <div class="msg-bubble ${m.remitente === 'profesional' ? 'prof' : 'pac'}">
+          ${m.contenido}
+          <div class="msg-fecha">${new Date(m.fecha_envio).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</div>
+        </div>
+      `).join("");
+      hilo.scrollTop = hilo.scrollHeight;
+    }
+
+    const noLeidosIds = mensajes.filter(m => m.remitente === "paciente" && !m.leido_por_profesional).map(m => m.id);
+    if (noLeidosIds.length) {
+      await sb.from("mensajes").update({ leido_por_profesional: true }).in("id", noLeidosIds);
+    }
+
+    document.getElementById("enviar-mensaje-btn").onclick = async () => {
+      const texto = document.getElementById("mensaje-nuevo").value.trim();
+      if (!texto) return;
+      const { data: { user } } = await sb.auth.getUser();
+      const btn = document.getElementById("enviar-mensaje-btn");
+      btn.disabled = true;
+      await sb.from("mensajes").insert({ paciente_id: pacienteId, profesional_id: user ? user.id : null, remitente: "profesional", contenido: texto });
+      document.getElementById("mensaje-nuevo").value = "";
+      btn.disabled = false;
+      cargarMensajes(pacienteId);
+    };
   }
 
   const CT_CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
