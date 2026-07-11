@@ -3,190 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIEMPRE — Profesional</title>
+<title>SIEMPRE</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --violet: #5B3E96;
-    --violet-dark: #382461;
-    --violet-deep: #241847;
+    --violet-dark: #3E2A69;
     --violet-light: #EFEAF9;
-    --teal: #0F8C68;
-    --teal-dark: #0B6E52;
-    --teal-light: #E1F5EE;
     --pink: #E85D8A;
     --pink-light: #FCEAF0;
-    --blue: #2C5FA3;
-    --blue-light: #E3EEFC;
-    --amber: #C17A1F;
-    --amber-light: #FBF0DF;
-    --gray-900: #221F2B;
-    --gray-600: #6E6A78;
-    --gray-300: #DEDAE6;
-    --gray-100: #F5F3F9;
-    --bg: #F7F7FA;
+    --teal: #0F8C68;
+    --teal-light: #E1F5EE;
+    --gray-900: #2B2B2E;
+    --gray-600: #6B6A70;
+    --gray-300: #DAD8E0;
+    --gray-100: #F5F4F8;
+    --bg: #FBFAFD;
     --radius: 14px;
-    --shadow-card: 0 1px 2px rgba(34,24,60,0.04), 0 6px 20px -8px rgba(34,24,60,0.12);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--gray-900); min-height: 100vh; }
-  .screen { max-width: 420px; margin: 0 auto; min-height: 100vh; display: none; flex-direction: column; justify-content: center; padding: 32px 24px; }
-  .screen.show { display: flex; }
-  #dashboard-screen.show, #pacientes-screen.show, #ficha-screen.show { display: block; max-width: 900px; padding: 0; justify-content: flex-start; }
+  .screen { max-width: 460px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
 
+  /* ---------- LOGIN / WELCOME (compartido) ---------- */
+  #login-screen, #welcome-screen { justify-content: center; padding: 32px 24px; display: none; }
+  #login-screen.show, #welcome-screen.show { display: flex; }
   .logo-mark {
     width: 56px; height: 56px; border-radius: 16px;
-    background: linear-gradient(155deg, #7C5CC4 0%, var(--violet) 45%, var(--violet-deep) 100%);
-    display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;
-    font-family: 'Fraunces', serif; font-size: 22px; margin: 0 auto 18px; box-shadow: var(--shadow-card);
+    background: linear-gradient(135deg, var(--violet), var(--violet-dark));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 22px; margin: 0 auto 20px;
   }
-  h1.brand { text-align: center; font-family: 'Fraunces', serif; font-weight: 600; font-size: 26px; color: var(--violet-deep); margin: 0 0 4px; }
-  p.tagline { text-align: center; color: var(--gray-600); font-size: 13px; margin: 0 0 28px; }
-
+  h1.brand { text-align: center; font-size: 26px; font-weight: 700; color: var(--violet-dark); margin: 0 0 4px; letter-spacing: -0.02em; }
+  p.tagline { text-align: center; color: var(--gray-600); font-size: 14px; margin: 0 0 32px; }
   label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-900); margin-bottom: 6px; }
-  input[type="text"], input[type="email"], input[type="password"], select {
-    width: 100%; padding: 12px 14px; border: 1.5px solid var(--gray-300); border-radius: 10px;
-    font-size: 15px; margin-bottom: 14px; background: white; font-family: inherit;
+  input[type="text"], input[type="password"], input[type="date"], input[type="number"], select {
+    width: 100%; padding: 13px 14px; border: 1.5px solid var(--gray-300); border-radius: 10px;
+    font-size: 16px; margin-bottom: 14px; background: white; font-family: inherit;
   }
   input:focus, select:focus { outline: none; border-color: var(--violet); }
   button.primary {
-    width: 100%; padding: 13px; background: linear-gradient(135deg, var(--violet), var(--violet-deep));
-    color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
-    font-family: 'Manrope', sans-serif; cursor: pointer;
+    width: 100%; padding: 14px; background: var(--violet); color: white; border: none;
+    border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;
   }
+  button.primary:active { background: var(--violet-dark); }
   button.primary:disabled { opacity: 0.6; }
-  button.link-btn {
-    display: block; width: 100%; text-align: center; background: none; border: none; color: var(--violet);
-    font-size: 13px; font-weight: 600; margin-top: 14px; cursor: pointer;
+  #login-error { color: var(--pink); background: var(--pink-light); padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
+
+  .welcome-msg { font-size: 20px; font-weight: 700; color: var(--violet-dark); text-align: center; margin-bottom: 14px; }
+  .welcome-explain { font-size: 14px; color: var(--gray-600); text-align: center; line-height: 1.6; margin-bottom: 28px; }
+
+  /* ---------- HOME ---------- */
+  #home-screen { display: none; }
+  header.top { background: var(--violet); color: white; padding: 20px 20px 16px; border-radius: 0 0 24px 24px; }
+  header.top .greeting { font-size: 13px; opacity: 0.8; }
+  header.top .name { font-size: 20px; font-weight: 700; margin-top: 2px; }
+
+  nav.tabs {
+    display: flex; gap: 6px; overflow-x: auto; padding: 14px 16px 0;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
   }
-  .msg-error { color: #B23B32; background: #FBEAE8; padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
-  .msg-info { color: var(--teal-dark); background: var(--teal-light); padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
-
-  header.top-bar {
-    background: linear-gradient(135deg, var(--violet), var(--violet-deep)); color: white;
-    padding: 18px 28px; display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 6px 18px -8px rgba(34,24,60,0.4);
+  nav.tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 0 0 auto; padding: 8px 14px; border-radius: 20px; border: 1.5px solid var(--gray-300);
+    background: white; color: var(--gray-600); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
   }
-  .top-bar-brand { display: flex; align-items: center; gap: 14px; }
-  .mini-logo {
-    width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
-    background: linear-gradient(155deg, rgba(255,255,255,0.35), rgba(255,255,255,0.05));
-    border: 1px solid rgba(255,255,255,0.35);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Fraunces', serif; font-weight: 600; font-size: 17px; color: white;
+  .tab-btn.active { background: var(--violet); border-color: var(--violet); color: white; }
+
+  main { padding: 16px 20px 20px; flex: 1; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: white; border-radius: var(--radius); padding: 18px; margin-bottom: 16px; border: 1px solid var(--gray-300); }
+  .card h2 { font-size: 15px; font-weight: 700; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+  .pill-teal { background: var(--teal-light); color: var(--teal); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+
+  /* calendarios (aspirina / calcio) */
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .cal-dow { font-size: 11px; color: var(--gray-600); text-align: center; font-weight: 600; }
+  .cal-day {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 8px;
+    font-size: 13px; cursor: pointer; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-900); user-select: none;
   }
-  .app-brand-name {
-    font-family: 'Manrope', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em;
-    color: rgba(255,255,255,0.65); text-transform: uppercase; margin-bottom: 1px;
+  .cal-day.empty { visibility: hidden; cursor: default; }
+  .cal-day.tomada, .cal-day.suficiente { background: var(--teal); border-color: var(--teal); color: white; font-weight: 700; }
+  .cal-day.no-tomada, .cal-day.insuficiente { background: var(--pink-light); border-color: var(--pink); color: var(--pink); font-weight: 700; }
+  .cal-day.today { box-shadow: 0 0 0 2px var(--violet); }
+  .legend { display: flex; gap: 14px; margin-top: 12px; font-size: 12px; color: var(--gray-600); flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+  /* calcio */
+  .food-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100); }
+  .food-row:last-child { border-bottom: none; }
+  .food-name { font-size: 13px; font-weight: 600; }
+  .food-unit { font-size: 11px; color: var(--gray-600); }
+  .food-qty { display: flex; align-items: center; gap: 8px; }
+  .qty-btn {
+    width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white;
+    font-size: 16px; font-weight: 700; color: var(--violet); cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;
   }
-  header.top-bar .titulo { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; line-height: 1.25; }
-  header.top-bar .sub { font-size: 12px; opacity: 0.8; margin-top: 2px; font-weight: 500; }
-  header.top-bar button { background: rgba(255,255,255,0.15); border: none; color: white; padding: 9px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer; transition: background 0.15s; }
-  header.top-bar button:hover { background: rgba(255,255,255,0.25); }
-  header.top-bar .top-nav { display: flex; gap: 4px; align-items: center; }
-  header.top-bar .top-nav-btn {
-    background: none; border: 1.5px solid transparent; color: rgba(255,255,255,0.7); font-size: 13px;
-    font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer; padding: 8px 14px; border-radius: 20px;
-    transition: background 0.15s, color 0.15s;
+  .qty-val { min-width: 18px; text-align: center; font-size: 14px; font-weight: 700; }
+  .aporte-resumen { display: flex; align-items: baseline; justify-content: space-between; background: var(--violet-light); border-radius: 10px; padding: 12px 14px; margin: 14px 0; }
+  .aporte-mg { font-size: 22px; font-weight: 800; color: var(--violet-dark); }
+  .aporte-label { font-size: 12px; color: var(--gray-600); }
+  .aporte-resumen.ok .aporte-mg { color: var(--teal); }
+  .aporte-resumen.falta .aporte-mg { color: var(--pink); }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; font-size: 13px; font-weight: 600; }
+  .switch { width: 40px; height: 22px; background: var(--gray-300); border-radius: 20px; position: relative; cursor: pointer; border: none; }
+  .switch.on { background: var(--teal); }
+  .switch::after { content: ""; width: 18px; height: 18px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: left 0.15s; }
+  .switch.on::after { left: 20px; }
+  textarea {
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--gray-300); border-radius: 10px; font-size: 14px;
+    font-family: inherit; resize: vertical; min-height: 50px; margin-top: 8px; margin-bottom: 14px;
   }
-  header.top-bar .top-nav-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-  header.top-bar .top-nav-btn.activo { color: var(--violet-deep); background: white; }
-  header.top-bar .top-nav-btn.activo:hover { background: white; }
-
-  main.dash-main { padding: 24px; }
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
-  .stat-card { background: white; border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); }
-  .stat-card .num { font-family: 'Manrope', sans-serif; font-size: 30px; font-weight: 800; color: var(--violet-dark); }
-  .stat-card .label { font-size: 12.5px; color: var(--gray-600); font-weight: 600; margin-top: 4px; }
-
-  .inst-table { width: 100%; background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); border-collapse: collapse; }
-  .inst-table th { background: var(--gray-100); text-align: left; padding: 10px 16px; font-size: 12px; color: var(--gray-600); font-weight: 700; }
-  .inst-table td { padding: 12px 16px; font-size: 13.5px; border-top: 1px solid var(--gray-100); }
-  .section-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px; color: var(--gray-900); margin: 0 0 12px; }
-
-  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
-  .chart-grid canvas { max-height: 220px; }
-  .chart-destacado { background: linear-gradient(135deg, #B8873F 0%, #6B3F94 100%); border: none; grid-column: 1 / -1; }
-  .chart-destacado .rc-titulo { color: white; }
-  .funnel-nota { color: rgba(255,255,255,0.8); font-size: 11.5px; margin-top: 8px; text-align: center; }
-
-  .search-bar { display: flex; gap: 10px; margin-bottom: 18px; }
-  .search-bar input { flex: 1; margin: 0; }
-  .search-bar button { width: auto; padding: 12px 20px; margin: 0; }
-  .pac-list { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); }
-  .pac-row {
-    display: flex; align-items: center; justify-content: space-between; padding: 14px 18px;
-    border-top: 1px solid var(--gray-100); cursor: pointer; transition: background 0.1s;
-  }
-  .pac-row:first-child { border-top: none; }
-  .pac-row:hover { background: var(--violet-light); }
-  .pac-row .p-nombre { font-weight: 700; font-size: 14px; color: var(--gray-900); }
-  .pac-row .p-detalle { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-  .pac-row .p-inst { font-size: 11.5px; color: var(--violet); font-weight: 600; }
-  .back-btn { background: none; border: none; color: var(--violet); font-weight: 700; font-size: 13px; cursor: pointer; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; padding: 0; }
-  .back-btn svg { width: 16px; height: 16px; }
-
-  .ficha-header { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 20px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-  .ficha-header .f-nombre { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; color: var(--violet-deep); letter-spacing: -0.01em; }
-  .ficha-header .f-detalle { font-size: 13px; color: var(--gray-600); margin-top: 5px; font-weight: 500; }
-  .gestacion-badge {
-    background: linear-gradient(135deg, var(--violet-light), #F5EFFC); border: 1.5px solid #D9C9F0;
-    border-radius: 14px; padding: 12px 18px; text-align: center; min-width: 160px;
-  }
-  .gestacion-badge .g-valor { font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800; color: var(--violet-dark); line-height: 1.1; }
-  .gestacion-badge .g-label { font-size: 11px; color: var(--gray-600); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 3px; }
-
-  .resumen-card { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 16px; }
-
-  .rc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-  .rc-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .rc-icon svg { width: 17px; height: 17px; }
-  .rc-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 14.5px; color: var(--gray-900); }
-
-  .stat-fila { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; margin-bottom: 4px; }
-  .stat-headline { font-family: 'Manrope', sans-serif; font-size: 26px; font-weight: 800; color: var(--violet-dark); line-height: 1; }
-  .stat-headline-label { font-size: 11px; color: var(--gray-600); font-weight: 600; display: block; margin-top: 2px; }
-  .stat-secundario { font-size: 13px; color: var(--gray-600); }
-  .stat-secundario strong { color: var(--gray-900); font-weight: 700; }
-
-  .ver-detalle-btn {
-    background: none; border: none; color: var(--violet); font-size: 12px; font-weight: 700;
-    text-decoration: underline; cursor: pointer; padding: 0; margin-top: 10px; display: inline-block;
-  }
-  .detalle-dias-wrap { margin-top: 12px; max-height: 220px; overflow-y: auto; border-top: 1px solid var(--gray-100); }
-  .detalle-dia-row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 12.5px; border-bottom: 1px solid var(--gray-100); }
-  .detalle-dia-row .ok { color: var(--teal-dark); font-weight: 700; }
-  .detalle-dia-row .no { color: #B23B32; font-weight: 700; }
-  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag-positivo { background: var(--pink-light); color: #B23B5A; font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 20px; }
-  .sin-antecedentes { color: var(--gray-600); font-size: 13px; }
-  .med-actual { display: flex; align-items: center; gap: 12px; background: var(--violet-light); border-radius: 12px; padding: 12px 14px; }
-  .med-actual .m-nombre { font-weight: 700; color: var(--gray-900); font-size: 14px; }
-  .med-actual .m-detalle { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-  .medicion-row { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-100); font-size: 13px; }
-  .medicion-row:first-child { border-top: none; }
-  .ver-previos-btn-prof {
-    display: flex; align-items: center; gap: 6px; background: var(--violet-light); color: var(--violet-dark);
-    border: none; border-radius: 20px; font-size: 12.5px; font-weight: 700; font-family: 'Manrope', sans-serif;
-    cursor: pointer; padding: 8px 14px;
+  button.secondary {
+    width: 100%; padding: 12px; background: var(--violet-light); color: var(--violet-dark); border: none;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px;
   }
 
-  .ct-card { border: none; background: linear-gradient(160deg, #FBF6E9 0%, #FFFFFF 100%); }
-  .ct-categoria-title { font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 800; color: #8A6A2E; text-transform: uppercase; letter-spacing: 0.03em; margin: 16px 0 8px; }
-  .ct-categoria-title:first-child { margin-top: 0; }
-  .ct-item-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 10px; margin-bottom: 6px; border: 1.5px solid var(--gray-300); background: white; opacity: 0.6; }
-  .ct-item-row.vigente { opacity: 1; border-color: #C79A4B; background: #FBF6EC; }
-  .ct-item-row.cumplido { border-color: var(--teal); background: var(--teal-light); opacity: 1; }
-  .ct-item-check { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--gray-300); background: white; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
-  .ct-item-check.on { background: var(--teal); border-color: var(--teal); color: white; }
-  .ct-item-check svg { width: 14px; height: 14px; }
-  .ct-item-text { font-size: 13px; color: var(--gray-900); line-height: 1.4; font-weight: 600; }
-  .ct-item-fecha { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
+  /* MDPA */
+  .alerta-severa { background: #FDEDEB; border: 1.5px solid var(--pink); color: #8A2E22; border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+  .mdpa-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .mdpa-table th { font-size: 10px; color: var(--gray-600); font-weight: 700; text-align: center; padding: 4px 2px; }
+  .mdpa-table td { text-align: center; padding: 3px 2px; }
+  .mdpa-day-label { font-size: 11px; font-weight: 700; color: var(--violet-dark); text-align: left !important; }
+  .mdpa-input { width: 32px; padding: 4px 2px; border: 1.5px solid var(--gray-300); border-radius: 6px; font-size: 12px; text-align: center; }
+  .mdpa-input.alarma { border-color: var(--pink); background: var(--pink-light); color: var(--pink); font-weight: 700; }
+
+  /* Mis datos / Embarazos — grupos colapsables */
+  details.grupo { border: 1px solid var(--gray-300); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  details.grupo summary {
+    padding: 12px 14px; font-size: 13px; font-weight: 700; cursor: pointer; background: var(--gray-100); color: var(--violet-dark); list-style: none;
+  }
+  details.grupo summary::-webkit-details-marker { display: none; }
+  details.grupo[open] summary { border-bottom: 1px solid var(--gray-300); }
+  .grupo-body { padding: 14px; }
+  .check-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13px; }
+  .check-row input[type="checkbox"] { width: 18px; height: 18px; margin: 0; flex-shrink: 0; }
+  .gesta-block { border: 1px dashed var(--gray-300); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .gesta-block .check-row { padding: 5px 0; }
+  button.tertiary { background: none; border: 1.5px dashed var(--violet); color: var(--violet); border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; width: 100%; cursor: pointer; margin-bottom: 10px; }
+  button.remove-gesta { background: none; border: none; color: var(--pink); font-size: 12px; font-weight: 700; cursor: pointer; padding: 4px 0; }
+  .fila-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* curva ponderal */
+  .imc-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; background: var(--teal-light); color: var(--teal); margin-bottom: 10px; }
+  .peso-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
+
+  /* actividad física */
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 10px; }
+  .week-day-label { font-size: 10px; text-align: center; color: var(--gray-600); font-weight: 600; }
+  .week-toggle { aspect-ratio: 1; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .week-toggle.on { background: var(--teal); border-color: var(--teal); }
+
+  /* info panels */
+  .info-text { font-size: 14px; line-height: 1.7; color: var(--gray-900); white-space: pre-wrap; }
+
+  button.logout { background: none; border: none; color: var(--gray-600); font-size: 13px; text-decoration: underline; cursor: pointer; padding: 0; }
+  footer.foot { text-align: center; padding: 12px; }
 </style>
 </head>
 <body>
@@ -194,183 +171,213 @@
 <div class="screen" id="login-screen">
   <div class="logo-mark">S</div>
   <h1 class="brand">SIEMPRE</h1>
-  <p class="tagline">Acceso profesional</p>
-  <div class="msg-error" id="login-error"></div>
+  <p class="tagline">Seguimiento integral del embarazo, maternidad, prevención de riesgo y evolución</p>
+  <div id="login-error"></div>
   <form id="login-form">
-    <label for="login-email">Email</label>
-    <input type="email" id="login-email" required>
-    <label for="login-password">Contraseña</label>
-    <input type="password" id="login-password" required>
+    <label for="dni">Documento (DNI)</label>
+    <input type="text" id="dni" inputmode="numeric" placeholder="Sin puntos, sin espacios" required>
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" required>
     <button type="submit" class="primary" id="login-btn">Ingresar</button>
   </form>
-  <button class="link-btn" id="ir-a-registro-btn">¿No tenés cuenta? Creá una</button>
 </div>
 
-<div class="screen" id="signup-screen">
+<div class="screen" id="welcome-screen">
   <div class="logo-mark">S</div>
-  <h1 class="brand">Crear cuenta</h1>
-  <p class="tagline">Acceso profesional</p>
-  <div class="msg-error" id="signup-error"></div>
-  <div class="msg-info" id="signup-info"></div>
-  <form id="signup-form">
-    <label for="signup-email">Email</label>
-    <input type="email" id="signup-email" required>
-    <label for="signup-password">Contraseña</label>
-    <input type="password" id="signup-password" required minlength="6">
-    <button type="submit" class="primary" id="signup-btn">Crear cuenta</button>
-  </form>
-  <button class="link-btn" id="ir-a-login-btn">Ya tengo cuenta</button>
+  <div class="welcome-msg" id="welcome-msg">—</div>
+  <div class="welcome-explain" id="welcome-explain">—</div>
+  <button class="primary" id="continuar-btn">Continuar</button>
 </div>
 
-<div class="screen" id="perfil-screen">
-  <div class="logo-mark">S</div>
-  <h1 class="brand">Completá tu perfil</h1>
-  <p class="tagline">Últimos datos antes de entrar</p>
-  <div class="msg-error" id="perfil-error"></div>
-  <form id="perfil-form">
-    <label for="perfil-nombre">Nombre completo</label>
-    <input type="text" id="perfil-nombre" required>
-    <label for="perfil-matricula">Matrícula (opcional)</label>
-    <input type="text" id="perfil-matricula">
-    <label for="perfil-institucion">Institución</label>
-    <select id="perfil-institucion"><option value="">Cargando...</option></select>
-    <button type="submit" class="primary" id="perfil-btn">Continuar</button>
-  </form>
-</div>
-
-<div class="screen" id="dashboard-screen">
-  <header class="top-bar">
-    <div class="top-bar-brand">
-      <div class="mini-logo">S</div>
-      <div>
-        <div class="app-brand-name">SIEMPRE</div>
-        <div class="titulo" id="dash-nombre">—</div>
-        <div class="sub" id="dash-institucion">—</div>
-      </div>
-    </div>
-    <div class="top-nav">
-      <button class="top-nav-btn activo" id="nav-dashboard-btn">Vista general</button>
-      <button class="top-nav-btn" id="nav-pacientes-btn">Pacientes</button>
-      <button id="logout-btn">Cerrar sesión</button>
-    </div>
+<div class="screen" id="home-screen">
+  <header class="top">
+    <div class="greeting">Hola,</div>
+    <div class="name" id="patient-name">—</div>
   </header>
-  <main class="dash-main">
-    <div class="stat-grid" id="dash-stats"></div>
-    <div id="dash-instituciones-wrap"></div>
 
-    <div class="chart-grid">
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:var(--violet-light); color:var(--violet-dark);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 4 3 5-7"/></svg>
-          </div>
-          <div class="rc-titulo">Altas por mes</div>
-        </div>
-        <canvas id="chart-altas"></canvas>
-      </div>
+  <nav class="tabs" id="tabs-nav">
+    <button class="tab-btn" data-tab="mis-datos">Mis datos</button>
+    <button class="tab-btn" data-tab="embarazos">Embarazos</button>
+    <button class="tab-btn" data-tab="aspirina">Aspirina</button>
+    <button class="tab-btn" data-tab="calcio">Calcio</button>
+    <button class="tab-btn" data-tab="alimentacion">Alimentación</button>
+    <button class="tab-btn" data-tab="actividad-fisica">Actividad física</button>
+    <button class="tab-btn" data-tab="presion-arterial">Presión arterial</button>
+    <button class="tab-btn" data-tab="curva-ponderal">Curva ponderal</button>
+    <button class="tab-btn" data-tab="pautas-alarma">Pautas de alarma</button>
+    <button class="tab-btn" data-tab="informacion">Información</button>
+  </nav>
 
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:var(--teal-light); color:var(--teal-dark);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg>
-          </div>
-          <div class="rc-titulo">Adherencia — Aspirina (con indicación)</div>
-        </div>
-        <canvas id="chart-aspirina"></canvas>
-      </div>
+  <main>
 
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:var(--blue-light); color:var(--blue);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>
-          </div>
-          <div class="rc-titulo">Adherencia — Calcio (con indicación)</div>
-        </div>
-        <canvas id="chart-calcio"></canvas>
-      </div>
+    <!-- MIS DATOS -->
+    <div class="panel" id="panel-mis-datos">
+      <div class="card">
+        <h2>Mis datos</h2>
+        <label for="md-telefono">Teléfono</label>
+        <input type="text" id="md-telefono">
+        <label for="md-fecha-nac">Fecha de nacimiento</label>
+        <input type="date" id="md-fecha-nac">
 
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:var(--amber-light); color:var(--amber);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.2" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 6.5l-2 4 3 2-1.2 5.3"/><path d="M11.5 10.3l-4 2"/><path d="M14.5 12.5l3 1 1 4.2"/></svg>
-          </div>
-          <div class="rc-titulo">Actividad física (todas)</div>
-        </div>
-        <canvas id="chart-actividad"></canvas>
-      </div>
+        <details class="grupo" open>
+          <summary>Antecedentes propios</summary>
+          <div class="grupo-body" id="grupo-clinicos"></div>
+        </details>
 
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:#FBEAE8; color:#B23B32;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>
+        <details class="grupo">
+          <summary>Antecedentes del papá del bebé</summary>
+          <div class="grupo-body">
+            <div id="paternos-list"></div>
+            <button type="button" class="tertiary" id="add-paterno-btn">+ Agregar embarazo previo del papá</button>
           </div>
-          <div class="rc-titulo">HTA medicadas — PA en objetivo</div>
-        </div>
-        <canvas id="chart-hta"></canvas>
-      </div>
+        </details>
 
-      <div class="resumen-card chart-destacado">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:rgba(255,255,255,0.25); color:#7A5A1E;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
+        <details class="grupo">
+          <summary>Antecedentes familiares</summary>
+          <div class="grupo-body">
+            <div class="check-row"><input type="checkbox" id="fam-madre-the"><label for="fam-madre-the" style="margin:0;">Mamá con hipertensión del embarazo</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-madre-pe"><label for="fam-madre-pe" style="margin:0;">Mamá con preeclampsia</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-hermana-the"><label for="fam-hermana-the" style="margin:0;">Hermana con hipertensión del embarazo</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-hermana-pe"><label for="fam-hermana-pe" style="margin:0;">Hermana con preeclampsia</label></div>
           </div>
-          <div class="rc-titulo" style="color:white;">Cuarto trimestre — retención</div>
-        </div>
-        <canvas id="chart-cuarto-trimestre"></canvas>
-        <p class="funnel-nota">Controles presenciales: próximamente.</p>
+        </details>
+
+        <details class="grupo">
+          <summary>Estilo de vida</summary>
+          <div class="grupo-body" id="grupo-estilo"></div>
+        </details>
+
+        <button class="primary" id="guardar-datos-btn" style="margin-top:8px;">Guardar mis datos</button>
+        <p id="datos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Datos guardados ✓</p>
       </div>
     </div>
+
+    <!-- EMBARAZOS -->
+    <div class="panel" id="panel-embarazos">
+      <div class="card">
+        <h2>Embarazo actual</h2>
+        <label for="ge-fum">Fecha de última menstruación (FUM)</label>
+        <input type="date" id="ge-fum">
+        <label for="ge-fecha-eco">Fecha de la ecografía datante</label>
+        <input type="date" id="ge-fecha-eco">
+        <div class="fila-2col">
+          <div><label for="ge-eco-sem">Semanas (en la eco)</label><input type="number" id="ge-eco-sem" min="0" max="42"></div>
+          <div><label for="ge-eco-dias">Días</label><input type="number" id="ge-eco-dias" min="0" max="6"></div>
+        </div>
+        <label for="ge-fpp">Fecha probable de parto (indicada por tu obstetra)</label>
+        <input type="date" id="ge-fpp">
+        <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Embarazos previos</h2>
+        <div id="previos-list"></div>
+        <button type="button" class="tertiary" id="add-previo-btn">+ Agregar embarazo previo</button>
+        <button class="primary" id="guardar-embarazos-btn">Guardar</button>
+        <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
+      </div>
+    </div>
+
+    <!-- ASPIRINA -->
+    <div class="panel" id="panel-aspirina">
+      <div class="card" id="aspirina-card">
+        <h2>Aspirina <span class="pill-teal" id="aspirina-mes-label">—</span></h2>
+        <div class="cal-grid" id="cal-dow-row"></div>
+        <div class="cal-grid" id="cal-grid" style="margin-top:6px;"></div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--teal)"></span> Tomada</span>
+          <span><span class="dot" style="background:var(--pink)"></span> No tomada</span>
+          <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALCIO -->
+    <div class="panel" id="panel-calcio">
+      <div class="card" id="calcio-card">
+        <h2>Calcio <span class="pill-teal">1000 mg/día</span></h2>
+        <div class="aporte-resumen" id="aporte-resumen">
+          <div><div class="aporte-mg" id="aporte-mg">0 mg</div><div class="aporte-label">de hoy</div></div>
+          <div class="aporte-label" id="aporte-estado">Cargá lo que consumiste</div>
+        </div>
+        <div id="calcio-foods"></div>
+        <div class="toggle-row"><span>Usé suplemento hoy</span><button class="switch" id="suplemento-switch"></button></div>
+        <label for="efecto-adverso" style="margin-top:8px;">¿Algún efecto adverso? (opcional)</label>
+        <textarea id="efecto-adverso" placeholder="Ej: constipación, distensión abdominal..."></textarea>
+        <button class="secondary" id="guardar-calcio-btn">Guardar registro de hoy</button>
+      </div>
+      <div class="card" id="calcio-cal-card">
+        <h2>Calendario de calcio <span class="pill-teal" id="calcio-mes-label">—</span></h2>
+        <div class="cal-grid" id="calcio-dow-row"></div>
+        <div class="cal-grid" id="calcio-cal-grid" style="margin-top:6px;"></div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--teal)"></span> ≥1000mg</span>
+          <span><span class="dot" style="background:var(--pink)"></span> &lt;1000mg</span>
+          <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALIMENTACIÓN -->
+    <div class="panel" id="panel-alimentacion">
+      <div class="card"><h2>Alimentación</h2><div class="info-text" id="info-alimentacion-text">Cargando...</div></div>
+    </div>
+
+    <!-- ACTIVIDAD FÍSICA -->
+    <div class="panel" id="panel-actividad-fisica">
+      <div class="card"><h2>Actividad física recomendada</h2><div class="info-text" id="info-actividad-text">Cargando...</div></div>
+      <div class="card">
+        <h2>Esta semana</h2>
+        <label for="tipo-actividad-select">¿Qué actividad estás haciendo?</label>
+        <select id="tipo-actividad-select">
+          <option value="">Seleccioná una opción</option>
+          <option value="caminata">Caminata</option>
+          <option value="natacion">Natación</option>
+          <option value="yoga">Yoga / elongación</option>
+          <option value="gimnasia">Gimnasia para embarazadas</option>
+          <option value="bicicleta_fija">Bicicleta fija</option>
+          <option value="otra">Otra</option>
+        </select>
+        <div class="week-grid" id="week-grid"></div>
+        <button class="secondary" id="guardar-actividad-btn" style="margin-top:14px;">Guardar semana</button>
+      </div>
+    </div>
+
+    <!-- PRESIÓN ARTERIAL -->
+    <div class="panel" id="panel-presion-arterial">
+      <div class="card" id="mdpa-card">
+        <h2>Presión arterial <span class="pill-teal">MDPA</span></h2>
+        <div id="mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
+      </div>
+    </div>
+
+    <!-- CURVA PONDERAL -->
+    <div class="panel" id="panel-curva-ponderal">
+      <div class="card">
+        <h2>Curva ponderal</h2>
+        <div id="imc-info"></div>
+        <label for="cp-altura">Altura (cm) — se carga una sola vez</label>
+        <input type="number" id="cp-altura" step="0.1">
+        <label for="cp-peso">Peso de hoy (kg)</label>
+        <input type="number" id="cp-peso" step="0.1">
+        <button class="secondary" id="guardar-peso-btn">Guardar peso</button>
+        <div id="peso-historial" style="margin-top:16px;"></div>
+      </div>
+    </div>
+
+    <!-- PAUTAS DE ALARMA -->
+    <div class="panel" id="panel-pautas-alarma">
+      <div class="card"><h2>Pautas de alarma — cuándo consultar</h2><div class="info-text" id="info-pautas-text">Cargando...</div></div>
+    </div>
+
+    <!-- INFORMACIÓN -->
+    <div class="panel" id="panel-informacion">
+      <div class="card"><h2>Información</h2><div class="info-text" id="info-general-text">Cargando...</div></div>
+    </div>
+
   </main>
-</div>
 
-<div class="screen" id="pacientes-screen">
-  <header class="top-bar">
-    <div class="top-bar-brand">
-      <div class="mini-logo">S</div>
-      <div>
-        <div class="app-brand-name">SIEMPRE</div>
-        <div class="titulo">Pacientes</div>
-        <div class="sub" id="pac-institucion-sub">—</div>
-      </div>
-    </div>
-    <div class="top-nav">
-      <button class="top-nav-btn" id="nav-dashboard-btn-2">Vista general</button>
-      <button class="top-nav-btn activo" id="nav-pacientes-btn-2">Pacientes</button>
-      <button id="logout-btn-2">Cerrar sesión</button>
-    </div>
-  </header>
-  <main class="dash-main">
-    <div class="search-bar">
-      <input type="text" id="pac-buscar-input" placeholder="Buscar por DNI o apellido...">
-      <button class="primary" id="pac-buscar-btn">Buscar</button>
-    </div>
-    <div class="pac-list" id="pac-lista"></div>
-  </main>
-</div>
-
-<div class="screen" id="ficha-screen">
-  <header class="top-bar">
-    <div class="top-bar-brand">
-      <div class="mini-logo">S</div>
-      <div>
-        <div class="app-brand-name">SIEMPRE</div>
-        <div class="titulo">Ficha de paciente</div>
-      </div>
-    </div>
-    <div class="top-nav">
-      <button id="logout-btn-3">Cerrar sesión</button>
-    </div>
-  </header>
-  <main class="dash-main">
-    <button class="back-btn" id="volver-a-lista-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Volver a pacientes
-    </button>
-    <div class="ficha-header" id="ficha-header"></div>
-    <div id="ficha-resumen-content"></div>
-    <div id="ficha-cuarto-trimestre"></div>
-    <div id="ficha-resumenes-mensuales"></div>
-  </main>
+  <footer class="foot"><button class="logout" id="logout-btn">Cerrar sesión</button></footer>
 </div>
 
 <script>
@@ -378,703 +385,630 @@
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2eGVpaWh2bGN6enR1dmpnenl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2OTUwNTksImV4cCI6MjA5OTI3MTA1OX0.xjf75zfJIgxTWSzJ8UMtnq1XNk7yMfbCijgUdIkxhCQ";
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  function mostrarPantalla(id) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("show"));
-    document.getElementById(id).classList.add("show");
-  }
+  const loginScreen = document.getElementById("login-screen");
+  const welcomeScreen = document.getElementById("welcome-screen");
+  const homeScreen = document.getElementById("home-screen");
+
+  let session = JSON.parse(localStorage.getItem("siempre_session") || "null");
 
   // ---------- LOGIN ----------
-  document.getElementById("login-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const errorBox = document.getElementById("login-error");
-    errorBox.style.display = "none";
-    const btn = document.getElementById("login-btn");
-    btn.disabled = true; btn.textContent = "Ingresando...";
+  const loginForm = document.getElementById("login-form");
+  const loginError = document.getElementById("login-error");
+  const loginBtn = document.getElementById("login-btn");
 
-    const { error } = await sb.auth.signInWithPassword({
-      email: document.getElementById("login-email").value.trim(),
-      password: document.getElementById("login-password").value
-    });
-
-    btn.disabled = false; btn.textContent = "Ingresar";
-    if (error) {
-      errorBox.textContent = "Email o contraseña incorrectos.";
-      errorBox.style.display = "block";
+  async function doLogin(dni, password) {
+    loginError.style.display = "none";
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Ingresando...";
+    const { data, error } = await sb.rpc("login_paciente", { p_dni: dni, p_password: password });
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Ingresar";
+    if (error) { loginError.textContent = "No pudimos conectar. Probá de nuevo."; loginError.style.display = "block"; return; }
+    if (!data.ok) {
+      loginError.textContent = data.error === "DNI no encontrado" ? "No encontramos ese documento." : "Contraseña incorrecta.";
+      loginError.style.display = "block";
       return;
     }
-    await despuesDeLogin();
+    session = data;
+    localStorage.setItem("siempre_session", JSON.stringify(session));
+    goToWelcome();
+  }
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    doLogin(document.getElementById("dni").value.trim(), document.getElementById("password").value);
+  });
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    localStorage.removeItem("siempre_session");
+    session = null;
+    homeScreen.style.display = "none";
+    loginScreen.classList.add("show");
+    loginForm.reset();
   });
 
-  document.getElementById("ir-a-registro-btn").addEventListener("click", () => mostrarPantalla("signup-screen"));
-  document.getElementById("ir-a-login-btn").addEventListener("click", () => mostrarPantalla("login-screen"));
-
-  // ---------- SIGNUP ----------
-  document.getElementById("signup-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const errorBox = document.getElementById("signup-error");
-    const infoBox = document.getElementById("signup-info");
-    errorBox.style.display = "none";
-    infoBox.style.display = "none";
-    const btn = document.getElementById("signup-btn");
-    btn.disabled = true; btn.textContent = "Creando cuenta...";
-
-    const { data, error } = await sb.auth.signUp({
-      email: document.getElementById("signup-email").value.trim(),
-      password: document.getElementById("signup-password").value
-    });
-
-    btn.disabled = false; btn.textContent = "Crear cuenta";
-    if (error) {
-      errorBox.textContent = error.message || "No pudimos crear la cuenta.";
-      errorBox.style.display = "block";
-      return;
-    }
-
-    if (!data.session) {
-      infoBox.textContent = "Te enviamos un email para confirmar tu cuenta. Confirmalo y después iniciá sesión.";
-      infoBox.style.display = "block";
-      return;
-    }
-    await despuesDeLogin();
+  // ---------- WELCOME ----------
+  async function goToWelcome() {
+    loginScreen.classList.remove("show");
+    const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
+    document.getElementById("welcome-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida!";
+    document.getElementById("welcome-explain").textContent = (data && data.mensaje_explicativo) || "";
+    welcomeScreen.classList.add("show");
+  }
+  document.getElementById("continuar-btn").addEventListener("click", () => {
+    welcomeScreen.classList.remove("show");
+    showHome();
   });
 
-  // ---------- Flujo post-login: ¿ya completó su perfil? ----------
-  async function despuesDeLogin() {
-    const { data, error } = await sb.rpc("obtener_mi_perfil_profesional");
-    if (error || !data || !data.ok) {
-      mostrarPantalla("login-screen");
-      return;
-    }
-    if (!data.registrado) {
-      await cargarInstitucionesEnSelect();
-      mostrarPantalla("perfil-screen");
-      return;
-    }
-    mostrarDashboard(data);
+  // ---------- HOME + TABS ----------
+  function showHome() {
+    document.getElementById("patient-name").textContent = session.nombre + " " + session.apellido;
+    homeScreen.style.display = "flex";
+    homeScreen.style.flexDirection = "column";
+    setupTabs();
+    loadAspirinaCalendar();
+    initCalcio();
+    initMdpa();
+    initInfoPanels();
+    initCurvaPonderal();
+    initActividadFisica();
+    initMisDatos();
+    initEmbarazos();
   }
 
-  async function cargarInstitucionesEnSelect() {
-    const { data } = await sb.rpc("obtener_instituciones_lista");
-    const select = document.getElementById("perfil-institucion");
-    select.innerHTML = (data || []).map(i => `<option value="${i.id}">${i.nombre}</option>`).join("") || `<option value="">No hay instituciones cargadas</option>`;
+  function setupTabs() {
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => activarTab(btn.dataset.tab));
+    });
+    activarTab("aspirina");
+  }
+  function activarTab(tab) {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+    document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + tab));
   }
 
-  document.getElementById("perfil-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const errorBox = document.getElementById("perfil-error");
-    errorBox.style.display = "none";
-    const institucionId = document.getElementById("perfil-institucion").value;
-    if (!institucionId) { errorBox.textContent = "Elegí una institución."; errorBox.style.display = "block"; return; }
+  // ================= ASPIRINA =================
+  const DOW = ["D", "L", "M", "M", "J", "V", "S"];
+  const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 
-    const btn = document.getElementById("perfil-btn");
+  async function loadAspirinaCalendar() {
+    const hoy = new Date();
+    const anio = hoy.getFullYear();
+    const mes = hoy.getMonth() + 1;
+    document.getElementById("aspirina-mes-label").textContent = MESES[mes - 1] + " " + anio;
+    document.getElementById("cal-dow-row").innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
+
+    const { data, error } = await sb.rpc("obtener_calendario_aspirina", { p_token: session.token, p_anio: anio, p_mes: mes });
+    const registros = {};
+    if (!error && data && data.ok) data.registros.forEach(r => { registros[r.dia.slice(8, 10)] = r.tomada; });
+
+    const primerDia = new Date(anio, mes - 1, 1).getDay();
+    const diasEnMes = new Date(anio, mes, 0).getDate();
+    const grid = document.getElementById("cal-grid");
+    grid.innerHTML = "";
+    for (let i = 0; i < primerDia; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
+    for (let d = 1; d <= diasEnMes; d++) {
+      const dd = String(d).padStart(2, "0");
+      let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
+      if (registros[dd] === true) cls += " tomada"; else if (registros[dd] === false) cls += " no-tomada";
+      grid.innerHTML += `<div class="${cls}" data-day="${dd}">${d}</div>`;
+    }
+    grid.querySelectorAll(".cal-day:not(.empty)").forEach(el => el.addEventListener("click", () => toggleAspirina(el, anio, mes)));
+  }
+  async function toggleAspirina(el, anio, mes) {
+    const dd = el.dataset.day;
+    const nuevoValor = !el.classList.contains("tomada");
+    const fecha = `${anio}-${String(mes).padStart(2, "0")}-${dd}`;
+    el.classList.remove("tomada", "no-tomada");
+    el.classList.add(nuevoValor ? "tomada" : "no-tomada");
+    await sb.rpc("registrar_aspirina", { p_token: session.token, p_dia: fecha, p_tomada: nuevoValor });
+  }
+
+  // ================= CALCIO =================
+  let catalogoCalcio = [];
+  let cantidades = {};
+
+  async function initCalcio() {
+    const { data, error } = await sb.rpc("obtener_catalogo_calcio");
+    if (error || !data) return;
+    catalogoCalcio = data;
+    catalogoCalcio.forEach(f => { cantidades[f.id] = 0; });
+    renderFoods();
+    loadCalcioCalendar();
+  }
+  function renderFoods() {
+    const cont = document.getElementById("calcio-foods");
+    cont.innerHTML = catalogoCalcio.map(f => `
+      <div class="food-row">
+        <div><div class="food-name">${f.nombre}</div><div class="food-unit">${f.unidad_porcion}</div></div>
+        <div class="food-qty">
+          <button class="qty-btn" data-action="menos" data-id="${f.id}">−</button>
+          <span class="qty-val" id="qty-${f.id}">0</span>
+          <button class="qty-btn" data-action="mas" data-id="${f.id}">+</button>
+        </div>
+      </div>`).join("");
+    cont.querySelectorAll(".qty-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.id;
+        cantidades[id] = Math.max(0, cantidades[id] + (btn.dataset.action === "mas" ? 1 : -1));
+        document.getElementById("qty-" + id).textContent = cantidades[id];
+        actualizarAporte();
+      });
+    });
+  }
+  function actualizarAporte() {
+    let total = 0;
+    catalogoCalcio.forEach(f => { total += f.mg_calcio_por_porcion * cantidades[f.id]; });
+    const resumen = document.getElementById("aporte-resumen");
+    document.getElementById("aporte-mg").textContent = total + " mg";
+    const estado = document.getElementById("aporte-estado");
+    resumen.classList.remove("ok", "falta");
+    if (total === 0) estado.textContent = "Cargá lo que consumiste";
+    else if (total >= 1000) { resumen.classList.add("ok"); estado.textContent = "¡Llegaste a tu objetivo diario!"; }
+    else { resumen.classList.add("falta"); estado.textContent = `Te faltan ${1000 - total} mg`; }
+  }
+  const suplementoSwitch = document.getElementById("suplemento-switch");
+  let suplementoOn = false;
+  suplementoSwitch.addEventListener("click", () => {
+    suplementoOn = !suplementoOn;
+    suplementoSwitch.classList.toggle("on", suplementoOn);
+  });
+  document.getElementById("guardar-calcio-btn").addEventListener("click", async () => {
+    const fecha = new Date().toISOString().slice(0, 10);
+    const porciones = catalogoCalcio.filter(f => cantidades[f.id] > 0).map(f => ({ alimento_id: f.id, cantidad: cantidades[f.id] }));
+    const efectoAdverso = document.getElementById("efecto-adverso").value.trim();
+    const btn = document.getElementById("guardar-calcio-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
-    const { data, error } = await sb.rpc("completar_registro_profesional", {
-      p_nombre: document.getElementById("perfil-nombre").value.trim(),
-      p_matricula: document.getElementById("perfil-matricula").value.trim(),
-      p_institucion_id: institucionId
-    });
-    btn.disabled = false; btn.textContent = "Continuar";
+    await sb.rpc("registrar_calcio", { p_token: session.token, p_dia: fecha, p_porciones: porciones, p_uso_suplemento: suplementoOn, p_efecto_adverso: efectoAdverso });
+    btn.disabled = false; btn.textContent = "Guardar registro de hoy";
+    loadCalcioCalendar();
+  });
+  async function loadCalcioCalendar() {
+    const hoy = new Date();
+    const anio = hoy.getFullYear(); const mes = hoy.getMonth() + 1;
+    document.getElementById("calcio-mes-label").textContent = MESES[mes - 1] + " " + anio;
+    document.getElementById("calcio-dow-row").innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
+    const { data, error } = await sb.rpc("obtener_calendario_calcio", { p_token: session.token, p_anio: anio, p_mes: mes });
+    const registros = {};
+    if (!error && data && data.ok) data.registros.forEach(r => { registros[r.dia.slice(8, 10)] = r.aporte_calculado_mg; });
+    const primerDia = new Date(anio, mes - 1, 1).getDay();
+    const diasEnMes = new Date(anio, mes, 0).getDate();
+    const grid = document.getElementById("calcio-cal-grid");
+    grid.innerHTML = "";
+    for (let i = 0; i < primerDia; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
+    for (let d = 1; d <= diasEnMes; d++) {
+      const dd = String(d).padStart(2, "0");
+      let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
+      if (registros[dd] !== undefined) cls += registros[dd] >= 1000 ? " suficiente" : " insuficiente";
+      grid.innerHTML += `<div class="${cls}">${d}</div>`;
+    }
+  }
 
-    if (error || !data || !data.ok) {
-      errorBox.textContent = "No pudimos guardar tu perfil. Probá de nuevo.";
-      errorBox.style.display = "block";
+  // ================= MDPA =================
+  let estudioActivo = null;
+  async function initMdpa() {
+    const { data, error } = await sb.rpc("obtener_mdpa_activo", { p_token: session.token });
+    const cont = document.getElementById("mdpa-content");
+    if (error || !data || !data.ok) { cont.innerHTML = `<p style="font-size:13px;color:var(--gray-600);">No pudimos cargar la información.</p>`; return; }
+    if (!data.estudio) {
+      cont.innerHTML = `<p style="font-size:13px; color:var(--gray-600); margin-bottom:12px;">No tenés un monitoreo activo. Si tu médica te indicó hacer un MDPA, iniciálo acá.</p>
+        <button class="secondary" id="iniciar-mdpa-btn">Iniciar monitoreo (4 días)</button>`;
+      document.getElementById("iniciar-mdpa-btn").addEventListener("click", async () => {
+        await sb.rpc("iniciar_mdpa", { p_token: session.token, p_duracion_dias: 4, p_incluye_postprandial: true });
+        initMdpa();
+      });
       return;
     }
-    const perfil = await sb.rpc("obtener_mi_perfil_profesional");
-    mostrarDashboard(perfil.data);
+    estudioActivo = data.estudio;
+    renderMdpaTable();
+  }
+  function getRegistro(dia, momento, toma) {
+    return estudioActivo.registros.find(r => r.dia === dia && r.momento === momento && r.toma === toma);
+  }
+  function renderMdpaTable() {
+    const e = estudioActivo;
+    const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
+    const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
+    const hayAlarmaSevera = e.registros.some(r => r.sistolica >= e.umbral_severo_sis || r.diastolica >= e.umbral_severo_dia);
+
+    const hoy = new Date();
+    const inicio = new Date(e.fecha_inicio + "T00:00:00");
+    const diaActual = Math.min(e.duracion_dias, Math.max(1, Math.floor((hoy - inicio) / 86400000) + 1));
+    const totalTomas = e.duracion_dias * momentos.length * 2;
+    const tomasCargadas = e.registros.length;
+
+    let resumenHtml = "";
+    if (hayAlarmaSevera) resumenHtml += `<div class="alerta-severa">⚠ Detectamos valores de presión muy elevados (≥${e.umbral_severo_sis}/${e.umbral_severo_dia}). Repetí la medición en 15 minutos y, si se confirma, consultá cuanto antes.</div>`;
+    resumenHtml += `
+      <p style="font-size:13px; color:var(--gray-600); margin-bottom:4px;">Monitoreo en curso — día ${diaActual} de ${e.duracion_dias}</p>
+      <p style="font-size:12px; color:var(--gray-600); margin-top:0;">${tomasCargadas} de ${totalTomas} tomas cargadas</p>
+      <button class="secondary" id="toggle-mdpa-tabla-btn">Cargar mediciones</button>
+      <div id="mdpa-tabla-wrap" style="display:none; margin-top:14px;"></div>
+    `;
+    document.getElementById("mdpa-content").innerHTML = resumenHtml;
+
+    document.getElementById("toggle-mdpa-tabla-btn").addEventListener("click", () => {
+      const wrap = document.getElementById("mdpa-tabla-wrap");
+      const abierta = wrap.style.display !== "none";
+      wrap.style.display = abierta ? "none" : "block";
+      document.getElementById("toggle-mdpa-tabla-btn").textContent = abierta ? "Cargar mediciones" : "Ocultar tabla";
+      if (!abierta) renderMdpaInputTable();
+    });
+  }
+
+  function renderMdpaInputTable() {
+    const e = estudioActivo;
+    const momentos = e.incluye_postprandial ? ["matutina", "postprandial", "vespertina"] : ["matutina", "vespertina"];
+    const labelMomento = { matutina: "Mañana", postprandial: "Post", vespertina: "Noche" };
+
+    let html = `<table class="mdpa-table"><thead><tr><th style="text-align:left;">Día</th>`;
+    momentos.forEach(m => { html += `<th colspan="2">${labelMomento[m]}</th>`; });
+    html += `</tr></thead><tbody>`;
+    for (let dia = 1; dia <= e.duracion_dias; dia++) {
+      for (let toma = 1; toma <= 2; toma++) {
+        html += `<tr>` + (toma === 1 ? `<td class="mdpa-day-label" rowspan="2">Día ${dia}</td>` : "");
+        momentos.forEach(m => {
+          const r = getRegistro(dia, m, toma);
+          const isAlarma = r && (r.sistolica >= e.umbral_alarma_sis || r.diastolica >= e.umbral_alarma_dia);
+          html += `<td><input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="SIS" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="sistolica" value="${r ? r.sistolica : ''}"></td>
+                   <td><input type="number" class="mdpa-input ${isAlarma ? 'alarma' : ''}" placeholder="DIA" data-dia="${dia}" data-momento="${m}" data-toma="${toma}" data-campo="diastolica" value="${r ? r.diastolica : ''}"></td>`;
+        });
+        html += `</tr>`;
+      }
+    }
+    html += `</tbody></table>`;
+    document.getElementById("mdpa-tabla-wrap").innerHTML = html;
+    document.querySelectorAll(".mdpa-input").forEach(input => input.addEventListener("change", () => guardarTomaMdpa(input)));
+  }
+  async function guardarTomaMdpa(input) {
+    const dia = parseInt(input.dataset.dia), momento = input.dataset.momento, toma = parseInt(input.dataset.toma), campo = input.dataset.campo;
+    const otroCampo = campo === "sistolica" ? "diastolica" : "sistolica";
+    const otroInput = document.querySelector(`.mdpa-input[data-dia="${dia}"][data-momento="${momento}"][data-toma="${toma}"][data-campo="${otroCampo}"]`);
+    const sistolica = campo === "sistolica" ? input.value : otroInput.value;
+    const diastolica = campo === "diastolica" ? input.value : otroInput.value;
+    if (!sistolica || !diastolica) return;
+    const { data } = await sb.rpc("registrar_toma_mdpa", { p_token: session.token, p_estudio_id: estudioActivo.id, p_dia: dia, p_momento: momento, p_toma: toma, p_sistolica: parseInt(sistolica), p_diastolica: parseInt(diastolica) });
+    if (data && data.ok) {
+      // Actualiza el registro en memoria sin recargar toda la pantalla (así la tabla queda abierta)
+      const idx = estudioActivo.registros.findIndex(r => r.dia === dia && r.momento === momento && r.toma === toma);
+      const nuevoReg = { dia, momento, toma, sistolica: parseInt(sistolica), diastolica: parseInt(diastolica) };
+      if (idx >= 0) estudioActivo.registros[idx] = nuevoReg; else estudioActivo.registros.push(nuevoReg);
+
+      if (data.es_alarma) {
+        input.classList.add("alarma");
+        otroInput.classList.add("alarma");
+      }
+      if (data.es_severa) {
+        await initMdpa(); // recarga completa para mostrar el cartel de alarma severa arriba
+        const wrap = document.getElementById("mdpa-tabla-wrap");
+        if (wrap) { wrap.style.display = "block"; renderMdpaInputTable(); document.getElementById("toggle-mdpa-tabla-btn").textContent = "Ocultar tabla"; }
+      }
+    }
+  }
+
+  // ================= INFO PANELS =================
+  async function initInfoPanels() {
+    const claves = ["info_alimentacion", "info_actividad_fisica", "info_pautas_alarma", "info_general"];
+    const { data } = await sb.rpc("obtener_config", { p_claves: claves });
+    if (!data) return;
+    document.getElementById("info-alimentacion-text").textContent = data.info_alimentacion || "";
+    document.getElementById("info-actividad-text").textContent = data.info_actividad_fisica || "";
+    document.getElementById("info-pautas-text").textContent = data.info_pautas_alarma || "";
+    document.getElementById("info-general-text").textContent = data.info_general || "";
+  }
+
+  // ================= CURVA PONDERAL =================
+  function clasificarIMC(imc) {
+    if (imc == null) return null;
+    if (imc < 18.5) return { cat: "Bajo peso", min: 12.5, max: 18 };
+    if (imc < 25) return { cat: "Normopeso", min: 11.5, max: 16 };
+    if (imc < 30) return { cat: "Sobrepeso", min: 7, max: 11.5 };
+    return { cat: "Obesidad", min: 5, max: 9 };
+  }
+  async function initCurvaPonderal() {
+    const { data, error } = await sb.rpc("obtener_curva_ponderal", { p_token: session.token });
+    if (error || !data || !data.ok) return;
+    if (data.altura_cm) document.getElementById("cp-altura").value = data.altura_cm;
+
+    const clasif = clasificarIMC(data.imc_pregestacional);
+    const imcInfo = document.getElementById("imc-info");
+    if (clasif) {
+      imcInfo.innerHTML = `<div class="imc-badge">${clasif.cat}</div><p style="font-size:12px;color:var(--gray-600);margin-top:0;">Según guías (IOM), tu objetivo de aumento total de peso en el embarazo es de ${clasif.min} a ${clasif.max} kg.</p>`;
+    } else {
+      imcInfo.innerHTML = `<p style="font-size:12px;color:var(--gray-600);">Completá tus datos en "Mis datos" (IMC pregestacional) para ver tu objetivo de aumento de peso.</p>`;
+    }
+
+    const hist = document.getElementById("peso-historial");
+    if (data.registros && data.registros.length) {
+      hist.innerHTML = "<h2 style='font-size:13px;'>Historial</h2>" + data.registros.slice().reverse().map(r =>
+        `<div class="peso-item"><span>${r.fecha}</span><span>${r.peso_kg} kg</span></div>`
+      ).join("");
+    } else {
+      hist.innerHTML = "";
+    }
+  }
+  document.getElementById("guardar-peso-btn").addEventListener("click", async () => {
+    const altura = document.getElementById("cp-altura").value;
+    const peso = document.getElementById("cp-peso").value;
+    if (!peso) return;
+    const fecha = new Date().toISOString().slice(0, 10);
+    await sb.rpc("guardar_peso", { p_token: session.token, p_altura_cm: altura ? parseFloat(altura) : null, p_peso_kg: parseFloat(peso), p_fecha: fecha });
+    document.getElementById("cp-peso").value = "";
+    initCurvaPonderal();
   });
 
-  // ---------- Dashboard ----------
-  async function mostrarDashboard(perfil) {
-    miPerfil = perfil;
-    document.getElementById("dash-nombre").textContent = perfil.nombre || "Profesional";
-    document.getElementById("dash-institucion").textContent = perfil.es_super_admin
-      ? "Acceso a todas las instituciones"
-      : (perfil.institucion_nombre || "");
-    document.querySelectorAll(".top-nav-btn").forEach(b => b.classList.remove("activo"));
-    document.getElementById("nav-dashboard-btn").classList.add("activo");
-    mostrarPantalla("dashboard-screen");
+  // ================= ACTIVIDAD FÍSICA =================
+  const DIAS_SEMANA = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
+  const DIAS_SEMANA_LABEL = ["L", "M", "M", "J", "V", "S", "D"];
+  let actividadDias = {};
 
-    const { data, error } = await sb.rpc("obtener_dashboard");
+  function lunesDeEstaSemana() {
+    const hoy = new Date();
+    const diff = (hoy.getDay() + 6) % 7; // 0 = lunes
+    const lunes = new Date(hoy);
+    lunes.setDate(hoy.getDate() - diff);
+    return lunes.toISOString().slice(0, 10);
+  }
+  async function initActividadFisica() {
+    DIAS_SEMANA.forEach(d => { actividadDias[d] = false; });
+    const semanaInicio = lunesDeEstaSemana();
+    const { data, error } = await sb.rpc("obtener_actividad_semana", { p_token: session.token, p_semana_inicio: semanaInicio });
+    if (!error && data && data.ok) {
+      if (data.tipo_actividad) document.getElementById("tipo-actividad-select").value = data.tipo_actividad;
+      if (data.dias) Object.assign(actividadDias, data.dias);
+    }
+    renderWeekGrid();
+  }
+  function renderWeekGrid() {
+    const grid = document.getElementById("week-grid");
+    grid.innerHTML = "";
+    DIAS_SEMANA.forEach((d, i) => { grid.innerHTML += `<div class="week-day-label">${DIAS_SEMANA_LABEL[i]}</div>`; });
+    DIAS_SEMANA.forEach(d => {
+      grid.innerHTML += `<div class="week-toggle ${actividadDias[d] ? 'on' : ''}" data-dia="${d}"></div>`;
+    });
+    grid.querySelectorAll(".week-toggle").forEach(el => {
+      el.addEventListener("click", () => {
+        const d = el.dataset.dia;
+        actividadDias[d] = !actividadDias[d];
+        el.classList.toggle("on", actividadDias[d]);
+      });
+    });
+  }
+  document.getElementById("guardar-actividad-btn").addEventListener("click", async () => {
+    const tipo = document.getElementById("tipo-actividad-select").value;
+    const semanaInicio = lunesDeEstaSemana();
+    await sb.rpc("guardar_actividad_semana", { p_token: session.token, p_semana_inicio: semanaInicio, p_tipo_actividad: tipo, p_dias: actividadDias });
+  });
+
+  // ================= MIS DATOS =================
+  function renderGrupoClinicos() {
+    document.getElementById("grupo-clinicos").innerHTML = `
+      <div class="check-row"><input type="checkbox" id="ac-preeclampsia-previa"><label style="margin:0;" for="ac-preeclampsia-previa">Preeclampsia en embarazo previo</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-hta-cronica"><label style="margin:0;" for="ac-hta-cronica">Hipertensión crónica</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-diabetes"><label style="margin:0;" for="ac-diabetes">Diabetes pregestacional</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-renal"><label style="margin:0;" for="ac-renal">Enfermedad renal crónica</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-autoinmune"><label style="margin:0;" for="ac-autoinmune">Enfermedad autoinmune</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-sop"><label style="margin:0;" for="ac-sop">Síndrome de ovario poliquístico</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-multiple"><label style="margin:0;" for="ac-multiple">Embarazo múltiple</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-nuliparidad"><label style="margin:0;" for="ac-nuliparidad">Primer embarazo (nuliparidad)</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-intervalo"><label style="margin:0;" for="ac-intervalo">Más de 10 años desde el último embarazo</label></div>
+      <div class="check-row"><input type="checkbox" id="ac-reprod"><label style="margin:0;" for="ac-reprod">Reproducción asistida</label></div>
+      <label for="ac-edad">Edad</label><input type="number" id="ac-edad" min="10" max="60">
+      <label for="ac-imc">IMC pregestacional</label><input type="number" id="ac-imc" step="0.1">
+      <label for="ac-otros">Otros antecedentes</label><textarea id="ac-otros"></textarea>`;
+  }
+  function renderGrupoEstilo() {
+    document.getElementById("grupo-estilo").innerHTML = `
+      <label for="es-ocupacion">Ocupación</label><input type="text" id="es-ocupacion">
+      <label for="es-alimentacion">Tipo de alimentación</label>
+      <select id="es-alimentacion">
+        <option value="omnivora">Omnívora</option><option value="vegetariana">Vegetariana</option>
+        <option value="vegana">Vegana</option><option value="otra">Otra</option>
+      </select>
+      <label for="es-tabaquismo">Tabaquismo</label>
+      <select id="es-tabaquismo">
+        <option value="nunca">Nunca fumé</option><option value="exfumadora">Exfumadora</option><option value="actual">Fumo actualmente</option>
+      </select>
+      <div class="check-row"><input type="checkbox" id="es-actividad-previa"><label style="margin:0;" for="es-actividad-previa">Hacía actividad física antes del embarazo</label></div>
+      <div class="check-row"><input type="checkbox" id="es-alcohol"><label style="margin:0;" for="es-alcohol">Consumo de alcohol</label></div>`;
+  }
+
+  let paternosList = [];
+  function renderPaternos() {
+    const cont = document.getElementById("paternos-list");
+    cont.innerHTML = paternosList.map((p, i) => `
+      <div class="gesta-block">
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="fue_con_pareja_actual" ${p.fue_con_pareja_actual ? "checked" : ""}><label style="margin:0;">Con pareja actual</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="the" ${p.the ? "checked" : ""}><label style="margin:0;">Hipertensión del embarazo</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="preeclampsia" ${p.preeclampsia ? "checked" : ""}><label style="margin:0;">Preeclampsia</label></div>
+        <label>Año</label><input type="number" data-i="${i}" data-f="anio" value="${p.anio || ''}">
+        <button type="button" class="remove-gesta" data-remove="${i}">Quitar</button>
+      </div>`).join("") || "<p style='font-size:12px;color:var(--gray-600);'>Sin registros todavía.</p>";
+    cont.querySelectorAll("input[type=checkbox]").forEach(el => el.addEventListener("change", () => { paternosList[el.dataset.i][el.dataset.f] = el.checked; }));
+    cont.querySelectorAll("input[type=number]").forEach(el => el.addEventListener("input", () => { paternosList[el.dataset.i][el.dataset.f] = el.value; }));
+    cont.querySelectorAll("[data-remove]").forEach(el => el.addEventListener("click", () => { paternosList.splice(parseInt(el.dataset.remove), 1); renderPaternos(); }));
+  }
+  document.getElementById("add-paterno-btn").addEventListener("click", () => {
+    paternosList.push({ fue_con_pareja_actual: true, the: false, preeclampsia: false, anio: "" });
+    renderPaternos();
+  });
+
+  async function initMisDatos() {
+    renderGrupoClinicos();
+    renderGrupoEstilo();
+    renderPaternos();
+    const { data, error } = await sb.rpc("obtener_mis_datos", { p_token: session.token });
     if (error || !data || !data.ok) return;
 
-    document.getElementById("dash-stats").innerHTML = `
-      <div class="stat-card"><div class="num">${data.total_pacientes}</div><div class="label">Pacientes totales</div></div>
-      <div class="stat-card"><div class="num">${data.activas}</div><div class="label">Pacientes activas</div></div>
-    `;
+    if (data.telefono) document.getElementById("md-telefono").value = data.telefono;
+    if (data.fecha_nacimiento) document.getElementById("md-fecha-nac").value = data.fecha_nacimiento;
 
-    const wrap = document.getElementById("dash-instituciones-wrap");
-    if (data.es_super_admin && data.instituciones) {
-      wrap.innerHTML = `<h2 class="section-title">Por institución</h2>
-        <table class="inst-table">
-          <thead><tr><th>Institución</th><th>Total</th><th>Activas</th></tr></thead>
-          <tbody>${data.instituciones.map(i => `<tr><td>${i.nombre}</td><td>${i.total}</td><td>${i.activas}</td></tr>`).join("")}</tbody>
-        </table>`;
-    } else {
-      wrap.innerHTML = "";
-    }
+    const c = data.clinicos || {};
+    document.getElementById("ac-preeclampsia-previa").checked = !!c.preeclampsia_previa;
+    document.getElementById("ac-hta-cronica").checked = !!c.hta_cronica;
+    document.getElementById("ac-diabetes").checked = !!c.diabetes_pregestacional;
+    document.getElementById("ac-renal").checked = !!c.enfermedad_renal_cronica;
+    document.getElementById("ac-autoinmune").checked = !!c.enfermedad_autoinmune;
+    document.getElementById("ac-sop").checked = !!c.sindrome_ovario_poliquistico;
+    document.getElementById("ac-multiple").checked = !!c.embarazo_multiple;
+    document.getElementById("ac-nuliparidad").checked = !!c.nuliparidad;
+    document.getElementById("ac-intervalo").checked = !!c.intervalo_embarazos_mayor_10;
+    document.getElementById("ac-reprod").checked = !!c.reproduccion_asistida;
+    if (c.edad_materna) document.getElementById("ac-edad").value = c.edad_materna;
+    if (c.imc_pregestacional) document.getElementById("ac-imc").value = c.imc_pregestacional;
+    if (c.otros_antecedentes) document.getElementById("ac-otros").value = c.otros_antecedentes;
 
-    cargarGraficosDashboard();
+    const fam = data.familiares || {};
+    document.getElementById("fam-madre-the").checked = !!fam.madre_the;
+    document.getElementById("fam-madre-pe").checked = !!fam.madre_pe;
+    document.getElementById("fam-hermana-the").checked = !!fam.hermana_the;
+    document.getElementById("fam-hermana-pe").checked = !!fam.hermana_pe;
+
+    const es = data.estilo_vida || {};
+    if (es.ocupacion) document.getElementById("es-ocupacion").value = es.ocupacion;
+    if (es.tipo_alimentacion) document.getElementById("es-alimentacion").value = es.tipo_alimentacion;
+    if (es.tabaquismo) document.getElementById("es-tabaquismo").value = es.tabaquismo;
+    document.getElementById("es-actividad-previa").checked = !!es.actividad_fisica_previa;
+    document.getElementById("es-alcohol").checked = !!es.consumo_alcohol;
+
+    paternosList = data.paternos || [];
+    renderPaternos();
   }
 
-  // ---------- Gráficos del dashboard ----------
-  let chartInstances = {};
-  function destruirChart(id) {
-    if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
-  }
-
-  const COLOR_BAJA = "#D9544A", COLOR_MEDIA = "#C17A1F", COLOR_ALTA = "#0F8C68", COLOR_SIN_DATOS = "#C7C4D1";
-  const MESES_CORTOS = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-
-  function chartBucketOptions() {
-    return {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+  document.getElementById("guardar-datos-btn").addEventListener("click", async () => {
+    const clinicos = {
+      preeclampsia_previa: document.getElementById("ac-preeclampsia-previa").checked,
+      hta_cronica: document.getElementById("ac-hta-cronica").checked,
+      diabetes_pregestacional: document.getElementById("ac-diabetes").checked,
+      enfermedad_renal_cronica: document.getElementById("ac-renal").checked,
+      enfermedad_autoinmune: document.getElementById("ac-autoinmune").checked,
+      sindrome_ovario_poliquistico: document.getElementById("ac-sop").checked,
+      embarazo_multiple: document.getElementById("ac-multiple").checked,
+      nuliparidad: document.getElementById("ac-nuliparidad").checked,
+      intervalo_embarazos_mayor_10: document.getElementById("ac-intervalo").checked,
+      reproduccion_asistida: document.getElementById("ac-reprod").checked,
+      edad_materna: document.getElementById("ac-edad").value,
+      imc_pregestacional: document.getElementById("ac-imc").value,
+      otros_antecedentes: document.getElementById("ac-otros").value
     };
-  }
-
-  function renderBucketChart(canvasId, bucket) {
-    destruirChart(canvasId);
-    const ctx = document.getElementById(canvasId).getContext("2d");
-    chartInstances[canvasId] = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Baja (<50%)", "Media (50-79%)", "Alta (≥80%)", "Sin datos"],
-        datasets: [{
-          data: [bucket.baja, bucket.media, bucket.alta, bucket.sin_datos],
-          backgroundColor: [COLOR_BAJA, COLOR_MEDIA, COLOR_ALTA, COLOR_SIN_DATOS],
-          borderRadius: 6
-        }]
-      },
-      options: chartBucketOptions()
+    const familiares = {
+      madre_the: document.getElementById("fam-madre-the").checked,
+      madre_pe: document.getElementById("fam-madre-pe").checked,
+      hermana_the: document.getElementById("fam-hermana-the").checked,
+      hermana_pe: document.getElementById("fam-hermana-pe").checked
+    };
+    const estiloVida = {
+      ocupacion: document.getElementById("es-ocupacion").value,
+      tipo_alimentacion: document.getElementById("es-alimentacion").value,
+      tabaquismo: document.getElementById("es-tabaquismo").value,
+      actividad_fisica_previa: document.getElementById("es-actividad-previa").checked,
+      consumo_alcohol: document.getElementById("es-alcohol").checked
+    };
+    const btn = document.getElementById("guardar-datos-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await sb.rpc("guardar_mis_datos", {
+      p_token: session.token,
+      p_telefono: document.getElementById("md-telefono").value,
+      p_fecha_nacimiento: document.getElementById("md-fecha-nac").value || null,
+      p_clinicos: clinicos, p_familiares: familiares, p_estilo_vida: estiloVida, p_paternos: paternosList
     });
-  }
-
-  async function cargarGraficosDashboard() {
-    const { data, error } = await sb.rpc("obtener_dashboard_grafico");
-    if (error || !data || !data.ok) {
-      console.error("Error en obtener_dashboard_grafico:", error);
-      return;
-    }
-
-    // Altas por mes
-    destruirChart("chart-altas");
-    const altas = data.altas_por_mes || [];
-    chartInstances["chart-altas"] = new Chart(document.getElementById("chart-altas").getContext("2d"), {
-      type: "bar",
-      data: {
-        labels: altas.map(a => { const [y, m] = a.mes.split("-"); return MESES_CORTOS[parseInt(m) - 1] + " " + y.slice(2); }),
-        datasets: [{ data: altas.map(a => a.cantidad), backgroundColor: "#5B3E96", borderRadius: 6 }]
-      },
-      options: chartBucketOptions()
-    });
-
-    renderBucketChart("chart-aspirina", data.adherencia_aspirina);
-    renderBucketChart("chart-calcio", data.adherencia_calcio);
-    renderBucketChart("chart-actividad", data.actividad_fisica);
-
-    // HTA en objetivo — dona
-    destruirChart("chart-hta");
-    const hta = data.hta_objetivo;
-    chartInstances["chart-hta"] = new Chart(document.getElementById("chart-hta").getContext("2d"), {
-      type: "doughnut",
-      data: {
-        labels: ["En objetivo", "Fuera de objetivo", "Sin datos"],
-        datasets: [{ data: [hta.en_objetivo, hta.fuera_objetivo, hta.sin_datos], backgroundColor: [COLOR_ALTA, COLOR_BAJA, COLOR_SIN_DATOS] }]
-      },
-      options: { responsive: true, plugins: { legend: { position: "bottom", labels: { font: { size: 11 } } } } }
-    });
-
-    // Cuarto trimestre — funnel (barra horizontal descendente)
-    destruirChart("chart-cuarto-trimestre");
-    const ct = data.cuarto_trimestre;
-    chartInstances["chart-cuarto-trimestre"] = new Chart(document.getElementById("chart-cuarto-trimestre").getContext("2d"), {
-      type: "bar",
-      data: {
-        labels: ["Dieron a luz", "Siguen interactuando (30 días)", "Tienen PA posparto registrada"],
-        datasets: [{
-          data: [ct.dieron_a_luz, ct.interactuando, ct.con_pa_posparto],
-          backgroundColor: ["rgba(255,255,255,0.9)", "rgba(255,255,255,0.65)", "rgba(255,255,255,0.4)"],
-          borderRadius: 6
-        }]
-      },
-      options: {
-        indexAxis: "y",
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { beginAtZero: true, ticks: { color: "white", precision: 0 }, grid: { color: "rgba(255,255,255,0.15)" } },
-          y: { ticks: { color: "white", font: { size: 11.5 } }, grid: { display: false } }
-        }
-      }
-    });
-  }
-
-  document.getElementById("logout-btn").addEventListener("click", () => cerrarSesion());
-  document.getElementById("logout-btn-2").addEventListener("click", () => cerrarSesion());
-  document.getElementById("logout-btn-3").addEventListener("click", () => cerrarSesion());
-  async function cerrarSesion() {
-    await sb.auth.signOut();
-    mostrarPantalla("login-screen");
-  }
-
-  let miPerfil = null;
-
-  document.getElementById("nav-dashboard-btn").addEventListener("click", () => mostrarDashboard(miPerfil));
-  document.getElementById("nav-dashboard-btn-2").addEventListener("click", () => mostrarDashboard(miPerfil));
-  document.getElementById("nav-pacientes-btn").addEventListener("click", () => mostrarPacientes());
-  document.getElementById("nav-pacientes-btn-2").addEventListener("click", () => mostrarPacientes());
-  document.getElementById("volver-a-lista-btn").addEventListener("click", () => mostrarPacientes());
-
-  // ---------- Lista de pacientes ----------
-  async function mostrarPacientes() {
-    document.querySelectorAll(".top-nav-btn").forEach(b => b.classList.remove("activo"));
-    document.getElementById("nav-pacientes-btn").classList.add("activo");
-    document.getElementById("nav-pacientes-btn-2").classList.add("activo");
-    document.getElementById("pac-institucion-sub").textContent = miPerfil && miPerfil.es_super_admin
-      ? "Todas las instituciones" : (miPerfil ? miPerfil.institucion_nombre : "");
-    mostrarPantalla("pacientes-screen");
-    await buscarPacientes("");
-  }
-
-  async function buscarPacientes(texto) {
-    const cont = document.getElementById("pac-lista");
-    cont.innerHTML = `<p style="padding:16px; font-size:13px; color:var(--gray-600);">Buscando...</p>`;
-    const { data, error } = await sb.rpc("buscar_pacientes", { p_busqueda: texto });
-    if (error || !data || !data.ok) {
-      cont.innerHTML = `<p style="padding:16px; font-size:13px; color:#B23B32;">No pudimos cargar las pacientes.</p>`;
-      return;
-    }
-    const pacientes = data.pacientes || [];
-    if (!pacientes.length) {
-      cont.innerHTML = `<p style="padding:16px; font-size:13px; color:var(--gray-600);">Sin resultados.</p>`;
-      return;
-    }
-    cont.innerHTML = pacientes.map(p => `
-      <div class="pac-row" data-id="${p.id}">
-        <div>
-          <div class="p-nombre">${p.apellido}, ${p.nombre}</div>
-          <div class="p-detalle">DNI ${p.dni}${miPerfil && miPerfil.es_super_admin ? " · " + p.institucion_nombre : ""}</div>
-        </div>
-        <div class="p-inst">${p.activa ? "" : "Inactiva"}</div>
-      </div>
-    `).join("");
-    cont.querySelectorAll(".pac-row").forEach(row => {
-      row.addEventListener("click", () => abrirFicha(row.dataset.id));
-    });
-  }
-
-  document.getElementById("pac-buscar-btn").addEventListener("click", () => buscarPacientes(document.getElementById("pac-buscar-input").value.trim()));
-  document.getElementById("pac-buscar-input").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") buscarPacientes(e.target.value.trim());
+    btn.disabled = false; btn.textContent = "Guardar mis datos";
+    const msg = document.getElementById("datos-guardado-msg");
+    msg.style.display = "block";
+    setTimeout(() => { msg.style.display = "none"; }, 2500);
   });
 
-  // ---------- Ficha de paciente ----------
-  const LABEL_ANTECEDENTES = {
-    preeclampsia_previa: "Preeclampsia previa", hta_cronica: "Hipertensión crónica",
-    diabetes_pregestacional: "Diabetes pregestacional", enfermedad_renal_cronica: "Enfermedad renal crónica",
-    enfermedad_autoinmune: "Enfermedad autoinmune", sindrome_ovario_poliquistico: "SOP",
-    embarazo_multiple: "Embarazo múltiple", nuliparidad: "Nuliparidad",
-    intervalo_embarazos_mayor_10: ">10 años desde último embarazo", reproduccion_asistida: "Reproducción asistida"
-  };
-  const LABEL_FAMILIARES = {
-    madre_the: "Madre con hipertensión del embarazo", madre_pe: "Madre con preeclampsia",
-    hermana_the: "Hermana con hipertensión del embarazo", hermana_pe: "Hermana con preeclampsia",
-    papa_nacio_de_pe: "Papá del bebé nació de embarazo con preeclampsia"
-  };
+  // ================= EMBARAZOS =================
+  let previosList = [];
+  function renderPrevios() {
+    const cont = document.getElementById("previos-list");
+    cont.innerHTML = previosList.map((p, i) => `
+      <div class="gesta-block">
+        <div class="fila-2col">
+          <div><label>Gesta N°</label><input type="number" data-i="${i}" data-f="numero_gesta" value="${p.numero_gesta || ''}"></div>
+          <div><label>Año</label><input type="number" data-i="${i}" data-f="anio" value="${p.anio || ''}"></div>
+        </div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="hta_gestacional" ${p.hta_gestacional ? "checked" : ""}><label style="margin:0;">Hipertensión gestacional</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="preeclampsia" ${p.preeclampsia ? "checked" : ""}><label style="margin:0;">Preeclampsia</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="diabetes_gestacional" ${p.diabetes_gestacional ? "checked" : ""}><label style="margin:0;">Diabetes gestacional</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="rciu" ${p.rciu ? "checked" : ""}><label style="margin:0;">Restricción de crecimiento (RCIU)</label></div>
+        <div class="check-row"><input type="checkbox" data-i="${i}" data-f="parto_prematuro" ${p.parto_prematuro ? "checked" : ""}><label style="margin:0;">Parto prematuro</label></div>
+        <label>Semana de finalización</label><input type="number" data-i="${i}" data-f="semana_finalizacion" value="${p.semana_finalizacion || ''}">
+        <label>Vía de finalización</label>
+        <select data-i="${i}" data-f="via_finalizacion">
+          <option value="">—</option>
+          <option value="vaginal" ${p.via_finalizacion === 'vaginal' ? 'selected' : ''}>Vaginal</option>
+          <option value="cesarea" ${p.via_finalizacion === 'cesarea' ? 'selected' : ''}>Cesárea</option>
+        </select>
+        <button type="button" class="remove-gesta" data-remove="${i}">Quitar</button>
+      </div>`).join("") || "<p style='font-size:12px;color:var(--gray-600);'>Sin embarazos previos cargados.</p>";
+    cont.querySelectorAll("input[type=checkbox]").forEach(el => el.addEventListener("change", () => { previosList[el.dataset.i][el.dataset.f] = el.checked; }));
+    cont.querySelectorAll("input[type=number]").forEach(el => el.addEventListener("input", () => { previosList[el.dataset.i][el.dataset.f] = el.value; }));
+    cont.querySelectorAll("select").forEach(el => el.addEventListener("change", () => { previosList[el.dataset.i][el.dataset.f] = el.value; }));
+    cont.querySelectorAll("[data-remove]").forEach(el => el.addEventListener("click", () => { previosList.splice(parseInt(el.dataset.remove), 1); renderPrevios(); }));
+  }
+  document.getElementById("add-previo-btn").addEventListener("click", () => {
+    previosList.push({ numero_gesta: previosList.length + 1, anio: "", hta_gestacional: false, preeclampsia: false, diabetes_gestacional: false, rciu: false, parto_prematuro: false, semana_finalizacion: "", via_finalizacion: "" });
+    renderPrevios();
+  });
 
-  function calcularSemanasProf(fum, fppObstetra, fechaEco, ecoSemanas, ecoDias) {
-    let base = null;
-    if (fppObstetra) base = new Date(fppObstetra);
-    else if (fum) base = new Date(new Date(fum).getTime() + 280 * 86400000);
-    else if (fechaEco && ecoSemanas != null) {
-      const diasEnEco = parseInt(ecoSemanas) * 7 + (parseInt(ecoDias) || 0);
-      base = new Date(new Date(fechaEco).getTime() + (280 - diasEnEco) * 86400000);
-    }
+  function calcularEdadGestacional(fum, fppObstetra) {
+    const base = fppObstetra ? new Date(fppObstetra) : (fum ? new Date(new Date(fum).getTime() + 280 * 86400000) : null);
     if (!base) return null;
     const hoy = new Date();
     const diasRestantes = Math.round((base - hoy) / 86400000);
     const diasTranscurridos = 280 - diasRestantes;
     if (diasTranscurridos < 0) return null;
-    return { semanas: Math.floor(diasTranscurridos / 7), dias: diasTranscurridos % 7 };
+    const semanas = Math.floor(diasTranscurridos / 7);
+    const dias = diasTranscurridos % 7;
+    return `${semanas}s ${dias}d`;
   }
 
-  function renderGestacionBadge(g) {
-    if (!g) return "";
-    if (g.fecha_parto_real) {
-      const parto = new Date(g.fecha_parto_real + "T00:00:00");
-      const hoy = new Date();
-      const diasVida = Math.floor((hoy - parto) / 86400000);
-      let texto;
-      if (diasVida < 60) texto = diasVida + (diasVida === 1 ? " día" : " días");
-      else texto = Math.floor(diasVida / 30) + " meses";
-      return `<div class="gestacion-badge">
-        <div class="g-valor">${texto}</div>
-        <div class="g-label">Edad del bebé</div>
-      </div>`;
+  async function initEmbarazos() {
+    previosList = [];
+    renderPrevios();
+    const { data, error } = await sb.rpc("obtener_embarazos", { p_token: session.token });
+    if (error || !data || !data.ok) return;
+
+    previosList = data.previos || [];
+    renderPrevios();
+
+    if (data.actual && data.actual !== null) {
+      const a = data.actual;
+      if (a.fum) document.getElementById("ge-fum").value = a.fum;
+      if (a.fecha_eco_datante) document.getElementById("ge-fecha-eco").value = a.fecha_eco_datante;
+      if (a.eco_semanas != null) document.getElementById("ge-eco-sem").value = a.eco_semanas;
+      if (a.eco_dias != null) document.getElementById("ge-eco-dias").value = a.eco_dias;
+      if (a.fpp_obstetra) document.getElementById("ge-fpp").value = a.fpp_obstetra;
+
+      const eg = calcularEdadGestacional(a.fum, a.fpp_obstetra);
+      const badge = document.getElementById("edad-gestacional-badge");
+      if (eg) { badge.textContent = "Edad gestacional actual: " + eg; badge.style.display = "inline-block"; }
     }
-    const r = calcularSemanasProf(g.fum, g.fpp_obstetra, g.fecha_eco_datante, g.eco_semanas, g.eco_dias);
-    if (!r) return "";
-    return `<div class="gestacion-badge">
-      <div class="g-valor">${r.semanas}s ${r.dias}d</div>
-      <div class="g-label">Semana de gestación</div>
-    </div>`;
   }
-
-  async function abrirFicha(pacienteId) {
-    mostrarPantalla("ficha-screen");
-    document.getElementById("ficha-header").innerHTML = `<p style="color:var(--gray-600); font-size:13px;">Cargando...</p>`;
-    document.getElementById("ficha-resumen-content").innerHTML = "";
-
-    const { data: paciente } = await sb.from("pacientes").select("*").eq("id", pacienteId).single();
-    if (!paciente) { document.getElementById("ficha-header").innerHTML = `<p>No se encontró la paciente.</p>`; return; }
-
-    let edadTxt = "";
-    if (paciente.fecha_nacimiento) {
-      const nacimiento = new Date(paciente.fecha_nacimiento);
-      const hoy = new Date();
-      let edad = hoy.getFullYear() - nacimiento.getFullYear();
-      const m = hoy.getMonth() - nacimiento.getMonth();
-      if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) edad--;
-      edadTxt = edad + " años · ";
-    }
-
-    const { data: gestacion } = await sb.from("gestacion_actual").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1);
-    const g = (gestacion && gestacion[0]) || null;
-    const gestacionBadge = renderGestacionBadge(g);
-
-    document.getElementById("ficha-header").innerHTML = `
-      <div>
-        <div class="f-nombre">${paciente.apellido}, ${paciente.nombre}</div>
-        <div class="f-detalle">DNI ${paciente.dni} · ${edadTxt}Alta el ${paciente.fecha_alta ? paciente.fecha_alta.slice(0,10) : ''}</div>
-      </div>
-      ${gestacionBadge}
-    `;
-
-    const [clinicos, familiares, paternos, medicamentos, tomasSueltas] = await Promise.all([
-      sb.from("antecedentes_clinicos").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1),
-      sb.from("antecedentes_familiares").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1),
-      sb.from("antecedentes_paternos").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }),
-      sb.from("paciente_medicamentos").select("*, catalogo_farmacos(nombre, grupo)").eq("paciente_id", pacienteId).order("fecha_inicio", { ascending: false }),
-      sb.from("presion_arterial_suelta").select("*").eq("paciente_id", pacienteId).order("fecha_hora", { ascending: false }).limit(5)
-    ]);
-
-    // Antecedentes positivos
-    const tags = [];
-    const c = (clinicos.data && clinicos.data[0]) || {};
-    const f = (familiares.data && familiares.data[0]) || {};
-    Object.keys(LABEL_ANTECEDENTES).forEach(k => { if (c[k]) tags.push(LABEL_ANTECEDENTES[k]); });
-    Object.keys(LABEL_FAMILIARES).forEach(k => { if (f[k]) tags.push(LABEL_FAMILIARES[k]); });
-    (paternos.data || []).forEach(p => {
-      if (p.the) tags.push("Papá: pareja previa con hipertensión del embarazo");
-      if (p.preeclampsia) tags.push("Papá: pareja previa con preeclampsia");
-    });
-    if (c.otros_antecedentes) tags.push(c.otros_antecedentes);
-
-    let html = `<div class="resumen-card">
-      <div class="rc-header">
-        <div class="rc-icon" style="background:var(--pink-light); color:var(--pink);">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg>
-        </div>
-        <div class="rc-titulo">Antecedentes</div>
-      </div>
-      ${tags.length ? `<div class="tag-list">${tags.map(t => `<span class="tag-positivo">${t}</span>`).join("")}</div>` : `<p class="sin-antecedentes">Sin antecedentes positivos registrados.</p>`}
-    </div>`;
-
-    // Tratamiento de presión
-    const meds = (medicamentos.data || []).filter(m => m.catalogo_farmacos && m.catalogo_farmacos.grupo === "antihipertensivos");
-    const medActual = meds.find(m => !m.fecha_fin);
-    html += `<div class="resumen-card">
-      <div class="rc-header">
-        <div class="rc-icon" style="background:var(--violet-light); color:var(--violet-dark);">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg>
-        </div>
-        <div class="rc-titulo">Tratamiento de presión arterial</div>
-      </div>`;
-    if (medActual) {
-      html += `<div class="med-actual">
-        <div>
-          <div class="m-nombre">${medActual.catalogo_farmacos.nombre}</div>
-          <div class="m-detalle">${medActual.dosis || ''}${medActual.frecuencia ? ' · ' + medActual.frecuencia : ''} · desde ${medActual.fecha_inicio}</div>
-        </div>
-      </div>`;
-    } else {
-      html += `<p class="sin-antecedentes">Sin tratamiento farmacológico registrado.</p>`;
-    }
-    if (meds.length) {
-      html += `<button class="ver-detalle-btn" id="ver-hist-tratamiento-btn">Ver historial completo (${meds.length})</button>
-        <div class="detalle-dias-wrap" id="hist-tratamiento-wrap" style="display:none;">
-          ${meds.map(m => `<div class="detalle-dia-row"><span>${m.catalogo_farmacos.nombre} — ${m.dosis || ''} ${m.frecuencia || ''}</span><span>${m.fecha_inicio} ${m.fecha_fin ? '→ ' + m.fecha_fin : '(vigente)'}</span></div>`).join("")}
-        </div>`;
-    }
-    html += `</div>`;
-
-    // Últimas mediciones
-    const tomas = tomasSueltas.data || [];
-    html += `<div class="resumen-card">
-      <div class="rc-header">
-        <div class="rc-icon" style="background:#FBEAE8; color:#B23B32;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>
-        </div>
-        <div class="rc-titulo">Últimas mediciones de presión</div>
-      </div>`;
-    if (tomas.length) {
-      const ultima = tomas[0];
-      html += `<div class="stat-fila">
-        <div><span class="stat-headline">${ultima.sistolica}/${ultima.diastolica}</span><span class="stat-headline-label">Última toma</span></div>
-        <div class="stat-secundario">${new Date(ultima.fecha_hora).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</div>
-      </div>
-      <button class="ver-detalle-btn" id="ver-hist-mediciones-btn">Ver últimas ${tomas.length} mediciones</button>
-      <div class="detalle-dias-wrap" id="hist-mediciones-wrap" style="display:none;">
-        ${tomas.map(t => `<div class="detalle-dia-row"><span>${t.sistolica}/${t.diastolica}</span><span>${new Date(t.fecha_hora).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span></div>`).join("")}
-      </div>`;
-    } else {
-      html += `<p class="sin-antecedentes">Sin mediciones sueltas registradas.</p>`;
-    }
-    html += `</div>`;
-
-    document.getElementById("ficha-resumen-content").innerHTML = html;
-
-    const toggleDetalle = (btnId, wrapId, textoBase) => {
-      const btn = document.getElementById(btnId);
-      if (!btn) return;
-      btn.addEventListener("click", () => {
-        const wrap = document.getElementById(wrapId);
-        const abierto = wrap.style.display !== "none";
-        wrap.style.display = abierto ? "none" : "block";
-        btn.textContent = abierto ? textoBase : "Ocultar";
-      });
+  document.getElementById("guardar-embarazos-btn").addEventListener("click", async () => {
+    const actual = {
+      fum: document.getElementById("ge-fum").value || null,
+      fecha_eco_datante: document.getElementById("ge-fecha-eco").value || null,
+      eco_semanas: document.getElementById("ge-eco-sem").value || null,
+      eco_dias: document.getElementById("ge-eco-dias").value || null,
+      fpp_obstetra: document.getElementById("ge-fpp").value || null,
+      fuente_fpp_vigente: document.getElementById("ge-fpp").value ? "OBSTETRA" : (document.getElementById("ge-fum").value ? "FUM" : null)
     };
-    toggleDetalle("ver-hist-tratamiento-btn", "hist-tratamiento-wrap", `Ver historial completo (${meds.length})`);
-    toggleDetalle("ver-hist-mediciones-btn", "hist-mediciones-wrap", `Ver últimas ${tomas.length} mediciones`);
+    const btn = document.getElementById("guardar-embarazos-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await sb.rpc("guardar_embarazos", { p_token: session.token, p_previos: previosList, p_actual: actual });
+    btn.disabled = false; btn.textContent = "Guardar";
+    const msg = document.getElementById("embarazos-guardado-msg");
+    msg.style.display = "block";
+    setTimeout(() => { msg.style.display = "none"; }, 2500);
+    initEmbarazos();
+  });
 
-    cargarCuartoTrimestreProf(pacienteId);
-    cargarResumenesMensuales(pacienteId, paciente);
+  // ---------- Arranque ----------
+  if (session && session.token) {
+    showHome();
+  } else {
+    loginScreen.classList.add("show");
   }
-
-  const CT_CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
-
-  async function cargarCuartoTrimestreProf(pacienteId) {
-    const cont = document.getElementById("ficha-cuarto-trimestre");
-    const { data, error } = await sb.rpc("obtener_cuarto_trimestre_prof", { p_paciente_id: pacienteId });
-    if (error || !data || !data.ok || !data.fecha_parto) { cont.innerHTML = ""; return; }
-
-    const fmtFecha = f => new Date(f + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
-    const grupos = {};
-    data.items.forEach(it => { (grupos[it.categoria] = grupos[it.categoria] || []).push(it); });
-
-    let html = `<div class="resumen-card ct-card">
-      <div class="rc-header">
-        <div class="rc-icon" style="background:rgba(199,154,63,0.18); color:#8A6A2E;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
-        </div>
-        <div class="rc-titulo">Cuarto trimestre — día ${data.dias_desde_parto} desde el parto</div>
-      </div>`;
-
-    Object.keys(grupos).forEach(cat => {
-      html += `<div class="ct-categoria-title">${CT_CATEGORIA_LABEL[cat] || cat}</div>`;
-      grupos[cat].forEach(it => {
-        const cls = it.cumplido ? "cumplido" : (it.vigente ? "vigente" : "");
-        const rango = it.fecha_hasta ? `${fmtFecha(it.fecha_desde)} — ${fmtFecha(it.fecha_hasta)}` : `Desde ${fmtFecha(it.fecha_desde)}`;
-        html += `<div class="ct-item-row ${cls}">
-          <button class="ct-item-check ${it.cumplido ? 'on' : ''}" data-id="${it.id}">
-            ${it.cumplido ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>' : ''}
-          </button>
-          <div>
-            <div class="ct-item-text">${it.item}</div>
-            <div class="ct-item-fecha">${rango}</div>
-          </div>
-        </div>`;
-      });
-    });
-    html += `</div>`;
-    cont.innerHTML = html;
-
-    cont.querySelectorAll(".ct-item-check").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        const nuevo = !btn.classList.contains("on");
-        btn.classList.toggle("on", nuevo);
-        await sb.rpc("marcar_item_cuarto_trimestre_prof", { p_paciente_id: pacienteId, p_plan_item_id: btn.dataset.id, p_cumplido: nuevo });
-        cargarCuartoTrimestreProf(pacienteId);
-      });
-    });
-  }
-
-  function primerYUltimoDiaDelMes() {
-    const hoy = new Date();
-    const primero = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().slice(0, 10);
-    const ultimo = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).toISOString().slice(0, 10);
-    return { primero, ultimo };
-  }
-
-  async function cargarResumenesMensuales(pacienteId, paciente) {
-    const { primero, ultimo } = primerYUltimoDiaDelMes();
-    const cont = document.getElementById("ficha-resumenes-mensuales");
-
-    const [aspirinaTodo, calcioTodo, calcioSupTodo, actividadTodo, pasSueltasTodo, mdpaInformesTodo] = await Promise.all([
-      sb.from("aspirina_log").select("dia, tomada").eq("paciente_id", pacienteId).order("dia", { ascending: false }),
-      sb.from("calcio_log").select("dia, aporte_calculado_mg").eq("paciente_id", pacienteId).order("dia", { ascending: false }),
-      sb.from("calcio_suplemento_log").select("dia, dosis").eq("paciente_id", pacienteId).order("dia", { ascending: false }),
-      sb.from("actividad_fisica_semana").select("semana_inicio, dias").eq("paciente_id", pacienteId).order("semana_inicio", { ascending: false }),
-      sb.from("presion_arterial_suelta").select("*").eq("paciente_id", pacienteId).order("fecha_hora", { ascending: false }),
-      sb.from("mdpa_informes").select("*").eq("paciente_id", pacienteId).order("fecha_generado", { ascending: false })
-    ]);
-
-    // ---- Aspirina ----
-    const aspLogs = (aspirinaTodo.data || []).slice().reverse(); // cronológico para el detalle
-    const aspMes = aspLogs.filter(r => r.dia >= primero && r.dia <= ultimo);
-    const pctAsp = (arr) => arr.length ? Math.round(arr.filter(r => r.tomada).length / arr.length * 100) : null;
-    const aspMesPct = pctAsp(aspMes);
-    const aspTotalPct = pctAsp(aspLogs);
-
-    // ---- Calcio (alimentación + suplemento) ----
-    const calcLogs = (calcioTodo.data || []).slice().reverse();
-    const calcMes = calcLogs.filter(r => r.dia >= primero && r.dia <= ultimo);
-    const pctCalc = (arr) => arr.length ? Math.round(arr.filter(r => r.aporte_calculado_mg >= 1000).length / arr.length * 100) : null;
-    const calcMesPct = pctCalc(calcMes);
-    const calcTotalPct = pctCalc(calcLogs);
-
-    let calcSupPct = null;
-    let calcSupMes = [];
-    const frecuenciaCalcio = paciente.calcio_frecuencia_diaria || 1;
-    if (paciente.indicacion_calcio) {
-      calcSupMes = (calcioSupTodo.data || []).filter(r => r.dia >= primero && r.dia <= ultimo);
-      const cumplidos = calcSupMes.filter(r => Object.values(r.dosis || {}).filter(v => v === true).length >= frecuenciaCalcio).length;
-      calcSupPct = calcSupMes.length ? Math.round(cumplidos / calcSupMes.length * 100) : null;
-    }
-
-    // ---- Actividad física ----
-    const semanas = (actividadTodo.data || []).filter(s => s.semana_inicio >= primero.slice(0, 8) + "01" && s.semana_inicio <= ultimo);
-    let diasActivosTotal = 0;
-    const conteoActividad = {};
-    const detalleSemanas = [];
-    semanas.forEach(s => {
-      const dias = s.dias || {};
-      let activosEnSemana = 0;
-      Object.keys(dias).forEach(dia => {
-        const d = dias[dia];
-        if (d && d.actividad) {
-          activosEnSemana++;
-          conteoActividad[d.actividad] = (conteoActividad[d.actividad] || 0) + 1;
-        }
-      });
-      diasActivosTotal += activosEnSemana;
-      detalleSemanas.push({ semana: s.semana_inicio, activos: activosEnSemana });
-    });
-    const promedioSemanal = semanas.length ? (diasActivosTotal / semanas.length).toFixed(1) : null;
-    const actividadPredominante = Object.keys(conteoActividad).sort((a, b) => conteoActividad[b] - conteoActividad[a])[0];
-
-    const fmtPct = v => v == null ? "—" : v + "%";
-    const tomasLibres = pasSueltasTodo.data || [];
-    const informesMdpa = mdpaInformesTodo.data || [];
-
-    let html = `
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:var(--teal-light); color:var(--teal-dark);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg>
-          </div>
-          <div class="rc-titulo">Aspirina</div>
-        </div>
-        <div class="stat-fila">
-          <div><span class="stat-headline">${fmtPct(aspMesPct)}</span><span class="stat-headline-label">Este mes</span></div>
-          <div class="stat-secundario">Desde que se indicó: <strong>${fmtPct(aspTotalPct)}</strong></div>
-        </div>
-        ${aspLogs.length ? `<button class="ver-detalle-btn" id="ver-det-aspirina">Ver detalle diario (${aspLogs.length})</button>
-        <div class="detalle-dias-wrap" id="wrap-det-aspirina" style="display:none;">
-          ${aspLogs.slice().reverse().map(r => `<div class="detalle-dia-row"><span>${r.dia}</span><span class="${r.tomada ? 'ok' : 'no'}">${r.tomada ? 'Tomada' : 'No tomada'}</span></div>`).join("")}
-        </div>` : `<p class="sin-antecedentes">Sin registros de aspirina.</p>`}
-      </div>
-
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:var(--blue-light); color:var(--blue);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>
-          </div>
-          <div class="rc-titulo">Calcio</div>
-        </div>
-        <div class="stat-fila">
-          <div><span class="stat-headline">${fmtPct(calcMesPct)}</span><span class="stat-headline-label">Alimentación — este mes</span></div>
-          <div class="stat-secundario">Histórico: <strong>${fmtPct(calcTotalPct)}</strong></div>
-        </div>
-        ${paciente.indicacion_calcio ? `<p class="stat-secundario" style="margin-top:6px;">Suplemento este mes: <strong>${fmtPct(calcSupPct)}</strong> de cumplimiento</p>` : ""}
-        ${calcLogs.length ? `<button class="ver-detalle-btn" id="ver-det-calcio">Ver detalle diario (${calcLogs.length})</button>
-        <div class="detalle-dias-wrap" id="wrap-det-calcio" style="display:none;">
-          ${calcLogs.slice().reverse().map(r => `<div class="detalle-dia-row"><span>${r.dia}</span><span class="${r.aporte_calculado_mg >= 1000 ? 'ok' : 'no'}">${r.aporte_calculado_mg ?? 0} mg</span></div>`).join("")}
-        </div>` : `<p class="sin-antecedentes">Sin registros de calcio.</p>`}
-      </div>
-
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:var(--amber-light); color:var(--amber);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.2" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 6.5l-2 4 3 2-1.2 5.3"/><path d="M11.5 10.3l-4 2"/><path d="M14.5 12.5l3 1 1 4.2"/></svg>
-          </div>
-          <div class="rc-titulo">Actividad física</div>
-        </div>
-        <div class="stat-fila">
-          <div><span class="stat-headline">${promedioSemanal != null ? promedioSemanal : "—"}</span><span class="stat-headline-label">Días/semana (promedio)</span></div>
-          <div class="stat-secundario">Total del mes: <strong>${diasActivosTotal} días</strong>${actividadPredominante ? ` · Predomina: <strong>${actividadPredominante}</strong>` : ""}</div>
-        </div>
-        ${detalleSemanas.length ? `<button class="ver-detalle-btn" id="ver-det-actividad">Ver detalle semanal (${detalleSemanas.length})</button>
-        <div class="detalle-dias-wrap" id="wrap-det-actividad" style="display:none;">
-          ${detalleSemanas.map(s => `<div class="detalle-dia-row"><span>Semana del ${s.semana}</span><span>${s.activos} día(s) activo(s)</span></div>`).join("")}
-        </div>` : `<p class="sin-antecedentes">Sin registros de actividad física.</p>`}
-      </div>
-
-      <div class="resumen-card">
-        <div class="rc-header">
-          <div class="rc-icon" style="background:var(--violet-light); color:var(--violet-dark);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          </div>
-          <div class="rc-titulo">Historiales completos</div>
-        </div>
-        <button class="ver-detalle-btn" id="ver-tomas-libres-todas-btn">Ver historial completo de tomas libres (${tomasLibres.length})</button>
-        <div class="detalle-dias-wrap" id="tomas-libres-todas-wrap" style="display:none;"></div>
-        <br>
-        <button class="ver-detalle-btn" id="ver-mdpa-informes-todos-btn">Ver historial de MDPA (${informesMdpa.length} informes)</button>
-        <div class="detalle-dias-wrap" id="mdpa-informes-todos-wrap" style="display:none;"></div>
-      </div>`;
-
-    cont.innerHTML = html;
-
-    const toggle = (btnId, wrapId, textoBase, contenidoFn) => {
-      const btn = document.getElementById(btnId);
-      if (!btn) return;
-      btn.addEventListener("click", () => {
-        const wrap = document.getElementById(wrapId);
-        const abierto = wrap.style.display !== "none";
-        wrap.style.display = abierto ? "none" : "block";
-        btn.textContent = abierto ? textoBase : "Ocultar";
-        if (!abierto && contenidoFn) wrap.innerHTML = contenidoFn();
-      });
-    };
-
-    toggle("ver-det-aspirina", "wrap-det-aspirina", `Ver detalle diario (${aspLogs.length})`);
-    toggle("ver-det-calcio", "wrap-det-calcio", `Ver detalle diario (${calcLogs.length})`);
-    toggle("ver-det-actividad", "wrap-det-actividad", `Ver detalle semanal (${detalleSemanas.length})`);
-
-    toggle("ver-tomas-libres-todas-btn", "tomas-libres-todas-wrap", `Ver historial completo de tomas libres (${tomasLibres.length})`, () =>
-      tomasLibres.length
-        ? tomasLibres.map(t => `<div class="detalle-dia-row"><span>${t.sistolica}/${t.diastolica} (${t.contexto})</span><span>${new Date(t.fecha_hora).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}</span></div>`).join("")
-        : `<p class="sin-antecedentes">Sin tomas registradas.</p>`
-    );
-    toggle("ver-mdpa-informes-todos-btn", "mdpa-informes-todos-wrap", `Ver historial de MDPA (${informesMdpa.length} informes)`, () =>
-      informesMdpa.length
-        ? informesMdpa.map(i => `<div class="detalle-dia-row"><span>${i.tipo} · sin día 1: ${i.promedio_sindia1_sis ?? '—'}/${i.promedio_sindia1_dia ?? '—'} · ${i.dentro_objetivo ? '✓ dentro de objetivo' : '⚠ fuera de objetivo'}</span><span>${new Date(i.fecha_generado).toLocaleDateString("es-AR")}</span></div>`).join("")
-        : `<p class="sin-antecedentes">Sin informes de MDPA generados.</p>`
-    );
-  }
-
-  // ---------- Arranque: ¿ya hay sesión activa? ----------
-  (async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) {
-      await despuesDeLogin();
-    } else {
-      mostrarPantalla("login-screen");
-    }
-  })();
 </script>
 
 </body>
