@@ -1429,9 +1429,15 @@
   });
 
   // ================= CLASIFICACIÓN DE PRESIÓN =================
-  // Escalera de alarma (cuándo consultar) basada en PAD (diastólica), con anulación si PAS ≥140.
-  // Fuente: protocolo clínico compartido — Magee and von Dadelszen,
-  // Maternal-Fetal Medicine (2021).
+  // Escalera de alarma (cuándo consultar): se evalúa la sistólica (PAS) y la
+  // diastólica (PAD) cada una contra su propia escala, y se toma el nivel más
+  // alto entre las dos — si cualquiera de las dos está alterada, alcanza para
+  // subir de nivel, aunque la otra esté en rango normal.
+  // Escala de PAD: fuente — protocolo clínico compartido, Magee and von
+  // Dadelszen, Maternal-Fetal Medicine (2021).
+  // Escala de PAS: derivada por el equipo en paralelo a la de PAD (mismo
+  // criterio de "muy alto" en ≥140, alineado a CHAP/NICE) — revisar y ajustar
+  // los cortes intermedios si hace falta.
   let tomaMedicacionPA = false;
   let riesgoAntecedentesPA = false;   // HTA crónica o preeclampsia previa (Mis datos)
   let riesgoGestacionalPA = false;    // HTA gestacional en el embarazo actual (Embarazos)
@@ -1442,22 +1448,50 @@
     return riesgoAntecedentesPA || riesgoGestacionalPA || tomaMedicacionPA;
   }
 
+  const NIVELES_PA = ["bajo", "normal_bajo", "normal", "normal_alto", "alto", "muy_alto"];
+
+  function nivelPorPAD(dia) {
+    if (dia == null) return null;
+    if (dia >= 105) return "muy_alto";
+    if (dia >= 90) return "alto";
+    if (dia >= 86) return "normal_alto";
+    if (dia >= 81) return "normal";
+    if (dia >= 75) return "normal_bajo";
+    return "bajo";
+  }
+  function nivelPorPAS(sis) {
+    if (sis == null) return null;
+    if (sis >= 140) return "muy_alto";
+    if (sis >= 130) return "alto";
+    if (sis >= 125) return "normal_alto";
+    if (sis >= 120) return "normal";
+    if (sis >= 110) return "normal_bajo";
+    return "bajo";
+  }
+
   function clasificarPA(sis, dia) {
-    const porPAS = sis != null && sis >= 140;
-    let nivel;
-    if (porPAS || dia >= 105) nivel = "muy_alto";
-    else if (dia >= 90) nivel = "alto";
-    else if (dia >= 86) nivel = "normal_alto";
-    else if (dia >= 81) nivel = "normal";
-    else if (dia >= 75) nivel = "normal_bajo";
-    else nivel = "bajo";
+    const nivelDia = nivelPorPAD(dia);
+    const nivelSis = nivelPorPAS(sis);
+    const rangoDia = nivelDia == null ? -1 : NIVELES_PA.indexOf(nivelDia);
+    const rangoSis = nivelSis == null ? -1 : NIVELES_PA.indexOf(nivelSis);
+    const nivel = (rangoDia === -1 && rangoSis === -1) ? "normal" : NIVELES_PA[Math.max(rangoDia, rangoSis)];
+
+    // Qué parámetro definió el nivel final: útil para aclarar el motivo en el mensaje.
+    let factorDecisivo = "ambas";
+    if (rangoSis > rangoDia) factorDecisivo = "PAS";
+    else if (rangoDia > rangoSis) factorDecisivo = "PAD";
 
     const conMed = tomaMedicacionPA;
+    const consultaMuyAlto = factorDecisivo === "PAS"
+      ? "Tu presión sistólica es ≥140 mmHg — consultá a GUARDIA en las próximas 4 horas."
+      : factorDecisivo === "PAD"
+        ? "Tu presión diastólica es ≥105 mmHg — consultá a GUARDIA en las próximas 4 horas."
+        : "Consultá a GUARDIA en las próximas 4 horas.";
     const tablas = {
       muy_alto: {
         label: "Muy alto", color: "#B23B32", bg: "#FBEAE8",
         siguiente: "Sentate en silencio 5 minutos y volvé a medir la presión.",
-        consultar: porPAS ? "Tu presión sistólica es ≥140 mmHg — consultá a GUARDIA en las próximas 4 horas." : "Consultá a GUARDIA en las próximas 4 horas.",
+        consultar: consultaMuyAlto,
         control: "Medí todos los días."
       },
       alto: {
@@ -1491,7 +1525,12 @@
         control: conMed ? "Medí todos los días, o como te indique tu médica si te cambió el tratamiento." : "Según las indicaciones de tu médica."
       }
     };
-    const resultado = Object.assign({ nivel, urgente: nivel === "muy_alto" || nivel === "alto", porPAS }, tablas[nivel]);
+    const urgente = nivel === "muy_alto" || nivel === "alto";
+    const notaFactor = urgente && factorDecisivo !== "ambas"
+      ? (factorDecisivo === "PAS" ? "Este nivel se definió por tu presión sistólica (la diastólica está más baja)." : "Este nivel se definió por tu presión diastólica (la sistólica está más baja).")
+      : null;
+
+    const resultado = Object.assign({ nivel, urgente, porPAS: factorDecisivo === "PAS", factorDecisivo, notaFactor }, tablas[nivel]);
 
     // Objetivo de control más estricto para pacientes con factores de riesgo o medicadas.
     // No es una alarma: es un aviso informativo de que la lectura no llega al objetivo
@@ -1509,6 +1548,9 @@
       <div class="pa-nivel-fila"><strong>Próxima medición:</strong> ${clasif.siguiente}</div>
       <div class="pa-nivel-fila"><strong>Consultar con tu médica:</strong> ${clasif.consultar}</div>
       <div class="pa-nivel-fila"><strong>Control:</strong> ${clasif.control}</div>`;
+    if (clasif.notaFactor) {
+      html += `<div class="pa-nivel-fila" style="font-style:italic; color:var(--gray-600);">${clasif.notaFactor}</div>`;
+    }
     if (clasif.objetivoSuperado) {
       html += `<div class="pa-nivel-fila pa-objetivo-nota"><strong>Objetivo de control:</strong> ${clasif.objetivoMsg}</div>`;
     }
