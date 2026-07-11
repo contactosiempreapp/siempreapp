@@ -188,6 +188,24 @@
   .ct-item-text { font-size: 13px; color: var(--gray-900); line-height: 1.4; font-weight: 600; }
   .ct-item-fecha { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
 
+  .ct-dia-subtitulo { font-size: 12px; color: var(--gray-600); font-weight: 600; margin-top: 1px; }
+  .ct-progreso-fila { display: flex; align-items: center; gap: 12px; margin: 14px 0 20px; }
+  .ct-progreso-barra { flex: 1; height: 8px; background: var(--gray-100); border-radius: 20px; overflow: hidden; }
+  .ct-progreso-relleno { height: 100%; background: linear-gradient(90deg, #C79A4B, #8A6A2E); border-radius: 20px; transition: width 0.3s ease; }
+  .ct-progreso-texto { font-size: 12px; font-weight: 700; color: var(--gray-600); white-space: nowrap; }
+
+  .ct-timeline-prof-wrap { margin: 0 0 22px; }
+  .ct-timeline-prof-track { position: relative; height: 26px; border-radius: 8px; background: var(--gray-100); margin: 0 4px; }
+  .ct-timeline-prof-zona { position: absolute; top: 0; height: 100%; background: rgba(199,154,63,0.12); border-right: 1px dashed rgba(199,154,63,0.35); }
+  .ct-timeline-prof-marca {
+    position: absolute; top: 50%; width: 8px; height: 8px; border-radius: 2px; background: var(--gray-300);
+    border: 1.5px solid white; transform: translate(-50%, -50%) rotate(45deg); box-shadow: 0 0 0 1px var(--gray-300);
+  }
+  .ct-timeline-prof-marca.vigente { background: #C79A4B; box-shadow: 0 0 0 1px #C79A4B; }
+  .ct-timeline-prof-marca.cumplido { background: var(--teal); box-shadow: 0 0 0 1px var(--teal); }
+  .ct-timeline-prof-hoy { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--violet-dark); transform: translateX(-50%); }
+  .ct-timeline-prof-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--gray-600); margin-top: 6px; padding: 0 4px; }
+
   .editar-datos-details { cursor: default; }
   .editar-datos-summary {
     font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13.5px; color: var(--violet);
@@ -207,6 +225,10 @@
   .check-row-prof { display: flex; align-items: center; gap: 8px; font-size: 12.5px; padding: 4px 0; }
   .check-row-prof input { width: 16px; height: 16px; margin: 0; flex-shrink: 0; }
   .guardado-ok { display: none; color: var(--teal-dark); font-size: 12.5px; font-weight: 700; margin-top: 8px; }
+
+  .editar-datos-details.plain { border: none; box-shadow: none; padding: 0; background: none; }
+  .editar-datos-details.plain summary { display: none; }
+  .editar-datos-details.plain .editar-datos-body { margin-top: 0; }
 
   .modal-backdrop-prof {
     display: none; position: fixed; inset: 0; background: rgba(34,24,60,0.5); z-index: 1000;
@@ -462,9 +484,15 @@
         <p class="guardado-ok" id="editar-datos-guardado-msg">Guardado ✓</p>
       </div>
     </details>
-    <div id="ficha-resumen-content"></div>
     <div id="ficha-cuarto-trimestre"></div>
-    <div id="ficha-resumenes-mensuales"></div>
+
+    <details class="resumen-card editar-datos-details" id="ficha-embarazo-details">
+      <summary class="editar-datos-summary" id="ficha-embarazo-summary">Resumen del embarazo</summary>
+      <div class="editar-datos-body">
+        <div id="ficha-resumen-content"></div>
+        <div id="ficha-resumenes-mensuales"></div>
+      </div>
+    </details>
   </main>
 </div>
 
@@ -957,6 +985,18 @@
     const g = (gestacion && gestacion[0]) || null;
     const gestacionBadge = renderGestacionBadge(g);
 
+    const yaNacio = !!(g && g.fecha_parto_real);
+    const wrapperEl = document.getElementById("ficha-embarazo-details");
+    const summaryEl = document.getElementById("ficha-embarazo-summary");
+    if (yaNacio) {
+      wrapperEl.classList.remove("plain");
+      wrapperEl.open = false;
+      summaryEl.textContent = "Resumen del embarazo (ver detalles)";
+    } else {
+      wrapperEl.classList.add("plain");
+      wrapperEl.open = true;
+    }
+
     document.getElementById("ficha-header").innerHTML = `
       <div>
         <div class="f-nombre">${paciente.apellido}, ${paciente.nombre}</div>
@@ -1071,6 +1111,42 @@
 
   const CT_CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
 
+  function renderCtTimelineProf(diasDesdeParto, items) {
+    const maxEscala = 365;
+    const diasClamp = Math.min(Math.max(diasDesdeParto, 0), maxEscala);
+    const pctHoy = (diasClamp / maxEscala) * 100;
+
+    const zonas = [
+      { desde: 0, hasta: 84, label: "0–12 semanas" },
+      { desde: 84, hasta: 365, label: "12 semanas – 1 año" }
+    ];
+
+    const hoy = new Date();
+    const fechaParto = new Date(hoy.getTime() - diasDesdeParto * 86400000);
+    const marcadores = items
+      .filter(it => it.fecha_desde)
+      .map(it => {
+        const offsetDias = Math.round((new Date(it.fecha_desde + "T00:00:00") - fechaParto) / 86400000);
+        return { pct: (Math.min(Math.max(offsetDias, 0), maxEscala) / maxEscala) * 100, item: it };
+      });
+
+    let html = `<div class="ct-timeline-prof-wrap">
+      <div class="ct-timeline-prof-track">`;
+    zonas.forEach((z, i) => {
+      const left = (z.desde / maxEscala) * 100;
+      const width = ((z.hasta - z.desde) / maxEscala) * 100;
+      html += `<div class="ct-timeline-prof-zona" style="left:${left}%; width:${width}%;"></div>`;
+    });
+    marcadores.forEach(m => {
+      html += `<div class="ct-timeline-prof-marca ${m.item.cumplido ? 'cumplido' : (m.item.vigente ? 'vigente' : '')}" style="left:${m.pct}%;" title="${m.item.item}"></div>`;
+    });
+    html += `<div class="ct-timeline-prof-hoy" style="left:${pctHoy}%;"></div>`;
+    html += `</div>
+      <div class="ct-timeline-prof-labels"><span>Parto</span><span>3 meses</span><span>6 meses</span><span>1 año +</span></div>
+    </div>`;
+    return html;
+  }
+
   async function cargarCuartoTrimestreProf(pacienteId) {
     const cont = document.getElementById("ficha-cuarto-trimestre");
     const { data, error } = await sb.rpc("obtener_cuarto_trimestre_prof", { p_paciente_id: pacienteId });
@@ -1080,13 +1156,28 @@
     const grupos = {};
     data.items.forEach(it => { (grupos[it.categoria] = grupos[it.categoria] || []).push(it); });
 
+    const totalItems = data.items.length;
+    const cumplidos = data.items.filter(it => it.cumplido).length;
+    const pctProgreso = totalItems ? Math.round(cumplidos / totalItems * 100) : 0;
+
     let html = `<div class="resumen-card ct-card">
       <div class="rc-header">
         <div class="rc-icon" style="background:rgba(199,154,63,0.18); color:#8A6A2E;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
         </div>
-        <div class="rc-titulo">Cuarto trimestre — día ${data.dias_desde_parto} desde el parto</div>
-      </div>`;
+        <div>
+          <div class="rc-titulo">Cuarto trimestre</div>
+          <div class="ct-dia-subtitulo">Día ${data.dias_desde_parto} desde el parto</div>
+        </div>
+      </div>
+
+      <div class="ct-progreso-fila">
+        <div class="ct-progreso-barra"><div class="ct-progreso-relleno" style="width:${pctProgreso}%;"></div></div>
+        <span class="ct-progreso-texto">${cumplidos}/${totalItems} controles cumplidos</span>
+      </div>
+
+      ${renderCtTimelineProf(data.dias_desde_parto, data.items)}
+    `;
 
     Object.keys(grupos).forEach(cat => {
       html += `<div class="ct-categoria-title">${CT_CATEGORIA_LABEL[cat] || cat}</div>`;
