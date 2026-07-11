@@ -398,6 +398,7 @@
   }
   .ct-hero-icon svg { width: 26px; height: 26px; }
   .ct-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.85); font-weight: 600; }
+  .ct-riesgo-card { background: linear-gradient(135deg, #FBF3E1 0%, #FDFAF3 100%); border-color: #EEDCB0; }
   .ct-dias-badge {
     display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 12px; font-weight: 700;
     padding: 4px 12px; border-radius: 20px; margin-top: 12px;
@@ -421,6 +422,34 @@
   .ct-item-check svg { width: 14px; height: 14px; }
   .ct-item-text { font-size: 13px; color: var(--gray-900); line-height: 1.4; }
   .ct-item-tag { font-size: 10.5px; color: var(--gray-600); font-weight: 600; margin-top: 2px; }
+
+  .ct-hoy-banner {
+    background: #FBF3E1; border: 1.5px solid #EEDCB0; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px;
+  }
+  .ct-hoy-banner strong { color: #7A5A1E; }
+  .ct-hoy-banner ul { margin: 6px 0 0; padding-left: 18px; }
+  .ct-hoy-banner li { margin-bottom: 3px; }
+
+  .ct-timeline-wrap { margin: 4px 0 20px; }
+  .ct-timeline-track {
+    position: relative; height: 34px; border-radius: 10px; background: var(--gray-100); overflow: visible; margin: 0 4px;
+  }
+  .ct-timeline-zona { position: absolute; top: 0; height: 100%; opacity: 0.55; }
+  .ct-timeline-zona:first-child { border-radius: 10px 0 0 10px; }
+  .ct-timeline-marca {
+    position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: white;
+    border: 2px solid var(--gray-600); transform: translate(-50%, -50%); cursor: default;
+  }
+  .ct-timeline-marca.vigente { border-color: #B8873F; background: #F0D8A8; box-shadow: 0 0 0 3px rgba(184,135,63,0.25); }
+  .ct-timeline-marca.cumplido { border-color: var(--teal); background: var(--teal); }
+  .ct-timeline-hoy { position: absolute; top: -8px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+  .ct-timeline-hoy-dot {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--violet); border: 2px solid white;
+    box-shadow: 0 0 0 3px rgba(91,62,150,0.3); animation: hoyPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes hoyPulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(91,62,150,0.3); } 50% { box-shadow: 0 0 0 6px rgba(91,62,150,0.15); } }
+  .ct-timeline-hoy-label { font-size: 9px; font-weight: 800; color: var(--violet-dark); margin-top: 2px; white-space: nowrap; }
+  .ct-timeline-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--gray-600); margin-top: 6px; padding: 0 4px; }
   .md-icon {
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
@@ -1021,13 +1050,29 @@
         </div>
       </div>
 
+      <div class="card ct-riesgo-card">
+        <h2><span class="md-icon" style="background:rgba(255,255,255,0.25); color:#7A5A1E;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/></svg></span>Por qué seguir con los controles</h2>
+        <p class="helper" id="ct-info-riesgo" style="margin-bottom:0;">Cargando...</p>
+      </div>
+
+      <div class="card" id="ct-fecha-actual-card" style="display:none;">
+        <h2 style="margin-bottom:10px;">Fecha de parto</h2>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <p class="helper" id="ct-fecha-actual-text" style="margin:0;"></p>
+          <button type="button" id="ct-editar-fecha-btn" style="flex-shrink:0; background:var(--violet-light); color:var(--violet-dark); border:none; border-radius:10px; padding:8px 14px; font-size:12.5px; font-weight:700; font-family:'Manrope',sans-serif; cursor:pointer;">Editar</button>
+        </div>
+      </div>
+
       <div class="card" id="ct-setup-card" style="display:none;">
-        <h2>¿Ya nació tu bebé?</h2>
-        <p class="helper">Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.</p>
+        <h2 id="ct-setup-titulo">¿Ya nació tu bebé?</h2>
+        <p class="helper" id="ct-setup-ayuda">Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.</p>
         <label for="ct-fecha-parto">Fecha de parto</label>
         <input type="date" id="ct-fecha-parto">
         <div class="check-row"><input type="checkbox" id="ct-tuvo-the"><label for="ct-tuvo-the" style="margin:0;">Tuve hipertensión del embarazo o preeclampsia en este embarazo</label></div>
-        <button class="primary" id="ct-guardar-parto-btn" style="margin-top:10px;">Activar mi seguimiento</button>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button class="primary" id="ct-guardar-parto-btn" style="flex:1;">Activar mi seguimiento</button>
+          <button type="button" id="ct-cancelar-edicion-btn" style="display:none; flex-shrink:0; background:var(--gray-100); color:var(--gray-600); border:none; border-radius:12px; padding:0 16px; font-size:13.5px; font-weight:700; font-family:'Manrope',sans-serif; cursor:pointer;">Cancelar</button>
+        </div>
       </div>
 
       <div id="ct-content"></div>
@@ -2190,25 +2235,71 @@
 
   // ================= CUARTO TRIMESTRE =================
   const CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
+  let ctDatosActuales = null;
+
+  function mostrarFormularioParto(esEdicion) {
+    const setupCard = document.getElementById("ct-setup-card");
+    const cancelarBtn = document.getElementById("ct-cancelar-edicion-btn");
+    const titulo = document.getElementById("ct-setup-titulo");
+    const ayuda = document.getElementById("ct-setup-ayuda");
+    const guardarBtn = document.getElementById("ct-guardar-parto-btn");
+
+    if (esEdicion) {
+      document.getElementById("ct-fecha-parto").value = (ctDatosActuales && ctDatosActuales.fecha_parto) || "";
+      document.getElementById("ct-tuvo-the").checked = !!(ctDatosActuales && ctDatosActuales.tuvo_the);
+      titulo.textContent = "Corregir fecha de parto";
+      ayuda.textContent = "Si te equivocaste al cargarla, modificala acá.";
+      guardarBtn.textContent = "Guardar cambios";
+      cancelarBtn.style.display = "inline-block";
+      document.getElementById("ct-fecha-actual-card").style.display = "none";
+    } else {
+      titulo.textContent = "¿Ya nació tu bebé?";
+      ayuda.textContent = "Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.";
+      guardarBtn.textContent = "Activar mi seguimiento";
+      cancelarBtn.style.display = "none";
+    }
+    setupCard.style.display = "block";
+  }
+
+  document.getElementById("ct-editar-fecha-btn").addEventListener("click", () => {
+    mostrarFormularioParto(true);
+  });
+
+  document.getElementById("ct-cancelar-edicion-btn").addEventListener("click", () => {
+    document.getElementById("ct-setup-card").style.display = "none";
+    if (ctDatosActuales && ctDatosActuales.fecha_parto) {
+      document.getElementById("ct-fecha-actual-card").style.display = "block";
+    }
+  });
 
   async function initCuartoTrimestre() {
+    sb.rpc("obtener_config", { p_claves: ["info_cuarto_trimestre_riesgo"] }).then(({ data }) => {
+      document.getElementById("ct-info-riesgo").textContent = (data && data.info_cuarto_trimestre_riesgo) || "";
+    });
     const { data, error } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
     const cont = document.getElementById("ct-content");
     const setupCard = document.getElementById("ct-setup-card");
+    const fechaActualCard = document.getElementById("ct-fecha-actual-card");
 
     if (error || !data || !data.ok) {
       cont.innerHTML = `<div class="card"><p style="font-size:13px;color:var(--gray-600);">No pudimos cargar esta sección.</p></div>`;
       return;
     }
 
+    ctDatosActuales = data;
+
     if (!data.fecha_parto) {
-      setupCard.style.display = "block";
+      fechaActualCard.style.display = "none";
+      mostrarFormularioParto(false);
       cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
       document.getElementById("pp-mdpa-card").style.display = "none";
       return;
     }
 
     setupCard.style.display = "none";
+    fechaActualCard.style.display = "block";
+    const fechaTexto = new Date(data.fecha_parto + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
+    document.getElementById("ct-fecha-actual-text").textContent = fechaTexto;
     document.getElementById("pp-mdpa-card").style.display = "block";
     initMdpa("pp");
 
@@ -2218,7 +2309,20 @@
       grupos[it.categoria].push(it);
     });
 
-    let html = `<div class="card"><div class="ct-dias-badge">Día ${data.dias_desde_parto} desde el parto</div>`;
+    const vigentesAhora = data.items.filter(it => it.vigente && !it.cumplido);
+
+    let html = `<div class="card">
+      <div class="ct-dias-badge">Día ${data.dias_desde_parto} desde el parto</div>`;
+
+    if (vigentesAhora.length) {
+      html += `<div class="ct-hoy-banner">
+        <strong>Hoy te corresponde:</strong>
+        <ul>${vigentesAhora.map(it => `<li>${it.item}</li>`).join("")}</ul>
+      </div>`;
+    }
+
+    html += renderCtTimeline(data.dias_desde_parto, data.items);
+
     Object.keys(grupos).forEach(cat => {
       html += `<div class="ct-categoria-title">${CATEGORIA_LABEL[cat] || cat}</div>`;
       grupos[cat].forEach(it => {
@@ -2247,14 +2351,51 @@
     });
   }
 
+  function renderCtTimeline(diasDesdeParto, items) {
+    // Escala de la línea: 0 a 365 días. Lo "continuo" (sin fin) se marca aparte.
+    const maxEscala = 365;
+    const diasClamp = Math.min(diasDesdeParto, maxEscala);
+    const pctHoy = (diasClamp / maxEscala) * 100;
+
+    const zonas = [
+      { desde: 0, hasta: 84, color: "#F0D8A8", label: "0-12 sem" },
+      { desde: 84, hasta: 365, color: "#D9C1E8", label: "12sem-1año" }
+    ];
+
+    const marcadores = items
+      .filter(it => it.ventana_inicio_dias != null)
+      .map(it => {
+        const inicioPct = (Math.min(it.ventana_inicio_dias, maxEscala) / maxEscala) * 100;
+        return { pct: inicioPct, item: it };
+      });
+
+    let html = `<div class="ct-timeline-wrap">
+      <div class="ct-timeline-track">`;
+    zonas.forEach(z => {
+      const left = (z.desde / maxEscala) * 100;
+      const width = ((z.hasta - z.desde) / maxEscala) * 100;
+      html += `<div class="ct-timeline-zona" style="left:${left}%; width:${width}%; background:${z.color};"></div>`;
+    });
+    marcadores.forEach(m => {
+      html += `<div class="ct-timeline-marca ${m.item.cumplido ? 'cumplido' : (m.item.vigente ? 'vigente' : '')}" style="left:${m.pct}%;" title="${m.item.item}"></div>`;
+    });
+    html += `<div class="ct-timeline-hoy" style="left:${pctHoy}%;"><span class="ct-timeline-hoy-dot"></span><span class="ct-timeline-hoy-label">Hoy</span></div>`;
+    html += `</div>
+      <div class="ct-timeline-labels"><span>Parto</span><span>3 meses</span><span>6 meses</span><span>1 año +</span></div>
+    </div>`;
+    return html;
+  }
+
   document.getElementById("ct-guardar-parto-btn").addEventListener("click", async () => {
     const fecha = document.getElementById("ct-fecha-parto").value;
     if (!fecha) return;
     const tuvoThe = document.getElementById("ct-tuvo-the").checked;
     const btn = document.getElementById("ct-guardar-parto-btn");
+    const textoOriginal = btn.textContent;
     btn.disabled = true; btn.textContent = "Guardando...";
     await sb.rpc("guardar_fecha_parto", { p_token: session.token, p_fecha_parto: fecha, p_tuvo_the: tuvoThe });
-    btn.disabled = false; btn.textContent = "Activar mi seguimiento";
+    btn.disabled = false; btn.textContent = textoOriginal;
+    document.getElementById("ct-cancelar-edicion-btn").style.display = "none";
     initCuartoTrimestre();
   });
 
