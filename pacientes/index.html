@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIEMPRE</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#5B3E96">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -243,6 +248,18 @@
   .welcome-hero { text-align: center; padding: 26px 20px; background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
   .welcome-hero-msg { font-family: 'Fraunces', serif; font-weight: 600; font-size: 20px; color: var(--violet-deep); margin-bottom: 10px; }
   .welcome-hero-explain { font-size: 13.5px; color: var(--gray-600); line-height: 1.65; margin: 0; }
+
+  .rc-header-pac { display: flex; align-items: center; gap: 12px; }
+  .notif-icon {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--violet-light); color: var(--violet-dark);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .notif-icon svg { width: 20px; height: 20px; }
+  .notif-titulo { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); }
+  .notif-sub { font-size: 12px; color: var(--gray-600); margin-top: 1px; }
+  .notif-estado { font-size: 12.5px; font-weight: 600; margin-top: 10px; }
+  .notif-estado.ok { color: var(--teal-dark); }
+  .notif-estado.error { color: var(--pink-dark); }
   .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .feature-card {
     background: white; border-radius: 14px; padding: 14px; border: 1px solid var(--gray-300); box-shadow: var(--shadow-card);
@@ -644,6 +661,20 @@
         <div class="logo-mark" style="margin: 0 auto 16px;">S</div>
         <div class="welcome-hero-msg" id="bienvenida-msg">—</div>
         <p class="welcome-hero-explain" id="bienvenida-explain">—</p>
+      </div>
+
+      <div class="card" id="notif-card">
+        <div class="rc-header-pac">
+          <div class="notif-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          </div>
+          <div>
+            <div class="notif-titulo">Activá las notificaciones</div>
+            <div class="notif-sub">Así te avisamos cuando corresponda algo importante</div>
+          </div>
+        </div>
+        <button class="secondary" id="activar-notif-btn" style="margin-top:12px;">Activar notificaciones</button>
+        <p class="notif-estado" id="notif-estado" style="display:none;"></p>
       </div>
     </div>
 
@@ -1319,6 +1350,69 @@
     { tab: "pautas-alarma", color: "#A5382E", title: "Pautas de alarma", desc: "Cuándo consultar sin demora", icon: '<path d="M12 3.2l9.5 17.1H2.5L12 3.2z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="17.2" r="0.9" fill="currentColor" stroke="none"/>' },
     { tab: "informacion", color: "#5D4A85", title: "Información", desc: "Preguntas frecuentes", icon: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/>' }
   ];
+  // ================= NOTIFICACIONES PUSH =================
+  const VAPID_PUBLIC_KEY = "BI_B30-nv5anh9soomMMAiicwILy4lceyDulP4L7klXiWToMTIkO7U8h_vNje1flaySYyZ5mnJ7f6uR8wSok6OA";
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+  }
+
+  function actualizarEstadoNotif(texto, clase) {
+    const el = document.getElementById("notif-estado");
+    el.textContent = texto;
+    el.className = "notif-estado " + (clase || "");
+    el.style.display = "block";
+  }
+
+  async function verificarEstadoNotificaciones() {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      document.getElementById("activar-notif-btn").style.display = "none";
+      actualizarEstadoNotif("Tu navegador no admite notificaciones push.", "error");
+      return;
+    }
+    if (Notification.permission === "granted") {
+      document.getElementById("activar-notif-btn").style.display = "none";
+      actualizarEstadoNotif("Notificaciones activadas ✓", "ok");
+    } else if (Notification.permission === "denied") {
+      document.getElementById("activar-notif-btn").style.display = "none";
+      actualizarEstadoNotif("Bloqueaste las notificaciones para esta app. Podés habilitarlas desde la configuración del navegador.", "error");
+    }
+  }
+
+  document.getElementById("activar-notif-btn").addEventListener("click", async () => {
+    const btn = document.getElementById("activar-notif-btn");
+    btn.disabled = true; btn.textContent = "Activando...";
+    try {
+      const registro = await navigator.serviceWorker.register("./sw.js");
+      const permiso = await Notification.requestPermission();
+      if (permiso !== "granted") {
+        actualizarEstadoNotif("No se activaron las notificaciones.", "error");
+        btn.disabled = false; btn.textContent = "Activar notificaciones";
+        return;
+      }
+      const suscripcion = await registro.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+      const sub = suscripcion.toJSON();
+      await sb.rpc("guardar_push_subscription", {
+        p_token: session.token,
+        p_endpoint: sub.endpoint,
+        p_p256dh: sub.keys.p256dh,
+        p_auth_key: sub.keys.auth
+      });
+      btn.style.display = "none";
+      actualizarEstadoNotif("Notificaciones activadas ✓", "ok");
+    } catch (e) {
+      console.error("Error activando notificaciones:", e);
+      actualizarEstadoNotif("No pudimos activar las notificaciones. Probá de nuevo.", "error");
+      btn.disabled = false; btn.textContent = "Activar notificaciones";
+    }
+  });
+
   async function initBienvenida() {
     try {
       const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
@@ -1327,6 +1421,7 @@
     } catch (e) {
       document.getElementById("bienvenida-msg").textContent = "¡Bienvenida a SIEMPRE!";
     }
+    verificarEstadoNotificaciones();
   }
 
   // ================= ASPIRINA =================
