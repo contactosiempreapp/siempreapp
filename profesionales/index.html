@@ -113,6 +113,11 @@
   .med-actual .m-detalle { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
   .medicion-row { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-100); font-size: 13px; }
   .medicion-row:first-child { border-top: none; }
+  .ver-previos-btn-prof {
+    display: flex; align-items: center; gap: 6px; background: var(--violet-light); color: var(--violet-dark);
+    border: none; border-radius: 20px; font-size: 12.5px; font-weight: 700; font-family: 'Manrope', sans-serif;
+    cursor: pointer; padding: 8px 14px;
+  }
 </style>
 </head>
 <body>
@@ -219,6 +224,7 @@
     </button>
     <div class="ficha-header" id="ficha-header"></div>
     <div id="ficha-resumen-content"></div>
+    <div id="ficha-resumenes-mensuales"></div>
   </main>
 </div>
 
@@ -516,6 +522,120 @@
     html += `</div>`;
 
     document.getElementById("ficha-resumen-content").innerHTML = html;
+    cargarResumenesMensuales(pacienteId, paciente);
+  }
+
+  function primerYUltimoDiaDelMes() {
+    const hoy = new Date();
+    const primero = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().slice(0, 10);
+    const ultimo = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).toISOString().slice(0, 10);
+    return { primero, ultimo };
+  }
+
+  async function cargarResumenesMensuales(pacienteId, paciente) {
+    const { primero, ultimo } = primerYUltimoDiaDelMes();
+    const cont = document.getElementById("ficha-resumenes-mensuales");
+
+    const [aspirinaTodo, calcioTodo, calcioSupTodo, actividadTodo, pasSueltasTodo, mdpaInformesTodo] = await Promise.all([
+      sb.from("aspirina_log").select("dia, tomada").eq("paciente_id", pacienteId).order("dia"),
+      sb.from("calcio_log").select("dia, aporte_calculado_mg").eq("paciente_id", pacienteId).order("dia"),
+      sb.from("calcio_suplemento_log").select("dia, dosis").eq("paciente_id", pacienteId).order("dia"),
+      sb.from("actividad_fisica_semana").select("semana_inicio, dias").eq("paciente_id", pacienteId).order("semana_inicio"),
+      sb.from("presion_arterial_suelta").select("*").eq("paciente_id", pacienteId).order("fecha_hora", { ascending: false }),
+      sb.from("mdpa_informes").select("*").eq("paciente_id", pacienteId).order("fecha_generado", { ascending: false })
+    ]);
+
+    // ---- Aspirina ----
+    const aspLogs = aspirinaTodo.data || [];
+    const aspMes = aspLogs.filter(r => r.dia >= primero && r.dia <= ultimo);
+    const pctAsp = (arr) => arr.length ? Math.round(arr.filter(r => r.tomada).length / arr.length * 100) : null;
+    const aspMesPct = pctAsp(aspMes);
+    const aspTotalPct = pctAsp(aspLogs);
+
+    // ---- Calcio (alimentación + suplemento) ----
+    const calcLogs = calcioTodo.data || [];
+    const calcMes = calcLogs.filter(r => r.dia >= primero && r.dia <= ultimo);
+    const pctCalc = (arr) => arr.length ? Math.round(arr.filter(r => r.aporte_calculado_mg >= 1000).length / arr.length * 100) : null;
+    const calcMesPct = pctCalc(calcMes);
+    const calcTotalPct = pctCalc(calcLogs);
+
+    let calcSupPct = null;
+    if (paciente.indicacion_calcio) {
+      const frecuencia = paciente.calcio_frecuencia_diaria || 1;
+      const supMes = (calcioSupTodo.data || []).filter(r => r.dia >= primero && r.dia <= ultimo);
+      const cumplidos = supMes.filter(r => Object.values(r.dosis || {}).filter(v => v === true).length >= frecuencia).length;
+      calcSupPct = supMes.length ? Math.round(cumplidos / supMes.length * 100) : null;
+    }
+
+    // ---- Actividad física ----
+    const semanas = (actividadTodo.data || []).filter(s => s.semana_inicio >= primero.slice(0, 8) + "01" && s.semana_inicio <= ultimo);
+    let diasActivosTotal = 0, semanasConDatos = 0;
+    const conteoActividad = {};
+    semanas.forEach(s => {
+      const dias = s.dias || {};
+      let activosEnSemana = 0;
+      Object.values(dias).forEach(d => {
+        if (d && d.actividad) {
+          activosEnSemana++;
+          conteoActividad[d.actividad] = (conteoActividad[d.actividad] || 0) + 1;
+        }
+      });
+      if (activosEnSemana > 0) semanasConDatos++;
+      diasActivosTotal += activosEnSemana;
+    });
+    const promedioSemanal = semanas.length ? (diasActivosTotal / semanas.length).toFixed(1) : null;
+    const actividadPredominante = Object.keys(conteoActividad).sort((a, b) => conteoActividad[b] - conteoActividad[a])[0];
+
+    const fmtPct = v => v == null ? "sin datos" : v + "%";
+    let html = `<div class="resumen-card">
+      <div class="section-title">Resumen del mes — Aspirina</div>
+      <p style="font-size:13px;">Este mes: <strong>${fmtPct(aspMesPct)}</strong> de adherencia · Desde que se indicó: <strong>${fmtPct(aspTotalPct)}</strong></p>
+    </div>
+    <div class="resumen-card">
+      <div class="section-title">Resumen del mes — Calcio</div>
+      <p style="font-size:13px;">Alimentación: este mes <strong>${fmtPct(calcMesPct)}</strong> de días llegó al objetivo · Histórico: <strong>${fmtPct(calcTotalPct)}</strong></p>
+      ${paciente.indicacion_calcio ? `<p style="font-size:13px;">Suplemento: <strong>${fmtPct(calcSupPct)}</strong> de cumplimiento este mes</p>` : ""}
+    </div>
+    <div class="resumen-card">
+      <div class="section-title">Resumen del mes — Actividad física</div>
+      <p style="font-size:13px;">Promedio: <strong>${promedioSemanal != null ? promedioSemanal + " días/semana" : "sin datos"}</strong> · Total del mes: <strong>${diasActivosTotal} días activos</strong>${actividadPredominante ? ` · Predomina: <strong>${actividadPredominante}</strong>` : ""}</p>
+    </div>`;
+
+    // ---- Historiales completos ----
+    const tomasLibres = pasSueltasTodo.data || [];
+    const informesMdpa = mdpaInformesTodo.data || [];
+
+    html += `<div class="resumen-card">
+      <div class="section-title">Historiales</div>
+      <button class="ver-previos-btn-prof" id="ver-tomas-libres-todas-btn">Ver historial completo de tomas libres (${tomasLibres.length})</button>
+      <div id="tomas-libres-todas-wrap" style="display:none; margin-top:10px;"></div>
+      <button class="ver-previos-btn-prof" id="ver-mdpa-informes-todos-btn" style="margin-top:10px;">Ver historial de MDPA (${informesMdpa.length} informes)</button>
+      <div id="mdpa-informes-todos-wrap" style="display:none; margin-top:10px;"></div>
+    </div>`;
+
+    cont.innerHTML = html;
+
+    document.getElementById("ver-tomas-libres-todas-btn").addEventListener("click", () => {
+      const wrap = document.getElementById("tomas-libres-todas-wrap");
+      const abierto = wrap.style.display !== "none";
+      wrap.style.display = abierto ? "none" : "block";
+      if (!abierto) {
+        wrap.innerHTML = tomasLibres.length
+          ? tomasLibres.map(t => `<div class="medicion-row"><span>${t.sistolica}/${t.diastolica} (${t.contexto})</span><span>${new Date(t.fecha_hora).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}</span></div>`).join("")
+          : `<p class="sin-antecedentes">Sin tomas registradas.</p>`;
+      }
+    });
+
+    document.getElementById("ver-mdpa-informes-todos-btn").addEventListener("click", () => {
+      const wrap = document.getElementById("mdpa-informes-todos-wrap");
+      const abierto = wrap.style.display !== "none";
+      wrap.style.display = abierto ? "none" : "block";
+      if (!abierto) {
+        wrap.innerHTML = informesMdpa.length
+          ? informesMdpa.map(i => `<div class="medicion-row"><span>${i.tipo} · sin día 1: ${i.promedio_sindia1_sis ?? '—'}/${i.promedio_sindia1_dia ?? '—'} · ${i.dentro_objetivo ? '✓ dentro de objetivo' : '⚠ fuera de objetivo'}</span><span>${new Date(i.fecha_generado).toLocaleDateString("es-AR")}</span></div>`).join("")
+          : `<p class="sin-antecedentes">Sin informes de MDPA generados.</p>`;
+      }
+    });
   }
 
   // ---------- Arranque: ¿ya hay sesión activa? ----------
