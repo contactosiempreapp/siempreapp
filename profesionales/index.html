@@ -99,6 +99,19 @@
   header.top-bar .top-nav-btn.activo { color: var(--violet-deep); background: white; }
   header.top-bar .top-nav-btn.activo:hover { background: white; }
 
+  @media (max-width: 640px) {
+    header.top-bar { flex-direction: column; align-items: stretch; gap: 14px; padding: 16px 18px; }
+    .top-bar-brand { justify-content: flex-start; }
+    header.top-bar .top-nav {
+      width: 100%; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px; scrollbar-width: none;
+    }
+    header.top-bar .top-nav::-webkit-scrollbar { display: none; }
+    header.top-bar .top-nav-btn, header.top-bar button { flex-shrink: 0; white-space: nowrap; font-size: 12px; padding: 8px 12px; }
+    main.dash-main { padding: 16px; }
+    .stat-grid, .chart-grid { grid-template-columns: 1fr; }
+  }
+
   main.dash-main { padding: 24px; }
   .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
   .stat-card { background: white; border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); }
