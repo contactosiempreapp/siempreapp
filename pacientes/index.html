@@ -337,6 +337,18 @@
     background: var(--gray-100); border-radius: 10px; padding: 8px 10px; font-size: 11px; color: var(--gray-600);
   }
   .mdpa-informe-item strong { display: block; font-size: 14px; color: var(--violet-dark); font-family: 'Manrope', sans-serif; margin-top: 2px; }
+
+  .mdpa-card-destacado {
+    background: linear-gradient(160deg, #EEF4FD 0%, #FBFDFF 100%); border: 1.5px solid #C9DCF3;
+  }
+  .mdpa-subtitulo { font-size: 11px; font-weight: 600; color: var(--gray-600); }
+  .mdpa-duracion-info {
+    display: flex; align-items: center; justify-content: space-between; background: white; border: 1px solid #C9DCF3;
+    border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; font-size: 12.5px; color: var(--gray-900);
+  }
+  .mdpa-duracion-info button { background: none; border: none; color: #2C5FA3; font-weight: 700; font-size: 12px; text-decoration: underline; cursor: pointer; padding: 0; }
+  .mdpa-duracion-edit { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .mdpa-duracion-edit select { flex: 1; margin: 0; }
   .mdpa-informe-fecha { font-size: 11px; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 8px; }
   .mdpa-completo-banner {
     background: var(--teal-light); color: var(--teal-dark); font-size: 12.5px; font-weight: 700;
@@ -371,38 +383,22 @@
   .pa-nivel-fila { font-size: 12.5px; margin-top: 5px; line-height: 1.5; }
   .pa-nivel-fila strong { font-weight: 700; }
   .pa-nivel-banner.urgente { animation: urgentpulse 1.6s ease-in-out infinite; }
-  .pa-objetivo-nota { margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(34,24,60,0.15); color: #7A5A1E; }
   @keyframes urgentpulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(178,59,50,0.25); } 50% { box-shadow: 0 0 0 8px rgba(178,59,50,0); } }
   .pa-suelta-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
   .pa-suelta-nivel-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-  .pa-suelta-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-  .pa-suelta-table th { text-align: left; padding: 8px 10px; background: var(--gray-100); color: var(--gray-600); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.02em; }
-  .pa-suelta-table td { padding: 8px 10px; border-bottom: 1px solid var(--gray-100); }
-  .pa-suelta-table tr:last-child td { border-bottom: none; }
 
   .pa-alerta-item {
     border: 1.5px solid var(--gray-300); border-radius: 12px; margin-top: 10px; overflow: hidden;
   }
   .pa-alerta-item summary {
     padding: 10px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; background: var(--gray-100);
-    color: var(--gray-900); list-style: none; display: flex; align-items: center; gap: 6px;
+    color: var(--gray-900); list-style: none; display: flex; align-items: center;
   }
   .pa-alerta-item summary::-webkit-details-marker { display: none; }
   .pa-alerta-item[open] summary { border-bottom: 1px solid var(--gray-300); }
   .pa-alerta-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px; flex-shrink: 0; }
   .pa-alerta-body { padding: 10px 12px; }
   .pa-alerta-body .pa-nivel-banner { margin-top: 0; }
-  .pa-ver-recomendacion { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--violet); text-decoration: underline; flex-shrink: 0; }
-  .pa-alerta-activa { border-color: var(--pink); }
-  .pa-alerta-activa .pa-alerta-header {
-    padding: 10px 12px; font-size: 12.5px; font-weight: 700; background: var(--pink-light);
-    color: var(--gray-900); display: flex; align-items: center; border-bottom: 1px solid var(--gray-300);
-  }
-  .pa-entendido-btn {
-    margin-top: 12px; width: 100%; padding: 11px; background: var(--violet); color: white; border: none;
-    border-radius: 10px; font-size: 13.5px; font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer;
-  }
-  .pa-entendido-btn:active { opacity: 0.85; }
 
   /* Cuarto trimestre */
   .ct-hero-card { background: linear-gradient(135deg, #B8873F 0%, #6B3F94 100%); border: none; }
@@ -415,6 +411,13 @@
   .ct-hero-icon svg { width: 26px; height: 26px; }
   .ct-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.85); font-weight: 600; }
   .ct-riesgo-card { background: linear-gradient(135deg, #FBF3E1 0%, #FDFAF3 100%); border-color: #EEDCB0; }
+  .ct-parto-resumen-card {
+    display: flex; align-items: center; justify-content: space-between; background: var(--gray-100);
+    border-radius: 12px; padding: 12px 14px;
+  }
+  .ct-parto-resumen-card .t-detalle { font-size: 12.5px; color: var(--gray-600); margin-top: 2px; }
+  .ct-parto-resumen-card .t-nombre { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); }
+  .ct-parto-modificar-btn { background: none; border: none; color: var(--violet); font-weight: 700; font-size: 12.5px; text-decoration: underline; cursor: pointer; flex-shrink: 0; }
   .ct-dias-badge {
     display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 12px; font-weight: 700;
     padding: 4px 12px; border-radius: 20px; margin-top: 12px;
@@ -1017,12 +1020,11 @@
         </div>
         <button class="secondary" id="guardar-pa-suelta-btn">Guardar toma</button>
         <div id="pa-suelta-resultado"></div>
-        <button class="secondary" id="toggle-pa-suelta-lista-btn" style="margin-top:10px; display:none;">Ver tomas registradas en el día de hoy</button>
-        <div id="pa-suelta-lista-wrap" style="display:none; margin-top:10px;"></div>
+        <div id="pa-suelta-lista" style="margin-top:10px;"></div>
       </div>
 
-      <div class="card" id="mdpa-card">
-        <h2><span class="md-icon" style="background:#FBEAE8; color:#B23B32;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg></span>Presión arterial <span class="pill-teal">MDPA</span></h2>
+      <div class="card mdpa-card-destacado" id="mdpa-card">
+        <h2><span class="md-icon" style="background:#E3EEFC; color:#2C5FA3;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg></span>MDPA <span class="mdpa-subtitulo">(Monitoreo Ambulatorio de la Presión Arterial)</span></h2>
         <p class="helper">Cargá cada medición en el momento del día que corresponda. Si tu médica te indicó el estudio, tocá "Cargar mediciones".</p>
         <div class="fuente-selector">
           <label class="fuente-opcion">
@@ -1072,30 +1074,22 @@
         <p class="helper" id="ct-info-riesgo" style="margin-bottom:0;">Cargando...</p>
       </div>
 
-      <div class="card" id="ct-fecha-actual-card" style="display:none;">
-        <h2 style="margin-bottom:10px;">Fecha de parto</h2>
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-          <p class="helper" id="ct-fecha-actual-text" style="margin:0;"></p>
-          <button type="button" id="ct-editar-fecha-btn" style="flex-shrink:0; background:var(--violet-light); color:var(--violet-dark); border:none; border-radius:10px; padding:8px 14px; font-size:12.5px; font-weight:700; font-family:'Manrope',sans-serif; cursor:pointer;">Editar</button>
-        </div>
-      </div>
-
       <div class="card" id="ct-setup-card" style="display:none;">
-        <h2 id="ct-setup-titulo">¿Ya nació tu bebé?</h2>
-        <p class="helper" id="ct-setup-ayuda">Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.</p>
-        <label for="ct-fecha-parto">Fecha de parto</label>
-        <input type="date" id="ct-fecha-parto">
-        <div class="check-row"><input type="checkbox" id="ct-tuvo-the"><label for="ct-tuvo-the" style="margin:0;">Tuve hipertensión del embarazo o preeclampsia en este embarazo</label></div>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-          <button class="primary" id="ct-guardar-parto-btn" style="flex:1;">Activar mi seguimiento</button>
-          <button type="button" id="ct-cancelar-edicion-btn" style="display:none; flex-shrink:0; background:var(--gray-100); color:var(--gray-600); border:none; border-radius:12px; padding:0 16px; font-size:13.5px; font-weight:700; font-family:'Manrope',sans-serif; cursor:pointer;">Cancelar</button>
+        <h2>Fecha de parto</h2>
+        <div id="ct-parto-resumen" style="display:none;"></div>
+        <div id="ct-parto-form-wrap">
+          <p class="helper" id="ct-parto-form-helper">Contanos cuándo nació tu bebé, así activamos tu plan de seguimiento del cuarto trimestre.</p>
+          <label for="ct-fecha-parto">Fecha de parto</label>
+          <input type="date" id="ct-fecha-parto">
+          <div class="check-row"><input type="checkbox" id="ct-tuvo-the"><label for="ct-tuvo-the" style="margin:0;">Tuve hipertensión del embarazo o preeclampsia en este embarazo</label></div>
+          <button class="primary" id="ct-guardar-parto-btn" style="margin-top:10px;">Activar mi seguimiento</button>
         </div>
       </div>
 
       <div id="ct-content"></div>
 
-      <div class="card" id="pp-mdpa-card" style="display:none;">
-        <h2>Presión arterial <span class="pill-teal">MDPA posparto</span></h2>
+      <div class="card mdpa-card-destacado" id="pp-mdpa-card" style="display:none;">
+        <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Ambulatorio de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
         <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
         <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
         <div id="pp-mdpa-informes-historial"></div>
@@ -1445,69 +1439,27 @@
   });
 
   // ================= CLASIFICACIÓN DE PRESIÓN =================
-  // Escalera de alarma (cuándo consultar): se evalúa la sistólica (PAS) y la
-  // diastólica (PAD) cada una contra su propia escala, y se toma el nivel más
-  // alto entre las dos — si cualquiera de las dos está alterada, alcanza para
-  // subir de nivel, aunque la otra esté en rango normal.
-  // Escala de PAD: fuente — protocolo clínico compartido, Magee and von
-  // Dadelszen, Maternal-Fetal Medicine (2021).
-  // Escala de PAS: derivada por el equipo en paralelo a la de PAD (mismo
-  // criterio de "muy alto" en ≥140, alineado a CHAP/NICE) — revisar y ajustar
-  // los cortes intermedios si hace falta.
+  // Basado en PAD (diastólica), con anulación si PAS ≥155.
+  // Fuente: protocolo clínico compartido — Magee and von Dadelszen,
+  // Maternal-Fetal Medicine (2021).
   let tomaMedicacionPA = false;
-  let riesgoAntecedentesPA = false;   // HTA crónica o preeclampsia previa (Mis datos)
-  let riesgoGestacionalPA = false;    // HTA gestacional en el embarazo actual (Embarazos)
-
-  // Pacientes medicadas o con factores de riesgo tienen un objetivo de control más
-  // estricto que el resto (NICE: <135/85 mmHg), aunque no estén en zona de alarma.
-  function esPacienteRiesgoPA() {
-    return riesgoAntecedentesPA || riesgoGestacionalPA || tomaMedicacionPA;
-  }
-
-  const NIVELES_PA = ["bajo", "normal_bajo", "normal", "normal_alto", "alto", "muy_alto"];
-
-  function nivelPorPAD(dia) {
-    if (dia == null) return null;
-    if (dia >= 105) return "muy_alto";
-    if (dia >= 90) return "alto";
-    if (dia >= 86) return "normal_alto";
-    if (dia >= 81) return "normal";
-    if (dia >= 75) return "normal_bajo";
-    return "bajo";
-  }
-  function nivelPorPAS(sis) {
-    if (sis == null) return null;
-    if (sis >= 140) return "muy_alto";
-    if (sis >= 130) return "alto";
-    if (sis >= 125) return "normal_alto";
-    if (sis >= 120) return "normal";
-    if (sis >= 110) return "normal_bajo";
-    return "bajo";
-  }
 
   function clasificarPA(sis, dia) {
-    const nivelDia = nivelPorPAD(dia);
-    const nivelSis = nivelPorPAS(sis);
-    const rangoDia = nivelDia == null ? -1 : NIVELES_PA.indexOf(nivelDia);
-    const rangoSis = nivelSis == null ? -1 : NIVELES_PA.indexOf(nivelSis);
-    const nivel = (rangoDia === -1 && rangoSis === -1) ? "normal" : NIVELES_PA[Math.max(rangoDia, rangoSis)];
-
-    // Qué parámetro definió el nivel final: útil para aclarar el motivo en el mensaje.
-    let factorDecisivo = "ambas";
-    if (rangoSis > rangoDia) factorDecisivo = "PAS";
-    else if (rangoDia > rangoSis) factorDecisivo = "PAD";
+    const porPAS = sis != null && sis >= 155;
+    let nivel;
+    if (porPAS || dia >= 105) nivel = "muy_alto";
+    else if (dia >= 90) nivel = "alto";
+    else if (dia >= 86) nivel = "normal_alto";
+    else if (dia >= 81) nivel = "normal";
+    else if (dia >= 75) nivel = "normal_bajo";
+    else nivel = "bajo";
 
     const conMed = tomaMedicacionPA;
-    const consultaMuyAlto = factorDecisivo === "PAS"
-      ? "Tu presión sistólica es ≥140 mmHg — consultá a GUARDIA en las próximas 4 horas."
-      : factorDecisivo === "PAD"
-        ? "Tu presión diastólica es ≥105 mmHg — consultá a GUARDIA en las próximas 4 horas."
-        : "Consultá a GUARDIA en las próximas 4 horas.";
     const tablas = {
       muy_alto: {
         label: "Muy alto", color: "#B23B32", bg: "#FBEAE8",
         siguiente: "Sentate en silencio 5 minutos y volvé a medir la presión.",
-        consultar: consultaMuyAlto,
+        consultar: porPAS ? "Tu presión sistólica es ≥155 mmHg — consultá a GUARDIA en las próximas 4 horas." : "Consultá a GUARDIA en las próximas 4 horas.",
         control: "Medí todos los días."
       },
       alto: {
@@ -1541,37 +1493,16 @@
         control: conMed ? "Medí todos los días, o como te indique tu médica si te cambió el tratamiento." : "Según las indicaciones de tu médica."
       }
     };
-    const urgente = nivel === "muy_alto" || nivel === "alto";
-    const notaFactor = urgente && factorDecisivo !== "ambas"
-      ? (factorDecisivo === "PAS" ? "Este nivel se definió por tu presión sistólica (la diastólica está más baja)." : "Este nivel se definió por tu presión diastólica (la sistólica está más baja).")
-      : null;
-
-    const resultado = Object.assign({ nivel, urgente, porPAS: factorDecisivo === "PAS", factorDecisivo, notaFactor }, tablas[nivel]);
-
-    // Objetivo de control más estricto para pacientes con factores de riesgo o medicadas.
-    // No es una alarma: es un aviso informativo de que la lectura no llega al objetivo
-    // recomendado por NICE (<135/85 mmHg) aunque no requiera consulta urgente.
-    if (!resultado.urgente && esPacienteRiesgoPA() && sis != null && dia != null && (sis >= 135 || dia > 85)) {
-      resultado.objetivoSuperado = true;
-      resultado.objetivoMsg = "Para tu perfil (con medicación o factores de riesgo), el objetivo de control recomendado es menos de 135/85 mmHg. Esta lectura no lo alcanza. No es urgente, pero comentaselo a tu médica en el próximo control.";
-    }
-    return resultado;
+    return Object.assign({ nivel, urgente: nivel === "muy_alto" || nivel === "alto", porPAS }, tablas[nivel]);
   }
 
   function renderNivelBanner(clasif) {
-    let html = `<div class="pa-nivel-banner ${clasif.urgente ? 'urgente' : ''}" style="background:${clasif.bg}; border-color:${clasif.color};">
+    return `<div class="pa-nivel-banner ${clasif.urgente ? 'urgente' : ''}" style="background:${clasif.bg}; border-color:${clasif.color};">
       <div class="pa-nivel-label" style="color:${clasif.color};">${clasif.label}${clasif.porPAS ? ' ⚠' : ''}</div>
       <div class="pa-nivel-fila"><strong>Próxima medición:</strong> ${clasif.siguiente}</div>
       <div class="pa-nivel-fila"><strong>Consultar con tu médica:</strong> ${clasif.consultar}</div>
-      <div class="pa-nivel-fila"><strong>Control:</strong> ${clasif.control}</div>`;
-    if (clasif.notaFactor) {
-      html += `<div class="pa-nivel-fila" style="font-style:italic; color:var(--gray-600);">${clasif.notaFactor}</div>`;
-    }
-    if (clasif.objetivoSuperado) {
-      html += `<div class="pa-nivel-fila pa-objetivo-nota"><strong>Objetivo de control:</strong> ${clasif.objetivoMsg}</div>`;
-    }
-    html += `</div>`;
-    return html;
+      <div class="pa-nivel-fila"><strong>Control:</strong> ${clasif.control}</div>
+    </div>`;
   }
 
   // Clasificación simplificada para posparto (umbrales provisorios, a confirmar)
@@ -1670,90 +1601,42 @@
 
   // ================= TOMAS DEL DÍA =================
   let alertasPaHoy = [];
-  let ultimasTomasHoy = [];
-  let paSueltaListaAbierta = false;
 
   async function initPaSuelta() {
     const { data, error } = await sb.rpc("obtener_pa_suelta_hoy", { p_token: session.token });
     if (error || !data || !data.ok) return;
     const tomas = data.tomas || [];
-    ultimasTomasHoy = tomas;
     renderPaSueltaLista(tomas);
 
-    // Reconstruye las alertas del día (por si se recarga la página).
-    // Se marcan como "leídas" todas menos la última, que siempre queda
-    // visible y pendiente de que la paciente confirme "Entendido".
+    // Reconstruye las alertas del día (por si se recarga la página)
     alertasPaHoy = tomas
       .map(t => {
         const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
-        return (c.urgente || c.objetivoSuperado) ? { sis: t.sistolica, dia: t.diastolica, clasif: c, hora: new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) } : null;
+        return c.urgente ? { sis: t.sistolica, dia: t.diastolica, clasif: c, hora: new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) } : null;
       })
       .filter(Boolean)
-      .reverse(); // más antigua primero, para que la última quede al final
-    alertasPaHoy.forEach((a, i) => { a.leida = i !== alertasPaHoy.length - 1; });
+      .reverse(); // más antigua primero, para que la última quede al final (abierta)
     renderAlertasPaHoy();
   }
-
   function renderPaSueltaLista(tomas) {
-    const btn = document.getElementById("toggle-pa-suelta-lista-btn");
-    const wrap = document.getElementById("pa-suelta-lista-wrap");
-    if (!tomas.length) {
-      btn.style.display = "none";
-      wrap.style.display = "none";
-      wrap.innerHTML = "";
-      return;
-    }
-    btn.style.display = "block";
-    btn.textContent = paSueltaListaAbierta ? "Ocultar tomas de hoy" : `Ver tomas registradas en el día de hoy (${tomas.length})`;
-    wrap.style.display = paSueltaListaAbierta ? "block" : "none";
-    const filas = tomas.map(t => {
+    const cont = document.getElementById("pa-suelta-lista");
+    if (!tomas.length) { cont.innerHTML = ""; return; }
+    cont.innerHTML = `<div class="ct-categoria-title">Tomas de hoy</div>` + tomas.map(t => {
       const c = t.contexto === "posparto" ? clasificarPAPosparto(t.sistolica, t.diastolica) : clasificarPA(t.sistolica, t.diastolica);
       const hora = new Date(t.fecha_hora).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
-      return `<tr>
-        <td>${hora}</td>
-        <td>${t.sistolica}/${t.diastolica}</td>
-        <td><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${c.label}</td>
-      </tr>`;
+      return `<div class="pa-suelta-item"><span><span class="pa-suelta-nivel-dot" style="background:${c.color}"></span>${t.sistolica}/${t.diastolica} — ${c.label}</span><span>${hora}</span></div>`;
     }).join("");
-    wrap.innerHTML = `<div class="mdpa-table-scroll"><table class="pa-suelta-table">
-      <thead><tr><th>Hora</th><th>PA</th><th>Nivel</th></tr></thead>
-      <tbody>${filas}</tbody>
-    </table></div>`;
   }
-  document.getElementById("toggle-pa-suelta-lista-btn").addEventListener("click", () => {
-    paSueltaListaAbierta = !paSueltaListaAbierta;
-    renderPaSueltaLista(ultimasTomasHoy);
-  });
-
   function renderAlertasPaHoy() {
     const cont = document.getElementById("pa-suelta-resultado");
     if (!alertasPaHoy.length) { cont.innerHTML = ""; return; }
     cont.innerHTML = alertasPaHoy.map((a, i) => {
       const esUltima = i === alertasPaHoy.length - 1;
-      if (esUltima && !a.leida) {
-        // La alerta vigente: siempre visible y desplegada hasta que la paciente confirme que la leyó.
-        return `<div class="pa-alerta-item pa-alerta-activa">
-          <div class="pa-alerta-header"><span class="pa-alerta-dot" style="background:${a.clasif.color}"></span>${a.hora} — ${a.sis}/${a.dia} · ${a.clasif.label}</div>
-          <div class="pa-alerta-body">${renderNivelBanner(a.clasif)}
-            <button class="pa-entendido-btn" data-idx="${i}">Entendido</button>
-          </div>
-        </div>`;
-      }
-      // Alertas anteriores (o ya confirmadas): minimizadas, se pueden reabrir para ver la recomendación.
-      return `<details class="pa-alerta-item">
-        <summary><span class="pa-alerta-dot" style="background:${a.clasif.color}"></span>${a.hora} — ${a.sis}/${a.dia} · ${a.clasif.label}<span class="pa-ver-recomendacion">Ver recomendación</span></summary>
+      return `<details class="pa-alerta-item" ${esUltima ? "open" : ""}>
+        <summary><span class="pa-alerta-dot" style="background:${a.clasif.color}"></span>${a.hora} — ${a.sis}/${a.dia} · ${a.clasif.label}</summary>
         <div class="pa-alerta-body">${renderNivelBanner(a.clasif)}</div>
       </details>`;
     }).join("");
-
-    const btnEntendido = cont.querySelector(".pa-entendido-btn");
-    if (btnEntendido) {
-      btnEntendido.addEventListener("click", () => {
-        const idx = parseInt(btnEntendido.dataset.idx);
-        alertasPaHoy[idx].leida = true;
-        renderAlertasPaHoy();
-      });
-    }
   }
   document.getElementById("guardar-pa-suelta-btn").addEventListener("click", async () => {
     const sis = parseInt(document.getElementById("pa-suelta-sis").value);
@@ -1765,6 +1648,12 @@
     await sb.rpc("registrar_pa_suelta", { p_token: session.token, p_sistolica: sis, p_diastolica: dia, p_contexto: contexto });
     btn.disabled = false; btn.textContent = "Guardar toma";
 
+    const clasif = contexto === "posparto" ? clasificarPAPosparto(sis, dia) : clasificarPA(sis, dia);
+    if (clasif.urgente) {
+      const hora = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+      alertasPaHoy.push({ sis, dia, clasif, hora });
+      renderAlertasPaHoy();
+    }
     document.getElementById("pa-suelta-sis").value = "";
     document.getElementById("pa-suelta-dia").value = "";
     initPaSuelta();
@@ -1897,6 +1786,21 @@
     let resumenHtml = "";
     if (hayAlarmaSevera) resumenHtml += `<div class="alerta-severa">⚠ Detectamos valores de presión muy altos. Repetí la medición en 5-15 minutos y, si se confirma, consultá cuanto antes (ver el detalle en cada toma).</div>`;
     resumenHtml += `
+      <div class="mdpa-duracion-info" id="${pref}mdpa-duracion-info">
+        <span>Duración indicada: <strong>${e.duracion_dias} días</strong></span>
+        <button id="${pref}editar-duracion-btn">Editar</button>
+      </div>
+      <div class="mdpa-duracion-edit" id="${pref}mdpa-duracion-edit-wrap" style="display:none;">
+        <select id="${pref}mdpa-duracion-edit-select">
+          <option value="2">2 días</option>
+          <option value="3">3 días</option>
+          <option value="4">4 días (protocolo corto)</option>
+          <option value="5">5 días</option>
+          <option value="6">6 días</option>
+          <option value="7">7 días (protocolo largo)</option>
+        </select>
+        <button class="secondary" id="${pref}guardar-duracion-btn" style="margin:0; width:auto; padding:8px 12px;">Guardar</button>
+      </div>
       <p style="font-size:13px; color:var(--gray-600); margin-bottom:4px;">Monitoreo en curso — día ${diaActual} de ${e.duracion_dias}</p>
       <p style="font-size:12px; color:var(--gray-600); margin-top:0;">${tomasCargadas} de ${totalTomas} tomas cargadas</p>
       <button class="secondary" id="${pref}toggle-mdpa-tabla-btn">Cargar mediciones</button>
@@ -1922,6 +1826,16 @@
     document.getElementById(pref + "cancelar-mdpa-btn").addEventListener("click", async () => {
       if (!confirm("¿Cancelar este monitoreo? Se van a borrar las mediciones cargadas y vas a poder iniciar uno nuevo.")) return;
       await sb.rpc("cancelar_mdpa", { p_token: session.token, p_estudio_id: e.id });
+      initMdpa(ctx);
+    });
+
+    document.getElementById(pref + "editar-duracion-btn").addEventListener("click", () => {
+      document.getElementById(pref + "mdpa-duracion-edit-select").value = e.duracion_dias;
+      document.getElementById(pref + "mdpa-duracion-edit-wrap").style.display = "flex";
+    });
+    document.getElementById(pref + "guardar-duracion-btn").addEventListener("click", async () => {
+      const nuevaDuracion = parseInt(document.getElementById(pref + "mdpa-duracion-edit-select").value);
+      await sb.rpc("actualizar_duracion_mdpa", { p_token: session.token, p_estudio_id: e.id, p_nueva_duracion: nuevaDuracion });
       initMdpa(ctx);
     });
 
@@ -2357,42 +2271,6 @@
 
   // ================= CUARTO TRIMESTRE =================
   const CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
-  let ctDatosActuales = null;
-
-  function mostrarFormularioParto(esEdicion) {
-    const setupCard = document.getElementById("ct-setup-card");
-    const cancelarBtn = document.getElementById("ct-cancelar-edicion-btn");
-    const titulo = document.getElementById("ct-setup-titulo");
-    const ayuda = document.getElementById("ct-setup-ayuda");
-    const guardarBtn = document.getElementById("ct-guardar-parto-btn");
-
-    if (esEdicion) {
-      document.getElementById("ct-fecha-parto").value = (ctDatosActuales && ctDatosActuales.fecha_parto) || "";
-      document.getElementById("ct-tuvo-the").checked = !!(ctDatosActuales && ctDatosActuales.tuvo_the);
-      titulo.textContent = "Corregir fecha de parto";
-      ayuda.textContent = "Si te equivocaste al cargarla, modificala acá.";
-      guardarBtn.textContent = "Guardar cambios";
-      cancelarBtn.style.display = "inline-block";
-      document.getElementById("ct-fecha-actual-card").style.display = "none";
-    } else {
-      titulo.textContent = "¿Ya nació tu bebé?";
-      ayuda.textContent = "Contanos cuándo, así activamos tu plan de seguimiento del cuarto trimestre.";
-      guardarBtn.textContent = "Activar mi seguimiento";
-      cancelarBtn.style.display = "none";
-    }
-    setupCard.style.display = "block";
-  }
-
-  document.getElementById("ct-editar-fecha-btn").addEventListener("click", () => {
-    mostrarFormularioParto(true);
-  });
-
-  document.getElementById("ct-cancelar-edicion-btn").addEventListener("click", () => {
-    document.getElementById("ct-setup-card").style.display = "none";
-    if (ctDatosActuales && ctDatosActuales.fecha_parto) {
-      document.getElementById("ct-fecha-actual-card").style.display = "block";
-    }
-  });
 
   async function initCuartoTrimestre() {
     sb.rpc("obtener_config", { p_claves: ["info_cuarto_trimestre_riesgo"] }).then(({ data }) => {
@@ -2401,27 +2279,38 @@
     const { data, error } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
     const cont = document.getElementById("ct-content");
     const setupCard = document.getElementById("ct-setup-card");
-    const fechaActualCard = document.getElementById("ct-fecha-actual-card");
 
     if (error || !data || !data.ok) {
       cont.innerHTML = `<div class="card"><p style="font-size:13px;color:var(--gray-600);">No pudimos cargar esta sección.</p></div>`;
       return;
     }
 
-    ctDatosActuales = data;
-
     if (!data.fecha_parto) {
-      fechaActualCard.style.display = "none";
-      mostrarFormularioParto(false);
+      setupCard.style.display = "block";
+      document.getElementById("ct-parto-resumen").style.display = "none";
+      document.getElementById("ct-parto-form-wrap").style.display = "block";
       cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
       document.getElementById("pp-mdpa-card").style.display = "none";
       return;
     }
 
-    setupCard.style.display = "none";
-    fechaActualCard.style.display = "block";
-    const fechaTexto = new Date(data.fecha_parto + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
-    document.getElementById("ct-fecha-actual-text").textContent = fechaTexto;
+    setupCard.style.display = "block";
+    const fechaFmt = new Date(data.fecha_parto + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const ramaTxt = data.rama === "A_con_THE" ? "Con hipertensión del embarazo / preeclampsia" : "Sin hipertensión del embarazo";
+    document.getElementById("ct-parto-resumen").style.display = "block";
+    document.getElementById("ct-parto-resumen").innerHTML = `<div class="ct-parto-resumen-card">
+      <div><div class="t-nombre">${fechaFmt}</div><div class="t-detalle">${ramaTxt}</div></div>
+      <button class="ct-parto-modificar-btn" id="ct-parto-modificar-btn">Modificar</button>
+    </div>`;
+    document.getElementById("ct-parto-form-wrap").style.display = "none";
+    document.getElementById("ct-fecha-parto").value = data.fecha_parto;
+    document.getElementById("ct-tuvo-the").checked = data.rama === "A_con_THE";
+    document.getElementById("ct-parto-form-helper").textContent = "Corregí la fecha o la rama si hubo un error, y guardá de nuevo.";
+    document.getElementById("ct-guardar-parto-btn").textContent = "Guardar cambios";
+    document.getElementById("ct-parto-modificar-btn").addEventListener("click", () => {
+      document.getElementById("ct-parto-resumen").style.display = "none";
+      document.getElementById("ct-parto-form-wrap").style.display = "block";
+    });
     document.getElementById("pp-mdpa-card").style.display = "block";
     initMdpa("pp");
 
@@ -2513,11 +2402,9 @@
     if (!fecha) return;
     const tuvoThe = document.getElementById("ct-tuvo-the").checked;
     const btn = document.getElementById("ct-guardar-parto-btn");
-    const textoOriginal = btn.textContent;
     btn.disabled = true; btn.textContent = "Guardando...";
     await sb.rpc("guardar_fecha_parto", { p_token: session.token, p_fecha_parto: fecha, p_tuvo_the: tuvoThe });
-    btn.disabled = false; btn.textContent = textoOriginal;
-    document.getElementById("ct-cancelar-edicion-btn").style.display = "none";
+    btn.disabled = false; btn.textContent = "Activar mi seguimiento";
     initCuartoTrimestre();
   });
 
@@ -2610,7 +2497,6 @@
     const c = data.clinicos || {};
     document.getElementById("ac-preeclampsia-previa").checked = !!c.preeclampsia_previa;
     document.getElementById("ac-hta-cronica").checked = !!c.hta_cronica;
-    riesgoAntecedentesPA = !!(c.preeclampsia_previa || c.hta_cronica);
     document.getElementById("ac-diabetes").checked = !!c.diabetes_pregestacional;
     document.getElementById("ac-renal").checked = !!c.enfermedad_renal_cronica;
     document.getElementById("ac-autoinmune").checked = !!c.enfermedad_autoinmune;
@@ -2692,7 +2578,6 @@
       p_clinicos: clinicos, p_familiares: familiares, p_estilo_vida: estiloVida, p_paternos: paternosList
     });
     btn.disabled = false; btn.textContent = "Guardar mis datos";
-    riesgoAntecedentesPA = !!(clinicos.preeclampsia_previa || clinicos.hta_cronica);
     const msg = document.getElementById("datos-guardado-msg");
     msg.style.display = "block";
     setTimeout(() => { msg.style.display = "none"; }, 2500);
@@ -2828,7 +2713,6 @@
     renderPrevios();
 
     semanaGestacionalActual = null;
-    riesgoGestacionalPA = false;
     if (data.actual && data.actual !== null) {
       const a = data.actual;
       if (a.fum) document.getElementById("ge-fum").value = a.fum;
@@ -2837,7 +2721,6 @@
       if (a.eco_dias != null) document.getElementById("ge-eco-dias").value = a.eco_dias;
       if (a.fpp_obstetra) document.getElementById("ge-fpp").value = a.fpp_obstetra;
       document.getElementById("ge-hta-gestacional").checked = !!a.hipertension_gestacional_actual;
-      riesgoGestacionalPA = !!a.hipertension_gestacional_actual;
 
       // Si ya tenía cargado solo eco (sin FUM), dejamos seleccionado ese modo
       if (!a.fum && a.fecha_eco_datante) {
