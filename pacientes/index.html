@@ -358,6 +358,12 @@
     display: block; background: none; border: none; color: var(--gray-600); font-size: 11.5px;
     text-decoration: underline; cursor: pointer; margin-top: 12px; padding: 0;
   }
+  .ver-previos-btn {
+    display: flex; align-items: center; gap: 6px; background: var(--violet-light); color: var(--violet-dark);
+    border: none; border-radius: 20px; font-size: 12.5px; font-weight: 700; font-family: 'Manrope', sans-serif;
+    cursor: pointer; padding: 8px 14px; margin-top: 12px;
+  }
+  .ver-previos-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
   /* Tratamiento y tomas sueltas */
   .tratamiento-activo-card {
@@ -375,6 +381,18 @@
   .tratamiento-activo-card .t-detalle { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
   .tratamiento-hist-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 12px; color: var(--gray-600); }
   .tratamiento-hist-item .t-hist-nombre { color: var(--gray-900); font-weight: 600; }
+
+  .det-trat-item {
+    border-left: 3px solid var(--gray-300); padding: 4px 0 14px 14px; margin-left: 4px; position: relative;
+  }
+  .det-trat-item::before {
+    content: ""; position: absolute; left: -6px; top: 6px; width: 10px; height: 10px; border-radius: 50%;
+    background: var(--gray-300); border: 2px solid white;
+  }
+  .det-trat-item.vigente { border-left-color: var(--teal); }
+  .det-trat-item.vigente::before { background: var(--teal); }
+  .det-trat-item .t-nombre { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); }
+  .det-trat-item .t-detalle { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
 
   .pa-nivel-banner {
     border-radius: 12px; padding: 14px; margin-top: 12px; border: 2px solid;
@@ -547,6 +565,14 @@
   /* info panels */
   .info-text { font-size: 14px; line-height: 1.7; color: var(--gray-900); white-space: pre-wrap; }
 
+  .mensajes-hilo-pac { max-height: 320px; overflow-y: auto; margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .msg-bubble-pac { max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 13.5px; line-height: 1.45; }
+  .msg-bubble-pac.pac { align-self: flex-end; background: var(--violet); color: white; border-bottom-right-radius: 4px; }
+  .msg-bubble-pac.prof { align-self: flex-start; background: var(--gray-100); color: var(--gray-900); border-bottom-left-radius: 4px; }
+  .msg-fecha-pac { font-size: 10.5px; opacity: 0.7; margin-top: 4px; }
+  .mensajes-input-row-pac { display: flex; gap: 8px; align-items: flex-end; }
+  .mensajes-input-row-pac textarea { flex: 1; min-height: 44px; max-height: 100px; padding: 11px 13px; border: 1.5px solid var(--gray-300); border-radius: 10px; font-size: 14px; font-family: inherit; resize: vertical; margin: 0; }
+
   button.logout { background: none; border: none; color: var(--gray-600); font-size: 13px; text-decoration: underline; cursor: pointer; padding: 0; }
   footer.foot { text-align: center; padding: 12px; }
 </style>
@@ -607,6 +633,7 @@
     </button>
     <button class="tab-btn" data-tab="pautas-alarma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l9.5 17.1H2.5L12 3.2z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="17.2" r="0.9" fill="currentColor" stroke="none"/></svg>Pautas de alarma</button>
     <button class="tab-btn" data-tab="informacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>Información</button>
+    <button class="tab-btn" data-tab="mensajes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg>Mensajes</button>
   </nav>
 
   <main>
@@ -962,11 +989,26 @@
         </div>
       </div>
 
+      <div class="modal-backdrop" id="detalle-tratamiento-modal">
+        <div class="modal-card">
+          <button class="modal-close-btn" id="cerrar-detalle-tratamiento-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <h2 style="margin-bottom:4px;">Historial de tratamiento</h2>
+          <p class="helper">Cada cambio queda registrado — nada se borra.</p>
+          <div id="detalle-tratamiento-lista"></div>
+        </div>
+      </div>
+
       <!-- MI TRATAMIENTO -->
       <div class="card">
         <h2><span class="md-icon" style="background:var(--indigo-light); color:var(--indigo);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg></span>Mi tratamiento</h2>
         <p class="helper">Medicación indicada para tu presión, validada para el embarazo. Si cambia, cargá la nueva — la anterior queda guardada en tu historial.</p>
         <div id="tratamiento-actual"></div>
+        <button class="ver-previos-btn" id="ver-detalle-tratamiento-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver detalles</span>
+        </button>
         <details class="grupo" id="tratamiento-form-details">
           <summary id="tratamiento-form-summary">Cargar mi tratamiento</summary>
           <div class="grupo-body">
@@ -1021,12 +1063,15 @@
         <button class="secondary" id="guardar-pa-suelta-btn">Guardar toma</button>
         <div id="pa-suelta-resultado"></div>
         <div id="pa-suelta-lista" style="margin-top:10px;"></div>
-        <button class="mdpa-cancelar-btn" id="ver-pa-suelta-historial-btn" style="display:none;">Ver tomas previas</button>
+        <button class="ver-previos-btn" id="ver-pa-suelta-historial-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver tomas previas</span>
+        </button>
         <div id="pa-suelta-historial" style="display:none; margin-top:8px;"></div>
       </div>
 
       <div class="card mdpa-card-destacado" id="mdpa-card">
-        <h2><span class="md-icon" style="background:#E3EEFC; color:#2C5FA3;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg></span>MDPA <span class="mdpa-subtitulo">(Monitoreo Ambulatorio de la Presión Arterial)</span></h2>
+        <h2><span class="md-icon" style="background:#E3EEFC; color:#2C5FA3;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg></span>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span></h2>
         <p class="helper">Cargá cada medición en el momento del día que corresponda. Si tu médica te indicó el estudio, tocá "Cargar mediciones".</p>
         <div class="fuente-selector">
           <label class="fuente-opcion">
@@ -1039,7 +1084,10 @@
           </label>
         </div>
         <div id="mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
-        <button class="mdpa-cancelar-btn" id="ver-mdpa-previos-btn" style="display:none;">Ver MDPA previos</button>
+        <button class="ver-previos-btn" id="ver-mdpa-previos-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver MDPA previos</span>
+        </button>
         <div id="mdpa-informes-historial" style="display:none;"></div>
       </div>
     </div>
@@ -1092,10 +1140,13 @@
       <div id="ct-content"></div>
 
       <div class="card mdpa-card-destacado" id="pp-mdpa-card" style="display:none;">
-        <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Ambulatorio de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
+        <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
         <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
         <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
-        <button class="mdpa-cancelar-btn" id="ver-pp-mdpa-previos-btn" style="display:none;">Ver MDPA previos</button>
+        <button class="ver-previos-btn" id="ver-pp-mdpa-previos-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver MDPA previos</span>
+        </button>
         <div id="pp-mdpa-informes-historial" style="display:none;"></div>
       </div>
     </div>
@@ -1108,6 +1159,19 @@
     <!-- INFORMACIÓN -->
     <div class="panel" id="panel-informacion">
       <div class="card"><h2>Información</h2><div class="info-text" id="info-general-text">Cargando...</div></div>
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="panel" id="panel-mensajes">
+      <div class="card">
+        <h2>Mensajes con tu médica</h2>
+        <p class="helper">Acá vas a ver los mensajes que te escriba tu médica, y podés responderle.</p>
+        <div class="mensajes-hilo-pac" id="mensajes-hilo-pac"></div>
+        <div class="mensajes-input-row-pac">
+          <textarea id="mensaje-nuevo-pac" placeholder="Escribí un mensaje..."></textarea>
+          <button class="primary" id="enviar-mensaje-pac-btn" style="width:auto; padding:12px 18px;">Enviar</button>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -1199,6 +1263,7 @@
     });
     initPaSuelta();
     initInfoPanels();
+    initMensajes();
     initRecomendacionSodio();
     initCurvaPonderal();
     initActividadFisica();
@@ -1231,7 +1296,8 @@
     "curva-ponderal":   ["#7477C2", "#454890"],
     "cuarto-trimestre": ["#B8873F", "#6B3F94"],
     "pautas-alarma":    ["#E2665B", "#A5382E"],
-    "informacion":      ["#9482BE", "#5D4A85"]
+    "informacion":      ["#9482BE", "#5D4A85"],
+    "mensajes":         ["#6B8CC4", "#3E5A8C"]
   };
   function activarTab(tab) {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
@@ -1576,7 +1642,35 @@
     } else {
       histCont.innerHTML = "";
     }
+
+    const btnDetalle = document.getElementById("ver-detalle-tratamiento-btn");
+    if ((data.historial || []).length) {
+      btnDetalle.style.display = "flex";
+      btnDetalle.dataset.historial = JSON.stringify(data.historial);
+    } else {
+      btnDetalle.style.display = "none";
+    }
   }
+
+  document.getElementById("ver-detalle-tratamiento-btn").addEventListener("click", () => {
+    const historial = JSON.parse(document.getElementById("ver-detalle-tratamiento-btn").dataset.historial || "[]");
+    const lista = document.getElementById("detalle-tratamiento-lista");
+    lista.innerHTML = historial.map(h => {
+      const vigente = !h.fecha_fin;
+      return `<div class="det-trat-item ${vigente ? 'vigente' : ''}">
+        <div class="t-nombre">${h.nombre}${vigente ? ' <span class="t-vigente-badge">Vigente</span>' : ''}</div>
+        <div class="t-detalle">${h.dosis || 'Sin dosis registrada'}${h.frecuencia ? ' · ' + h.frecuencia : ''}</div>
+        <div class="t-detalle">Inició el ${h.fecha_inicio}${h.fecha_fin ? ' · Finalizó el ' + h.fecha_fin : ''}</div>
+      </div>`;
+    }).join("");
+    document.getElementById("detalle-tratamiento-modal").classList.add("show");
+  });
+  document.getElementById("cerrar-detalle-tratamiento-btn").addEventListener("click", () => {
+    document.getElementById("detalle-tratamiento-modal").classList.remove("show");
+  });
+  document.getElementById("detalle-tratamiento-modal").addEventListener("click", (e) => {
+    if (e.target.id === "detalle-tratamiento-modal") document.getElementById("detalle-tratamiento-modal").classList.remove("show");
+  });
 
   document.querySelectorAll('input[name="pa-trat-tipo"]').forEach(radio => {
     radio.addEventListener("change", () => {
@@ -1608,6 +1702,7 @@
 
   async function initPaSuelta() {
     const { data: recientes, error: errRecientes } = await sb.rpc("obtener_pa_suelta_recientes", { p_token: session.token, p_limite: 3 });
+    if (errRecientes) console.error("Error en obtener_pa_suelta_recientes:", errRecientes);
     if (!errRecientes && recientes && recientes.ok) renderPaSueltaLista(recientes.tomas || []);
 
     const { data: hoyData, error: errHoy } = await sb.rpc("obtener_pa_suelta_hoy", { p_token: session.token });
@@ -1629,10 +1724,10 @@
     const abierto = wrap.style.display !== "none";
     if (abierto) {
       wrap.style.display = "none";
-      document.getElementById("ver-pa-suelta-historial-btn").textContent = "Ver tomas previas";
+      document.querySelector("#ver-pa-suelta-historial-btn .vp-label").textContent = "Ver tomas previas";
       return;
     }
-    document.getElementById("ver-pa-suelta-historial-btn").textContent = "Ocultar tomas previas";
+    document.querySelector("#ver-pa-suelta-historial-btn .vp-label").textContent = "Ocultar tomas previas";
     wrap.style.display = "block";
     wrap.innerHTML = `<p class="helper">Cargando...</p>`;
     const { data, error } = await sb.rpc("obtener_pa_suelta_historial", { p_token: session.token });
@@ -1788,7 +1883,7 @@
     }
 
     btn.style.display = "block";
-    btn.textContent = "Ver MDPA previos";
+    btn.querySelector(".vp-label").textContent = "Ver MDPA previos";
     cont.style.display = "none";
     cont.innerHTML = `<div class="ct-categoria-title">Informes anteriores</div>` +
       data.informes.map(i => {
@@ -1806,7 +1901,7 @@
     btn.onclick = () => {
       const abierto = cont.style.display !== "none";
       cont.style.display = abierto ? "none" : "block";
-      btn.textContent = abierto ? "Ver MDPA previos" : "Ocultar MDPA previos";
+      btn.querySelector(".vp-label").textContent = abierto ? "Ver MDPA previos" : "Ocultar MDPA previos";
     };
   }
 
@@ -1987,6 +2082,36 @@
   }
 
   // ================= INFO PANELS =================
+  // ================= MENSAJES =================
+  async function initMensajes() {
+    const { data, error } = await sb.rpc("obtener_mensajes_paciente", { p_token: session.token });
+    const hilo = document.getElementById("mensajes-hilo-pac");
+    if (error || !data || !data.ok) { hilo.innerHTML = `<p class="helper">No pudimos cargar los mensajes.</p>`; return; }
+
+    const mensajes = data.mensajes || [];
+    if (!mensajes.length) {
+      hilo.innerHTML = `<p class="helper">Todavía no tenés mensajes. Si tu médica te escribe, van a aparecer acá.</p>`;
+    } else {
+      hilo.innerHTML = mensajes.map(m => `
+        <div class="msg-bubble-pac ${m.remitente === 'paciente' ? 'pac' : 'prof'}">
+          ${m.contenido}
+          <div class="msg-fecha-pac">${new Date(m.fecha_envio).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</div>
+        </div>
+      `).join("");
+      hilo.scrollTop = hilo.scrollHeight;
+    }
+  }
+  document.getElementById("enviar-mensaje-pac-btn").addEventListener("click", async () => {
+    const texto = document.getElementById("mensaje-nuevo-pac").value.trim();
+    if (!texto) return;
+    const btn = document.getElementById("enviar-mensaje-pac-btn");
+    btn.disabled = true;
+    await sb.rpc("enviar_mensaje_paciente", { p_token: session.token, p_contenido: texto });
+    document.getElementById("mensaje-nuevo-pac").value = "";
+    btn.disabled = false;
+    initMensajes();
+  });
+
   async function initInfoPanels() {
     const claves = ["info_alimentacion", "info_actividad_fisica", "info_pautas_alarma", "info_general"];
     const { data } = await sb.rpc("obtener_config", { p_claves: claves });
