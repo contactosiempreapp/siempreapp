@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIEMPRE — Profesional</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -87,6 +88,12 @@
   .inst-table th { background: var(--gray-100); text-align: left; padding: 10px 16px; font-size: 12px; color: var(--gray-600); font-weight: 700; }
   .inst-table td { padding: 12px 16px; font-size: 13.5px; border-top: 1px solid var(--gray-100); }
   .section-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px; color: var(--gray-900); margin: 0 0 12px; }
+
+  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .chart-grid canvas { max-height: 220px; }
+  .chart-destacado { background: linear-gradient(135deg, #B8873F 0%, #6B3F94 100%); border: none; grid-column: 1 / -1; }
+  .chart-destacado .rc-titulo { color: white; }
+  .funnel-nota { color: rgba(255,255,255,0.8); font-size: 11.5px; margin-top: 8px; text-align: center; }
 
   .search-bar { display: flex; gap: 10px; margin-bottom: 18px; }
   .search-bar input { flex: 1; margin: 0; }
@@ -208,6 +215,69 @@
   <main class="dash-main">
     <div class="stat-grid" id="dash-stats"></div>
     <div id="dash-instituciones-wrap"></div>
+
+    <div class="chart-grid">
+      <div class="resumen-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:var(--violet-light); color:var(--violet-dark);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 4 3 5-7"/></svg>
+          </div>
+          <div class="rc-titulo">Altas por mes</div>
+        </div>
+        <canvas id="chart-altas"></canvas>
+      </div>
+
+      <div class="resumen-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:var(--teal-light); color:var(--teal-dark);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg>
+          </div>
+          <div class="rc-titulo">Adherencia — Aspirina (con indicación)</div>
+        </div>
+        <canvas id="chart-aspirina"></canvas>
+      </div>
+
+      <div class="resumen-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:var(--blue-light); color:var(--blue);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>
+          </div>
+          <div class="rc-titulo">Adherencia — Calcio (con indicación)</div>
+        </div>
+        <canvas id="chart-calcio"></canvas>
+      </div>
+
+      <div class="resumen-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:var(--amber-light); color:var(--amber);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.2" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 6.5l-2 4 3 2-1.2 5.3"/><path d="M11.5 10.3l-4 2"/><path d="M14.5 12.5l3 1 1 4.2"/></svg>
+          </div>
+          <div class="rc-titulo">Actividad física (todas)</div>
+        </div>
+        <canvas id="chart-actividad"></canvas>
+      </div>
+
+      <div class="resumen-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:#FBEAE8; color:#B23B32;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>
+          </div>
+          <div class="rc-titulo">HTA medicadas — PA en objetivo</div>
+        </div>
+        <canvas id="chart-hta"></canvas>
+      </div>
+
+      <div class="resumen-card chart-destacado">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:rgba(255,255,255,0.25); color:#7A5A1E;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
+          </div>
+          <div class="rc-titulo" style="color:white;">Cuarto trimestre — retención</div>
+        </div>
+        <canvas id="chart-cuarto-trimestre"></canvas>
+        <p class="funnel-nota">Controles presenciales: próximamente.</p>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -392,6 +462,102 @@
     } else {
       wrap.innerHTML = "";
     }
+
+    cargarGraficosDashboard();
+  }
+
+  // ---------- Gráficos del dashboard ----------
+  let chartInstances = {};
+  function destruirChart(id) {
+    if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+  }
+
+  const COLOR_BAJA = "#D9544A", COLOR_MEDIA = "#C17A1F", COLOR_ALTA = "#0F8C68", COLOR_SIN_DATOS = "#C7C4D1";
+  const MESES_CORTOS = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+  function chartBucketOptions() {
+    return {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    };
+  }
+
+  function renderBucketChart(canvasId, bucket) {
+    destruirChart(canvasId);
+    const ctx = document.getElementById(canvasId).getContext("2d");
+    chartInstances[canvasId] = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Baja (<50%)", "Media (50-79%)", "Alta (≥80%)", "Sin datos"],
+        datasets: [{
+          data: [bucket.baja, bucket.media, bucket.alta, bucket.sin_datos],
+          backgroundColor: [COLOR_BAJA, COLOR_MEDIA, COLOR_ALTA, COLOR_SIN_DATOS],
+          borderRadius: 6
+        }]
+      },
+      options: chartBucketOptions()
+    });
+  }
+
+  async function cargarGraficosDashboard() {
+    const { data, error } = await sb.rpc("obtener_dashboard_grafico");
+    if (error || !data || !data.ok) {
+      console.error("Error en obtener_dashboard_grafico:", error);
+      return;
+    }
+
+    // Altas por mes
+    destruirChart("chart-altas");
+    const altas = data.altas_por_mes || [];
+    chartInstances["chart-altas"] = new Chart(document.getElementById("chart-altas").getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: altas.map(a => { const [y, m] = a.mes.split("-"); return MESES_CORTOS[parseInt(m) - 1] + " " + y.slice(2); }),
+        datasets: [{ data: altas.map(a => a.cantidad), backgroundColor: "#5B3E96", borderRadius: 6 }]
+      },
+      options: chartBucketOptions()
+    });
+
+    renderBucketChart("chart-aspirina", data.adherencia_aspirina);
+    renderBucketChart("chart-calcio", data.adherencia_calcio);
+    renderBucketChart("chart-actividad", data.actividad_fisica);
+
+    // HTA en objetivo — dona
+    destruirChart("chart-hta");
+    const hta = data.hta_objetivo;
+    chartInstances["chart-hta"] = new Chart(document.getElementById("chart-hta").getContext("2d"), {
+      type: "doughnut",
+      data: {
+        labels: ["En objetivo", "Fuera de objetivo", "Sin datos"],
+        datasets: [{ data: [hta.en_objetivo, hta.fuera_objetivo, hta.sin_datos], backgroundColor: [COLOR_ALTA, COLOR_BAJA, COLOR_SIN_DATOS] }]
+      },
+      options: { responsive: true, plugins: { legend: { position: "bottom", labels: { font: { size: 11 } } } } }
+    });
+
+    // Cuarto trimestre — funnel (barra horizontal descendente)
+    destruirChart("chart-cuarto-trimestre");
+    const ct = data.cuarto_trimestre;
+    chartInstances["chart-cuarto-trimestre"] = new Chart(document.getElementById("chart-cuarto-trimestre").getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: ["Dieron a luz", "Siguen interactuando (30 días)", "Tienen PA posparto registrada"],
+        datasets: [{
+          data: [ct.dieron_a_luz, ct.interactuando, ct.con_pa_posparto],
+          backgroundColor: ["rgba(255,255,255,0.9)", "rgba(255,255,255,0.65)", "rgba(255,255,255,0.4)"],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, ticks: { color: "white", precision: 0 }, grid: { color: "rgba(255,255,255,0.15)" } },
+          y: { ticks: { color: "white", font: { size: 11.5 } }, grid: { display: false } }
+        }
+      }
+    });
   }
 
   document.getElementById("logout-btn").addEventListener("click", () => cerrarSesion());
