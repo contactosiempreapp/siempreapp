@@ -32,7 +32,7 @@
   body { margin: 0; background: var(--bg); color: var(--gray-900); min-height: 100vh; }
   .screen { max-width: 420px; margin: 0 auto; min-height: 100vh; display: none; flex-direction: column; justify-content: center; padding: 32px 24px; }
   .screen.show { display: flex; }
-  #dashboard-screen.show { display: block; max-width: 900px; padding: 0; justify-content: flex-start; }
+  #dashboard-screen.show, #pacientes-screen.show, #ficha-screen.show { display: block; max-width: 900px; padding: 0; justify-content: flex-start; }
 
   .logo-mark {
     width: 56px; height: 56px; border-radius: 16px;
@@ -69,6 +69,9 @@
   header.top-bar .titulo { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; }
   header.top-bar .sub { font-size: 12px; opacity: 0.85; margin-top: 2px; }
   header.top-bar button { background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+  header.top-bar .top-nav { display: flex; gap: 8px; align-items: center; }
+  header.top-bar .top-nav-btn { background: none; border: none; color: rgba(255,255,255,0.75); font-size: 13px; font-weight: 700; cursor: pointer; padding: 6px 4px; }
+  header.top-bar .top-nav-btn.activo { color: white; border-bottom: 2px solid white; }
 
   main.dash-main { padding: 24px; }
   .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
@@ -80,6 +83,36 @@
   .inst-table th { background: var(--gray-100); text-align: left; padding: 10px 16px; font-size: 12px; color: var(--gray-600); font-weight: 700; }
   .inst-table td { padding: 12px 16px; font-size: 13.5px; border-top: 1px solid var(--gray-100); }
   .section-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px; color: var(--gray-900); margin: 0 0 12px; }
+
+  .search-bar { display: flex; gap: 10px; margin-bottom: 18px; }
+  .search-bar input { flex: 1; margin: 0; }
+  .search-bar button { width: auto; padding: 12px 20px; margin: 0; }
+  .pac-list { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); }
+  .pac-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 18px;
+    border-top: 1px solid var(--gray-100); cursor: pointer; transition: background 0.1s;
+  }
+  .pac-row:first-child { border-top: none; }
+  .pac-row:hover { background: var(--violet-light); }
+  .pac-row .p-nombre { font-weight: 700; font-size: 14px; color: var(--gray-900); }
+  .pac-row .p-detalle { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+  .pac-row .p-inst { font-size: 11.5px; color: var(--violet); font-weight: 600; }
+  .back-btn { background: none; border: none; color: var(--violet); font-weight: 700; font-size: 13px; cursor: pointer; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; padding: 0; }
+  .back-btn svg { width: 16px; height: 16px; }
+
+  .ficha-header { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 20px; }
+  .ficha-header .f-nombre { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--violet-deep); }
+  .ficha-header .f-detalle { font-size: 13px; color: var(--gray-600); margin-top: 4px; }
+
+  .resumen-card { background: white; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--gray-300); margin-bottom: 16px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag-positivo { background: var(--pink-light); color: #B23B5A; font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 20px; }
+  .sin-antecedentes { color: var(--gray-600); font-size: 13px; }
+  .med-actual { display: flex; align-items: center; gap: 12px; background: var(--violet-light); border-radius: 12px; padding: 12px 14px; }
+  .med-actual .m-nombre { font-weight: 700; color: var(--gray-900); font-size: 14px; }
+  .med-actual .m-detalle { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+  .medicion-row { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--gray-100); font-size: 13px; }
+  .medicion-row:first-child { border-top: none; }
 </style>
 </head>
 <body>
@@ -137,11 +170,55 @@
       <div class="titulo" id="dash-nombre">—</div>
       <div class="sub" id="dash-institucion">—</div>
     </div>
-    <button id="logout-btn">Cerrar sesión</button>
+    <div class="top-nav">
+      <button class="top-nav-btn activo" id="nav-dashboard-btn">Dashboard</button>
+      <button class="top-nav-btn" id="nav-pacientes-btn">Pacientes</button>
+      <button id="logout-btn">Cerrar sesión</button>
+    </div>
   </header>
   <main class="dash-main">
     <div class="stat-grid" id="dash-stats"></div>
     <div id="dash-instituciones-wrap"></div>
+  </main>
+</div>
+
+<div class="screen" id="pacientes-screen">
+  <header class="top-bar">
+    <div>
+      <div class="titulo">Pacientes</div>
+      <div class="sub" id="pac-institucion-sub">—</div>
+    </div>
+    <div class="top-nav">
+      <button class="top-nav-btn" id="nav-dashboard-btn-2">Dashboard</button>
+      <button class="top-nav-btn activo" id="nav-pacientes-btn-2">Pacientes</button>
+      <button id="logout-btn-2">Cerrar sesión</button>
+    </div>
+  </header>
+  <main class="dash-main">
+    <div class="search-bar">
+      <input type="text" id="pac-buscar-input" placeholder="Buscar por DNI o apellido...">
+      <button class="primary" id="pac-buscar-btn">Buscar</button>
+    </div>
+    <div class="pac-list" id="pac-lista"></div>
+  </main>
+</div>
+
+<div class="screen" id="ficha-screen">
+  <header class="top-bar">
+    <div>
+      <div class="titulo">Ficha de paciente</div>
+    </div>
+    <div class="top-nav">
+      <button id="logout-btn-3">Cerrar sesión</button>
+    </div>
+  </header>
+  <main class="dash-main">
+    <button class="back-btn" id="volver-a-lista-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver a pacientes
+    </button>
+    <div class="ficha-header" id="ficha-header"></div>
+    <div id="ficha-resumen-content"></div>
   </main>
 </div>
 
@@ -258,10 +335,13 @@
 
   // ---------- Dashboard ----------
   async function mostrarDashboard(perfil) {
+    miPerfil = perfil;
     document.getElementById("dash-nombre").textContent = perfil.nombre || "Profesional";
     document.getElementById("dash-institucion").textContent = perfil.es_super_admin
       ? "Acceso a todas las instituciones"
       : (perfil.institucion_nombre || "");
+    document.querySelectorAll(".top-nav-btn").forEach(b => b.classList.remove("activo"));
+    document.getElementById("nav-dashboard-btn").classList.add("activo");
     mostrarPantalla("dashboard-screen");
 
     const { data, error } = await sb.rpc("obtener_dashboard");
@@ -284,10 +364,159 @@
     }
   }
 
-  document.getElementById("logout-btn").addEventListener("click", async () => {
+  document.getElementById("logout-btn").addEventListener("click", () => cerrarSesion());
+  document.getElementById("logout-btn-2").addEventListener("click", () => cerrarSesion());
+  document.getElementById("logout-btn-3").addEventListener("click", () => cerrarSesion());
+  async function cerrarSesion() {
     await sb.auth.signOut();
     mostrarPantalla("login-screen");
+  }
+
+  let miPerfil = null;
+
+  document.getElementById("nav-dashboard-btn").addEventListener("click", () => mostrarDashboard(miPerfil));
+  document.getElementById("nav-dashboard-btn-2").addEventListener("click", () => mostrarDashboard(miPerfil));
+  document.getElementById("nav-pacientes-btn").addEventListener("click", () => mostrarPacientes());
+  document.getElementById("nav-pacientes-btn-2").addEventListener("click", () => mostrarPacientes());
+  document.getElementById("volver-a-lista-btn").addEventListener("click", () => mostrarPacientes());
+
+  // ---------- Lista de pacientes ----------
+  async function mostrarPacientes() {
+    document.querySelectorAll(".top-nav-btn").forEach(b => b.classList.remove("activo"));
+    document.getElementById("nav-pacientes-btn").classList.add("activo");
+    document.getElementById("nav-pacientes-btn-2").classList.add("activo");
+    document.getElementById("pac-institucion-sub").textContent = miPerfil && miPerfil.es_super_admin
+      ? "Todas las instituciones" : (miPerfil ? miPerfil.institucion_nombre : "");
+    mostrarPantalla("pacientes-screen");
+    await buscarPacientes("");
+  }
+
+  async function buscarPacientes(texto) {
+    const cont = document.getElementById("pac-lista");
+    cont.innerHTML = `<p style="padding:16px; font-size:13px; color:var(--gray-600);">Buscando...</p>`;
+    const { data, error } = await sb.rpc("buscar_pacientes", { p_busqueda: texto });
+    if (error || !data || !data.ok) {
+      cont.innerHTML = `<p style="padding:16px; font-size:13px; color:#B23B32;">No pudimos cargar las pacientes.</p>`;
+      return;
+    }
+    const pacientes = data.pacientes || [];
+    if (!pacientes.length) {
+      cont.innerHTML = `<p style="padding:16px; font-size:13px; color:var(--gray-600);">Sin resultados.</p>`;
+      return;
+    }
+    cont.innerHTML = pacientes.map(p => `
+      <div class="pac-row" data-id="${p.id}">
+        <div>
+          <div class="p-nombre">${p.apellido}, ${p.nombre}</div>
+          <div class="p-detalle">DNI ${p.dni}${miPerfil && miPerfil.es_super_admin ? " · " + p.institucion_nombre : ""}</div>
+        </div>
+        <div class="p-inst">${p.activa ? "" : "Inactiva"}</div>
+      </div>
+    `).join("");
+    cont.querySelectorAll(".pac-row").forEach(row => {
+      row.addEventListener("click", () => abrirFicha(row.dataset.id));
+    });
+  }
+
+  document.getElementById("pac-buscar-btn").addEventListener("click", () => buscarPacientes(document.getElementById("pac-buscar-input").value.trim()));
+  document.getElementById("pac-buscar-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") buscarPacientes(e.target.value.trim());
   });
+
+  // ---------- Ficha de paciente ----------
+  const LABEL_ANTECEDENTES = {
+    preeclampsia_previa: "Preeclampsia previa", hta_cronica: "Hipertensión crónica",
+    diabetes_pregestacional: "Diabetes pregestacional", enfermedad_renal_cronica: "Enfermedad renal crónica",
+    enfermedad_autoinmune: "Enfermedad autoinmune", sindrome_ovario_poliquistico: "SOP",
+    embarazo_multiple: "Embarazo múltiple", nuliparidad: "Nuliparidad",
+    intervalo_embarazos_mayor_10: ">10 años desde último embarazo", reproduccion_asistida: "Reproducción asistida"
+  };
+  const LABEL_FAMILIARES = {
+    madre_the: "Madre con hipertensión del embarazo", madre_pe: "Madre con preeclampsia",
+    hermana_the: "Hermana con hipertensión del embarazo", hermana_pe: "Hermana con preeclampsia",
+    papa_nacio_de_pe: "Papá del bebé nació de embarazo con preeclampsia"
+  };
+
+  async function abrirFicha(pacienteId) {
+    mostrarPantalla("ficha-screen");
+    document.getElementById("ficha-header").innerHTML = `<p style="color:var(--gray-600); font-size:13px;">Cargando...</p>`;
+    document.getElementById("ficha-resumen-content").innerHTML = "";
+
+    const { data: paciente } = await sb.from("pacientes").select("*").eq("id", pacienteId).single();
+    if (!paciente) { document.getElementById("ficha-header").innerHTML = `<p>No se encontró la paciente.</p>`; return; }
+
+    let edadTxt = "";
+    if (paciente.fecha_nacimiento) {
+      const nacimiento = new Date(paciente.fecha_nacimiento);
+      const hoy = new Date();
+      let edad = hoy.getFullYear() - nacimiento.getFullYear();
+      const m = hoy.getMonth() - nacimiento.getMonth();
+      if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) edad--;
+      edadTxt = edad + " años · ";
+    }
+    document.getElementById("ficha-header").innerHTML = `
+      <div class="f-nombre">${paciente.apellido}, ${paciente.nombre}</div>
+      <div class="f-detalle">DNI ${paciente.dni} · ${edadTxt}Alta el ${paciente.fecha_alta ? paciente.fecha_alta.slice(0,10) : ''}</div>
+    `;
+
+    const [clinicos, familiares, paternos, medicamentos, tomasSueltas] = await Promise.all([
+      sb.from("antecedentes_clinicos").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1),
+      sb.from("antecedentes_familiares").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }).limit(1),
+      sb.from("antecedentes_paternos").select("*").eq("paciente_id", pacienteId).order("fecha_carga", { ascending: false }),
+      sb.from("paciente_medicamentos").select("*, catalogo_farmacos(nombre, grupo)").eq("paciente_id", pacienteId).order("fecha_inicio", { ascending: false }),
+      sb.from("presion_arterial_suelta").select("*").eq("paciente_id", pacienteId).order("fecha_hora", { ascending: false }).limit(5)
+    ]);
+
+    // Antecedentes positivos
+    const tags = [];
+    const c = (clinicos.data && clinicos.data[0]) || {};
+    const f = (familiares.data && familiares.data[0]) || {};
+    Object.keys(LABEL_ANTECEDENTES).forEach(k => { if (c[k]) tags.push(LABEL_ANTECEDENTES[k]); });
+    Object.keys(LABEL_FAMILIARES).forEach(k => { if (f[k]) tags.push(LABEL_FAMILIARES[k]); });
+    (paternos.data || []).forEach(p => {
+      if (p.the) tags.push("Papá: pareja previa con hipertensión del embarazo");
+      if (p.preeclampsia) tags.push("Papá: pareja previa con preeclampsia");
+    });
+    if (c.otros_antecedentes) tags.push(c.otros_antecedentes);
+
+    let html = `<div class="resumen-card">
+      <div class="section-title">Antecedentes</div>
+      ${tags.length ? `<div class="tag-list">${tags.map(t => `<span class="tag-positivo">${t}</span>`).join("")}</div>` : `<p class="sin-antecedentes">Sin antecedentes positivos registrados.</p>`}
+    </div>`;
+
+    // Tratamiento de presión
+    const meds = (medicamentos.data || []).filter(m => m.catalogo_farmacos && m.catalogo_farmacos.grupo === "antihipertensivos");
+    const medActual = meds.find(m => !m.fecha_fin);
+    html += `<div class="resumen-card">
+      <div class="section-title">Tratamiento de presión arterial</div>`;
+    if (medActual) {
+      html += `<div class="med-actual">
+        <div>
+          <div class="m-nombre">${medActual.catalogo_farmacos.nombre}</div>
+          <div class="m-detalle">${medActual.dosis || ''}${medActual.frecuencia ? ' · ' + medActual.frecuencia : ''} · desde ${medActual.fecha_inicio}</div>
+        </div>
+      </div>`;
+    } else {
+      html += `<p class="sin-antecedentes">Sin tratamiento farmacológico registrado.</p>`;
+    }
+    if (meds.length > (medActual ? 1 : 0)) {
+      html += `<p style="font-size:12px; color:var(--gray-600); margin-top:10px;">${meds.length} entradas en el historial de tratamiento.</p>`;
+    }
+    html += `</div>`;
+
+    // Últimas mediciones
+    const tomas = tomasSueltas.data || [];
+    html += `<div class="resumen-card">
+      <div class="section-title">Últimas mediciones de presión</div>`;
+    if (tomas.length) {
+      html += tomas.map(t => `<div class="medicion-row"><span>${t.sistolica}/${t.diastolica}</span><span>${new Date(t.fecha_hora).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</span></div>`).join("");
+    } else {
+      html += `<p class="sin-antecedentes">Sin mediciones sueltas registradas.</p>`;
+    }
+    html += `</div>`;
+
+    document.getElementById("ficha-resumen-content").innerHTML = html;
+  }
 
   // ---------- Arranque: ¿ya hay sesión activa? ----------
   (async () => {
