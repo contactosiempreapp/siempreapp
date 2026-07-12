@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIEMPRE — Profesional</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#5B3E96">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -350,6 +354,17 @@
   </header>
   <main class="dash-main">
     <button class="primary" id="abrir-alta-paciente-btn" style="width:auto; padding:12px 22px; margin-bottom:20px;">+ Dar de alta paciente</button>
+    <div class="resumen-card" id="notif-card-prof" style="display:none;">
+      <div class="rc-header">
+        <div class="rc-icon" style="background:var(--violet-light); color:var(--violet-dark);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </div>
+        <div class="rc-titulo">Activá las notificaciones</div>
+      </div>
+      <p class="stat-secundario" style="margin-bottom:10px;">Recibí un aviso cuando una paciente te escriba o registre una presión elevada.</p>
+      <button class="secondary" id="activar-notif-prof-btn" style="width:auto; padding:10px 18px;">Activar notificaciones</button>
+      <p class="guardado-ok" id="notif-prof-estado" style="display:none;"></p>
+    </div>
     <div class="stat-grid" id="dash-stats"></div>
     <div id="dash-alertas-wrap"></div>
     <div id="dash-instituciones-wrap"></div>
@@ -690,6 +705,57 @@
   });
 
   // ---------- Dashboard ----------
+  // ================= NOTIFICACIONES PUSH (profesional) =================
+  const VAPID_PUBLIC_KEY = "BI_B30-nv5anh9soomMMAiicwILy4lceyDulP4L7klXiWToMTIkO7U8h_vNje1flaySYyZ5mnJ7f6uR8wSok6OA";
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+  }
+
+  function actualizarEstadoNotifProf(texto, ok) {
+    const el = document.getElementById("notif-prof-estado");
+    el.textContent = texto;
+    el.style.color = ok ? "" : "#B23B32";
+    el.style.display = "block";
+  }
+
+  function verificarEstadoNotificacionesProf() {
+    const card = document.getElementById("notif-card-prof");
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) { card.style.display = "none"; return; }
+    if (Notification.permission === "granted") { card.style.display = "none"; return; }
+    card.style.display = "block";
+  }
+
+  document.getElementById("activar-notif-prof-btn").addEventListener("click", async () => {
+    const btn = document.getElementById("activar-notif-prof-btn");
+    btn.disabled = true; btn.textContent = "Activando...";
+    try {
+      const registro = await navigator.serviceWorker.register("./sw.js");
+      const permiso = await Notification.requestPermission();
+      if (permiso !== "granted") {
+        actualizarEstadoNotifProf("No se activaron las notificaciones.", false);
+        btn.disabled = false; btn.textContent = "Activar notificaciones";
+        return;
+      }
+      const suscripcion = await registro.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+      const sub = suscripcion.toJSON();
+      await sb.rpc("guardar_push_subscription_prof", {
+        p_endpoint: sub.endpoint, p_p256dh: sub.keys.p256dh, p_auth_key: sub.keys.auth
+      });
+      document.getElementById("notif-card-prof").style.display = "none";
+    } catch (e) {
+      console.error("Error activando notificaciones:", e);
+      actualizarEstadoNotifProf("No pudimos activar las notificaciones. Probá de nuevo.", false);
+      btn.disabled = false; btn.textContent = "Activar notificaciones";
+    }
+  });
+
   async function mostrarDashboard(perfil) {
     miPerfil = perfil;
     document.getElementById("dash-nombre").textContent = perfil.nombre || "Profesional";
@@ -721,6 +787,7 @@
 
     cargarAlertasRecientes();
     cargarGraficosDashboard();
+    verificarEstadoNotificacionesProf();
   }
 
   async function cargarAlertasRecientes() {
