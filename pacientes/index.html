@@ -1373,12 +1373,24 @@
       actualizarEstadoNotif("Tu navegador no admite notificaciones push.", "error");
       return;
     }
-    if (Notification.permission === "granted") {
-      document.getElementById("activar-notif-btn").style.display = "none";
-      actualizarEstadoNotif("Notificaciones activadas ✓", "ok");
-    } else if (Notification.permission === "denied") {
+    if (Notification.permission === "denied") {
       document.getElementById("activar-notif-btn").style.display = "none";
       actualizarEstadoNotif("Bloqueaste las notificaciones para esta app. Podés habilitarlas desde la configuración del navegador.", "error");
+      return;
+    }
+    try {
+      const registro = await navigator.serviceWorker.register("./sw.js");
+      const existente = await registro.pushManager.getSubscription();
+      if (existente && Notification.permission === "granted") {
+        document.getElementById("activar-notif-btn").style.display = "none";
+        actualizarEstadoNotif("Notificaciones activadas ✓", "ok");
+      } else {
+        document.getElementById("activar-notif-btn").style.display = "inline-block";
+        document.getElementById("notif-estado").style.display = "none";
+      }
+    } catch (e) {
+      console.error("Error verificando notificaciones:", e);
+      actualizarEstadoNotif("No pudimos verificar las notificaciones: " + e.message, "error");
     }
   }
 
@@ -1387,9 +1399,10 @@
     btn.disabled = true; btn.textContent = "Activando...";
     try {
       const registro = await navigator.serviceWorker.register("./sw.js");
+      await navigator.serviceWorker.ready;
       const permiso = await Notification.requestPermission();
       if (permiso !== "granted") {
-        actualizarEstadoNotif("No se activaron las notificaciones.", "error");
+        actualizarEstadoNotif("No se activaron las notificaciones (permiso denegado).", "error");
         btn.disabled = false; btn.textContent = "Activar notificaciones";
         return;
       }
@@ -1398,17 +1411,18 @@
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       });
       const sub = suscripcion.toJSON();
-      await sb.rpc("guardar_push_subscription", {
+      const { error } = await sb.rpc("guardar_push_subscription", {
         p_token: session.token,
         p_endpoint: sub.endpoint,
         p_p256dh: sub.keys.p256dh,
         p_auth_key: sub.keys.auth
       });
+      if (error) throw error;
       btn.style.display = "none";
       actualizarEstadoNotif("Notificaciones activadas ✓", "ok");
     } catch (e) {
       console.error("Error activando notificaciones:", e);
-      actualizarEstadoNotif("No pudimos activar las notificaciones. Probá de nuevo.", "error");
+      actualizarEstadoNotif("No pudimos activar las notificaciones: " + (e.message || e), "error");
       btn.disabled = false; btn.textContent = "Activar notificaciones";
     }
   });
