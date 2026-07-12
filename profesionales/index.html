@@ -284,6 +284,15 @@
     background: var(--gray-100); color: var(--gray-600); display: flex; align-items: center; justify-content: center; cursor: pointer;
   }
   .modal-close-btn-prof svg { width: 16px; height: 16px; }
+
+  .md-progreso-wrap { margin: 0 0 16px; }
+  .md-progreso-barra { height: 7px; background: var(--gray-100); border-radius: 20px; overflow: hidden; }
+  .md-progreso-relleno { height: 100%; background: linear-gradient(90deg, var(--violet), var(--violet-dark)); border-radius: 20px; transition: width 0.3s ease; }
+  .md-progreso-texto { font-size: 11.5px; font-weight: 700; color: var(--gray-600); margin-top: 6px; text-align: right; }
+  .md-nav-row { display: flex; gap: 10px; }
+  .md-nav-row button.primary, .md-nav-row button.tertiary { width: auto; margin: 0; padding: 11px 20px; }
+  .md-nav-row button.primary:last-child { margin-left: auto; }
+  button.tertiary { background: none; border: 1.5px solid var(--gray-300); color: var(--gray-600); border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -375,27 +384,38 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
         <h2 class="section-title">Dar de alta paciente</h2>
+        <div class="md-progreso-wrap">
+          <div class="md-progreso-barra"><div class="md-progreso-relleno" id="alta-progreso-relleno" style="width:50%;"></div></div>
+          <div class="md-progreso-texto" id="alta-progreso-texto">Paso 1 de 2</div>
+        </div>
         <div class="msg-error" id="alta-paciente-error"></div>
-        <label>DNI</label><input type="text" id="alta-dni" inputmode="numeric">
-        <div class="fila-2col-prof">
-          <div><label>Nombre</label><input type="text" id="alta-nombre"></div>
-          <div><label>Apellido</label><input type="text" id="alta-apellido"></div>
-        </div>
-        <div id="alta-institucion-wrap" style="display:none;">
-          <label>Institución</label>
-          <select id="alta-institucion"></select>
-        </div>
-        <details class="editar-datos-details">
-          <summary class="editar-datos-summary">Agregar datos básicos ahora (opcional)</summary>
-          <div class="editar-datos-body">
-            <div class="fila-2col-prof">
-              <div><label>WhatsApp</label><input type="text" id="alta-whatsapp"></div>
-              <div><label>Email</label><input type="text" id="alta-email"></div>
-            </div>
-            <label>Fecha de nacimiento</label><input type="date" id="alta-fecha-nac">
+
+        <div class="alta-step" data-step="1">
+          <label>DNI</label><input type="text" id="alta-dni" inputmode="numeric">
+          <div class="fila-2col-prof">
+            <div><label>Nombre</label><input type="text" id="alta-nombre"></div>
+            <div><label>Apellido</label><input type="text" id="alta-apellido"></div>
           </div>
-        </details>
-        <button class="primary" id="confirmar-alta-paciente-btn" style="margin-top:14px;">Dar de alta</button>
+          <div id="alta-institucion-wrap" style="display:none;">
+            <label>Institución</label>
+            <select id="alta-institucion"></select>
+          </div>
+        </div>
+
+        <div class="alta-step" data-step="2" style="display:none;">
+          <p class="stat-secundario" style="margin-bottom:12px;">Estos datos son opcionales — podés completarlos ahora o después, desde la ficha de la paciente.</p>
+          <div class="fila-2col-prof">
+            <div><label>WhatsApp</label><input type="text" id="alta-whatsapp"></div>
+            <div><label>Email</label><input type="text" id="alta-email"></div>
+          </div>
+          <label>Fecha de nacimiento</label><input type="date" id="alta-fecha-nac">
+        </div>
+
+        <div class="md-nav-row" style="margin:14px 0 0;">
+          <button class="tertiary" id="alta-atras-btn" style="display:none;">← Atrás</button>
+          <button class="primary" id="alta-siguiente-btn">Siguiente</button>
+          <button class="primary" id="confirmar-alta-paciente-btn" style="display:none;">Dar de alta</button>
+        </div>
       </div>
     </div>
 
@@ -957,6 +977,28 @@
   document.getElementById("volver-a-lista-btn").addEventListener("click", () => mostrarPacientes());
 
   // ---------- Lista de pacientes ----------
+  function mostrarPasoAlta(n) {
+    document.querySelectorAll(".alta-step").forEach(el => {
+      el.style.display = parseInt(el.dataset.step) === n ? "block" : "none";
+    });
+    document.getElementById("alta-progreso-relleno").style.width = (n / 2 * 100) + "%";
+    document.getElementById("alta-progreso-texto").textContent = `Paso ${n} de 2`;
+    document.getElementById("alta-atras-btn").style.display = n === 1 ? "none" : "inline-block";
+    document.getElementById("alta-siguiente-btn").style.display = n === 1 ? "inline-block" : "none";
+    document.getElementById("confirmar-alta-paciente-btn").style.display = n === 2 ? "inline-block" : "none";
+  }
+  document.getElementById("alta-siguiente-btn").addEventListener("click", () => {
+    const errorBox = document.getElementById("alta-paciente-error");
+    errorBox.style.display = "none";
+    if (!document.getElementById("alta-dni").value.trim() || !document.getElementById("alta-nombre").value.trim() || !document.getElementById("alta-apellido").value.trim()) {
+      errorBox.textContent = "DNI, nombre y apellido son obligatorios.";
+      errorBox.style.display = "block";
+      return;
+    }
+    mostrarPasoAlta(2);
+  });
+  document.getElementById("alta-atras-btn").addEventListener("click", () => mostrarPasoAlta(1));
+
   document.getElementById("abrir-alta-paciente-btn").addEventListener("click", async () => {
     document.getElementById("alta-paciente-error").style.display = "none";
     document.getElementById("alta-dni").value = "";
@@ -965,6 +1007,7 @@
     document.getElementById("alta-whatsapp").value = "";
     document.getElementById("alta-email").value = "";
     document.getElementById("alta-fecha-nac").value = "";
+    mostrarPasoAlta(1);
     if (miPerfil && miPerfil.es_super_admin) {
       const { data } = await sb.rpc("obtener_instituciones_lista");
       document.getElementById("alta-institucion").innerHTML = (data || []).map(i => `<option value="${i.id}">${i.nombre}</option>`).join("");
