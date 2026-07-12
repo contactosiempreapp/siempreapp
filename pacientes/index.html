@@ -515,6 +515,14 @@
   .md-icon-indigo { background: var(--indigo-light); color: var(--indigo); }
   .md-icon-pink { background: var(--pink-light); color: var(--pink-dark); }
   .mis-datos-hero { background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
+
+  .md-progreso-wrap { margin: 0 4px 16px; }
+  .md-progreso-barra { height: 7px; background: var(--gray-100); border-radius: 20px; overflow: hidden; }
+  .md-progreso-relleno { height: 100%; background: linear-gradient(90deg, var(--violet), var(--violet-dark)); border-radius: 20px; transition: width 0.3s ease; }
+  .md-progreso-texto { font-size: 11.5px; font-weight: 700; color: var(--gray-600); margin-top: 6px; text-align: right; }
+  .md-nav-row { display: flex; gap: 10px; margin: 4px 4px 20px; }
+  .md-nav-row button.primary, .md-nav-row button.tertiary { width: auto; margin: 0; padding: 12px 22px; }
+  .md-nav-row button.primary:last-child { margin-left: auto; }
   .sodio-banner.sodio-si { border-color: var(--amber); }
   .sodio-banner.sodio-no { border-color: var(--indigo); }
   .edad-badge { margin-top: 4px; }
@@ -685,65 +693,83 @@
         <p class="helper">Completá esta sección una vez al empezar. Podés volver cuando quieras a modificarla — tu médica va a ver siempre la información más reciente.</p>
       </div>
 
-      <!-- 1. Datos filiatorios -->
-      <div class="card">
-        <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Mis datos personales</h2>
-        <label for="md-whatsapp">WhatsApp</label>
-        <input type="text" id="md-whatsapp" inputmode="tel" placeholder="Ej: 11 2345 6789">
-        <label for="md-email">Correo electrónico</label>
-        <input type="text" id="md-email" inputmode="email" placeholder="tunombre@mail.com">
-        <label for="md-fecha-nac">Fecha de nacimiento</label>
-        <input type="date" id="md-fecha-nac">
-        <div class="edad-badge pill-teal" id="edad-badge" style="display:none;"></div>
-        <label for="md-ocupacion" style="margin-top:14px;">Ocupación</label>
-        <input type="text" id="md-ocupacion" placeholder="Ej: docente, comerciante, ama de casa...">
+      <div class="md-progreso-wrap">
+        <div class="md-progreso-barra"><div class="md-progreso-relleno" id="md-progreso-relleno"></div></div>
+        <div class="md-progreso-texto" id="md-progreso-texto">Paso 1 de 4</div>
       </div>
 
-      <!-- 2. Antecedentes de enfermedades previas -->
-      <div class="card">
-        <h2><span class="md-icon md-icon-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-9.5-8.6C.7 8.7 3.2 5 6.8 5c2 0 3.6 1.4 5.2 3.4C13.6 6.4 15.2 5 17.2 5c3.6 0 6.1 3.7 4.3 7.4C19 16.6 12 21 12 21z"/></svg></span>Enfermedades previas</h2>
-        <p class="helper">Marcá las que tuviste antes de este embarazo.</p>
-        <div id="grupo-clinicos"></div>
-      </div>
-
-      <!-- Altura y peso antes del embarazo -->
-      <div class="card">
-        <h2><span class="md-icon md-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg></span>Antes de empezar el embarazo</h2>
-        <p class="helper">Con esto calculamos tu IMC pregestacional y tu objetivo de aumento de peso — se usa después en la solapa "Curva ponderal".</p>
-        <div class="fila-2col">
-          <div><label for="md-altura">Altura (cm)</label><input type="number" id="md-altura" step="0.1"></div>
-          <div><label for="md-peso-preg">Peso (kg)</label><input type="number" id="md-peso-preg" step="0.1"></div>
+      <div class="md-step" data-step="1">
+        <!-- 1. Datos filiatorios -->
+        <div class="card">
+          <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Mis datos personales</h2>
+          <label for="md-whatsapp">WhatsApp</label>
+          <input type="text" id="md-whatsapp" inputmode="tel" placeholder="Ej: 11 2345 6789">
+          <label for="md-email">Correo electrónico</label>
+          <input type="text" id="md-email" inputmode="email" placeholder="tunombre@mail.com">
+          <label for="md-fecha-nac">Fecha de nacimiento</label>
+          <input type="date" id="md-fecha-nac">
+          <div class="edad-badge pill-teal" id="edad-badge" style="display:none;"></div>
+          <label for="md-ocupacion" style="margin-top:14px;">Ocupación</label>
+          <input type="text" id="md-ocupacion" placeholder="Ej: docente, comerciante, ama de casa...">
         </div>
-        <div class="imc-badge" id="imc-preview-badge" style="display:none;"></div>
+
+        <!-- Altura y peso antes del embarazo -->
+        <div class="card">
+          <h2><span class="md-icon md-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg></span>Antes de empezar el embarazo</h2>
+          <p class="helper">Con esto calculamos tu IMC pregestacional y tu objetivo de aumento de peso — se usa después en la solapa "Curva ponderal".</p>
+          <div class="fila-2col">
+            <div><label for="md-altura">Altura (cm)</label><input type="number" id="md-altura" step="0.1"></div>
+            <div><label for="md-peso-preg">Peso (kg)</label><input type="number" id="md-peso-preg" step="0.1"></div>
+          </div>
+          <div class="imc-badge" id="imc-preview-badge" style="display:none;"></div>
+        </div>
       </div>
 
-      <!-- 3. Antecedentes del papá del bebé -->
-      <div class="card">
-        <h2><span class="md-icon md-icon-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Antecedentes del papá del bebé</h2>
-        <div class="check-row"><input type="checkbox" id="fam-papa-nacio-pe"><label for="fam-papa-nacio-pe" style="margin:0;">¿Sabés si el papá del bebé nació de un embarazo con preeclampsia?</label></div>
-
-        <p class="helper" style="margin-top:14px;">¿Tuvo otras parejas en las que hubo preeclampsia o hipertensión del embarazo? Agregá cada caso.</p>
-        <div id="paternos-list"></div>
-        <button type="button" class="tertiary" id="add-paterno-btn">+ Agregar otra pareja con este antecedente</button>
+      <div class="md-step" data-step="2" style="display:none;">
+        <!-- 2. Antecedentes de enfermedades previas -->
+        <div class="card">
+          <h2><span class="md-icon md-icon-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-9.5-8.6C.7 8.7 3.2 5 6.8 5c2 0 3.6 1.4 5.2 3.4C13.6 6.4 15.2 5 17.2 5c3.6 0 6.1 3.7 4.3 7.4C19 16.6 12 21 12 21z"/></svg></span>Enfermedades previas</h2>
+          <p class="helper">Marcá las que tuviste antes de este embarazo.</p>
+          <div id="grupo-clinicos"></div>
+        </div>
       </div>
 
-      <!-- 4. Antecedentes familiares -->
-      <div class="card">
-        <h2><span class="md-icon md-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg></span>Antecedentes familiares</h2>
-        <p class="helper">De tu mamá y tus hermanas.</p>
-        <div class="check-row"><input type="checkbox" id="fam-madre-the"><label for="fam-madre-the" style="margin:0;">Mamá con hipertensión del embarazo</label></div>
-        <div class="check-row"><input type="checkbox" id="fam-madre-pe"><label for="fam-madre-pe" style="margin:0;">Mamá con preeclampsia</label></div>
-        <div class="check-row"><input type="checkbox" id="fam-hermana-the"><label for="fam-hermana-the" style="margin:0;">Hermana con hipertensión del embarazo</label></div>
-        <div class="check-row"><input type="checkbox" id="fam-hermana-pe"><label for="fam-hermana-pe" style="margin:0;">Hermana con preeclampsia</label></div>
+      <div class="md-step" data-step="3" style="display:none;">
+        <!-- 3. Antecedentes del papá del bebé -->
+        <div class="card">
+          <h2><span class="md-icon md-icon-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Antecedentes del papá del bebé</h2>
+          <div class="check-row"><input type="checkbox" id="fam-papa-nacio-pe"><label for="fam-papa-nacio-pe" style="margin:0;">¿Sabés si el papá del bebé nació de un embarazo con preeclampsia?</label></div>
+
+          <p class="helper" style="margin-top:14px;">¿Tuvo otras parejas en las que hubo preeclampsia o hipertensión del embarazo? Agregá cada caso.</p>
+          <div id="paternos-list"></div>
+          <button type="button" class="tertiary" id="add-paterno-btn">+ Agregar otra pareja con este antecedente</button>
+        </div>
+
+        <!-- 4. Antecedentes familiares -->
+        <div class="card">
+          <h2><span class="md-icon md-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg></span>Antecedentes familiares</h2>
+          <p class="helper">De tu mamá y tus hermanas.</p>
+          <div class="check-row"><input type="checkbox" id="fam-madre-the"><label for="fam-madre-the" style="margin:0;">Mamá con hipertensión del embarazo</label></div>
+          <div class="check-row"><input type="checkbox" id="fam-madre-pe"><label for="fam-madre-pe" style="margin:0;">Mamá con preeclampsia</label></div>
+          <div class="check-row"><input type="checkbox" id="fam-hermana-the"><label for="fam-hermana-the" style="margin:0;">Hermana con hipertensión del embarazo</label></div>
+          <div class="check-row"><input type="checkbox" id="fam-hermana-pe"><label for="fam-hermana-pe" style="margin:0;">Hermana con preeclampsia</label></div>
+        </div>
       </div>
 
-      <div class="card">
-        <details class="grupo">
-          <summary>Otros datos de estilo de vida</summary>
-          <div class="grupo-body" id="grupo-estilo"></div>
-        </details>
-        <button class="primary" id="guardar-datos-btn" style="margin-top:14px;">Guardar mis datos</button>
-        <p id="datos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Datos guardados ✓</p>
+      <div class="md-step" data-step="4" style="display:none;">
+        <div class="card">
+          <details class="grupo">
+            <summary>Otros datos de estilo de vida</summary>
+            <div class="grupo-body" id="grupo-estilo"></div>
+          </details>
+          <button class="primary" id="guardar-datos-btn" style="margin-top:14px;">Guardar mis datos</button>
+          <p id="datos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Datos guardados ✓</p>
+        </div>
+      </div>
+
+      <div class="md-nav-row" id="md-nav-row">
+        <button class="tertiary" id="md-atras-btn" style="display:none;">← Atrás</button>
+        <button class="primary" id="md-siguiente-btn">Siguiente</button>
       </div>
     </div>
 
@@ -2757,7 +2783,31 @@
   document.getElementById("md-altura").addEventListener("input", actualizarImcPreview);
   document.getElementById("md-peso-preg").addEventListener("input", actualizarImcPreview);
 
+  // ================= WIZARD DE MIS DATOS =================
+  let mdPasoActual = 1;
+  const MD_TOTAL_PASOS = 4;
+
+  function mostrarPasoMisDatos(n) {
+    mdPasoActual = n;
+    document.querySelectorAll(".md-step").forEach(el => {
+      el.style.display = parseInt(el.dataset.step) === n ? "block" : "none";
+    });
+    document.getElementById("md-progreso-relleno").style.width = (n / MD_TOTAL_PASOS * 100) + "%";
+    document.getElementById("md-progreso-texto").textContent = `Paso ${n} de ${MD_TOTAL_PASOS}`;
+    document.getElementById("md-atras-btn").style.display = n === 1 ? "none" : "inline-block";
+    document.getElementById("md-siguiente-btn").style.display = n === MD_TOTAL_PASOS ? "none" : "inline-block";
+    document.getElementById("panel-mis-datos").scrollTop = 0;
+    window.scrollTo(0, document.getElementById("panel-mis-datos").offsetTop - 10);
+  }
+  document.getElementById("md-siguiente-btn").addEventListener("click", () => {
+    if (mdPasoActual < MD_TOTAL_PASOS) mostrarPasoMisDatos(mdPasoActual + 1);
+  });
+  document.getElementById("md-atras-btn").addEventListener("click", () => {
+    if (mdPasoActual > 1) mostrarPasoMisDatos(mdPasoActual - 1);
+  });
+
   async function initMisDatos() {
+    mostrarPasoMisDatos(1);
     renderGrupoClinicos();
     renderGrupoEstilo();
     renderPaternos();
