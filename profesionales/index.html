@@ -722,11 +722,30 @@
     el.style.display = "block";
   }
 
-  function verificarEstadoNotificacionesProf() {
+  async function verificarEstadoNotificacionesProf() {
     const card = document.getElementById("notif-card-prof");
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) { card.style.display = "none"; return; }
-    if (Notification.permission === "granted") { card.style.display = "none"; return; }
-    card.style.display = "block";
+    const btn = document.getElementById("activar-notif-prof-btn");
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      card.style.display = "block"; btn.style.display = "none";
+      actualizarEstadoNotifProf("Tu navegador no admite notificaciones push.", false);
+      return;
+    }
+    try {
+      const registro = await navigator.serviceWorker.register("./sw.js");
+      const existente = await registro.pushManager.getSubscription();
+      card.style.display = "block";
+      if (existente && Notification.permission === "granted") {
+        btn.style.display = "none";
+        actualizarEstadoNotifProf("Notificaciones activadas ✓", true);
+      } else {
+        btn.style.display = "inline-block";
+        document.getElementById("notif-prof-estado").style.display = "none";
+      }
+    } catch (e) {
+      console.error("Error verificando notificaciones:", e);
+      card.style.display = "block";
+      actualizarEstadoNotifProf("No pudimos verificar las notificaciones: " + e.message, false);
+    }
   }
 
   document.getElementById("activar-notif-prof-btn").addEventListener("click", async () => {
@@ -734,9 +753,10 @@
     btn.disabled = true; btn.textContent = "Activando...";
     try {
       const registro = await navigator.serviceWorker.register("./sw.js");
+      await navigator.serviceWorker.ready;
       const permiso = await Notification.requestPermission();
       if (permiso !== "granted") {
-        actualizarEstadoNotifProf("No se activaron las notificaciones.", false);
+        actualizarEstadoNotifProf("No se activaron las notificaciones (permiso denegado).", false);
         btn.disabled = false; btn.textContent = "Activar notificaciones";
         return;
       }
@@ -745,13 +765,15 @@
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       });
       const sub = suscripcion.toJSON();
-      await sb.rpc("guardar_push_subscription_prof", {
+      const { error } = await sb.rpc("guardar_push_subscription_prof", {
         p_endpoint: sub.endpoint, p_p256dh: sub.keys.p256dh, p_auth_key: sub.keys.auth
       });
-      document.getElementById("notif-card-prof").style.display = "none";
+      if (error) throw error;
+      btn.style.display = "none";
+      actualizarEstadoNotifProf("Notificaciones activadas ✓", true);
     } catch (e) {
       console.error("Error activando notificaciones:", e);
-      actualizarEstadoNotifProf("No pudimos activar las notificaciones. Probá de nuevo.", false);
+      actualizarEstadoNotifProf("No pudimos activar las notificaciones: " + (e.message || e), false);
       btn.disabled = false; btn.textContent = "Activar notificaciones";
     }
   });
