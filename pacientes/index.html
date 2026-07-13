@@ -97,6 +97,10 @@
   }
   header.top .greeting { font-size: 12.5px; opacity: 0.85; letter-spacing: 0.02em; }
   header.top .name { font-family: 'Fraunces', serif; font-size: 21px; font-weight: 600; margin-top: 3px; }
+  .header-gestacion-badge {
+    display: inline-block; margin-top: 5px; background: rgba(255,255,255,0.18); color: white;
+    font-size: 11.5px; font-weight: 700; padding: 3px 11px; border-radius: 20px;
+  }
   .header-row { display: flex; align-items: center; justify-content: space-between; }
   .profile-btn {
     width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4);
@@ -105,6 +109,135 @@
   }
   .profile-btn:active { background: rgba(255,255,255,0.3); }
   .profile-btn svg { width: 19px; height: 19px; }
+
+  #notif-header-btn.notif-on { background: rgba(255,255,255,0.35); border-color: white; }
+  #notif-header-btn.notif-on svg { fill: rgba(255,255,255,0.9); }
+  .notif-dot {
+    position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%;
+    background: #E85D8A; border: 1.5px solid var(--violet-dark);
+  }
+
+  .toast-bienvenida {
+    position: fixed; top: 14px; left: 50%; transform: translateX(-50%) translateY(-120%);
+    background: white; border-radius: 16px; padding: 14px 18px; box-shadow: 0 10px 30px -8px rgba(34,24,60,0.35);
+    display: flex; align-items: center; gap: 12px; max-width: 340px; width: calc(100% - 32px);
+    z-index: 999; opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+  .toast-bienvenida.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast-icon { font-size: 22px; flex-shrink: 0; }
+  .toast-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 13.5px; color: var(--violet-dark); }
+  .toast-texto { font-size: 12.5px; color: var(--gray-600); margin-top: 2px; line-height: 1.4; }
+
+  .md-big-card {
+    display: flex; align-items: center; gap: 14px; background: white; border: 2px solid var(--gray-300);
+    border-radius: 18px; padding: 18px; margin-bottom: 12px; cursor: pointer; transition: transform 0.1s;
+  }
+  .md-big-card:active { transform: scale(0.98); }
+  .md-big-card .mdb-icon { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .md-big-card .mdb-icon svg { width: 26px; height: 26px; }
+  .md-big-card .mdb-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 16px; color: var(--gray-900); }
+  .md-big-card .mdb-sub { font-size: 13px; color: var(--gray-600); margin-top: 2px; }
+  .md-big-card .mdb-arrow { margin-left: auto; color: var(--gray-300); flex-shrink: 0; }
+  .md-big-card .mdb-arrow svg { width: 22px; height: 22px; }
+
+  .habito-card { padding: 0; overflow: hidden; margin-bottom: 12px; }
+  .habito-illus-strip { display: flex; justify-content: center; align-items: center; padding: 18px 16px; }
+  .habito-illus-aspirina { background: linear-gradient(135deg, #DFF3EC, #EFFBF6); }
+  .habito-illus-calcio { background: linear-gradient(135deg, #EEF4FC, #F7FAFF); }
+  .habito-illus-aspirina-info { background: linear-gradient(135deg, #EEF2FB, #F6F1FC); padding: 22px 16px; }
+  .habito-illus-calcio-info { background: linear-gradient(135deg, #F5F8FC, #FAFBFE); padding: 22px 16px; }
+  .habito-top { display: flex; align-items: center; gap: 12px; padding: 16px 18px 4px; }
+  .habito-check {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--teal); color: white;
+    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex-shrink: 0;
+  }
+  .habito-info { flex: 1; min-width: 0; }
+  .habito-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px; color: var(--gray-900); }
+  .habito-estado { font-size: 12.5px; color: var(--gray-600); margin-top: 2px; font-weight: 600; }
+  .habito-estado.hecho { color: var(--teal-dark); }
+  .habito-racha {
+    display: inline-block; font-size: 11px; font-weight: 700; color: #A6690E; background: var(--amber-light);
+    padding: 2px 9px; border-radius: 20px; margin-top: 4px;
+  }
+  .habito-semana-dots { display: flex; gap: 6px; justify-content: center; padding: 4px 18px 12px; }
+  .habito-dot {
+    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: var(--gray-600); background: var(--gray-100); flex-shrink: 0;
+  }
+  .habito-dot-ok { background: var(--teal); color: white; }
+  .habito-dot-no { background: var(--pink-light); color: var(--pink); }
+  .habito-dot-futuro { background: none; color: var(--gray-300); }
+  .habito-dot-hoy { box-shadow: 0 0 0 2px var(--violet); }
+  .chequeo-motivo-btn {
+    display: block; width: 100%; text-align: left; background: var(--gray-100); border: 1.5px solid var(--gray-300);
+    border-radius: 12px; padding: 12px 16px; font-size: 13.5px; font-weight: 600; color: var(--gray-900);
+    cursor: pointer; margin-top: 8px; transition: background 0.15s;
+  }
+  .chequeo-motivo-btn:hover { background: var(--violet-light); border-color: var(--violet); }
+  .habito-no-olvides {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 800; color: #A5382E;
+    background: var(--pink-light); padding: 4px 11px; border-radius: 20px; margin-top: 5px;
+    animation: noOlvidesSuave 2.2s ease-in-out infinite;
+  }
+  .habito-no-olvides::before { content: "●"; font-size: 8px; color: #E2665B; }
+  @keyframes noOlvidesSuave { 0%, 100% { opacity: 1; } 50% { opacity: 0.72; } }
+  .habito-info-btn {
+    width: 26px; height: 26px; border-radius: 50%; border: none; background: var(--violet-light);
+    color: var(--violet-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+  }
+  .habito-info-btn svg { width: 15px; height: 15px; }
+  .habito-confirmar-btn {
+    display: block; width: calc(100% - 36px); margin: 12px 18px 4px; padding: 13px; border-radius: 12px; border: none;
+    font-size: 14.5px; font-weight: 800; font-family: 'Manrope', sans-serif; color: white; cursor: pointer;
+  }
+  .md-patron-nota { text-align: center; font-size: 11.5px; color: var(--gray-600); margin-top: 8px; }
+  .info-embebido-card { background: var(--gray-100); border-radius: 14px; padding: 14px; margin-top: 14px; }
+  .info-embebido-card h2 { font-size: 14.5px; margin-bottom: 6px; }
+  .ver-mes-link {
+    display: block; width: 100%; text-align: center; background: none; border: none; color: var(--gray-600);
+    font-size: 12px; font-weight: 700; text-decoration: underline; cursor: pointer; margin-top: 10px; padding: 0;
+  }
+  .habito-card > .ver-mes-link { width: calc(100% - 36px); margin: 10px 18px 16px; }
+  .habito-hecho .habito-top { padding-bottom: 4px; }
+
+  .md-pasos-card { border: 2px solid #F4A94E; }
+  .pasos-input-row { display: flex; gap: 10px; }
+  .pasos-input-row input { flex: 1; padding: 14px; border: 1.5px solid var(--gray-300); border-radius: 12px; font-size: 16px; text-align: center; margin: 0; }
+  .pasos-guardar-btn {
+    padding: 14px 22px; border: none; border-radius: 12px; background: linear-gradient(135deg, #F4A94E, #E2665B);
+    color: white; font-weight: 800; font-size: 14px; font-family: 'Manrope', sans-serif; cursor: pointer;
+  }
+  .pasos-hoy-listo { display: flex; align-items: center; gap: 12px; background: #FFF6EC; border-radius: 12px; padding: 12px 14px; }
+  .pasos-hoy-check { width: 32px; height: 32px; border-radius: 50%; background: #F4A94E; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
+  .pasos-hoy-numero { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 16px; color: var(--gray-900); }
+  .pasos-hoy-sub { font-size: 11.5px; color: var(--gray-600); }
+  .pasos-editar-btn { margin-left: auto; background: none; border: none; color: var(--gray-600); font-size: 12px; text-decoration: underline; cursor: pointer; }
+  .pasos-resumen-fila { display: flex; gap: 10px; margin-bottom: 12px; }
+  .pasos-resumen-dato { flex: 1; text-align: center; background: var(--gray-100); border-radius: 10px; padding: 10px 6px; }
+  .prd-num { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 17px; color: var(--gray-900); }
+  .prd-label { font-size: 10px; color: var(--gray-600); margin-top: 2px; }
+  .pasos-mensaje-motivacional { font-size: 13px; color: var(--gray-900); text-align: center; line-height: 1.5; margin: 0; font-weight: 600; }
+
+  .md-todo-listo { text-align: center; padding: 30px 20px; }
+  .md-todo-listo-icon { font-size: 40px; margin-bottom: 10px; }
+  .md-todo-listo-texto { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 16px; color: var(--gray-900); }
+  .md-todo-listo-sub { font-size: 13px; color: var(--gray-600); margin-top: 6px; }
+
+  .md-mensaje-rapido-card textarea {
+    width: 100%; padding: 11px 13px; border: 1.5px solid var(--gray-300); border-radius: 10px;
+    font-size: 14px; font-family: inherit; resize: vertical; min-height: 50px;
+  }
+
+  .patron-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100); gap: 10px; }
+  .patron-item:last-child { border-bottom: none; }
+  .patron-item-nombre { font-size: 13.5px; color: var(--gray-900); font-weight: 600; }
+  .patron-item-porcion { font-size: 11.5px; color: var(--gray-600); }
+  .patron-item-input { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .patron-item-input input { width: 46px; padding: 8px 4px; border: 1.5px solid var(--gray-300); border-radius: 8px; text-align: center; font-size: 14px; margin: 0; }
+  .patron-item-input span { font-size: 11px; color: var(--gray-600); }
+  .patron-resultado-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .patron-resultado-badge.pobre { background: var(--pink-light); color: #B23B5A; }
+  .patron-resultado-badge.adecuada { background: var(--teal-light); color: var(--teal-dark); }
 
   nav.tabs {
     display: flex; gap: 8px; overflow-x: auto; padding: 16px 16px 4px;
@@ -260,6 +393,7 @@
   .notif-estado { font-size: 12.5px; font-weight: 600; margin-top: 10px; }
   .notif-estado.ok { color: var(--teal-dark); }
   .notif-estado.error { color: var(--pink-dark); }
+
   .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .feature-card {
     background: white; border-radius: 14px; padding: 14px; border: 1px solid var(--gray-300); box-shadow: var(--shadow-card);
@@ -515,6 +649,10 @@
   .md-icon-indigo { background: var(--indigo-light); color: var(--indigo); }
   .md-icon-pink { background: var(--pink-light); color: var(--pink-dark); }
   .mis-datos-hero { background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
+  .hoy-hero-card { background: linear-gradient(135deg, #28A67F 0%, #0B6E52 100%); border: none; }
+  .semana-hero-card { background: linear-gradient(135deg, #DDA23F 0%, #95611A 100%); border: none; }
+  .ocasional-hero-card { background: linear-gradient(135deg, #7477C2 0%, #454890 100%); border: none; }
+  .hoy-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.85); font-weight: 600; }
 
   .md-progreso-wrap { margin: 0 4px 16px; }
   .md-progreso-barra { height: 7px; background: var(--gray-100); border-radius: 20px; overflow: hidden; }
@@ -626,13 +764,85 @@
 </div>
 
 <div class="screen" id="home-screen">
+  <div class="toast-bienvenida" id="toast-bienvenida">
+    <span class="toast-icon">💜</span>
+    <div>
+      <div class="toast-titulo" id="toast-titulo">—</div>
+      <div class="toast-texto" id="toast-texto"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="info-habito-modal">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="cerrar-info-habito-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div id="info-aspirina-block" style="display:none;">
+        <div class="habito-illus-strip habito-illus-aspirina-info" style="border-radius:14px; margin-bottom:14px;">
+          <div class="asp-moon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M17.5 3.5a9 9 0 1 0 3 15.6A9.5 9.5 0 0 1 17.5 3.5z" fill="#F4D998"/></svg>
+            <span class="asp-star asp-star-1"></span>
+            <span class="asp-star asp-star-2"></span>
+          </div>
+        </div>
+        <h2 style="margin-bottom:6px;">¿Cuándo tomarla?</h2>
+        <p class="helper">1 comprimido a la noche (100–150 mg), siempre a la misma hora, junto con la cena o antes de dormir.</p>
+        <h2 style="margin-bottom:6px; margin-top:14px;">¿Por qué te la indicaron?</h2>
+        <p class="helper">Se te indicó como prevención de preeclampsia. Tomarla todos los días, sin saltear, es lo que la hace efectiva.</p>
+        <div class="info-embebido-card" id="aspirina-semana-card">
+          <div id="asp-semana-info"><p class="helper" style="margin-bottom:0;">Cargando información de tu embarazo...</p></div>
+        </div>
+      </div>
+
+      <div id="info-calcio-block" style="display:none;">
+        <div class="habito-illus-strip habito-illus-calcio-info" style="border-radius:14px; margin-bottom:14px;">
+          <div class="cal-foods-illus">
+            <span class="food-icon food-icon-milk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v3l2 4v9a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-9l2-4V3z"/><path d="M7 12h10"/></svg></span>
+            <span class="food-icon food-icon-cheese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8z"/><circle cx="9" cy="15" r="0.8" fill="currentColor" stroke="none"/><circle cx="14" cy="13" r="0.8" fill="currentColor" stroke="none"/></svg></span>
+            <span class="food-icon food-icon-yogurt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8l1 4-2 12H9L7 8l1-4z"/><path d="M7.5 9h9"/></svg></span>
+          </div>
+        </div>
+        <h2 style="margin-bottom:6px;">Cómo tomarlo mejor</h2>
+        <p class="helper">El carbonato de calcio se absorbe mejor junto con las comidas; otras formas, como el lactato de calcio, se pueden tomar con o sin alimentos. La OMS recomienda dividir la dosis diaria en tres tomas, separadas por algunas horas, y no tomarlas junto con el suplemento de hierro y ácido fólico.</p>
+        <div class="info-embebido-card" id="patron-calcio-card" style="display:none;">
+          <h2 style="font-size:14.5px;">Contanos tu alimentación habitual</h2>
+          <p class="helper">Esto lo preguntamos una sola vez, para saber si tu alimentación diaria ya te alcanza en calcio o conviene sumar un suplemento. Elegí cuántas veces por semana consumís cada uno habitualmente.</p>
+          <div id="patron-calcio-lista"></div>
+          <button class="primary" id="patron-calcio-guardar-btn" style="margin-top:12px;">Calcular</button>
+        </div>
+        <div class="info-embebido-card" id="patron-calcio-resultado-card" style="display:none;">
+          <h2 style="font-size:14.5px;">Tu alimentación habitual</h2>
+          <div id="patron-calcio-resultado-texto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="resumen-mes-modal">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="cerrar-resumen-mes-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div id="resumen-mes-header" style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div id="resumen-mes-icono" class="md-icon" style="width:40px; height:40px;"></div>
+        <h2 id="resumen-mes-titulo" style="margin-bottom:0;">—</h2>
+      </div>
+      <div id="resumen-mes-contenido"></div>
+    </div>
+  </div>
+
   <header class="top">
     <div class="header-row">
       <div>
         <div class="greeting">Hola,</div>
         <div class="name" id="patient-name">—</div>
+        <div class="header-gestacion-badge" id="header-gestacion-badge" style="display:none;"></div>
       </div>
-      <div style="display:flex; gap:8px;">
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="profile-btn" id="notif-header-btn" aria-label="Estado de notificaciones" title="Notificaciones">
+          <svg id="notif-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </button>
         <button class="profile-btn" id="mis-datos-shortcut" aria-label="Ir a Mis datos" title="Mis datos">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg>
         </button>
@@ -644,50 +854,135 @@
   </header>
 
   <nav class="tabs" id="tabs-nav">
-    <button class="tab-btn" data-tab="bienvenida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>Presentación</button>
-    <button class="tab-btn" data-tab="embarazos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg>Embarazos</button>
-    <button class="tab-btn" data-tab="aspirina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg>Aspirina</button>
-    <button class="tab-btn" data-tab="calcio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>Calcio</button>
-    <button class="tab-btn" data-tab="alimentacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6.2"/><path d="M12 8V5.2"/><path d="M12 5.2c1-1.2 2.2-1.4 3.4-1.2"/></svg>Alimentación</button>
-    <button class="tab-btn" data-tab="actividad-fisica"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.2" r="1.6" fill="currentColor" stroke="none"/><path d="M13.5 6.5l-2 4 3 2-1.2 5.3"/><path d="M11.5 10.3l-4 2"/><path d="M14.5 12.5l3 1 1 4.2"/></svg>Actividad física</button>
-    <button class="tab-btn tab-btn-roja" data-tab="presion-arterial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Presión</button>
-    <button class="tab-btn" data-tab="curva-ponderal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg>Curva ponderal</button>
-    <button class="tab-btn tab-btn-especial" data-tab="cuarto-trimestre">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
-      Cuarto trimestre
-    </button>
-    <button class="tab-btn" data-tab="pautas-alarma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l9.5 17.1H2.5L12 3.2z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="17.2" r="0.9" fill="currentColor" stroke="none"/></svg>Pautas de alarma</button>
-    <button class="tab-btn" data-tab="informacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>Información</button>
+    <button class="tab-btn" data-tab="bienvenida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>Mi día</button>
+    <button class="tab-btn" data-tab="esta-semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>Esta semana</button>
+    <button class="tab-btn" data-tab="ocasional"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>Ocasional</button>
     <button class="tab-btn" data-tab="mensajes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg>Mensajes</button>
   </nav>
 
   <main>
 
-    <!-- PRESENTACIÓN -->
+    <!-- MI DÍA -->
     <div class="panel" id="panel-bienvenida">
-      <div class="card welcome-hero" style="min-height: 260px;">
-        <div class="logo-mark" style="margin: 0 auto 16px;">S</div>
-        <div class="welcome-hero-msg" id="bienvenida-msg">—</div>
-        <p class="welcome-hero-explain" id="bienvenida-explain">—</p>
+      <div id="mi-dia-contenido">
+        <p class="helper">Cargando tu día...</p>
       </div>
 
-      <div class="card" id="notif-card">
-        <div class="rc-header-pac">
-          <div class="notif-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      <div id="seccion-cuarto-trimestre-hoy" style="display:none;">
+      <div class="card ct-hero-card">
+        <div class="ct-hero-header">
+          <div class="ct-hero-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
           </div>
           <div>
-            <div class="notif-titulo">Activá las notificaciones</div>
-            <div class="notif-sub">Así te avisamos cuando corresponda algo importante</div>
+            <h2 style="color:white; margin-bottom:2px;">Cuarto trimestre</h2>
+            <div class="ct-hero-sub">Tu seguimiento después del parto</div>
           </div>
         </div>
-        <button class="secondary" id="activar-notif-btn" style="margin-top:12px;">Activar notificaciones</button>
-        <p class="notif-estado" id="notif-estado" style="display:none;"></p>
+      </div>
+
+      <div class="card ct-riesgo-card">
+        <h2><span class="md-icon" style="background:rgba(255,255,255,0.25); color:#7A5A1E;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/></svg></span>Por qué seguir con los controles</h2>
+        <p class="helper" id="ct-info-riesgo" style="margin-bottom:0;">Cargando...</p>
+      </div>
+
+      <div class="card" id="ct-setup-card" style="display:none;">
+        <h2>Fecha de parto</h2>
+        <div id="ct-parto-resumen" style="display:none;"></div>
+        <div id="ct-parto-form-wrap">
+          <p class="helper" id="ct-parto-form-helper">Contanos cuándo nació tu bebé, así activamos tu plan de seguimiento del cuarto trimestre.</p>
+          <label for="ct-fecha-parto">Fecha de parto</label>
+          <input type="date" id="ct-fecha-parto">
+          <div class="check-row"><input type="checkbox" id="ct-tuvo-the"><label for="ct-tuvo-the" style="margin:0;">Tuve hipertensión del embarazo o preeclampsia en este embarazo</label></div>
+          <button class="primary" id="ct-guardar-parto-btn" style="margin-top:10px;">Activar mi seguimiento</button>
+        </div>
+      </div>
+
+      <div id="ct-content"></div>
+
+      <div class="card mdpa-card-destacado" id="pp-mdpa-card" style="display:none;">
+        <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
+        <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
+        <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
+        <button class="ver-previos-btn" id="ver-pp-mdpa-previos-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver MDPA previos</span>
+        </button>
+        <div id="pp-mdpa-informes-historial" style="display:none;"></div>
+      </div>
+      </div>
+
+      <div class="card md-mensaje-rapido-card">
+        <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg></span>¿Necesitás escribirle algo a tu médica?</h2>
+        <textarea id="mi-dia-mensaje-input" placeholder="Escribí acá tu mensaje..." rows="2"></textarea>
+        <button class="secondary" id="mi-dia-mensaje-btn" style="margin-top:8px;">Enviar mensaje</button>
+      </div>
+
+    </div>
+
+    <div class="modal-backdrop" id="chequeo-adherencia-modal">
+      <div class="modal-card" style="text-align:center;">
+        <h2 style="margin-bottom:8px;">¿Todo bien?</h2>
+        <p class="helper" id="chequeo-adherencia-texto">—</p>
+        <div id="chequeo-motivos-lista"></div>
+        <button class="tertiary" id="chequeo-omitir-btn" style="margin-top:6px;">Prefiero no responder</button>
       </div>
     </div>
 
-    <!-- MIS DATOS -->
-    <div class="panel" id="panel-mis-datos">
+    <div class="modal-backdrop" id="notif-onboarding-modal">
+      <div class="modal-card" style="text-align:center;">
+        <div class="notif-icon" style="margin:0 auto 14px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </div>
+        <h2 style="margin-bottom:8px;">¿Activamos las notificaciones?</h2>
+        <p class="helper">Así te avisamos cuando corresponda algo importante, sin que tengas que estar revisando la app todo el tiempo.</p>
+        <button class="primary" id="notif-onboarding-si-btn" style="margin-top:10px;">Sí, activar</button>
+        <button class="tertiary" id="notif-onboarding-no-btn" style="margin-top:8px;">Ahora no</button>
+      </div>
+    </div>
+
+    <!-- ESTA SEMANA -->
+    <div class="panel" id="panel-esta-semana">
+      <div class="card semana-hero-card">
+        <h2 style="color:white; margin-bottom:2px;">Esta semana</h2>
+        <div class="hoy-hero-sub">Lo que se registra semana a semana</div>
+      </div>
+
+      <div class="card">
+        <h2>Trabajo</h2>
+        <div class="toggle-row"><span>¿Tu trabajo es sedentario?</span><button class="switch" id="sedentario-switch"></button></div>
+        <div id="pausas-wrap" style="display:none;">
+          <div class="toggle-row"><span>¿Hacés pausas activas?</span><button class="switch" id="pausas-switch"></button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Esta semana</h2>
+        <p class="helper">Por cada día, elegí qué actividad hiciste y cuántos minutos. Si no hiciste nada ese día, dejalo en "Ninguna".</p>
+        <div id="dias-actividad-resumen" class="pill-teal" style="margin-bottom:12px; display:inline-block;">0 de 7 días activos</div>
+        <div id="dias-actividad-list"></div>
+        <button class="secondary" id="guardar-actividad-btn" style="margin-top:14px;">Guardar semana</button>
+      </div>
+
+      <div class="card">
+        <h2>Curva ponderal</h2>
+        <p class="helper">Tu altura se toma de "Mis datos". Acá solo tenés que pesarte y registrarlo periódicamente para ver tu evolución frente al objetivo recomendado.</p>
+        <div id="imc-info"></div>
+        <div id="curva-chart-wrap"></div>
+        <label for="cp-peso">Peso de hoy (kg)</label>
+        <input type="number" id="cp-peso" step="0.1">
+        <button class="secondary" id="guardar-peso-btn">Guardar peso</button>
+        <div id="peso-historial" style="margin-top:16px;"></div>
+      </div>
+    </div>
+
+    <!-- OCASIONAL -->
+    <div class="panel" id="panel-ocasional">
+      <div class="card ocasional-hero-card">
+        <h2 style="color:white; margin-bottom:2px;">Ocasional</h2>
+        <div class="hoy-hero-sub">Datos que se cargan una vez o se consultan de tanto en tanto</div>
+      </div>
+
       <div class="card mis-datos-hero">
         <h2>Mis datos</h2>
         <p class="helper">Completá esta sección una vez al empezar. Podés volver cuando quieras a modificarla — tu médica va a ver siempre la información más reciente.</p>
@@ -771,10 +1066,8 @@
         <button class="tertiary" id="md-atras-btn" style="display:none;">← Atrás</button>
         <button class="primary" id="md-siguiente-btn">Siguiente</button>
       </div>
-    </div>
 
-    <!-- EMBARAZOS -->
-    <div class="panel" id="panel-embarazos">
+      <div id="seccion-embarazos-ocasional">
       <div class="card embarazo-actual-card">
         <div class="emb-actual-header">
           <div class="emb-illus">
@@ -833,144 +1126,8 @@
         <button class="primary" id="guardar-embarazos-btn">Guardar</button>
         <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
       </div>
-    </div>
-
-    <!-- ASPIRINA -->
-    <div class="panel" id="panel-aspirina">
-      <div class="card" id="aspirina-indicacion-card">
-        <div class="asp-indicacion">
-          <div class="asp-moon">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M17.5 3.5a9 9 0 1 0 3 15.6A9.5 9.5 0 0 1 17.5 3.5z" fill="#F4D998"/></svg>
-            <span class="asp-star asp-star-1"></span>
-            <span class="asp-star asp-star-2"></span>
-          </div>
-          <div>
-            <div class="asp-indicacion-title">Aspirina 100–150 mg</div>
-            <div class="asp-indicacion-sub">1 comprimido a la noche</div>
-          </div>
-        </div>
-        <p class="helper" style="margin-top:12px; margin-bottom:0;">Se te indicó como prevención de preeclampsia. Tomala siempre a la misma hora, junto con la cena o antes de dormir.</p>
       </div>
 
-      <div class="card" id="aspirina-semana-card">
-        <div id="asp-semana-info"><p class="helper" style="margin-bottom:0;">Cargando información de tu embarazo...</p></div>
-      </div>
-
-      <div class="card" id="aspirina-card">
-        <h2>Aspirina <span class="pill-teal" id="aspirina-mes-label">—</span></h2>
-        <p class="helper">Tocá el día de hoy para marcar si tomaste tu aspirina. Un toque = tomada (verde), dos toques = no tomada (rosa). Todo lo que registres queda guardado en tu historial: nada se borra, y tu médica lo va a poder ver.</p>
-        <div class="cal-grid" id="cal-dow-row"></div>
-        <div class="cal-grid" id="cal-grid" style="margin-top:6px;"></div>
-        <div class="legend">
-          <span><span class="dot" style="background:var(--teal)"></span> Tomada</span>
-          <span><span class="dot" style="background:var(--pink)"></span> No tomada</span>
-          <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- CALCIO -->
-    <div class="panel" id="panel-calcio">
-      <div class="card" id="calcio-foods-header-card">
-        <div class="cal-foods-illus">
-          <span class="food-icon food-icon-milk">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v3l2 4v9a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-9l2-4V3z"/><path d="M7 12h10"/></svg>
-          </span>
-          <span class="food-icon food-icon-cheese">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-8z"/><circle cx="9" cy="15" r="0.8" fill="currentColor" stroke="none"/><circle cx="14" cy="13" r="0.8" fill="currentColor" stroke="none"/></svg>
-          </span>
-          <span class="food-icon food-icon-yogurt">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8l1 4-2 12H9L7 8l1-4z"/><path d="M7.5 9h9"/></svg>
-          </span>
-        </div>
-        <h2 style="text-align:center; margin-top:12px;">Alimentación rica en calcio por día</h2>
-        <p class="helper" style="text-align:center;">Objetivo: 1000 mg/día. Cargá abajo lo que fuiste comiendo.</p>
-      </div>
-
-      <div class="card" id="calcio-card">
-        <h2>Porciones de hoy</h2>
-        <p class="helper">Sumá con + cada porción de estos alimentos que consumiste. Calculamos cuánto calcio total llevás.</p>
-        <div class="aporte-resumen" id="aporte-resumen">
-          <div><div class="aporte-mg" id="aporte-mg">0 mg</div><div class="aporte-label">de hoy</div></div>
-          <div class="aporte-label" id="aporte-estado">Cargá lo que consumiste</div>
-        </div>
-        <div id="calcio-foods"></div>
-        <label for="efecto-adverso" style="margin-top:8px;">¿Algún efecto adverso? (opcional)</label>
-        <textarea id="efecto-adverso" placeholder="Ej: constipación, distensión abdominal..."></textarea>
-        <button class="secondary" id="guardar-calcio-btn">Guardar registro de hoy</button>
-      </div>
-
-      <div class="card" id="calcio-info-card">
-        <div class="asp-indicacion" style="background: linear-gradient(135deg, #E7F0FC, #F5FAFF);">
-          <div class="cal-pill-badge">
-            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.3" fill="#FFFFFF" stroke="#5B8FD6" stroke-width="1.4"/><line x1="12" y1="4" x2="12" y2="20" stroke="#5B8FD6" stroke-width="1.3"/></svg>
-          </div>
-          <div>
-            <div class="asp-indicacion-title">Calcio</div>
-            <div class="asp-indicacion-sub">Cómo tomarlo mejor</div>
-          </div>
-        </div>
-        <p class="helper" style="margin-top:12px; margin-bottom:0;">El carbonato de calcio se absorbe mejor junto con las comidas; otras formas, como el lactato de calcio, se pueden tomar con o sin alimentos. La OMS recomienda dividir la dosis diaria en tres tomas, separadas por algunas horas, y no tomarlas junto con el suplemento de hierro y ácido fólico.</p>
-      </div>
-
-      <div class="card" id="calcio-suplemento-card" style="display:none;">
-        <h2>Suplemento de calcio <span class="pill-teal" id="calcio-frecuencia-label">—</span></h2>
-        <div id="calcio-suplemento-mensaje" class="helper" style="margin-bottom:14px;"></div>
-        <div id="calcio-suplemento-toggles"></div>
-        <button class="secondary" id="guardar-suplemento-btn" style="margin-top:10px;">Guardar toma de hoy</button>
-      </div>
-
-      <div class="card" id="calcio-suplemento-cal-card" style="display:none;">
-        <h2>Calendario del calcio <span class="pill-teal" id="calcio-sup-mes-label">—</span></h2>
-        <p class="helper">Este calendario es solo para marcar si tomaste los comprimidos indicados. Se completa cuando marcás todas las tomas del día.</p>
-        <div class="cal-grid" id="calcio-sup-dow-row"></div>
-        <div class="cal-grid" id="calcio-sup-cal-grid" style="margin-top:6px;"></div>
-        <div class="legend">
-          <span><span class="dot" style="background:var(--teal)"></span> Cumplido</span>
-          <span><span class="dot" style="background:var(--pink)"></span> Incompleto</span>
-          <span><span class="dot" style="background:white;border:1.5px solid var(--gray-300)"></span> Sin registrar</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ALIMENTACIÓN -->
-    <div class="panel" id="panel-alimentacion">
-      <div id="alimentacion-sodio-banner"></div>
-      <div class="card"><h2>Alimentación</h2><div class="info-text" id="info-alimentacion-text">Cargando...</div></div>
-    </div>
-
-    <!-- ACTIVIDAD FÍSICA -->
-    <div class="panel" id="panel-actividad-fisica">
-      <div class="card"><h2>Actividad física recomendada</h2><div class="info-text" id="info-actividad-text">Cargando...</div></div>
-
-      <div class="card">
-        <h2>Pasos diarios</h2>
-        <div class="toggle-row"><span>¿Contás tus pasos diarios?</span><button class="switch" id="pasos-switch"></button></div>
-        <div id="pasos-input-wrap" style="display:none; margin-top:6px;">
-          <label for="pasos-promedio">Promedio de pasos por día</label>
-          <input type="number" id="pasos-promedio" min="0" step="100" placeholder="Ej: 5000">
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Trabajo</h2>
-        <div class="toggle-row"><span>¿Tu trabajo es sedentario?</span><button class="switch" id="sedentario-switch"></button></div>
-        <div id="pausas-wrap" style="display:none;">
-          <div class="toggle-row"><span>¿Hacés pausas activas?</span><button class="switch" id="pausas-switch"></button></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Esta semana</h2>
-        <p class="helper">Por cada día, elegí qué actividad hiciste y cuántos minutos. Si no hiciste nada ese día, dejalo en "Ninguna".</p>
-        <div id="dias-actividad-resumen" class="pill-teal" style="margin-bottom:12px; display:inline-block;">0 de 7 días activos</div>
-        <div id="dias-actividad-list"></div>
-        <button class="secondary" id="guardar-actividad-btn" style="margin-top:14px;">Guardar semana</button>
-      </div>
-    </div>
-
-    <!-- PRESIÓN ARTERIAL -->
-    <div class="panel" id="panel-presion-arterial">
       <div class="card pa-hero-card">
         <div class="ct-hero-header">
           <div class="ct-hero-icon">
@@ -1147,75 +1304,16 @@
         </button>
         <div id="mdpa-informes-historial" style="display:none;"></div>
       </div>
-    </div>
 
-    <!-- CURVA PONDERAL -->
-    <div class="panel" id="panel-curva-ponderal">
-      <div class="card">
-        <h2>Curva ponderal</h2>
-        <p class="helper">Tu altura se toma de "Mis datos". Acá solo tenés que pesarte y registrarlo periódicamente para ver tu evolución frente al objetivo recomendado.</p>
-        <div id="imc-info"></div>
-        <div id="curva-chart-wrap"></div>
-        <label for="cp-peso">Peso de hoy (kg)</label>
-        <input type="number" id="cp-peso" step="0.1">
-        <button class="secondary" id="guardar-peso-btn">Guardar peso</button>
-        <div id="peso-historial" style="margin-top:16px;"></div>
-      </div>
-    </div>
+      <div class="card"><h2>Actividad física recomendada</h2><div class="info-text" id="info-actividad-text">Cargando...</div></div>
 
-    <!-- CUARTO TRIMESTRE -->
-    <div class="panel" id="panel-cuarto-trimestre">
-      <div class="card ct-hero-card">
-        <div class="ct-hero-header">
-          <div class="ct-hero-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
-          </div>
-          <div>
-            <h2 style="color:white; margin-bottom:2px;">Cuarto trimestre</h2>
-            <div class="ct-hero-sub">Tu seguimiento después del parto</div>
-          </div>
-        </div>
-      </div>
+      <div id="alimentacion-sodio-banner"></div>
+      <div class="card"><h2>Alimentación</h2><div class="info-text" id="info-alimentacion-text">Cargando...</div></div>
 
-      <div class="card ct-riesgo-card">
-        <h2><span class="md-icon" style="background:rgba(255,255,255,0.25); color:#7A5A1E;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/></svg></span>Por qué seguir con los controles</h2>
-        <p class="helper" id="ct-info-riesgo" style="margin-bottom:0;">Cargando...</p>
-      </div>
-
-      <div class="card" id="ct-setup-card" style="display:none;">
-        <h2>Fecha de parto</h2>
-        <div id="ct-parto-resumen" style="display:none;"></div>
-        <div id="ct-parto-form-wrap">
-          <p class="helper" id="ct-parto-form-helper">Contanos cuándo nació tu bebé, así activamos tu plan de seguimiento del cuarto trimestre.</p>
-          <label for="ct-fecha-parto">Fecha de parto</label>
-          <input type="date" id="ct-fecha-parto">
-          <div class="check-row"><input type="checkbox" id="ct-tuvo-the"><label for="ct-tuvo-the" style="margin:0;">Tuve hipertensión del embarazo o preeclampsia en este embarazo</label></div>
-          <button class="primary" id="ct-guardar-parto-btn" style="margin-top:10px;">Activar mi seguimiento</button>
-        </div>
-      </div>
-
-      <div id="ct-content"></div>
-
-      <div class="card mdpa-card-destacado" id="pp-mdpa-card" style="display:none;">
-        <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
-        <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
-        <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
-        <button class="ver-previos-btn" id="ver-pp-mdpa-previos-btn" style="display:none;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <span class="vp-label">Ver MDPA previos</span>
-        </button>
-        <div id="pp-mdpa-informes-historial" style="display:none;"></div>
-      </div>
-    </div>
-
-    <!-- PAUTAS DE ALARMA -->
-    <div class="panel" id="panel-pautas-alarma">
       <div class="card"><h2>Pautas de alarma — cuándo consultar</h2><div class="info-text" id="info-pautas-text">Cargando...</div></div>
-    </div>
 
-    <!-- INFORMACIÓN -->
-    <div class="panel" id="panel-informacion">
       <div class="card"><h2>Información</h2><div class="info-text" id="info-general-text">Cargando...</div></div>
+
     </div>
 
     <!-- MENSAJES -->
@@ -1230,6 +1328,7 @@
         </div>
       </div>
     </div>
+
 
   </main>
 
@@ -1246,6 +1345,12 @@
   const homeScreen = document.getElementById("home-screen");
 
   let session = JSON.parse(localStorage.getItem("siempre_session") || "null");
+
+  // Fecha de HOY en horario local (evita el descalce de toISOString, que usa UTC)
+  function fechaLocalHoy() {
+    const d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
 
   // ---------- LOGIN ----------
   const loginForm = document.getElementById("login-form");
@@ -1308,7 +1413,6 @@
     homeScreen.style.flexDirection = "column";
     setupTabs();
     initBienvenida();
-    loadAspirinaCalendar();
     initCalcio();
     initTratamientoPA();
     initMdpa("main");
@@ -1342,19 +1446,10 @@
     activarTab("bienvenida");
   }
   const TAB_COLORS = {
-    "bienvenida":       ["#7C5CC4", "#4B3585"],
-    "mis-datos":        ["#7C5CC4", "#4B3585"],
-    "embarazos":        ["#EC7FA0", "#C43F69"],
-    "aspirina":         ["#28A67F", "#0B6E52"],
-    "calcio":           ["#5B8FD6", "#2C4F87"],
-    "alimentacion":     ["#72B06C", "#3E6E3B"],
-    "actividad-fisica": ["#DDA23F", "#95611A"],
-    "presion-arterial": ["#C2554C", "#7A2A22"],
-    "curva-ponderal":   ["#7477C2", "#454890"],
-    "cuarto-trimestre": ["#B8873F", "#6B3F94"],
-    "pautas-alarma":    ["#E2665B", "#A5382E"],
-    "informacion":      ["#9482BE", "#5D4A85"],
-    "mensajes":         ["#6B8CC4", "#3E5A8C"]
+    "bienvenida":  ["#4B3585", "#2E1F4D"],
+    "esta-semana": ["#C15FA0", "#8C3E75"],
+    "ocasional":   ["#7477C2", "#454890"],
+    "mensajes":    ["#6B8CC4", "#3E5A8C"]
   };
   function activarTab(tab) {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
@@ -1386,52 +1481,28 @@
     return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
   }
 
-  function actualizarEstadoNotif(texto, clase) {
-    const el = document.getElementById("notif-estado");
-    el.textContent = texto;
-    el.className = "notif-estado " + (clase || "");
-    el.style.display = "block";
-  }
-
-  async function verificarEstadoNotificaciones() {
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-      document.getElementById("activar-notif-btn").style.display = "none";
-      actualizarEstadoNotif("Tu navegador no admite notificaciones push.", "error");
-      return;
-    }
-    if (Notification.permission === "denied") {
-      document.getElementById("activar-notif-btn").style.display = "none";
-      actualizarEstadoNotif("Bloqueaste las notificaciones para esta app. Podés habilitarlas desde la configuración del navegador.", "error");
-      return;
-    }
-    try {
-      const registro = await navigator.serviceWorker.register("./sw.js");
-      const existente = await registro.pushManager.getSubscription();
-      if (existente && Notification.permission === "granted") {
-        document.getElementById("activar-notif-btn").style.display = "none";
-        actualizarEstadoNotif("Notificaciones activadas ✓", "ok");
-      } else {
-        document.getElementById("activar-notif-btn").style.display = "inline-block";
-        document.getElementById("notif-estado").style.display = "none";
+  function actualizarIconoHeaderNotif(activo) {
+    const btn = document.getElementById("notif-header-btn");
+    btn.classList.toggle("notif-on", activo);
+    const dotExistente = btn.querySelector(".notif-dot");
+    if (!activo) {
+      if (!dotExistente) {
+        const dot = document.createElement("span");
+        dot.className = "notif-dot";
+        btn.style.position = "relative";
+        btn.appendChild(dot);
       }
-    } catch (e) {
-      console.error("Error verificando notificaciones:", e);
-      actualizarEstadoNotif("No pudimos verificar las notificaciones: " + e.message, "error");
+    } else if (dotExistente) {
+      dotExistente.remove();
     }
   }
 
-  document.getElementById("activar-notif-btn").addEventListener("click", async () => {
-    const btn = document.getElementById("activar-notif-btn");
-    btn.disabled = true; btn.textContent = "Activando...";
+  async function activarNotificacionesPush() {
     try {
       const registro = await navigator.serviceWorker.register("./sw.js");
       await navigator.serviceWorker.ready;
       const permiso = await Notification.requestPermission();
-      if (permiso !== "granted") {
-        actualizarEstadoNotif("No se activaron las notificaciones (permiso denegado).", "error");
-        btn.disabled = false; btn.textContent = "Activar notificaciones";
-        return;
-      }
+      if (permiso !== "granted") return false;
       const suscripcion = await registro.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
@@ -1444,62 +1515,603 @@
         p_auth_key: sub.keys.auth
       });
       if (error) throw error;
-      btn.style.display = "none";
-      actualizarEstadoNotif("Notificaciones activadas ✓", "ok");
+      actualizarIconoHeaderNotif(true);
+      return true;
     } catch (e) {
       console.error("Error activando notificaciones:", e);
-      actualizarEstadoNotif("No pudimos activar las notificaciones: " + (e.message || e), "error");
-      btn.disabled = false; btn.textContent = "Activar notificaciones";
+      return false;
+    }
+  }
+
+  async function verificarEstadoNotificaciones() {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      actualizarIconoHeaderNotif(false);
+      return;
+    }
+    if (Notification.permission === "denied") {
+      actualizarIconoHeaderNotif(false);
+      return;
+    }
+    try {
+      const registro = await navigator.serviceWorker.register("./sw.js");
+      const existente = await registro.pushManager.getSubscription();
+      actualizarIconoHeaderNotif(!!(existente && Notification.permission === "granted"));
+
+      // Preguntamos una sola vez en toda la vida de la app
+      const yaPreguntado = localStorage.getItem("siempre_notif_preguntado");
+      if (!existente && Notification.permission === "default" && !yaPreguntado) {
+        document.getElementById("notif-onboarding-modal").classList.add("show");
+      }
+    } catch (e) {
+      console.error("Error verificando notificaciones:", e);
+      actualizarIconoHeaderNotif(false);
+    }
+  }
+
+  document.getElementById("notif-header-btn").addEventListener("click", async () => {
+    if (!document.getElementById("notif-header-btn").classList.contains("notif-on")) {
+      await activarNotificacionesPush();
     }
   });
+
+  document.getElementById("notif-onboarding-si-btn").addEventListener("click", async () => {
+    localStorage.setItem("siempre_notif_preguntado", "1");
+    const btn = document.getElementById("notif-onboarding-si-btn");
+    btn.disabled = true; btn.textContent = "Activando...";
+    await activarNotificacionesPush();
+    document.getElementById("notif-onboarding-modal").classList.remove("show");
+  });
+  document.getElementById("notif-onboarding-no-btn").addEventListener("click", () => {
+    localStorage.setItem("siempre_notif_preguntado", "1");
+    document.getElementById("notif-onboarding-modal").classList.remove("show");
+  });
+
+  const MOTIVOS_NO_ADHERENCIA = ["Me olvido", "Tengo efectos molestos", "Decidí no tomarla por ahora", "Otro motivo"];
+  let chequeoTipoActual = null;
+
+  function abrirChequeoAdherencia(tipo) {
+    chequeoTipoActual = tipo;
+    const nombreHabito = tipo === "aspirina" ? "la aspirina" : "el suplemento de calcio";
+    document.getElementById("chequeo-adherencia-texto").textContent = `Notamos que hace unos días no marcás ${nombreHabito}. Contanos qué está pasando — nos ayuda a acompañarte mejor, no hay respuesta incorrecta.`;
+    document.getElementById("chequeo-motivos-lista").innerHTML = MOTIVOS_NO_ADHERENCIA.map(m =>
+      `<button class="chequeo-motivo-btn" data-motivo="${m}">${m}</button>`
+    ).join("");
+    document.getElementById("chequeo-motivos-lista").querySelectorAll(".chequeo-motivo-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        await sb.rpc("guardar_motivo_no_adherencia", { p_token: session.token, p_tipo: chequeoTipoActual, p_motivo: btn.dataset.motivo });
+        document.getElementById("chequeo-adherencia-modal").classList.remove("show");
+        mostrarToastBienvenida("Gracias por contarnos 💜", "Esto nos ayuda a acompañarte mejor.");
+      });
+    });
+    document.getElementById("chequeo-adherencia-modal").classList.add("show");
+  }
+  document.getElementById("chequeo-omitir-btn").addEventListener("click", async () => {
+    if (chequeoTipoActual) {
+      await sb.rpc("guardar_motivo_no_adherencia", { p_token: session.token, p_tipo: chequeoTipoActual, p_motivo: "omitido" });
+    }
+    document.getElementById("chequeo-adherencia-modal").classList.remove("show");
+  });
+
+  function mostrarToastBienvenida(titulo, texto) {
+    document.getElementById("toast-titulo").textContent = titulo;
+    document.getElementById("toast-texto").textContent = texto;
+    const toast = document.getElementById("toast-bienvenida");
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 4500);
+  }
+
+  async function actualizarBadgeHeaderGestacion() {
+    const badge = document.getElementById("header-gestacion-badge");
+    try {
+      const { data: ctData } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
+      if (ctData && ctData.ok && ctData.fecha_parto) {
+        const dias = ctData.dias_desde_parto;
+        let texto;
+        if (dias < 60) texto = `${dias} día${dias === 1 ? "" : "s"} posparto`;
+        else { const meses = Math.floor(dias / 30); texto = `${meses} ${meses === 1 ? "mes" : "meses"} posparto`; }
+        badge.textContent = texto;
+        badge.style.display = "inline-block";
+        return;
+      }
+      const { data: embData } = await sb.rpc("obtener_embarazos", { p_token: session.token });
+      if (embData && embData.ok && embData.actual) {
+        const a = embData.actual;
+        const r = calcularSemanas(a.fum, a.fpp_obstetra, a.fecha_eco_datante, a.eco_semanas, a.eco_dias);
+        if (r) {
+          badge.textContent = `Semana ${r.semanas}${r.dias ? "." + r.dias : ""}`;
+          badge.style.display = "inline-block";
+        }
+      }
+    } catch (e) {
+      console.error("Error actualizando badge de gestación:", e);
+    }
+  }
 
   async function initBienvenida() {
     try {
       const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
-      document.getElementById("bienvenida-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida a SIEMPRE!";
-      document.getElementById("bienvenida-explain").textContent = (data && data.mensaje_explicativo) || "";
+      mostrarToastBienvenida((data && data.mensaje_bienvenida) || "¡Te acompañamos!", (data && data.mensaje_explicativo) || "");
     } catch (e) {
-      document.getElementById("bienvenida-msg").textContent = "¡Bienvenida a SIEMPRE!";
+      mostrarToastBienvenida("¡Te acompañamos!", "");
     }
     verificarEstadoNotificaciones();
+    renderMiDia();
+    actualizarBadgeHeaderGestacion();
   }
 
-  // ================= ASPIRINA =================
-  const DOW = ["D", "L", "M", "M", "J", "V", "S"];
-  const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  const OBJETIVO_PASOS = 7000;
 
-  async function loadAspirinaCalendar() {
+  function renderPasosCard(pasosRes, hoyISO, anio, mes, racha) {
+    const registros = (pasosRes.data && pasosRes.data.ok) ? pasosRes.data.registros : [];
+    const hoyReg = registros.find(r => r.dia === hoyISO);
+    const rachaBadge = racha > 1 ? `<span class="habito-racha">🔥 ${racha} días seguidos</span>` : "";
+
+    let contenidoHoy;
+    if (hoyReg) {
+      contenidoHoy = `
+        <div class="pasos-hoy-listo">
+          <span class="pasos-hoy-check">✓</span>
+          <div><div class="pasos-hoy-numero">${hoyReg.pasos.toLocaleString("es-AR")} pasos</div><div class="pasos-hoy-sub">Registrados hoy</div>${rachaBadge}</div>
+          <button class="pasos-editar-btn" id="pasos-editar-btn">Editar</button>
+        </div>`;
+    } else {
+      contenidoHoy = `
+        <div class="pasos-input-row">
+          <input type="number" id="pasos-hoy-input" min="0" step="100" placeholder="Ej: 5000">
+          <button class="pasos-guardar-btn" id="pasos-guardar-btn">Guardar</button>
+        </div>
+        ${rachaBadge ? `<div style="text-align:center; margin-top:8px;">${rachaBadge}</div>` : ""}`;
+    }
+
+    return `<div class="card md-pasos-card">
+      <h2><span class="md-icon" style="background:linear-gradient(135deg, #F4A94E, #E2665B); color:white;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="5" r="1.8"/><path d="M9.5 8l-2 4 2 2-1 6"/><circle cx="16" cy="10" r="1.8"/><path d="M17.5 13l-2 4 2 2-1 3"/></svg>
+      </span>Pasos diarios</h2>
+      ${contenidoHoy}
+      ${renderSemanaDots(registros, r => r.pasos >= OBJETIVO_PASOS)}
+      <button class="ver-mes-link" data-tipo="pasos">Ver resumen del mes</button>
+    </div>`;
+  }
+
+  function wirePasosCard(hoyISO, anio, mes) {
+    const guardarBtn = document.getElementById("pasos-guardar-btn");
+    if (guardarBtn) guardarBtn.addEventListener("click", async () => {
+      const valor = parseInt(document.getElementById("pasos-hoy-input").value);
+      if (!valor && valor !== 0) return;
+      guardarBtn.disabled = true; guardarBtn.textContent = "Guardando...";
+      await sb.rpc("registrar_pasos_diarios", { p_token: session.token, p_dia: hoyISO, p_pasos: valor });
+      mostrarToastBienvenida("¡Buenísimo! 💜", "Quedaron registrados tus pasos de hoy.");
+      renderMiDia();
+    });
+    const editarBtn = document.getElementById("pasos-editar-btn");
+    if (editarBtn) editarBtn.addEventListener("click", async () => {
+      const { data } = await sb.rpc("obtener_pasos_diarios_mes", { p_token: session.token, p_anio: anio, p_mes: mes });
+      const reg = (data && data.ok) ? data.registros.find(r => r.dia === hoyISO) : null;
+      const nuevo = prompt("Editar pasos de hoy:", reg ? reg.pasos : "");
+      if (nuevo === null) return;
+      const valor = parseInt(nuevo);
+      if (isNaN(valor)) return;
+      await sb.rpc("registrar_pasos_diarios", { p_token: session.token, p_dia: hoyISO, p_pasos: valor });
+      renderMiDia();
+    });
+  }
+
+  const TIPOS_CON_INFO = ["aspirina", "calcio"];
+
+  function abrirInfoHabito(tipo) {
+    if (!TIPOS_CON_INFO.includes(tipo)) return;
+    document.getElementById("info-aspirina-block").style.display = tipo === "aspirina" ? "block" : "none";
+    document.getElementById("info-calcio-block").style.display = tipo === "calcio" ? "block" : "none";
+    document.getElementById("info-habito-modal").classList.add("show");
+  }
+  document.getElementById("cerrar-info-habito-btn").addEventListener("click", () => {
+    document.getElementById("info-habito-modal").classList.remove("show");
+  });
+  document.getElementById("info-habito-modal").addEventListener("click", (e) => {
+    if (e.target.id === "info-habito-modal") document.getElementById("info-habito-modal").classList.remove("show");
+  });
+
+  const ILUSTRACION_HABITO = {
+    aspirina: `<div class="habito-illus-strip habito-illus-aspirina">
+      <svg viewBox="0 0 64 64" width="56" height="56">
+        <defs>
+          <radialGradient id="gradPillMiniA" cx="35%" cy="28%" r="75%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#ECE6F7"/></radialGradient>
+        </defs>
+        <ellipse cx="32" cy="48" rx="16" ry="4" fill="#000000" opacity="0.07"/>
+        <circle cx="32" cy="29" r="19" fill="url(#gradPillMiniA)" stroke="#CDBFE0" stroke-width="1.4"/>
+        <line x1="15" y1="29" x2="49" y2="29" stroke="#B8A9D1" stroke-width="1.2"/>
+        <line x1="32" y1="12" x2="32" y2="46" stroke="#B8A9D1" stroke-width="1.2"/>
+        <ellipse cx="24" cy="20" rx="6.5" ry="4.2" fill="#FFFFFF" opacity="0.85"/>
+      </svg>
+    </div>`,
+    calcio: `<div class="habito-illus-strip habito-illus-calcio">
+      <svg viewBox="0 0 64 64" width="56" height="56">
+        <defs>
+          <radialGradient id="gradPillMiniC" cx="35%" cy="28%" r="80%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#F3F7FD"/></radialGradient>
+          <linearGradient id="gradPillMiniC2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#C9DFF9"/><stop offset="100%" stop-color="#9FC3EF"/></linearGradient>
+        </defs>
+        <ellipse cx="32" cy="48" rx="17" ry="4" fill="#000000" opacity="0.06"/>
+        <g transform="rotate(-28 32 28)">
+          <path d="M12 28a12 12 0 0 1 12-12h16a12 12 0 1 1 0 24H24A12 12 0 0 1 12 28z" fill="url(#gradPillMiniC)" stroke="#AFC7E8" stroke-width="1.4"/>
+          <path d="M32 16h8a12 12 0 1 1 0 24h-8z" fill="url(#gradPillMiniC2)"/>
+          <ellipse cx="20" cy="20" rx="5" ry="3.2" fill="#FFFFFF" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>`
+  };
+
+  function renderSemanaDots(registros, esCumplidoFn) {
     const hoy = new Date();
-    const anio = hoy.getFullYear();
-    const mes = hoy.getMonth() + 1;
-    document.getElementById("aspirina-mes-label").textContent = MESES[mes - 1] + " " + anio;
-    document.getElementById("cal-dow-row").innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
+    const diaSemana = (hoy.getDay() + 6) % 7; // 0 = lunes
+    const lunes = new Date(hoy);
+    lunes.setDate(hoy.getDate() - diaSemana);
+    const letras = ["L", "M", "M", "J", "V", "S", "D"];
+    const hoyISO = fechaLocalHoy();
+    let html = '<div class="habito-semana-dots">';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(lunes);
+      d.setDate(lunes.getDate() + i);
+      const dISO = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      const esHoy = dISO === hoyISO;
+      const esFuturo = dISO > hoyISO;
+      const reg = registros.find(r => (r.dia || "").slice(0, 10) === dISO);
+      let estado = "vacio";
+      if (reg) estado = esCumplidoFn(reg) ? "ok" : "no";
+      else if (esFuturo) estado = "futuro";
+      html += `<span class="habito-dot habito-dot-${estado}${esHoy ? " habito-dot-hoy" : ""}" title="${letras[i]}">${letras[i]}</span>`;
+    }
+    html += "</div>";
+    return html;
+  }
 
-    const { data, error } = await sb.rpc("obtener_calendario_aspirina", { p_token: session.token, p_anio: anio, p_mes: mes });
-    const registros = {};
-    if (!error && data && data.ok) data.registros.forEach(r => { registros[r.dia.slice(8, 10)] = r.tomada; });
+  function renderAccionDiariaCard(opts) {
+    const ilustracion = ILUSTRACION_HABITO[opts.tipo] || "";
+    const infoBtn = TIPOS_CON_INFO.includes(opts.tipo) ? `<button class="habito-info-btn" data-info="${opts.tipo}" aria-label="Más información"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg></button>` : "";
+    const rachaBadge = opts.racha > 1 ? `<span class="habito-racha">🔥 ${opts.racha} días seguidos</span>` : "";
+    const semanaDots = opts.semanaDotsHtml || "";
 
+    if (opts.yaHecho) {
+      return `<div class="card habito-card habito-hecho">
+        ${ilustracion}
+        <div class="habito-top">
+          <div class="habito-check">✓</div>
+          <div class="habito-info"><div class="habito-titulo">${opts.titulo}</div><div class="habito-estado hecho">${opts.textoHecho}</div>${rachaBadge}</div>
+          ${infoBtn}
+        </div>
+        ${semanaDots}
+        <button class="ver-mes-link" data-tipo="${opts.tipo}">Ver resumen del mes</button>
+      </div>`;
+    }
+    return `<div class="card habito-card habito-pendiente">
+      ${ilustracion}
+      <div class="habito-top">
+        <div class="habito-info"><div class="habito-titulo">${opts.titulo}</div><div class="habito-no-olvides">No te lo olvides</div>${rachaBadge}</div>
+        ${infoBtn}
+      </div>
+      ${semanaDots}
+      <button class="habito-confirmar-btn" id="${opts.btnId}" style="background:${opts.colorBtn};">${opts.btnTexto}</button>
+      <button class="ver-mes-link" data-tipo="${opts.tipo}">Ver resumen del mes</button>
+    </div>`;
+  }
+
+  function wireVerMesLinks() {
+    document.querySelectorAll(".ver-mes-link").forEach(link => {
+      link.addEventListener("click", () => {
+        const tipo = link.dataset.tipo;
+        if (tipo === "aspirina") abrirResumenAspirina();
+        else if (tipo === "calcio") abrirResumenCalcio();
+        else if (tipo === "pasos") abrirResumenPasos();
+      });
+    });
+    document.querySelectorAll(".habito-info-btn").forEach(btn => {
+      btn.addEventListener("click", () => abrirInfoHabito(btn.dataset.info));
+    });
+  }
+
+  function abrirModalResumen(titulo, iconoSvg, bg, color) {
+    document.getElementById("resumen-mes-titulo").textContent = titulo;
+    const icono = document.getElementById("resumen-mes-icono");
+    icono.innerHTML = iconoSvg;
+    icono.style.background = bg;
+    icono.style.color = color;
+    document.getElementById("resumen-mes-modal").classList.add("show");
+  }
+  document.getElementById("cerrar-resumen-mes-btn").addEventListener("click", () => {
+    document.getElementById("resumen-mes-modal").classList.remove("show");
+  });
+  document.getElementById("resumen-mes-modal").addEventListener("click", (e) => {
+    if (e.target.id === "resumen-mes-modal") document.getElementById("resumen-mes-modal").classList.remove("show");
+  });
+
+  function renderMiniCalendarGrid(containerId, dowContainerId, registrosMap, onToggle) {
+    const hoy = new Date();
+    const anio = hoy.getFullYear(), mes = hoy.getMonth() + 1;
+    document.getElementById(dowContainerId).innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
     const primerDia = new Date(anio, mes - 1, 1).getDay();
     const diasEnMes = new Date(anio, mes, 0).getDate();
-    const grid = document.getElementById("cal-grid");
+    const grid = document.getElementById(containerId);
     grid.innerHTML = "";
     for (let i = 0; i < primerDia; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
     for (let d = 1; d <= diasEnMes; d++) {
       const dd = String(d).padStart(2, "0");
       let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
-      if (registros[dd] === true) cls += " tomada"; else if (registros[dd] === false) cls += " no-tomada";
+      if (registrosMap[dd] === true) cls += " tomada"; else if (registrosMap[dd] === false) cls += " no-tomada";
       grid.innerHTML += `<div class="${cls}" data-day="${dd}">${d}</div>`;
     }
-    grid.querySelectorAll(".cal-day:not(.empty)").forEach(el => el.addEventListener("click", () => toggleAspirina(el, anio, mes)));
+    grid.querySelectorAll(".cal-day:not(.empty)").forEach(el => el.addEventListener("click", () => onToggle(el, anio, mes)));
+    return { anio, mes };
   }
-  async function toggleAspirina(el, anio, mes) {
-    const dd = el.dataset.day;
-    const nuevoValor = !el.classList.contains("tomada");
-    const fecha = `${anio}-${String(mes).padStart(2, "0")}-${dd}`;
-    el.classList.remove("tomada", "no-tomada");
-    el.classList.add(nuevoValor ? "tomada" : "no-tomada");
-    await sb.rpc("registrar_aspirina", { p_token: session.token, p_dia: fecha, p_tomada: nuevoValor });
+
+  async function abrirResumenAspirina() {
+    abrirModalResumen("Aspirina — este mes",
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg>',
+      "var(--teal-light)", "var(--teal-dark)");
+    const cont = document.getElementById("resumen-mes-contenido");
+    cont.innerHTML = `<p class="helper">Cargando...</p>`;
+    const hoy = new Date();
+    const { data } = await sb.rpc("obtener_calendario_aspirina", { p_token: session.token, p_anio: hoy.getFullYear(), p_mes: hoy.getMonth() + 1 });
+    const registros = (data && data.ok) ? data.registros : [];
+    const registrosMap = {};
+    registros.forEach(r => { registrosMap[r.dia.slice(8, 10)] = r.tomada; });
+    const total = registros.length;
+    const tomadas = registros.filter(r => r.tomada).length;
+    const pct = total ? Math.round((tomadas / total) * 100) : 0;
+    let mensaje;
+    if (!total) mensaje = "Todavía no registraste ningún día este mes.";
+    else if (pct >= 90) mensaje = "¡Excelente adherencia este mes! Seguí así 💜";
+    else if (pct >= 70) mensaje = "Vas bien, pero todavía podés mejorar un poco la constancia.";
+    else mensaje = "Esta aspirina es importante para vos — intentá no saltearte días.";
+
+    cont.innerHTML = `
+      <p class="helper">Tocá cualquier día para marcar si tomaste tu aspirina. Así podés completar días anteriores que se te hayan pasado.</p>
+      <div class="pasos-resumen-fila">
+        <div class="pasos-resumen-dato"><div class="prd-num">${pct}%</div><div class="prd-label">Adherencia</div></div>
+        <div class="pasos-resumen-dato"><div class="prd-num">${total}</div><div class="prd-label">Días registrados</div></div>
+      </div>
+      <p class="pasos-mensaje-motivacional">${mensaje}</p>
+      <div class="cal-grid" id="modal-cal-dow-row"></div>
+      <div class="cal-grid" id="modal-cal-grid" style="margin-top:6px;"></div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--teal)"></span> Tomada</span>
+        <span><span class="dot" style="background:var(--pink)"></span> No tomada</span>
+      </div>
+    `;
+    renderMiniCalendarGrid("modal-cal-grid", "modal-cal-dow-row", registrosMap, async (el, anio, mes) => {
+      const dd = el.dataset.day;
+      const nuevoValor = !el.classList.contains("tomada");
+      const fecha = `${anio}-${String(mes).padStart(2, "0")}-${dd}`;
+      el.classList.remove("tomada", "no-tomada");
+      el.classList.add(nuevoValor ? "tomada" : "no-tomada");
+      await sb.rpc("registrar_aspirina", { p_token: session.token, p_dia: fecha, p_tomada: nuevoValor });
+      renderMiDia();
+    });
   }
+
+  async function abrirResumenCalcio() {
+    abrirModalResumen("Suplemento de calcio — este mes",
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>',
+      "var(--blue-light)", "var(--blue)");
+    const cont = document.getElementById("resumen-mes-contenido");
+    cont.innerHTML = `<p class="helper">Cargando...</p>`;
+    const hoy = new Date();
+    const frecuencia = session.calcio_frecuencia_diaria || 1;
+    const { data } = await sb.rpc("obtener_calendario_calcio_suplemento", { p_token: session.token, p_anio: hoy.getFullYear(), p_mes: hoy.getMonth() + 1 });
+    const registros = (data && data.ok) ? data.registros : [];
+    const registrosMap = {};
+    registros.forEach(r => {
+      const tomasHechas = Object.values(r.dosis || {}).filter(v => v === true).length;
+      registrosMap[r.dia.slice(8, 10)] = tomasHechas >= frecuencia;
+    });
+    const total = registros.length;
+    const cumplidos = registros.filter(r => Object.values(r.dosis || {}).filter(v => v === true).length >= frecuencia).length;
+    const pct = total ? Math.round((cumplidos / total) * 100) : 0;
+    let mensaje;
+    if (!total) mensaje = "Todavía no registraste ningún día este mes.";
+    else if (pct >= 90) mensaje = "¡Excelente! Estás cumpliendo muy bien con el suplemento 💜";
+    else if (pct >= 70) mensaje = "Vas bien, pero todavía podés mejorar un poco la constancia.";
+    else mensaje = "El suplemento es importante para vos — intentá no saltearte días.";
+
+    cont.innerHTML = `
+      <p class="helper">Tocá cualquier día para marcar si tomaste tu suplemento. Así podés completar días anteriores que se te hayan pasado.</p>
+      <div class="pasos-resumen-fila">
+        <div class="pasos-resumen-dato"><div class="prd-num">${pct}%</div><div class="prd-label">Cumplimiento</div></div>
+        <div class="pasos-resumen-dato"><div class="prd-num">${total}</div><div class="prd-label">Días registrados</div></div>
+      </div>
+      <p class="pasos-mensaje-motivacional">${mensaje}</p>
+      <div class="cal-grid" id="modal-cal-dow-row"></div>
+      <div class="cal-grid" id="modal-cal-grid" style="margin-top:6px;"></div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--teal)"></span> Cumplido</span>
+        <span><span class="dot" style="background:var(--pink)"></span> Incompleto</span>
+      </div>
+    `;
+    renderMiniCalendarGrid("modal-cal-grid", "modal-cal-dow-row", registrosMap, async (el, anio, mes) => {
+      const dd = el.dataset.day;
+      const nuevoValor = !el.classList.contains("tomada");
+      const fecha = `${anio}-${String(mes).padStart(2, "0")}-${dd}`;
+      el.classList.remove("tomada", "no-tomada");
+      el.classList.add(nuevoValor ? "tomada" : "no-tomada");
+      const dosis = {};
+      for (let i = 1; i <= frecuencia; i++) dosis["dosis_" + i] = nuevoValor;
+      await sb.rpc("guardar_calcio_suplemento", { p_token: session.token, p_dia: fecha, p_dosis: dosis });
+      renderMiDia();
+    });
+  }
+
+  async function abrirResumenPasos() {
+    abrirModalResumen("Pasos diarios — este mes",
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="5" r="1.8"/><path d="M9.5 8l-2 4 2 2-1 6"/><circle cx="16" cy="10" r="1.8"/><path d="M17.5 13l-2 4 2 2-1 3"/></svg>',
+      "linear-gradient(135deg, #F4A94E, #E2665B)", "white");
+    const cont = document.getElementById("resumen-mes-contenido");
+    cont.innerHTML = `<p class="helper">Cargando...</p>`;
+    const hoy = new Date();
+    const { data } = await sb.rpc("obtener_pasos_diarios_mes", { p_token: session.token, p_anio: hoy.getFullYear(), p_mes: hoy.getMonth() + 1 });
+    const registros = (data && data.ok) ? data.registros : [];
+    const diasConDatos = registros.length;
+    const promedio = diasConDatos ? Math.round(registros.reduce((a, r) => a + r.pasos, 0) / diasConDatos) : 0;
+    const diasEnObjetivo = registros.filter(r => r.pasos >= OBJETIVO_PASOS).length;
+    const pctObjetivo = diasConDatos ? Math.round((diasEnObjetivo / diasConDatos) * 100) : 0;
+    let mensaje;
+    if (!diasConDatos) mensaje = "Empezá a registrar tus pasos para ver tu progreso acá.";
+    else if (promedio >= OBJETIVO_PASOS) mensaje = "¡Llegaste a tu objetivo este mes! 🎉 Seguí así.";
+    else if (promedio >= OBJETIVO_PASOS * 0.7) mensaje = "¡Ya casi lo lográs! Todavía te falta un poco, pero vas muy bien.";
+    else mensaje = "Todavía podés sumar un poco más de movimiento — cada caminata cuenta. ¡Vos podés!";
+
+    cont.innerHTML = `
+      <div class="pasos-resumen-fila">
+        <div class="pasos-resumen-dato"><div class="prd-num">${promedio.toLocaleString("es-AR")}</div><div class="prd-label">Promedio diario</div></div>
+        <div class="pasos-resumen-dato"><div class="prd-num">${pctObjetivo}%</div><div class="prd-label">Días en objetivo</div></div>
+        <div class="pasos-resumen-dato"><div class="prd-num">${diasConDatos}</div><div class="prd-label">Días registrados</div></div>
+      </div>
+      <p class="pasos-mensaje-motivacional">${mensaje}</p>
+    `;
+  }
+
+  async function renderMiDia() {
+    const cont = document.getElementById("mi-dia-contenido");
+    cont.innerHTML = `<p class="helper">Cargando tu día...</p>`;
+
+    const hoyISO = fechaLocalHoy();
+    const anio = new Date().getFullYear(), mes = new Date().getMonth() + 1;
+
+    const [ctRes, aspRes, calcRes, patronRes, pasosRes, rachaAspRes, rachaCalcRes, rachaPasosRes] = await Promise.all([
+      sb.rpc("obtener_cuarto_trimestre", { p_token: session.token }),
+      session.indicacion_aspirina ? sb.rpc("obtener_calendario_aspirina", { p_token: session.token, p_anio: anio, p_mes: mes }) : Promise.resolve({ data: null }),
+      (session.indicacion_calcio && session.calcio_frecuencia_diaria) ? sb.rpc("obtener_calendario_calcio_suplemento", { p_token: session.token, p_anio: anio, p_mes: mes }) : Promise.resolve({ data: null }),
+      session.indicacion_calcio ? sb.rpc("obtener_patron_alimentario_calcio", { p_token: session.token }) : Promise.resolve({ data: null }),
+      sb.rpc("obtener_pasos_diarios_mes", { p_token: session.token, p_anio: anio, p_mes: mes }),
+      session.indicacion_aspirina ? sb.rpc("obtener_racha_aspirina", { p_token: session.token }) : Promise.resolve({ data: null }),
+      (session.indicacion_calcio && session.calcio_frecuencia_diaria) ? sb.rpc("obtener_racha_calcio", { p_token: session.token }) : Promise.resolve({ data: null }),
+      sb.rpc("obtener_racha_pasos", { p_token: session.token })
+    ]);
+
+    const ctData = (ctRes.data && ctRes.data.ok) ? ctRes.data : null;
+    const yaNacio = !!(ctData && ctData.fecha_parto);
+
+    let html = "";
+
+    if (yaNacio) {
+      const pendientesCT = (ctData.items || []).filter(it => it.vigente && !it.cumplido);
+      if (pendientesCT.length) {
+        html += `<div class="md-big-card" id="md-ir-cuarto-trimestre">
+          <div class="mdb-icon" style="background:rgba(199,154,63,0.18); color:#8A6A2E;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
+          </div>
+          <div><div class="mdb-titulo">Tenés un control pendiente</div><div class="mdb-sub">${pendientesCT[0].item}${pendientesCT.length > 1 ? ` y ${pendientesCT.length - 1} más` : ""}</div></div>
+          <div class="mdb-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>`;
+      }
+    } else {
+      if (session.indicacion_aspirina) {
+        const registros = (aspRes.data && aspRes.data.ok) ? aspRes.data.registros : [];
+        const yaHoy = registros.some(r => r.dia === hoyISO);
+        const racha = (rachaAspRes.data && rachaAspRes.data.ok) ? rachaAspRes.data.racha : 0;
+        html += renderAccionDiariaCard({
+          colorBg: "var(--teal-light)", colorBorder: "var(--teal)", colorBtn: "var(--teal)",
+          titulo: "Aspirina de hoy", yaHecho: yaHoy, textoHecho: "Tomada hoy",
+          btnId: "md-aspirina-si", btnTexto: "Ya la tomé ✓", tipo: "aspirina",
+          racha, semanaDotsHtml: renderSemanaDots(registros, r => r.tomada === true)
+        });
+      }
+      const patronData = (patronRes.data && patronRes.data.ok) ? patronRes.data : null;
+      if (session.indicacion_calcio) {
+        if (!patronData || !patronData.ya_respondido) {
+          html += `<div class="md-big-card" id="md-ir-patron-calcio">
+            <div class="mdb-icon" style="background:var(--blue-light); color:var(--blue);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s6 7.2 6 11.2a6 6 0 1 1-12 0c0-4 6-11.2 6-11.2z"/></svg>
+            </div>
+            <div><div class="mdb-titulo">Contanos tu alimentación habitual</div><div class="mdb-sub">Se pregunta una sola vez</div></div>
+            <div class="mdb-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>`;
+        } else if (session.calcio_frecuencia_diaria) {
+          let yaHoy = false;
+          const frecuencia = session.calcio_frecuencia_diaria;
+          const registrosCalcio = (calcRes.data && calcRes.data.ok) ? calcRes.data.registros : [];
+          if (calcRes.data && calcRes.data.ok) {
+            const r = registrosCalcio.find(x => x.dia === hoyISO);
+            yaHoy = !!(r && Object.values(r.dosis || {}).filter(v => v === true).length >= frecuencia);
+          }
+          const racha = (rachaCalcRes.data && rachaCalcRes.data.ok) ? rachaCalcRes.data.racha : 0;
+          html += renderAccionDiariaCard({
+            colorBg: "var(--blue-light)", colorBorder: "var(--blue)", colorBtn: "var(--blue)",
+            titulo: "Suplemento de calcio de hoy", yaHecho: yaHoy, textoHecho: "Tomado hoy",
+            btnId: "md-calcio-si", btnTexto: "Ya lo tomé ✓", tipo: "calcio",
+            racha, semanaDotsHtml: renderSemanaDots(registrosCalcio, r => Object.values(r.dosis || {}).filter(v => v === true).length >= frecuencia)
+          });
+        }
+        // Si el patrón ya se respondió y dio "adecuada", no se muestra nada acá: no hace falta suplemento.
+      }
+
+    }
+
+    const pasosYaHoy = (pasosRes.data && pasosRes.data.ok) ? pasosRes.data.registros.some(r => r.dia === hoyISO) : false;
+    const diaCompleto = !html && pasosYaHoy;
+
+    if (!html) {
+      html = `<div class="md-todo-listo">
+        <div class="md-todo-listo-icon">✓</div>
+        <div class="md-todo-listo-texto">¡Ya estás al día!</div>
+        <div class="md-todo-listo-sub">No tenés nada pendiente para hoy.</div>
+      </div>`;
+    }
+
+    if (diaCompleto) {
+      const yaFestejado = localStorage.getItem("siempre_festejo_" + hoyISO);
+      if (!yaFestejado) {
+        localStorage.setItem("siempre_festejo_" + hoyISO, "1");
+        setTimeout(() => mostrarToastBienvenida("¡Día completo! 🎉", "Completaste todo lo de hoy. ¡Sos un crack!"), 400);
+      }
+    }
+
+    const rachaPasos = (rachaPasosRes.data && rachaPasosRes.data.ok) ? rachaPasosRes.data.racha : 0;
+    html += renderPasosCard(pasosRes, hoyISO, anio, mes, rachaPasos);
+
+    cont.innerHTML = html;
+    wirePasosCard(hoyISO, anio, mes);
+    wireVerMesLinks();
+
+    sb.rpc("verificar_patron_no_adherencia", { p_token: session.token }).then(({ data }) => {
+      if (data && data.ok && data.necesita_chequeo) {
+        setTimeout(() => abrirChequeoAdherencia(data.necesita_chequeo), 1200);
+      }
+    });
+
+    const btnSi = document.getElementById("md-aspirina-si");
+    if (btnSi) btnSi.addEventListener("click", () => marcarAspirinaDesdeMiDia(true));
+
+    const irCT = document.getElementById("md-ir-cuarto-trimestre");
+    if (irCT) irCT.addEventListener("click", () => document.getElementById("seccion-cuarto-trimestre-hoy").scrollIntoView({ behavior: "smooth", block: "start" }));
+
+    const irPatronCalcio = document.getElementById("md-ir-patron-calcio");
+    if (irPatronCalcio) irPatronCalcio.addEventListener("click", () => abrirInfoHabito("calcio"));
+
+    const btnCalcioSi = document.getElementById("md-calcio-si");
+    if (btnCalcioSi) btnCalcioSi.addEventListener("click", async () => {
+      btnCalcioSi.disabled = true; btnCalcioSi.textContent = "Guardando...";
+      const frecuencia = session.calcio_frecuencia_diaria || 1;
+      const dosisHoy = {};
+      for (let i = 0; i < frecuencia; i++) dosisHoy["dosis_" + (i + 1)] = true;
+      const fecha = fechaLocalHoy();
+      await sb.rpc("guardar_calcio_suplemento", { p_token: session.token, p_dia: fecha, p_dosis: dosisHoy });
+      mostrarToastBienvenida("¡Buenísimo! 💜", "Quedó registrado tu suplemento de hoy.");
+      renderMiDia();
+    });
+
+    cont.querySelectorAll(".md-big-card[data-tab]").forEach(card => {
+      card.addEventListener("click", () => activarTab(card.dataset.tab));
+    });
+  }
+
+  async function marcarAspirinaDesdeMiDia(tomada) {
+    const hoyISO = fechaLocalHoy();
+    await sb.rpc("registrar_aspirina", { p_token: session.token, p_dia: hoyISO, p_tomada: tomada });
+    mostrarToastBienvenida(tomada ? "¡Buenísimo! 💜" : "Listo, gracias por contarme", "Quedó registrado en tu calendario de aspirina.");
+    renderMiDia();
+  }
+
+  // ================= ASPIRINA =================
+  const DOW = ["D", "L", "M", "M", "J", "V", "S"];
+  const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 
   // ================= CALCIO =================
   let catalogoCalcio = [];
@@ -1509,128 +2121,57 @@
     const { data, error } = await sb.rpc("obtener_catalogo_calcio");
     if (error || !data) return;
     catalogoCalcio = data;
-    catalogoCalcio.forEach(f => { cantidades[f.id] = 0; });
-    renderFoods();
-    initCalcioSuplemento();
+    initPatronAlimentarioCalcio();
   }
-  function renderFoods() {
-    const cont = document.getElementById("calcio-foods");
-    cont.innerHTML = catalogoCalcio.map(f => `
-      <div class="food-row">
-        <div><div class="food-name">${f.nombre}</div><div class="food-unit">${f.unidad_porcion}</div></div>
-        <div class="food-qty">
-          <button class="qty-btn" data-action="menos" data-id="${f.id}">−</button>
-          <span class="qty-val" id="qty-${f.id}">0</span>
-          <button class="qty-btn" data-action="mas" data-id="${f.id}">+</button>
+
+  async function initPatronAlimentarioCalcio() {
+    const { data, error } = await sb.rpc("obtener_patron_alimentario_calcio", { p_token: session.token });
+    if (error || !data || !data.ok) return;
+
+    const cardPregunta = document.getElementById("patron-calcio-card");
+    const cardResultado = document.getElementById("patron-calcio-resultado-card");
+
+    if (data.ya_respondido) {
+      cardPregunta.style.display = "none";
+      cardResultado.style.display = "block";
+      const pobre = data.resultado === "pobre";
+      document.getElementById("patron-calcio-resultado-texto").innerHTML = `
+        <div class="patron-resultado-badge ${data.resultado}">${pobre ? "Alimentación pobre en calcio" : "Alimentación adecuada"}</div>
+        <p class="helper" style="margin:0;">${pobre
+          ? "Según lo que nos contaste, tu alimentación habitual no llega al calcio que necesitás — por eso activamos el seguimiento del suplemento, más abajo."
+          : "Según lo que nos contaste, tu alimentación habitual ya te aporta un buen nivel de calcio. Seguí así."}</p>
+      `;
+      return;
+    }
+
+    cardPregunta.style.display = "block";
+    cardResultado.style.display = "none";
+    document.getElementById("patron-calcio-lista").innerHTML = catalogoCalcio.map(f => `
+      <div class="patron-item">
+        <div><div class="patron-item-nombre">${f.nombre}</div><div class="patron-item-porcion">${f.unidad_porcion}</div></div>
+        <div class="patron-item-input">
+          <input type="number" min="0" max="21" value="0" id="patron-${f.id}">
+          <span>veces/sem.</span>
         </div>
-      </div>`).join("");
-    cont.querySelectorAll(".qty-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.dataset.id;
-        cantidades[id] = Math.max(0, cantidades[id] + (btn.dataset.action === "mas" ? 1 : -1));
-        document.getElementById("qty-" + id).textContent = cantidades[id];
-        actualizarAporte();
-      });
+      </div>
+    `).join("");
+
+    document.getElementById("patron-calcio-guardar-btn").addEventListener("click", async () => {
+      const btn = document.getElementById("patron-calcio-guardar-btn");
+      btn.disabled = true; btn.textContent = "Calculando...";
+      const respuestas = catalogoCalcio.map(f => ({
+        alimento_id: f.id,
+        veces_por_semana: parseInt(document.getElementById("patron-" + f.id).value) || 0
+      }));
+      const { data: resultado } = await sb.rpc("guardar_patron_alimentario_calcio", { p_token: session.token, p_respuestas: respuestas });
+      btn.disabled = false; btn.textContent = "Calcular";
+      if (resultado && resultado.ok && resultado.resultado === "pobre" && !session.calcio_frecuencia_diaria) {
+        session.calcio_frecuencia_diaria = 1;
+        localStorage.setItem("siempre_session", JSON.stringify(session));
+      }
+      initPatronAlimentarioCalcio();
+      renderMiDia();
     });
-  }
-  function actualizarAporte() {
-    let total = 0;
-    catalogoCalcio.forEach(f => { total += f.mg_calcio_por_porcion * cantidades[f.id]; });
-    const resumen = document.getElementById("aporte-resumen");
-    document.getElementById("aporte-mg").textContent = total + " mg";
-    const estado = document.getElementById("aporte-estado");
-    resumen.classList.remove("ok", "falta");
-    if (total === 0) estado.textContent = "Cargá lo que consumiste";
-    else if (total >= 1000) { resumen.classList.add("ok"); estado.textContent = "¡Llegaste a tu objetivo diario!"; }
-    else { resumen.classList.add("falta"); estado.textContent = `Te faltan ${1000 - total} mg`; }
-  }
-  document.getElementById("guardar-calcio-btn").addEventListener("click", async () => {
-    const fecha = new Date().toISOString().slice(0, 10);
-    const porciones = catalogoCalcio.filter(f => cantidades[f.id] > 0).map(f => ({ alimento_id: f.id, cantidad: cantidades[f.id] }));
-    const efectoAdverso = document.getElementById("efecto-adverso").value.trim();
-    const btn = document.getElementById("guardar-calcio-btn");
-    btn.disabled = true; btn.textContent = "Guardando...";
-    const total = catalogoCalcio.reduce((acc, f) => acc + f.mg_calcio_por_porcion * cantidades[f.id], 0);
-    await sb.rpc("registrar_calcio", { p_token: session.token, p_dia: fecha, p_porciones: porciones, p_uso_suplemento: false, p_efecto_adverso: efectoAdverso });
-    btn.disabled = false; btn.textContent = "Guardar registro de hoy";
-    actualizarMensajeSuplemento(total);
-  });
-  function actualizarMensajeSuplemento(totalHoy) {
-    const msg = document.getElementById("calcio-suplemento-mensaje");
-    if (!msg) return;
-    if (totalHoy >= 1000) {
-      msg.innerHTML = `¡Buenísimo! Hoy llegaste a tu objetivo solo con la alimentación 🎉 Si tu médica te indicó tomar igual el suplemento, marcalo abajo.`;
-    } else {
-      msg.innerHTML = `Con la comida de hoy llegaste a ${totalHoy} mg, por debajo del objetivo. Te recomendamos tomar el suplemento indicado — marcá acá cada toma.`;
-    }
-  }
-
-  // ---- Suplemento de calcio (solo si hay indicación) ----
-  let dosisHoy = {};
-  function initCalcioSuplemento() {
-    if (!session.indicacion_calcio) return; // sin indicación, no se muestra nada de esto
-
-    document.getElementById("calcio-suplemento-card").style.display = "block";
-    document.getElementById("calcio-suplemento-cal-card").style.display = "block";
-
-    const frecuencia = session.calcio_frecuencia_diaria || 1;
-    document.getElementById("calcio-frecuencia-label").textContent = frecuencia === 2 ? "2 veces al día" : "1 vez al día";
-
-    dosisHoy = {};
-    for (let i = 1; i <= frecuencia; i++) dosisHoy["dosis_" + i] = false;
-    renderDosisToggles(frecuencia);
-    actualizarMensajeSuplemento(0);
-    loadCalcioSuplementoCalendario();
-  }
-  function renderDosisToggles(frecuencia) {
-    const cont = document.getElementById("calcio-suplemento-toggles");
-    const labels = frecuencia === 2 ? ["Toma de la mañana", "Toma de la noche"] : ["Toma del día"];
-    cont.innerHTML = labels.map((lbl, i) => `
-      <div class="toggle-row">
-        <span>${lbl}</span>
-        <button class="switch" data-dosis="dosis_${i + 1}"></button>
-      </div>`).join("");
-    cont.querySelectorAll(".switch").forEach(sw => {
-      sw.addEventListener("click", () => {
-        const key = sw.dataset.dosis;
-        dosisHoy[key] = !dosisHoy[key];
-        sw.classList.toggle("on", dosisHoy[key]);
-      });
-    });
-  }
-  document.getElementById("guardar-suplemento-btn").addEventListener("click", async () => {
-    const fecha = new Date().toISOString().slice(0, 10);
-    const btn = document.getElementById("guardar-suplemento-btn");
-    btn.disabled = true; btn.textContent = "Guardando...";
-    await sb.rpc("guardar_calcio_suplemento", { p_token: session.token, p_dia: fecha, p_dosis: dosisHoy });
-    btn.disabled = false; btn.textContent = "Guardar toma de hoy";
-    loadCalcioSuplementoCalendario();
-  });
-  async function loadCalcioSuplementoCalendario() {
-    const hoy = new Date();
-    const anio = hoy.getFullYear(); const mes = hoy.getMonth() + 1;
-    const frecuencia = session.calcio_frecuencia_diaria || 1;
-    document.getElementById("calcio-sup-mes-label").textContent = MESES[mes - 1] + " " + anio;
-    document.getElementById("calcio-sup-dow-row").innerHTML = DOW.map(d => `<div class="cal-dow">${d}</div>`).join("");
-    const { data, error } = await sb.rpc("obtener_calendario_calcio_suplemento", { p_token: session.token, p_anio: anio, p_mes: mes });
-    const registros = {};
-    if (!error && data && data.ok) {
-      data.registros.forEach(r => {
-        const tomasHechas = Object.values(r.dosis || {}).filter(v => v === true).length;
-        registros[r.dia.slice(8, 10)] = tomasHechas >= frecuencia;
-      });
-    }
-    const primerDia = new Date(anio, mes - 1, 1).getDay();
-    const diasEnMes = new Date(anio, mes, 0).getDate();
-    const grid = document.getElementById("calcio-sup-cal-grid");
-    grid.innerHTML = "";
-    for (let i = 0; i < primerDia; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
-    for (let d = 1; d <= diasEnMes; d++) {
-      const dd = String(d).padStart(2, "0");
-      let cls = "cal-day" + (d === hoy.getDate() ? " today" : "");
-      if (registros[dd] !== undefined) cls += registros[dd] ? " suficiente" : " insuficiente";
-      grid.innerHTML += `<div class="${cls}">${d}</div>`;
-    }
   }
 
   document.getElementById("abrir-tips-pa-btn").addEventListener("click", () => {
@@ -2218,6 +2759,17 @@
 
   // ================= INFO PANELS =================
   // ================= MENSAJES =================
+  document.getElementById("mi-dia-mensaje-btn").addEventListener("click", async () => {
+    const texto = document.getElementById("mi-dia-mensaje-input").value.trim();
+    if (!texto) return;
+    const btn = document.getElementById("mi-dia-mensaje-btn");
+    btn.disabled = true; btn.textContent = "Enviando...";
+    await sb.rpc("enviar_mensaje_paciente", { p_token: session.token, p_contenido: texto });
+    document.getElementById("mi-dia-mensaje-input").value = "";
+    btn.disabled = false; btn.textContent = "Enviar mensaje";
+    mostrarToastBienvenida("Mensaje enviado 💜", "Tu médica lo va a ver pronto.");
+  });
+
   async function initMensajes() {
     const { data, error } = await sb.rpc("obtener_mensajes_paciente", { p_token: session.token });
     const hilo = document.getElementById("mensajes-hilo-pac");
@@ -2440,7 +2992,7 @@
   document.getElementById("guardar-peso-btn").addEventListener("click", async () => {
     const peso = document.getElementById("cp-peso").value;
     if (!peso) return;
-    const fecha = new Date().toISOString().slice(0, 10);
+    const fecha = fechaLocalHoy();
     await sb.rpc("guardar_peso", { p_token: session.token, p_peso_kg: parseFloat(peso), p_fecha: fecha });
     document.getElementById("cp-peso").value = "";
     initCurvaPonderal();
@@ -2465,7 +3017,7 @@
     const diff = (hoy.getDay() + 6) % 7; // 0 = lunes
     const lunes = new Date(hoy);
     lunes.setDate(hoy.getDate() - diff);
-    return lunes.toISOString().slice(0, 10);
+    return lunes.getFullYear() + "-" + String(lunes.getMonth() + 1).padStart(2, "0") + "-" + String(lunes.getDate()).padStart(2, "0");
   }
 
   async function initActividadFisica() {
@@ -2481,11 +3033,6 @@
             diasActividad[d] = { actividad: data.dias[d].actividad || "", minutos: data.dias[d].minutos ?? "" };
           }
         });
-      }
-      if (data.contabiliza_pasos) {
-        document.getElementById("pasos-switch").classList.add("on");
-        document.getElementById("pasos-input-wrap").style.display = "block";
-        if (data.pasos_promedio != null) document.getElementById("pasos-promedio").value = data.pasos_promedio;
       }
       if (data.trabajo_sedentario) {
         document.getElementById("sedentario-switch").classList.add("on");
@@ -2530,11 +3077,6 @@
     document.getElementById("dias-actividad-resumen").textContent = `${activos} de 7 días activos`;
   }
 
-  document.getElementById("pasos-switch").addEventListener("click", () => {
-    const sw = document.getElementById("pasos-switch");
-    sw.classList.toggle("on");
-    document.getElementById("pasos-input-wrap").style.display = sw.classList.contains("on") ? "block" : "none";
-  });
   document.getElementById("sedentario-switch").addEventListener("click", () => {
     const sw = document.getElementById("sedentario-switch");
     sw.classList.toggle("on");
@@ -2554,8 +3096,8 @@
         minutos: diasActividad[d].minutos ? parseInt(diasActividad[d].minutos) : null
       };
     });
-    const contabilizaPasos = document.getElementById("pasos-switch").classList.contains("on");
-    const pasosPromedio = document.getElementById("pasos-promedio").value || null;
+    const contabilizaPasos = false;
+    const pasosPromedio = null;
     const trabajoSedentario = document.getElementById("sedentario-switch").classList.contains("on");
     const pausasActivas = document.getElementById("pausas-switch").classList.contains("on");
 
@@ -2591,8 +3133,13 @@
       document.getElementById("ct-parto-form-wrap").style.display = "block";
       cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
       document.getElementById("pp-mdpa-card").style.display = "none";
+      document.getElementById("seccion-cuarto-trimestre-hoy").style.display = "none";
+      document.getElementById("seccion-embarazos-ocasional").style.display = "block";
       return;
     }
+
+    document.getElementById("seccion-cuarto-trimestre-hoy").style.display = "block";
+    document.getElementById("seccion-embarazos-ocasional").style.display = "none";
 
     setupCard.style.display = "block";
     const fechaFmt = new Date(data.fecha_parto + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
@@ -3013,7 +3560,7 @@
       return;
     }
     const fuenteTxt = FUENTE_LABEL[fuenteGestacionalActual] || "";
-    let html = `<p class="semana-actual-text">Estás en la semana ${semanaGestacionalActual}, día ${diasGestacionalesActual}${fuenteTxt ? ` <span style="font-weight:500;color:var(--gray-600);">(${fuenteTxt})</span>` : ""}</p>`;
+    let html = "";
 
     if (semanaGestacionalActual < 12) {
       html += `<div class="banner-wait">⏳ Todavía no llegaste a la semana 12. La ventana habitual para iniciar la aspirina es entre la semana 12 y 18 — esperá la indicación de tu médica.</div>`;
@@ -3023,6 +3570,8 @@
       html += `<div class="banner-wait">📅 Te estás acercando a la semana 36. Pronto vas a tener que consultar con tu médica para evaluar si corresponde continuar o suspender la aspirina.</div>`;
     } else if (semanaGestacionalActual >= 36) {
       html += `<div class="banner-warn">⚠ Estás en la semana 36 o más. Consultá con tu médica para reevaluar si corresponde continuar con la aspirina.</div>`;
+    } else {
+      html += `<p class="helper" style="margin-bottom:0;">Por ahora no hay ningún aviso especial sobre la ventana de la aspirina.</p>`;
     }
     cont.innerHTML = html;
   }
