@@ -45,7 +45,9 @@
     --radius: 16px;
     --tab-accent: var(--violet);
     --tab-accent-dark: var(--violet-dark);
-    --shadow-card: 0 1px 2px rgba(34, 24, 60, 0.04), 0 6px 20px -8px rgba(34, 24, 60, 0.12);
+    --shadow-card: 0 1px 1px rgba(34, 24, 60, 0.03), 0 3px 8px -3px rgba(34, 24, 60, 0.08), 0 12px 28px -12px rgba(34, 24, 60, 0.16);
+    --shadow-card-hover: 0 2px 3px rgba(34, 24, 60, 0.05), 0 6px 14px -4px rgba(34, 24, 60, 0.12), 0 18px 34px -14px rgba(34, 24, 60, 0.2);
+    --shadow-inset-top: inset 0 1px 0 rgba(255,255,255,0.6);
     --shadow-soft: 0 4px 14px -6px rgba(34, 24, 60, 0.18);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
@@ -77,11 +79,12 @@
   }
   input:focus, select:focus { outline: none; border-color: var(--violet); box-shadow: 0 0 0 3px rgba(91,62,150,0.12); }
   button.primary {
-    width: 100%; padding: 14px; background: linear-gradient(135deg, var(--violet), var(--violet-deep)); color: white; border: none;
+    width: 100%; padding: 14px; background: linear-gradient(160deg, #6B4FA8 0%, var(--violet) 45%, var(--violet-deep) 100%); color: white; border: none;
     border-radius: 12px; font-size: 15.5px; font-weight: 700; font-family: 'Manrope', sans-serif; cursor: pointer;
-    box-shadow: var(--shadow-soft); transition: transform 0.1s, box-shadow 0.15s;
+    box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.1s, box-shadow 0.15s;
   }
-  button.primary:active { transform: translateY(1px); box-shadow: none; }
+  button.primary:active { transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0,0,0,0.25); }
   button.primary:disabled { opacity: 0.6; }
   #login-error { color: var(--pink-dark); background: var(--pink-light); padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
 
@@ -92,9 +95,15 @@
   #home-screen { display: none; }
   header.top {
     background: linear-gradient(135deg, var(--tab-accent) 0%, var(--tab-accent-dark) 100%);
+    position: relative; overflow: hidden;
     color: white; padding: 22px 20px 18px; border-radius: 0 0 26px 26px;
     transition: background 0.5s ease; box-shadow: 0 8px 24px -12px rgba(34,24,60,0.35);
   }
+  header.top::before {
+    content: ""; position: absolute; top: -60%; right: -20%; width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 70%); pointer-events: none;
+  }
+  header.top > * { position: relative; z-index: 1; }
   header.top .greeting { font-size: 12.5px; opacity: 0.85; letter-spacing: 0.02em; }
   header.top .name { font-family: 'Fraunces', serif; font-size: 21px; font-weight: 600; margin-top: 3px; }
   .header-gestacion-badge {
@@ -141,15 +150,26 @@
   .md-big-card .mdb-arrow svg { width: 22px; height: 22px; }
 
   .habito-card { padding: 0; overflow: hidden; margin-bottom: 12px; }
-  .habito-illus-strip { display: flex; justify-content: center; align-items: center; padding: 18px 16px; }
-  .habito-illus-aspirina { background: linear-gradient(135deg, #DFF3EC, #EFFBF6); }
-  .habito-illus-calcio { background: linear-gradient(135deg, #EEF4FC, #F7FAFF); }
-  .habito-illus-aspirina-info { background: linear-gradient(135deg, #EEF2FB, #F6F1FC); padding: 22px 16px; }
-  .habito-illus-calcio-info { background: linear-gradient(135deg, #F5F8FC, #FAFBFE); padding: 22px 16px; }
+  .habito-illus-strip {
+    display: flex; justify-content: center; align-items: center; padding: 18px 16px; position: relative; overflow: hidden;
+    box-shadow: inset 0 3px 8px -4px rgba(0,0,0,0.1), inset 0 -1px 0 rgba(255,255,255,0.4);
+  }
+  .habito-illus-strip::before {
+    content: ""; position: absolute; top: -40%; left: -10%; width: 60%; height: 140%; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 70%); pointer-events: none;
+  }
+  .habito-illus-izq { justify-content: flex-start; gap: 14px; padding: 16px 20px; }
+  .habito-nombre-banner { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 19px; letter-spacing: -0.01em; position: relative; z-index: 1; }
+  .habito-illus-strip svg { position: relative; z-index: 1; }
+  .habito-illus-aspirina { background: linear-gradient(160deg, #E8F7F0, #DFF3EC 55%, #D3EEE4); }
+  .habito-illus-calcio { background: linear-gradient(160deg, #F2F7FD, #EEF4FC 55%, #E4EEFA); }
+  .habito-illus-aspirina-info { background: linear-gradient(160deg, #F1F0FB, #EEF2FB 55%, #E8E4F6); padding: 22px 16px; }
+  .habito-illus-calcio-info { background: linear-gradient(160deg, #F8FAFD, #F5F8FC 55%, #EEF3F9); padding: 22px 16px; }
   .habito-top { display: flex; align-items: center; gap: 12px; padding: 16px 18px 4px; }
   .habito-check {
-    width: 34px; height: 34px; border-radius: 50%; background: var(--teal); color: white;
+    width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(160deg, #35B894, var(--teal)); color: white;
     display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex-shrink: 0;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.5), inset 0 -1px 2px rgba(0,0,0,0.15), 0 2px 5px -1px rgba(15,140,104,0.4);
   }
   .habito-info { flex: 1; min-width: 0; }
   .habito-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px; color: var(--gray-900); }
@@ -182,20 +202,34 @@
   .habito-no-olvides::before { content: "●"; font-size: 8px; color: #E2665B; }
   @keyframes noOlvidesSuave { 0%, 100% { opacity: 1; } 50% { opacity: 0.72; } }
   .habito-info-btn {
-    width: 26px; height: 26px; border-radius: 50%; border: none; background: var(--violet-light);
+    width: 26px; height: 26px; border-radius: 50%; border: none; background: linear-gradient(160deg, #F1EBFA, var(--violet-light));
     color: var(--violet-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.06);
+    transition: transform 0.1s;
   }
+  .habito-info-btn:active { transform: scale(0.92); }
   .habito-info-btn svg { width: 15px; height: 15px; }
   .habito-confirmar-btn {
     display: block; width: calc(100% - 36px); margin: 12px 18px 4px; padding: 13px; border-radius: 12px; border: none;
     font-size: 14.5px; font-weight: 800; font-family: 'Manrope', sans-serif; color: white; cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -2px 4px rgba(0,0,0,0.12), 0 3px 8px -3px rgba(0,0,0,0.25);
+    transition: transform 0.1s, box-shadow 0.15s;
   }
+  .habito-confirmar-btn:active { transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); }
   .md-patron-nota { text-align: center; font-size: 11.5px; color: var(--gray-600); margin-top: 8px; }
   .info-embebido-card { background: var(--gray-100); border-radius: 14px; padding: 14px; margin-top: 14px; }
   .info-embebido-card h2 { font-size: 14.5px; margin-bottom: 6px; }
   .ver-mes-link {
-    display: block; width: 100%; text-align: center; background: none; border: none; color: var(--gray-600);
-    font-size: 12px; font-weight: 700; text-decoration: underline; cursor: pointer; margin-top: 10px; padding: 0;
+    display: flex; align-items: center; justify-content: center; gap: 6px; width: calc(100% - 32px); margin: 12px 16px 16px;
+    background: linear-gradient(160deg, #F7F5FB, var(--gray-100)); border: 1.5px solid var(--gray-300); color: var(--gray-600);
+    font-size: 12.5px; font-weight: 700; text-decoration: none; cursor: pointer; padding: 9px 14px; border-radius: 20px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.04); transition: transform 0.1s;
+  }
+  .ver-mes-link:active { transform: translateY(1px); }
+  .ver-mes-link::before {
+    content: ""; width: 14px; height: 14px; flex-shrink: 0; background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='17' rx='2.5'/%3E%3Cline x1='3' y1='9' x2='21' y2='9'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='17' rx='2.5'/%3E%3Cline x1='3' y1='9' x2='21' y2='9'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3C/svg%3E") center / contain no-repeat;
   }
   .habito-card > .ver-mes-link { width: calc(100% - 36px); margin: 10px 18px 16px; }
   .habito-hecho .habito-top { padding-bottom: 4px; }
@@ -204,11 +238,18 @@
   .pasos-input-row { display: flex; gap: 10px; }
   .pasos-input-row input { flex: 1; padding: 14px; border: 1.5px solid var(--gray-300); border-radius: 12px; font-size: 16px; text-align: center; margin: 0; }
   .pasos-guardar-btn {
-    padding: 14px 22px; border: none; border-radius: 12px; background: linear-gradient(135deg, #F4A94E, #E2665B);
+    padding: 14px 22px; border: none; border-radius: 12px; background: linear-gradient(160deg, #F7BC72, #F4A94E 45%, #E2665B);
     color: white; font-weight: 800; font-size: 14px; font-family: 'Manrope', sans-serif; cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -2px 4px rgba(0,0,0,0.1), 0 3px 8px -3px rgba(226,102,91,0.4);
+    transition: transform 0.1s, box-shadow 0.15s;
   }
+  .pasos-guardar-btn:active { transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0,0,0,0.25); }
   .pasos-hoy-listo { display: flex; align-items: center; gap: 12px; background: #FFF6EC; border-radius: 12px; padding: 12px 14px; }
-  .pasos-hoy-check { width: 32px; height: 32px; border-radius: 50%; background: #F4A94E; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
+  .pasos-hoy-check {
+    width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(160deg, #F7BC72, #F4A94E); color: white;
+    display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.5), inset 0 -1px 2px rgba(0,0,0,0.12), 0 2px 5px -1px rgba(226,102,91,0.35);
+  }
   .pasos-hoy-numero { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 16px; color: var(--gray-900); }
   .pasos-hoy-sub { font-size: 11.5px; color: var(--gray-600); }
   .pasos-editar-btn { margin-left: auto; background: none; border: none; color: var(--gray-600); font-size: 12px; text-decoration: underline; cursor: pointer; }
@@ -250,7 +291,7 @@
     cursor: pointer; white-space: nowrap; transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
   }
   .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
-  .tab-btn.active { background: var(--tab-accent); border-color: var(--tab-accent); color: white; box-shadow: 0 4px 12px -4px var(--tab-accent); }
+  .tab-btn.active { background: linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0) 60%), var(--tab-accent); border-color: var(--tab-accent); color: white; box-shadow: 0 4px 12px -4px var(--tab-accent), inset 0 1px 0 rgba(255,255,255,0.3); }
   .tab-btn-especial {
     background: linear-gradient(135deg, #C79A4B 0%, #8B5CB8 100%);
     border-color: transparent; color: white; font-weight: 800;
@@ -278,7 +319,11 @@
   .panel.active { display: block; animation: fadein 0.25s ease; }
   @keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-  .card { background: white; border-radius: var(--radius); padding: 20px; margin-bottom: 16px; border: 1px solid var(--gray-300); box-shadow: var(--shadow-card); }
+  .card {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFE 100%); border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+    border: 1px solid var(--gray-300); box-shadow: var(--shadow-card), var(--shadow-inset-top);
+    transition: box-shadow 0.2s ease;
+  }
   .card h2 { font-family: 'Manrope', sans-serif; font-size: 15.5px; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; color: var(--gray-900); }
   .helper { font-size: 12.5px; color: var(--gray-600); line-height: 1.55; margin: 0 0 14px; }
   .pill-teal { background: var(--teal-light); color: var(--teal-dark); font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 20px; font-family: 'Manrope', sans-serif; }
@@ -324,9 +369,12 @@
     font-family: inherit; resize: vertical; min-height: 50px; margin-top: 8px; margin-bottom: 14px;
   }
   button.secondary {
-    width: 100%; padding: 12px; background: var(--violet-light); color: var(--violet-dark); border: none;
+    width: 100%; padding: 12px; background: linear-gradient(160deg, #F1EBFA, var(--violet-light)); color: var(--violet-dark); border: none;
     border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 6px -2px rgba(91,62,150,0.18);
+    transition: transform 0.1s, box-shadow 0.15s;
   }
+  button.secondary:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(91,62,150,0.15); }
 
   /* Embarazo actual — card cálida */
   .embarazo-actual-card { background: linear-gradient(160deg, #FBEEE3 0%, #FDF8F3 100%); border-color: #F0D8C2; }
@@ -384,8 +432,9 @@
 
   .rc-header-pac { display: flex; align-items: center; gap: 12px; }
   .notif-icon {
-    width: 40px; height: 40px; border-radius: 50%; background: var(--violet-light); color: var(--violet-dark);
+    width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(160deg, #F1EBFA, var(--violet-light)); color: var(--violet-dark);
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.06);
   }
   .notif-icon svg { width: 20px; height: 20px; }
   .notif-titulo { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: var(--gray-900); }
@@ -641,6 +690,7 @@
   .md-icon {
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.06);
   }
   .md-icon svg { width: 16px; height: 16px; }
   .md-icon-violet { background: var(--violet-light); color: var(--violet-dark); }
@@ -655,8 +705,8 @@
   .hoy-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.85); font-weight: 600; }
 
   .md-progreso-wrap { margin: 0 4px 16px; }
-  .md-progreso-barra { height: 7px; background: var(--gray-100); border-radius: 20px; overflow: hidden; }
-  .md-progreso-relleno { height: 100%; background: linear-gradient(90deg, var(--violet), var(--violet-dark)); border-radius: 20px; transition: width 0.3s ease; }
+  .md-progreso-barra { height: 7px; background: var(--gray-100); border-radius: 20px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.08); }
+  .md-progreso-relleno { height: 100%; background: linear-gradient(180deg, #7C5CC4, var(--violet-dark)); border-radius: 20px; transition: width 0.3s ease; box-shadow: inset 0 1px 0 rgba(255,255,255,0.3); }
   .md-progreso-texto { font-size: 11.5px; font-weight: 700; color: var(--gray-600); margin-top: 6px; text-align: right; }
   .md-nav-row { display: flex; gap: 10px; margin: 4px 4px 20px; }
   .md-nav-row button.primary, .md-nav-row button.tertiary { width: auto; margin: 0; padding: 12px 22px; }
@@ -913,8 +963,10 @@
       </div>
 
       <div class="card md-mensaje-rapido-card">
-        <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg></span>¿Necesitás escribirle algo a tu médica?</h2>
-        <textarea id="mi-dia-mensaje-input" placeholder="Escribí acá tu mensaje..." rows="2"></textarea>
+        <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg></span>¿Algo que quieras contarnos?</h2>
+        <p class="helper" style="margin-top:-6px;">Si hay algo breve que te parezca importante — cómo te sentís, una duda, lo que sea — dejalo escrito acá.</p>
+        <p class="helper" style="margin-top:-6px; font-style:italic;">Esto lo va a ver tu equipo médico para saber si hoy hubo algún cambio importante. No es una consulta ni un chat en vivo, así que no esperes una lectura o respuesta inmediata.</p>
+        <textarea id="mi-dia-mensaje-input" placeholder="Escribí acá..." rows="2"></textarea>
         <button class="secondary" id="mi-dia-mensaje-btn" style="margin-top:8px;">Enviar mensaje</button>
       </div>
 
@@ -1712,8 +1764,8 @@
   });
 
   const ILUSTRACION_HABITO = {
-    aspirina: `<div class="habito-illus-strip habito-illus-aspirina">
-      <svg viewBox="0 0 64 64" width="56" height="56">
+    aspirina: `<div class="habito-illus-strip habito-illus-aspirina habito-illus-izq">
+      <svg viewBox="0 0 64 64" width="52" height="52">
         <defs>
           <radialGradient id="gradPillMiniA" cx="35%" cy="28%" r="75%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#ECE6F7"/></radialGradient>
         </defs>
@@ -1723,9 +1775,10 @@
         <line x1="32" y1="12" x2="32" y2="46" stroke="#B8A9D1" stroke-width="1.2"/>
         <ellipse cx="24" cy="20" rx="6.5" ry="4.2" fill="#FFFFFF" opacity="0.85"/>
       </svg>
+      <span class="habito-nombre-banner" style="color:var(--teal-dark);">Aspirina</span>
     </div>`,
-    calcio: `<div class="habito-illus-strip habito-illus-calcio">
-      <svg viewBox="0 0 64 64" width="56" height="56">
+    calcio: `<div class="habito-illus-strip habito-illus-calcio habito-illus-izq">
+      <svg viewBox="0 0 64 64" width="52" height="52">
         <defs>
           <radialGradient id="gradPillMiniC" cx="35%" cy="28%" r="80%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#F3F7FD"/></radialGradient>
           <linearGradient id="gradPillMiniC2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#C9DFF9"/><stop offset="100%" stop-color="#9FC3EF"/></linearGradient>
@@ -1737,6 +1790,7 @@
           <ellipse cx="20" cy="20" rx="5" ry="3.2" fill="#FFFFFF" opacity="0.9"/>
         </g>
       </svg>
+      <span class="habito-nombre-banner" style="color:var(--blue);">Calcio</span>
     </div>`
   };
 
@@ -1775,7 +1829,7 @@
         ${ilustracion}
         <div class="habito-top">
           <div class="habito-check">✓</div>
-          <div class="habito-info"><div class="habito-titulo">${opts.titulo}</div><div class="habito-estado hecho">${opts.textoHecho}</div>${rachaBadge}</div>
+          <div class="habito-info"><div class="habito-estado hecho">${opts.textoHecho}</div>${rachaBadge}</div>
           ${infoBtn}
         </div>
         ${semanaDots}
@@ -1785,7 +1839,7 @@
     return `<div class="card habito-card habito-pendiente">
       ${ilustracion}
       <div class="habito-top">
-        <div class="habito-info"><div class="habito-titulo">${opts.titulo}</div><div class="habito-no-olvides">No te lo olvides</div>${rachaBadge}</div>
+        <div class="habito-info"><div class="habito-no-olvides">No te lo olvides</div>${rachaBadge}</div>
         ${infoBtn}
       </div>
       ${semanaDots}
@@ -1857,10 +1911,10 @@
     const tomadas = registros.filter(r => r.tomada).length;
     const pct = total ? Math.round((tomadas / total) * 100) : 0;
     let mensaje;
-    if (!total) mensaje = "Todavía no registraste ningún día este mes.";
-    else if (pct >= 90) mensaje = "¡Excelente adherencia este mes! Seguí así 💜";
-    else if (pct >= 70) mensaje = "Vas bien, pero todavía podés mejorar un poco la constancia.";
-    else mensaje = "Esta aspirina es importante para vos — intentá no saltearte días.";
+    if (!total) mensaje = "Todavía no hay registros este mes — cuando empieces a cargar, vas a ver acá cómo te fue.";
+    else if (pct >= 90) mensaje = "¡Excelente! Estás cuidándote muy bien a vos y a tu bebé 💜 Seguí así.";
+    else if (pct >= 70) mensaje = "Vas bien encaminada. Un poquito más de constancia y llegás al 100% — cada toma cuenta para prevenir complicaciones.";
+    else mensaje = "Sabemos que no siempre es fácil acordarse. La aspirina te protege a vos y a tu bebé — intentá tomarla siempre a la misma hora, eso ayuda mucho a no olvidarla.";
 
     cont.innerHTML = `
       <p class="helper">Tocá cualquier día para marcar si tomaste tu aspirina. Así podés completar días anteriores que se te hayan pasado.</p>
@@ -1906,10 +1960,10 @@
     const cumplidos = registros.filter(r => Object.values(r.dosis || {}).filter(v => v === true).length >= frecuencia).length;
     const pct = total ? Math.round((cumplidos / total) * 100) : 0;
     let mensaje;
-    if (!total) mensaje = "Todavía no registraste ningún día este mes.";
-    else if (pct >= 90) mensaje = "¡Excelente! Estás cumpliendo muy bien con el suplemento 💜";
-    else if (pct >= 70) mensaje = "Vas bien, pero todavía podés mejorar un poco la constancia.";
-    else mensaje = "El suplemento es importante para vos — intentá no saltearte días.";
+    if (!total) mensaje = "Todavía no hay registros este mes — cuando empieces a cargar, vas a ver acá cómo te fue.";
+    else if (pct >= 90) mensaje = "¡Muy bien! El calcio ayuda a cuidar tu presión y el desarrollo de tu bebé — vas por muy buen camino 💜";
+    else if (pct >= 70) mensaje = "Vas bien encaminada. Sumar las tomas que faltan te va a ayudar todavía más a vos y a tu bebé.";
+    else mensaje = "No pasa nada por algún día salteado, pero el calcio es un cuidado importante para los dos — intentá dejarlo cerca de algo que hagas todos los días, como el desayuno, para acordarte más fácil.";
 
     cont.innerHTML = `
       <p class="helper">Tocá cualquier día para marcar si tomaste tu suplemento. Así podés completar días anteriores que se te hayan pasado.</p>
@@ -1953,9 +2007,9 @@
     const pctObjetivo = diasConDatos ? Math.round((diasEnObjetivo / diasConDatos) * 100) : 0;
     let mensaje;
     if (!diasConDatos) mensaje = "Empezá a registrar tus pasos para ver tu progreso acá.";
-    else if (promedio >= OBJETIVO_PASOS) mensaje = "¡Llegaste a tu objetivo este mes! 🎉 Seguí así.";
-    else if (promedio >= OBJETIVO_PASOS * 0.7) mensaje = "¡Ya casi lo lográs! Todavía te falta un poco, pero vas muy bien.";
-    else mensaje = "Todavía podés sumar un poco más de movimiento — cada caminata cuenta. ¡Vos podés!";
+    else if (promedio >= OBJETIVO_PASOS) mensaje = "¡Llegaste a tu objetivo este mes! 🎉 Mantenerte activa es un cuidado hermoso para vos y tu bebé.";
+    else if (promedio >= OBJETIVO_PASOS * 0.7) mensaje = "¡Ya casi lo lográs! Vas muy bien — moverte un poquito más te va a hacer sentir mejor a vos, y le hace bien a tu bebé también.";
+    else mensaje = "No hace falta que sea mucho de golpe: una caminata corta ya suma. Ir de a poco también es cuidarse.";
 
     cont.innerHTML = `
       <div class="pasos-resumen-fila">
@@ -2008,8 +2062,8 @@
         const racha = (rachaAspRes.data && rachaAspRes.data.ok) ? rachaAspRes.data.racha : 0;
         html += renderAccionDiariaCard({
           colorBg: "var(--teal-light)", colorBorder: "var(--teal)", colorBtn: "var(--teal)",
-          titulo: "Aspirina de hoy", yaHecho: yaHoy, textoHecho: "Tomada hoy",
-          btnId: "md-aspirina-si", btnTexto: "Ya la tomé ✓", tipo: "aspirina",
+          titulo: "Aspirina de hoy", yaHecho: yaHoy, textoHecho: "Ya la tomé ✓",
+          btnId: "md-aspirina-si", btnTexto: "Tomé la aspirina", tipo: "aspirina",
           racha, semanaDotsHtml: renderSemanaDots(registros, r => r.tomada === true)
         });
       }
@@ -2034,8 +2088,8 @@
           const racha = (rachaCalcRes.data && rachaCalcRes.data.ok) ? rachaCalcRes.data.racha : 0;
           html += renderAccionDiariaCard({
             colorBg: "var(--blue-light)", colorBorder: "var(--blue)", colorBtn: "var(--blue)",
-            titulo: "Suplemento de calcio de hoy", yaHecho: yaHoy, textoHecho: "Tomado hoy",
-            btnId: "md-calcio-si", btnTexto: "Ya lo tomé ✓", tipo: "calcio",
+            titulo: "Suplemento de calcio de hoy", yaHecho: yaHoy, textoHecho: "Ya lo tomé ✓",
+            btnId: "md-calcio-si", btnTexto: "Tomé el calcio", tipo: "calcio",
             racha, semanaDotsHtml: renderSemanaDots(registrosCalcio, r => Object.values(r.dosis || {}).filter(v => v === true).length >= frecuencia)
           });
         }
