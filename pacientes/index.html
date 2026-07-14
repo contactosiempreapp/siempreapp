@@ -560,7 +560,7 @@
   .ver-previos-btn {
     display: flex; align-items: center; gap: 6px; background: var(--violet-light); color: var(--violet-dark);
     border: none; border-radius: 20px; font-size: 12.5px; font-weight: 700; font-family: 'Manrope', sans-serif;
-    cursor: pointer; padding: 8px 14px; margin-top: 12px;
+    cursor: pointer; padding: 8px 14px; margin-top: 12px; margin-bottom: 12px;
   }
   .ver-previos-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
@@ -729,6 +729,12 @@
   .ct-riesgo-link { display: flex; align-items: center; gap: 10px; width: 100%; background: var(--amber-light); border: 1px solid #EEDCB0; border-radius: 14px; padding: 12px 14px; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13px; color: #7A5A1E; text-align: left; cursor: pointer; margin-bottom: 14px; }
   .ct-riesgo-link .md-icon { flex-shrink: 0; }
   .mis-datos-hero { background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
+  .md-subtabs { display: flex; gap: 6px; background: var(--gray-100); border-radius: 14px; padding: 4px; margin: 0 4px 16px; }
+  .md-subtab-btn {
+    flex: 1; border: none; background: transparent; color: var(--gray-600); font-family: 'Manrope', sans-serif;
+    font-weight: 700; font-size: 13px; padding: 10px 8px; border-radius: 11px; cursor: pointer; transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  }
+  .md-subtab-btn.active { background: white; color: var(--violet-deep); box-shadow: 0 2px 6px -2px rgba(0,0,0,0.15); }
   .hoy-hero-card { background: linear-gradient(135deg, #28A67F 0%, #0B6E52 100%); border: none; }
   .semana-hero-card { background: linear-gradient(135deg, #E88FC2 0%, #C15FA0 30%, #9C5FC4 65%, #8C3E75 100%); border: none; }
   .ocasional-hero-card { background: linear-gradient(135deg, #7477C2 0%, #454890 100%); border: none; }
@@ -1073,6 +1079,18 @@
       </div>
     </div>
 
+    <div class="modal-backdrop" id="notif-estado-modal">
+      <div class="modal-card" style="text-align:center;">
+        <div class="notif-icon" style="margin:0 auto 14px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </div>
+        <h2 style="margin-bottom:8px;" id="notif-estado-titulo">Notificaciones</h2>
+        <p class="helper" id="notif-estado-texto">—</p>
+        <button class="primary" id="notif-estado-primario-btn" style="margin-top:10px;">—</button>
+        <button class="tertiary" id="notif-estado-secundario-btn" style="margin-top:8px;">—</button>
+      </div>
+    </div>
+
     <!-- ESTA SEMANA -->
     <div class="panel" id="panel-esta-semana">
       <div class="card semana-hero-card">
@@ -1288,6 +1306,12 @@
         <p class="helper">Completá esta sección una vez al empezar. Podés volver cuando quieras a modificarla — tu médica va a ver siempre la información más reciente.</p>
       </div>
 
+      <div class="md-subtabs" id="md-subtabs">
+        <button type="button" class="md-subtab-btn active" data-subtab="personales">Datos personales</button>
+        <button type="button" class="md-subtab-btn" data-subtab="embarazo">Mi embarazo</button>
+      </div>
+
+      <div id="mdgrupo-personales">
       <div class="md-progreso-wrap">
         <div class="md-progreso-barra"><div class="md-progreso-relleno" id="md-progreso-relleno"></div></div>
         <div class="md-progreso-texto" id="md-progreso-texto">Paso 1 de 4</div>
@@ -1366,9 +1390,11 @@
         <button class="tertiary" id="md-atras-btn" style="display:none;">← Atrás</button>
         <button class="primary" id="md-siguiente-btn">Siguiente</button>
       </div>
+      </div>
 
+      <div id="mdgrupo-embarazo" style="display:none;">
       <div id="seccion-embarazos-ocasional">
-      <div class="card embarazo-actual-card">
+      <div class="card embarazo-actual-card" id="embarazo-actual-card">
         <div class="emb-actual-header">
           <div class="emb-illus">
             <svg viewBox="0 0 100 100" fill="none">
@@ -1425,6 +1451,7 @@
         <button type="button" class="tertiary" id="add-previo-btn">+ Agregar otro embarazo previo</button>
         <button class="primary" id="guardar-embarazos-btn">Guardar</button>
         <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
+      </div>
       </div>
       </div>
     </div>
@@ -1527,6 +1554,14 @@
       activarTab("bienvenida");
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
+    document.querySelectorAll(".md-subtab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".md-subtab-btn").forEach(b => b.classList.toggle("active", b === btn));
+        const esPersonales = btn.dataset.subtab === "personales";
+        document.getElementById("mdgrupo-personales").style.display = esPersonales ? "block" : "none";
+        document.getElementById("mdgrupo-embarazo").style.display = esPersonales ? "none" : "block";
+      });
+    });
   }
 
   function setupTabs() {
@@ -1613,6 +1648,23 @@
     }
   }
 
+  async function desactivarNotificacionesPush() {
+    try {
+      const registro = await navigator.serviceWorker.register("./sw.js");
+      const existente = await registro.pushManager.getSubscription();
+      if (existente) {
+        const endpoint = existente.endpoint;
+        await existente.unsubscribe();
+        await sb.rpc("eliminar_push_subscription", { p_token: session.token, p_endpoint: endpoint });
+      }
+      actualizarIconoHeaderNotif(false);
+      return true;
+    } catch (e) {
+      console.error("Error desactivando notificaciones:", e);
+      return false;
+    }
+  }
+
   async function verificarEstadoNotificaciones() {
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
       actualizarIconoHeaderNotif(false);
@@ -1638,10 +1690,47 @@
     }
   }
 
-  document.getElementById("notif-header-btn").addEventListener("click", async () => {
-    if (!document.getElementById("notif-header-btn").classList.contains("notif-on")) {
-      await activarNotificacionesPush();
+  function abrirModalEstadoNotificaciones() {
+    const activo = document.getElementById("notif-header-btn").classList.contains("notif-on");
+    const titulo = document.getElementById("notif-estado-titulo");
+    const texto = document.getElementById("notif-estado-texto");
+    const btnPrimario = document.getElementById("notif-estado-primario-btn");
+    const btnSecundario = document.getElementById("notif-estado-secundario-btn");
+    const cerrar = () => document.getElementById("notif-estado-modal").classList.remove("show");
+
+    if (activo) {
+      titulo.textContent = "Notificaciones activadas";
+      texto.textContent = "Te avisamos cuando corresponda algo importante. ¿Querés seguir recibiéndolas o preferís desactivarlas?";
+      btnPrimario.textContent = "Continuar activadas";
+      btnPrimario.onclick = cerrar;
+      btnSecundario.textContent = "Desactivar";
+      btnSecundario.onclick = async () => {
+        btnSecundario.disabled = true; btnSecundario.textContent = "Desactivando...";
+        await desactivarNotificacionesPush();
+        btnSecundario.disabled = false; btnSecundario.textContent = "Desactivar";
+        cerrar();
+      };
+    } else {
+      titulo.textContent = "¿Activamos las notificaciones?";
+      texto.textContent = "Así te avisamos cuando corresponda algo importante, sin que tengas que estar revisando la app todo el tiempo.";
+      btnPrimario.textContent = "Sí, activar";
+      btnPrimario.onclick = async () => {
+        btnPrimario.disabled = true; btnPrimario.textContent = "Activando...";
+        await activarNotificacionesPush();
+        btnPrimario.disabled = false; btnPrimario.textContent = "Sí, activar";
+        cerrar();
+      };
+      btnSecundario.textContent = "Ahora no";
+      btnSecundario.onclick = cerrar;
     }
+    document.getElementById("notif-estado-modal").classList.add("show");
+  }
+
+  document.getElementById("notif-header-btn").addEventListener("click", () => {
+    abrirModalEstadoNotificaciones();
+  });
+  document.getElementById("notif-estado-modal").addEventListener("click", (e) => {
+    if (e.target.id === "notif-estado-modal") document.getElementById("notif-estado-modal").classList.remove("show");
   });
 
   document.getElementById("notif-onboarding-si-btn").addEventListener("click", async () => {
@@ -3281,12 +3370,14 @@
       cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
       document.getElementById("seccion-cuarto-trimestre-hoy").style.display = "none";
       document.getElementById("seccion-embarazos-ocasional").style.display = "block";
+      document.getElementById("embarazo-actual-card").style.display = "block";
       initMdpa("main", "embarazo");
       return;
     }
 
     document.getElementById("seccion-cuarto-trimestre-hoy").style.display = "block";
-    document.getElementById("seccion-embarazos-ocasional").style.display = "none";
+    document.getElementById("seccion-embarazos-ocasional").style.display = "block";
+    document.getElementById("embarazo-actual-card").style.display = "none";
 
     setupCard.style.display = "block";
     const fechaFmt = new Date(data.fecha_parto + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
