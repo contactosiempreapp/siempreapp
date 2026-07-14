@@ -698,6 +698,17 @@
   .md-icon-blue { background: var(--blue-light); color: var(--blue); }
   .md-icon-indigo { background: var(--indigo-light); color: var(--indigo); }
   .md-icon-pink { background: var(--pink-light); color: var(--pink-dark); }
+  .oe-titulo { font-family: 'Fraunces', serif; font-weight: 600; font-size: 16px; color: var(--violet-deep); text-align: center; margin-bottom: 2px; }
+  .oe-sub { font-size: 12px; color: var(--gray-600); text-align: center; margin-bottom: 12px; }
+  .oe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .oe-item { border-radius: 12px; padding: 11px; }
+  .oe-icon { width: 32px; height: 32px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; margin-bottom: 7px; }
+  .oe-icon svg { width: 17px; height: 17px; }
+  .oe-nombre { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12px; color: var(--gray-900); margin-bottom: 2px; }
+  .oe-desc { font-size: 10.5px; color: var(--gray-600); line-height: 1.35; }
+  .oe-fuente { text-align: center; font-size: 10.5px; color: var(--gray-600); margin-top: 10px; }
+  .ct-riesgo-link { display: flex; align-items: center; gap: 10px; width: 100%; background: var(--amber-light); border: 1px solid #EEDCB0; border-radius: 14px; padding: 12px 14px; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13px; color: #7A5A1E; text-align: left; cursor: pointer; margin-bottom: 14px; }
+  .ct-riesgo-link .md-icon { flex-shrink: 0; }
   .mis-datos-hero { background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
   .hoy-hero-card { background: linear-gradient(135deg, #28A67F 0%, #0B6E52 100%); border: none; }
   .semana-hero-card { background: linear-gradient(135deg, #DDA23F 0%, #95611A 100%); border: none; }
@@ -914,10 +925,6 @@
 
     <!-- MI DÍA -->
     <div class="panel" id="panel-bienvenida">
-      <div id="mi-dia-contenido">
-        <p class="helper">Cargando tu día...</p>
-      </div>
-
       <div id="seccion-cuarto-trimestre-hoy" style="display:none;">
       <div class="card ct-hero-card">
         <div class="ct-hero-header">
@@ -931,10 +938,10 @@
         </div>
       </div>
 
-      <div class="card ct-riesgo-card">
-        <h2><span class="md-icon" style="background:rgba(255,255,255,0.25); color:#7A5A1E;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/></svg></span>Por qué seguir con los controles</h2>
-        <p class="helper" id="ct-info-riesgo" style="margin-bottom:0;">Cargando...</p>
-      </div>
+      <button type="button" class="ct-riesgo-link" id="ct-riesgo-link">
+        <span class="md-icon" style="background:rgba(184,135,63,0.18); color:#7A5A1E;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/></svg></span>
+        <span>¿Por qué seguir con los controles?</span>
+      </button>
 
       <div class="card" id="ct-setup-card" style="display:none;">
         <h2>Fecha de parto</h2>
@@ -948,18 +955,69 @@
         </div>
       </div>
 
+      <div class="card">
+        <div class="oe-titulo">Los 8 esenciales</div>
+        <div class="oe-sub">Para cuidar tu salud en el posparto</div>
+        <div class="oe-grid">
+
+          <div class="oe-item" style="background:var(--amber-light);">
+            <div class="oe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C17A1F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 3.5a9 9 0 1 0 3 15.6A9.5 9.5 0 0 1 17.5 3.5z"/></svg></div>
+            <div class="oe-nombre">Dormir bien</div>
+            <div class="oe-desc">Entre 7 y 9 horas cuidan tu corazón</div>
+          </div>
+
+          <div class="oe-item" style="background:var(--green-light);">
+            <div class="oe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4C8C4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><path d="M12 8c0-2 1.3-3.5 3-4"/><path d="M9 6.2c1 0 2 .5 2.4 1.6"/></svg></div>
+            <div class="oe-nombre">Comer bien</div>
+            <div class="oe-desc">Frutas, verduras y pescado, la base</div>
+          </div>
+
+          <div class="oe-item" style="background:var(--blue-light);">
+            <div class="oe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#3568B0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.6" fill="#3568B0" stroke="none"/><path d="M10 21l1.6-5.5-1.6-2.5.8-4.3 3.4.9 1.6 3.4-2.6.9 2.4 4.1-1 3"/><path d="M9 10.5l-2.6 1.7"/></svg></div>
+            <div class="oe-nombre">Moverte</div>
+            <div class="oe-desc">150 min de actividad por semana</div>
+          </div>
+
+          <div class="oe-item" style="background:var(--coral-light);">
+            <div class="oe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#D9544A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+            <div class="oe-nombre">No fumar</div>
+            <div class="oe-desc">Lo que más protege a tu corazón</div>
+          </div>
+
+          <div class="oe-item" style="background:var(--violet-light);">
+            <div class="oe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5B3E96" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9.5C5 7.5 7 5.5 9.5 5.5c1.2 0 2.4.6 3.5 2 1.1-1.4 2.3-2 3.5-2 2.5 0 4.5 2 4.5 5 0 5.1-7 9.5-7 9.5z"/><path d="M8 12h2l1.4-2.8 1.6 4.6 1.4-2.8h2"/></svg></div>
+            <div class="oe-nombre">Controlar la presión</div>
+            <div class="oe-desc">Cuidarla hoy te protege a futuro</div>
+          </div>
+
+          <div class="oe-item" style="background:var(--pink-light);">
+            <div class="oe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C43F69" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/></svg></div>
+            <div class="oe-nombre">Controlar el colesterol</div>
+            <div class="oe-desc">Se chequea con un análisis simple</div>
+          </div>
+
+          <div class="oe-item" style="background:var(--indigo-light);">
+            <div class="oe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5B5FA8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="2.5"/><circle cx="12" cy="14" r="3"/><line x1="12" y1="14" x2="13.6" y2="12.2"/></svg></div>
+            <div class="oe-nombre">Cuidar tu peso</div>
+            <div class="oe-desc">A tu ritmo, sin apuro</div>
+          </div>
+
+          <div class="oe-item" style="background:var(--teal-light);">
+            <div class="oe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#0F8C68" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="4" width="10" height="16" rx="2"/><circle cx="12" cy="16" r="1.8"/><path d="M9.5 7.5h5M9.5 10.5h5"/></svg></div>
+            <div class="oe-nombre">Controlar el azúcar</div>
+            <div class="oe-desc">Clave si tuviste diabetes gestacional</div>
+          </div>
+
+        </div>
+        <div class="oe-fuente">Basado en Life's Essential 8, American Heart Association</div>
+      </div>
+
       <div id="ct-content"></div>
 
-      <div class="card mdpa-card-destacado" id="pp-mdpa-card" style="display:none;">
-        <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
-        <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
-        <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
-        <button class="ver-previos-btn" id="ver-pp-mdpa-previos-btn" style="display:none;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <span class="vp-label">Ver MDPA previos</span>
-        </button>
-        <div id="pp-mdpa-informes-historial" style="display:none;"></div>
       </div>
+
+      <div id="mi-dia-contenido">
+        <p class="helper">Cargando tu día...</p>
       </div>
 
       <div class="card md-mensaje-rapido-card">
@@ -970,6 +1028,16 @@
         <button class="secondary" id="mi-dia-mensaje-btn" style="margin-top:8px;">Enviar mensaje</button>
       </div>
 
+    </div>
+
+    <div class="modal-backdrop" id="ct-riesgo-modal">
+      <div class="modal-card">
+        <button class="modal-close-btn" id="cerrar-ct-riesgo-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <h2 style="margin-bottom:8px;">¿Por qué seguir con los controles?</h2>
+        <p class="helper" id="ct-info-riesgo" style="margin-bottom:0;">Cargando...</p>
+      </div>
     </div>
 
     <div class="modal-backdrop" id="chequeo-adherencia-modal">
@@ -1355,6 +1423,17 @@
           <span class="vp-label">Ver MDPA previos</span>
         </button>
         <div id="mdpa-informes-historial" style="display:none;"></div>
+      </div>
+
+      <div class="card mdpa-card-destacado" id="pp-mdpa-card" style="display:none;">
+        <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
+        <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
+        <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
+        <button class="ver-previos-btn" id="ver-pp-mdpa-previos-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver MDPA previos</span>
+        </button>
+        <div id="pp-mdpa-informes-historial" style="display:none;"></div>
       </div>
 
       <div class="card"><h2>Actividad física recomendada</h2><div class="info-text" id="info-actividad-text">Cargando...</div></div>
@@ -3165,12 +3244,22 @@
     btn.disabled = false; btn.textContent = "Guardar semana";
   });
 
+  document.getElementById("ct-riesgo-link").addEventListener("click", () => {
+    document.getElementById("ct-riesgo-modal").classList.add("show");
+  });
+  document.getElementById("cerrar-ct-riesgo-btn").addEventListener("click", () => {
+    document.getElementById("ct-riesgo-modal").classList.remove("show");
+  });
+  document.getElementById("ct-riesgo-modal").addEventListener("click", (e) => {
+    if (e.target.id === "ct-riesgo-modal") document.getElementById("ct-riesgo-modal").classList.remove("show");
+  });
+
   // ================= CUARTO TRIMESTRE =================
   const CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
 
   async function initCuartoTrimestre() {
     sb.rpc("obtener_config", { p_claves: ["info_cuarto_trimestre_riesgo"] }).then(({ data }) => {
-      document.getElementById("ct-info-riesgo").textContent = (data && data.info_cuarto_trimestre_riesgo) || "";
+      document.getElementById("ct-info-riesgo").textContent = (data && data.info_cuarto_trimestre_riesgo) || "Haber tenido hipertensión o preeclampsia en el embarazo puede aumentar el riesgo de problemas cardiovasculares en el futuro. Seguir estos controles ahora, en el posparto, es la mejor forma de cuidarte y de prevenir a tiempo — no porque algo esté mal, sino para que puedas transitar esta etapa más tranquila, cuidándote a vos para poder cuidar mejor a tu bebé.";
     });
     const { data, error } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
     const cont = document.getElementById("ct-content");
