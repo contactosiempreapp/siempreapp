@@ -56,8 +56,8 @@
   .screen { max-width: 460px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
 
   /* ---------- LOGIN / WELCOME (compartido) ---------- */
-  #login-screen, #welcome-screen { justify-content: center; padding: 32px 24px; display: none; }
-  #login-screen.show, #welcome-screen.show { display: flex; }
+  #login-screen { justify-content: center; padding: 32px 24px; display: none; }
+  #login-screen.show { display: flex; }
   .logo-mark {
     width: 60px; height: 60px; border-radius: 18px;
     background: linear-gradient(155deg, #7C5CC4 0%, var(--violet) 45%, var(--violet-deep) 100%);
@@ -88,8 +88,6 @@
   button.primary:disabled { opacity: 0.6; }
   #login-error { color: var(--pink-dark); background: var(--pink-light); padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
 
-  .welcome-msg { font-family: 'Fraunces', serif; font-weight: 600; font-size: 23px; color: var(--violet-deep); text-align: center; margin-bottom: 14px; }
-  .welcome-explain { font-size: 14px; color: var(--gray-600); text-align: center; line-height: 1.65; margin-bottom: 28px; }
 
   /* ---------- HOME ---------- */
   #home-screen { display: none; }
@@ -292,6 +290,7 @@
   }
   .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
   .tab-btn.active { background: linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0) 60%), var(--tab-accent); border-color: var(--tab-accent); color: white; box-shadow: 0 4px 12px -4px var(--tab-accent), inset 0 1px 0 rgba(255,255,255,0.3); }
+  .tab-btn-icon { padding: 9px 10px; }
   .tab-btn-especial {
     background: linear-gradient(135deg, #C79A4B 0%, #8B5CB8 100%);
     border-color: transparent; color: white; font-weight: 800;
@@ -687,6 +686,26 @@
   @keyframes hoyPulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(91,62,150,0.3); } 50% { box-shadow: 0 0 0 6px rgba(91,62,150,0.15); } }
   .ct-timeline-hoy-label { font-size: 9px; font-weight: 800; color: var(--violet-dark); margin-top: 2px; white-space: nowrap; }
   .ct-timeline-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--gray-600); margin-top: 6px; padding: 0 4px; }
+
+  .ct-paradas-wrap { display: flex; flex-direction: column; gap: 10px; }
+  .ct-parada-card { border-radius: 14px; border: 1px solid var(--gray-300); overflow: hidden; transition: border-color 0.2s; }
+  .ct-parada-secundaria { opacity: 0.72; }
+  .ct-parada-actual { border-color: var(--violet); box-shadow: 0 0 0 1px var(--violet); opacity: 1; }
+  .ct-parada-cumplida.ct-parada-actual { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal); }
+  .ct-parada-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 14px; cursor: pointer; background: var(--gray-100); }
+  .ct-parada-actual .ct-parada-header { background: var(--violet-light); }
+  .ct-parada-cumplida .ct-parada-header { background: var(--teal-light); }
+  .ct-parada-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 13.5px; color: var(--gray-900); }
+  .ct-parada-badge { display: inline-block; background: var(--violet); color: white; font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 20px; margin-left: 6px; vertical-align: 1px; }
+  .ct-parada-rango { font-size: 11.5px; color: var(--gray-600); margin-top: 2px; }
+  .ct-parada-chevron { width: 16px; height: 16px; color: var(--gray-600); flex-shrink: 0; transition: transform 0.2s; }
+  .ct-parada-header.abierta .ct-parada-chevron { transform: rotate(180deg); }
+  .ct-parada-body { padding: 4px 14px 14px; }
+  .ct-parada-items { margin: 6px 0 12px; padding-left: 18px; }
+  .ct-parada-items li { font-size: 12.5px; color: var(--gray-900); line-height: 1.5; margin-bottom: 3px; }
+  .ct-parada-cumplir-btn { width: 100%; border: none; border-radius: 10px; padding: 10px; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 12.5px; cursor: pointer; background: var(--violet); color: white; }
+  .ct-parada-cumplir-btn.on { background: var(--teal-light); color: var(--teal-dark); }
+
   .md-icon {
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
@@ -711,7 +730,7 @@
   .ct-riesgo-link .md-icon { flex-shrink: 0; }
   .mis-datos-hero { background: linear-gradient(160deg, #F7F4FC 0%, #FDFAFF 100%); }
   .hoy-hero-card { background: linear-gradient(135deg, #28A67F 0%, #0B6E52 100%); border: none; }
-  .semana-hero-card { background: linear-gradient(135deg, #DDA23F 0%, #95611A 100%); border: none; }
+  .semana-hero-card { background: linear-gradient(135deg, #E88FC2 0%, #C15FA0 30%, #9C5FC4 65%, #8C3E75 100%); border: none; }
   .ocasional-hero-card { background: linear-gradient(135deg, #7477C2 0%, #454890 100%); border: none; }
   .hoy-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.85); font-weight: 600; }
 
@@ -774,9 +793,9 @@
 
   /* actividad física */
   .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 10px; }
-  .week-day-label { font-size: 10px; text-align: center; color: var(--gray-600); font-weight: 600; }
+  .week-day-label { font-size: 10px; text-align: center; color: var(--gray-600); font-weight: 600; margin-bottom: 4px; }
   .week-toggle { aspect-ratio: 1; border-radius: 8px; border: 1.5px solid var(--gray-300); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .week-toggle.on { background: var(--teal); border-color: var(--teal); }
+  .week-toggle.on { background: var(--teal); border-color: var(--teal); color: white; font-weight: 800; font-size: 13px; }
   .dia-actividad-row {
     display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--gray-100);
   }
@@ -815,13 +834,6 @@
     <input type="password" id="password" required>
     <button type="submit" class="primary" id="login-btn">Ingresar</button>
   </form>
-</div>
-
-<div class="screen" id="welcome-screen">
-  <div class="logo-mark">S</div>
-  <div class="welcome-msg" id="welcome-msg">—</div>
-  <div class="welcome-explain" id="welcome-explain">—</div>
-  <button class="primary" id="continuar-btn">Continuar</button>
 </div>
 
 <div class="screen" id="home-screen">
@@ -917,8 +929,8 @@
   <nav class="tabs" id="tabs-nav">
     <button class="tab-btn" data-tab="bienvenida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>Mi día</button>
     <button class="tab-btn" data-tab="esta-semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>Esta semana</button>
-    <button class="tab-btn" data-tab="ocasional"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>Ocasional</button>
-    <button class="tab-btn" data-tab="mensajes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg>Mensajes</button>
+    <button class="tab-btn" data-tab="ocasional"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Mi presión arterial</button>
+    <button class="tab-btn tab-btn-icon" data-tab="mensajes" aria-label="Mensajes" title="Mensajes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c0 4.42-4.03 8-9 8-1.3 0-2.53-.24-3.64-.68L4 21l1.05-3.16A7.93 7.93 0 0 1 3 12c0-4.42 4.03-8 9-8s9 3.58 9 8z"/></svg></button>
   </nav>
 
   <main>
@@ -954,6 +966,8 @@
           <button class="primary" id="ct-guardar-parto-btn" style="margin-top:10px;">Activar mi seguimiento</button>
         </div>
       </div>
+
+      <div id="ct-content"></div>
 
       <div class="card">
         <div class="oe-titulo">Los 8 esenciales</div>
@@ -1012,8 +1026,6 @@
         <div class="oe-fuente">Basado en Life's Essential 8, American Heart Association</div>
       </div>
 
-      <div id="ct-content"></div>
-
       </div>
 
       <div id="mi-dia-contenido">
@@ -1021,7 +1033,7 @@
       </div>
 
       <div class="card md-mensaje-rapido-card">
-        <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg></span>¿Algo que quieras contarnos?</h2>
+        <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c0 4.42-4.03 8-9 8-1.3 0-2.53-.24-3.64-.68L4 21l1.05-3.16A7.93 7.93 0 0 1 3 12c0-4.42 4.03-8 9-8s9 3.58 9 8z"/></svg></span>¿Algo que quieras contarnos?</h2>
         <p class="helper" style="margin-top:-6px;">Si hay algo breve que te parezca importante — cómo te sentís, una duda, lo que sea — dejalo escrito acá.</p>
         <p class="helper" style="margin-top:-6px; font-style:italic;">Esto lo va a ver tu equipo médico para saber si hoy hubo algún cambio importante. No es una consulta ni un chat en vivo, así que no esperes una lectura o respuesta inmediata.</p>
         <textarea id="mi-dia-mensaje-input" placeholder="Escribí acá..." rows="2"></textarea>
@@ -1065,7 +1077,7 @@
     <div class="panel" id="panel-esta-semana">
       <div class="card semana-hero-card">
         <h2 style="color:white; margin-bottom:2px;">Esta semana</h2>
-        <div class="hoy-hero-sub">Lo que se registra semana a semana</div>
+        <div class="hoy-hero-sub">Gracias por tomarte este ratito para vos 💜 Cada registro es un paso de constancia que te vas a agradecer más adelante.</div>
       </div>
 
       <div class="card">
@@ -1078,13 +1090,13 @@
 
       <div class="card">
         <h2>Esta semana</h2>
-        <p class="helper">Por cada día, elegí qué actividad hiciste y cuántos minutos. Si no hiciste nada ese día, dejalo en "Ninguna".</p>
+        <p class="helper">Marcá los días en los que hiciste actividad física, así sea poca. No hace falta detallar qué ni cuánto tiempo.</p>
         <div id="dias-actividad-resumen" class="pill-teal" style="margin-bottom:12px; display:inline-block;">0 de 7 días activos</div>
-        <div id="dias-actividad-list"></div>
+        <div class="week-grid" id="dias-actividad-list"></div>
         <button class="secondary" id="guardar-actividad-btn" style="margin-top:14px;">Guardar semana</button>
       </div>
 
-      <div class="card">
+      <div class="card" id="curva-ponderal-card" style="display:none;">
         <h2>Curva ponderal</h2>
         <p class="helper">Tu altura se toma de "Mis datos". Acá solo tenés que pesarte y registrarlo periódicamente para ver tu evolución frente al objetivo recomendado.</p>
         <div id="imc-info"></div>
@@ -1094,15 +1106,183 @@
         <button class="secondary" id="guardar-peso-btn">Guardar peso</button>
         <div id="peso-historial" style="margin-top:16px;"></div>
       </div>
+
+      <div class="card" id="perimetro-cintura-card" style="display:none;">
+        <h2>Perímetro de cintura</h2>
+        <p class="helper">Pasado el primer trimestre del posparto, te sugerimos medir tu perímetro de cintura una vez al mes en lugar del peso — es un mejor indicador de tu riesgo cardiometabólico en esta etapa.</p>
+        <div id="pc-info"></div>
+        <label for="pc-medida">Perímetro de cintura (cm)</label>
+        <input type="number" id="pc-medida" step="0.1">
+        <button class="secondary" id="guardar-pc-btn">Guardar medida</button>
+        <div id="pc-historial" style="margin-top:16px;"></div>
+      </div>
     </div>
 
     <!-- OCASIONAL -->
     <div class="panel" id="panel-ocasional">
-      <div class="card ocasional-hero-card">
-        <h2 style="color:white; margin-bottom:2px;">Ocasional</h2>
-        <div class="hoy-hero-sub">Datos que se cargan una vez o se consultan de tanto en tanto</div>
+
+      <div class="card pa-hero-card">
+        <div class="ct-hero-header">
+          <div class="ct-hero-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>
+          </div>
+          <div>
+            <h2 style="color:white; margin-bottom:2px;">Mi presión arterial</h2>
+            <div class="ct-hero-sub">Tu tratamiento, tus mediciones y el MDPA</div>
+          </div>
+        </div>
       </div>
 
+      <div class="card">
+        <button class="pa-tips-btn" id="abrir-tips-pa-btn">
+          <span class="pa-tips-btn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>
+          </span>
+          Cómo tomar la presión correctamente
+          <svg class="pa-tips-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-backdrop" id="tips-pa-modal">
+        <div class="modal-card">
+          <button class="modal-close-btn" id="cerrar-tips-pa-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <h2 style="margin-bottom:10px;">Cómo tomar la presión correctamente</h2>
+          <div class="mdpa-illus">
+            <svg viewBox="0 0 160 170" fill="none">
+              <!-- silla -->
+              <rect x="50" y="128" width="60" height="8" rx="3" fill="#E4DCF5"/>
+              <rect x="54" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
+              <rect x="100" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
+              <!-- piernas -->
+              <rect x="64" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
+              <rect x="85" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
+              <ellipse cx="70" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
+              <ellipse cx="91" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
+              <!-- cuerpo (remera) -->
+              <path d="M58 48c-9 5-13 15-13 25v38c0 6 5 10 11 10h48c6 0 11-4 11-10V73c0-10-4-20-13-25-3 8-9 13-17 13s-14-5-17-13z" fill="#6B4FA0"/>
+              <!-- pancita embarazada -->
+              <ellipse cx="80" cy="94" rx="30" ry="26" fill="#7C5CC4"/>
+              <path d="M56 88a24 24 0 0 0 48 0" stroke="#4B3585" stroke-width="1.5" fill="none" opacity="0.4"/>
+              <!-- brazo izquierdo apoyado -->
+              <path d="M58 54c-9 6-13 16-11 28" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <!-- brazo derecho con manguito -->
+              <path d="M102 54c9 5 13 13 12 22" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <rect x="104" y="58" width="16" height="11" rx="3" fill="#E85D8A" transform="rotate(18 112 63)"/>
+              <path d="M118 66c6 3 9 9 9 16" stroke="#E85D8A" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- mesa con tensiómetro -->
+              <rect x="118" y="98" width="34" height="5" rx="2" fill="#EFEAF9"/>
+              <rect x="121" y="103" width="3" height="24" fill="#EFEAF9"/>
+              <rect x="146" y="103" width="3" height="24" fill="#EFEAF9"/>
+              <rect x="126" y="85" width="20" height="14" rx="3" fill="#4B3585"/>
+              <circle cx="136" cy="92" r="3" fill="#F4D998"/>
+              <!-- cabeza y cabello -->
+              <circle cx="80" cy="32" r="15" fill="#F0C9A0"/>
+              <path d="M65 30c-1-11 8-19 15-19s16 8 15 19c-2-6-8-9-15-9s-13 3-15 9z" fill="#3E2A69"/>
+              <path d="M65 30c0 6 1 11 4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M95 30c0 6-1 11-4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <ul class="mdpa-tips">
+            <li>Medila en un lugar tranquilo y sin hablar durante la toma.</li>
+            <li>Sentate con la espalda apoyada, los pies apoyados en el piso y sin cruzar las piernas.</li>
+            <li>Apoyá el brazo sin ropa que apriete, a la altura del corazón, con el manguito del tamaño adecuado.</li>
+            <li>Vaciá la vejiga antes de medir y quedate en reposo, sentada, 5 minutos antes de la primera toma.</li>
+            <li>Medí antes del desayuno y antes de la cena, dos veces cada vez, y antes de tomar tu medicación antihipertensiva si la tenés indicada.</li>
+            <li>Usá un tensiómetro validado.</li>
+            <li>No suspendas tu medicación sin indicación médica.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-backdrop" id="detalle-tratamiento-modal">
+        <div class="modal-card">
+          <button class="modal-close-btn" id="cerrar-detalle-tratamiento-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <h2 style="margin-bottom:4px;">Historial de tratamiento</h2>
+          <p class="helper">Cada cambio queda registrado — nada se borra.</p>
+          <div id="detalle-tratamiento-lista"></div>
+        </div>
+      </div>
+
+      <!-- MI TRATAMIENTO -->
+      <div class="card">
+        <h2><span class="md-icon" style="background:var(--indigo-light); color:var(--indigo);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg></span>Mi tratamiento</h2>
+        <p class="helper">Medicación indicada para tu presión, validada para el embarazo. Si cambia, cargá la nueva — la anterior queda guardada en tu historial.</p>
+        <div id="tratamiento-actual"></div>
+        <button class="ver-previos-btn" id="ver-detalle-tratamiento-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver detalles</span>
+        </button>
+        <details class="grupo" id="tratamiento-form-details">
+          <summary id="tratamiento-form-summary">Cargar mi tratamiento</summary>
+          <div class="grupo-body">
+            <div class="fuente-selector">
+              <label class="fuente-opcion">
+                <input type="radio" name="pa-trat-tipo" value="sin" id="pa-trat-sin" checked>
+                <span>Sin tratamiento farmacológico</span>
+              </label>
+              <label class="fuente-opcion">
+                <input type="radio" name="pa-trat-tipo" value="con" id="pa-trat-con">
+                <span>Con tratamiento</span>
+              </label>
+            </div>
+            <div id="pa-trat-con-block" style="display:none;">
+              <label for="pa-farmaco-select">Medicación</label>
+              <select id="pa-farmaco-select"><option value="">Cargando...</option></select>
+              <label for="pa-dosis">Dosis</label>
+              <input type="text" id="pa-dosis" placeholder="Ej: 500 mg">
+              <label for="pa-frecuencia-select">Frecuencia</label>
+              <select id="pa-frecuencia-select">
+                <option value="Una vez al día">Una vez al día</option>
+                <option value="Cada 12 horas (2 veces al día)">Cada 12 horas (2 veces al día)</option>
+                <option value="Cada 8 horas (3 veces al día)">Cada 8 horas (3 veces al día)</option>
+                <option value="Cada 6 horas (4 veces al día)">Cada 6 horas (4 veces al día)</option>
+                <option value="Según necesidad">Según necesidad</option>
+              </select>
+            </div>
+            <button class="secondary" id="guardar-tratamiento-btn" style="margin-top:8px;">Guardar tratamiento</button>
+          </div>
+        </details>
+        <div id="tratamiento-historial" style="margin-top:10px;"></div>
+      </div>
+
+      <!-- TOMAS DEL DÍA -->
+      <div class="card">
+        <h2><span class="md-icon" style="background:var(--amber-light); color:var(--amber);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>Tomas del día <span class="pill-teal" id="pa-suelta-tipo-badge" style="display:none;">posparto</span></h2>
+        <p class="helper">¿Querés cargar una medición suelta de hoy, sin hacer el MDPA completo? Usá esto.</p>
+        <div class="fila-2col">
+          <div><label for="pa-suelta-sis">Sistólica</label><input type="number" id="pa-suelta-sis"></div>
+          <div><label for="pa-suelta-dia">Diastólica</label><input type="number" id="pa-suelta-dia"></div>
+        </div>
+        <button class="secondary" id="guardar-pa-suelta-btn">Guardar toma</button>
+        <div id="pa-suelta-resultado"></div>
+        <div id="pa-suelta-lista" style="margin-top:10px;"></div>
+        <button class="ver-previos-btn" id="ver-pa-suelta-historial-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver tomas previas</span>
+        </button>
+        <div id="pa-suelta-historial" style="display:none; margin-top:8px;"></div>
+      </div>
+
+      <div class="card mdpa-card-destacado" id="mdpa-card">
+        <h2><span class="md-icon" style="background:#E3EEFC; color:#2C5FA3;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg></span>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span> <span class="pill-teal" id="mdpa-tipo-badge" style="display:none;">posparto</span></h2>
+        <p class="helper" id="mdpa-helper-text">Cargá cada medición en el momento del día que corresponda. Si tu médica te indicó el estudio, tocá "Cargar mediciones".</p>
+        <div id="mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
+        <button class="ver-previos-btn" id="ver-mdpa-previos-btn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span class="vp-label">Ver MDPA previos</span>
+        </button>
+        <div id="mdpa-informes-historial" style="display:none;"></div>
+      </div>
+
+    </div>
+
+    <!-- MIS DATOS (solo accesible desde el ícono de perfil del header) -->
+    <div class="panel" id="panel-mis-datos">
+      <button type="button" class="tertiary" id="mis-datos-volver-btn" style="margin-bottom:4px;">← Volver</button>
       <div class="card mis-datos-hero">
         <h2>Mis datos</h2>
         <p class="helper">Completá esta sección una vez al empezar. Podés volver cuando quieras a modificarla — tu médica va a ver siempre la información más reciente.</p>
@@ -1247,204 +1427,6 @@
         <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
       </div>
       </div>
-
-      <div class="card pa-hero-card">
-        <div class="ct-hero-header">
-          <div class="ct-hero-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>
-          </div>
-          <div>
-            <h2 style="color:white; margin-bottom:2px;">Presión arterial</h2>
-            <div class="ct-hero-sub">Tu tratamiento, tus mediciones y el MDPA</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <button class="pa-tips-btn" id="abrir-tips-pa-btn">
-          <span class="pa-tips-btn-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.2"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>
-          </span>
-          Cómo tomar la presión correctamente
-          <svg class="pa-tips-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
-
-      <div class="modal-backdrop" id="tips-pa-modal">
-        <div class="modal-card">
-          <button class="modal-close-btn" id="cerrar-tips-pa-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-          <h2 style="margin-bottom:10px;">Cómo tomar la presión correctamente</h2>
-          <div class="mdpa-illus">
-            <svg viewBox="0 0 160 170" fill="none">
-              <!-- silla -->
-              <rect x="50" y="128" width="60" height="8" rx="3" fill="#E4DCF5"/>
-              <rect x="54" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
-              <rect x="100" y="136" width="6" height="16" rx="2" fill="#D8CDEF"/>
-              <!-- piernas -->
-              <rect x="64" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
-              <rect x="85" y="118" width="11" height="30" rx="5" fill="#4B3585"/>
-              <ellipse cx="70" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
-              <ellipse cx="91" cy="150" rx="8" ry="4" fill="#2E1F4D"/>
-              <!-- cuerpo (remera) -->
-              <path d="M58 48c-9 5-13 15-13 25v38c0 6 5 10 11 10h48c6 0 11-4 11-10V73c0-10-4-20-13-25-3 8-9 13-17 13s-14-5-17-13z" fill="#6B4FA0"/>
-              <!-- pancita embarazada -->
-              <ellipse cx="80" cy="94" rx="30" ry="26" fill="#7C5CC4"/>
-              <path d="M56 88a24 24 0 0 0 48 0" stroke="#4B3585" stroke-width="1.5" fill="none" opacity="0.4"/>
-              <!-- brazo izquierdo apoyado -->
-              <path d="M58 54c-9 6-13 16-11 28" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
-              <!-- brazo derecho con manguito -->
-              <path d="M102 54c9 5 13 13 12 22" stroke="#6B4FA0" stroke-width="9" stroke-linecap="round" fill="none"/>
-              <rect x="104" y="58" width="16" height="11" rx="3" fill="#E85D8A" transform="rotate(18 112 63)"/>
-              <path d="M118 66c6 3 9 9 9 16" stroke="#E85D8A" stroke-width="2" fill="none" stroke-linecap="round"/>
-              <!-- mesa con tensiómetro -->
-              <rect x="118" y="98" width="34" height="5" rx="2" fill="#EFEAF9"/>
-              <rect x="121" y="103" width="3" height="24" fill="#EFEAF9"/>
-              <rect x="146" y="103" width="3" height="24" fill="#EFEAF9"/>
-              <rect x="126" y="85" width="20" height="14" rx="3" fill="#4B3585"/>
-              <circle cx="136" cy="92" r="3" fill="#F4D998"/>
-              <!-- cabeza y cabello -->
-              <circle cx="80" cy="32" r="15" fill="#F0C9A0"/>
-              <path d="M65 30c-1-11 8-19 15-19s16 8 15 19c-2-6-8-9-15-9s-13 3-15 9z" fill="#3E2A69"/>
-              <path d="M65 30c0 6 1 11 4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <path d="M95 30c0 6-1 11-4 14" stroke="#3E2A69" stroke-width="3" fill="none" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <ul class="mdpa-tips">
-            <li>Medila en un lugar tranquilo y sin hablar durante la toma.</li>
-            <li>Sentate con la espalda apoyada, los pies apoyados en el piso y sin cruzar las piernas.</li>
-            <li>Apoyá el brazo sin ropa que apriete, a la altura del corazón, con el manguito del tamaño adecuado.</li>
-            <li>Vaciá la vejiga antes de medir y quedate en reposo, sentada, 5 minutos antes de la primera toma.</li>
-            <li>Medí antes del desayuno y antes de la cena, dos veces cada vez, y antes de tomar tu medicación antihipertensiva si la tenés indicada.</li>
-            <li>Usá un tensiómetro validado.</li>
-            <li>No suspendas tu medicación sin indicación médica.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="modal-backdrop" id="detalle-tratamiento-modal">
-        <div class="modal-card">
-          <button class="modal-close-btn" id="cerrar-detalle-tratamiento-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-          <h2 style="margin-bottom:4px;">Historial de tratamiento</h2>
-          <p class="helper">Cada cambio queda registrado — nada se borra.</p>
-          <div id="detalle-tratamiento-lista"></div>
-        </div>
-      </div>
-
-      <!-- MI TRATAMIENTO -->
-      <div class="card">
-        <h2><span class="md-icon" style="background:var(--indigo-light); color:var(--indigo);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="4" y="9" width="16" height="6" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/></g></svg></span>Mi tratamiento</h2>
-        <p class="helper">Medicación indicada para tu presión, validada para el embarazo. Si cambia, cargá la nueva — la anterior queda guardada en tu historial.</p>
-        <div id="tratamiento-actual"></div>
-        <button class="ver-previos-btn" id="ver-detalle-tratamiento-btn" style="display:none;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <span class="vp-label">Ver detalles</span>
-        </button>
-        <details class="grupo" id="tratamiento-form-details">
-          <summary id="tratamiento-form-summary">Cargar mi tratamiento</summary>
-          <div class="grupo-body">
-            <div class="fuente-selector">
-              <label class="fuente-opcion">
-                <input type="radio" name="pa-trat-tipo" value="sin" id="pa-trat-sin" checked>
-                <span>Sin tratamiento farmacológico</span>
-              </label>
-              <label class="fuente-opcion">
-                <input type="radio" name="pa-trat-tipo" value="con" id="pa-trat-con">
-                <span>Con tratamiento</span>
-              </label>
-            </div>
-            <div id="pa-trat-con-block" style="display:none;">
-              <label for="pa-farmaco-select">Medicación</label>
-              <select id="pa-farmaco-select"><option value="">Cargando...</option></select>
-              <label for="pa-dosis">Dosis</label>
-              <input type="text" id="pa-dosis" placeholder="Ej: 500 mg">
-              <label for="pa-frecuencia-select">Frecuencia</label>
-              <select id="pa-frecuencia-select">
-                <option value="Una vez al día">Una vez al día</option>
-                <option value="Cada 12 horas (2 veces al día)">Cada 12 horas (2 veces al día)</option>
-                <option value="Cada 8 horas (3 veces al día)">Cada 8 horas (3 veces al día)</option>
-                <option value="Cada 6 horas (4 veces al día)">Cada 6 horas (4 veces al día)</option>
-                <option value="Según necesidad">Según necesidad</option>
-              </select>
-            </div>
-            <button class="secondary" id="guardar-tratamiento-btn" style="margin-top:8px;">Guardar tratamiento</button>
-          </div>
-        </details>
-        <div id="tratamiento-historial" style="margin-top:10px;"></div>
-      </div>
-
-      <!-- TOMAS DEL DÍA -->
-      <div class="card">
-        <h2><span class="md-icon" style="background:var(--amber-light); color:var(--amber);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>Tomas del día</h2>
-        <p class="helper">¿Querés cargar una medición suelta de hoy, sin hacer el MDPA completo? Usá esto.</p>
-        <div class="fuente-selector">
-          <label class="fuente-opcion">
-            <input type="radio" name="pa-contexto" value="embarazo" id="pa-ctx-embarazo" checked>
-            <span>Estoy embarazada</span>
-          </label>
-          <label class="fuente-opcion">
-            <input type="radio" name="pa-contexto" value="posparto" id="pa-ctx-posparto">
-            <span>Estoy en posparto</span>
-          </label>
-        </div>
-        <div class="fila-2col">
-          <div><label for="pa-suelta-sis">Sistólica</label><input type="number" id="pa-suelta-sis"></div>
-          <div><label for="pa-suelta-dia">Diastólica</label><input type="number" id="pa-suelta-dia"></div>
-        </div>
-        <button class="secondary" id="guardar-pa-suelta-btn">Guardar toma</button>
-        <div id="pa-suelta-resultado"></div>
-        <div id="pa-suelta-lista" style="margin-top:10px;"></div>
-        <button class="ver-previos-btn" id="ver-pa-suelta-historial-btn" style="display:none;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <span class="vp-label">Ver tomas previas</span>
-        </button>
-        <div id="pa-suelta-historial" style="display:none; margin-top:8px;"></div>
-      </div>
-
-      <div class="card mdpa-card-destacado" id="mdpa-card">
-        <h2><span class="md-icon" style="background:#E3EEFC; color:#2C5FA3;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg></span>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span></h2>
-        <p class="helper">Cargá cada medición en el momento del día que corresponda. Si tu médica te indicó el estudio, tocá "Cargar mediciones".</p>
-        <div class="fuente-selector">
-          <label class="fuente-opcion">
-            <input type="radio" name="mdpa-main-ctx" value="embarazo" id="mdpa-main-ctx-embarazo" checked>
-            <span>Estoy embarazada</span>
-          </label>
-          <label class="fuente-opcion">
-            <input type="radio" name="mdpa-main-ctx" value="posparto" id="mdpa-main-ctx-posparto">
-            <span>Estoy en posparto</span>
-          </label>
-        </div>
-        <div id="mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
-        <button class="ver-previos-btn" id="ver-mdpa-previos-btn" style="display:none;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <span class="vp-label">Ver MDPA previos</span>
-        </button>
-        <div id="mdpa-informes-historial" style="display:none;"></div>
-      </div>
-
-      <div class="card mdpa-card-destacado" id="pp-mdpa-card" style="display:none;">
-        <h2>MDPA <span class="mdpa-subtitulo">(Monitoreo Domiciliario de la Presión Arterial)</span> <span class="pill-teal">posparto</span></h2>
-        <p class="helper">Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.</p>
-        <div id="pp-mdpa-content"><p style="font-size:13px; color:var(--gray-600);">Cargando...</p></div>
-        <button class="ver-previos-btn" id="ver-pp-mdpa-previos-btn" style="display:none;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <span class="vp-label">Ver MDPA previos</span>
-        </button>
-        <div id="pp-mdpa-informes-historial" style="display:none;"></div>
-      </div>
-
-      <div class="card"><h2>Actividad física recomendada</h2><div class="info-text" id="info-actividad-text">Cargando...</div></div>
-
-      <div id="alimentacion-sodio-banner"></div>
-      <div class="card"><h2>Alimentación</h2><div class="info-text" id="info-alimentacion-text">Cargando...</div></div>
-
-      <div class="card"><h2>Pautas de alarma — cuándo consultar</h2><div class="info-text" id="info-pautas-text">Cargando...</div></div>
-
-      <div class="card"><h2>Información</h2><div class="info-text" id="info-general-text">Cargando...</div></div>
-
     </div>
 
     <!-- MENSAJES -->
@@ -1472,7 +1454,6 @@
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const loginScreen = document.getElementById("login-screen");
-  const welcomeScreen = document.getElementById("welcome-screen");
   const homeScreen = document.getElementById("home-screen");
 
   let session = JSON.parse(localStorage.getItem("siempre_session") || "null");
@@ -1503,7 +1484,8 @@
     }
     session = data;
     localStorage.setItem("siempre_session", JSON.stringify(session));
-    goToWelcome();
+    loginScreen.classList.remove("show");
+    showHome();
   }
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -1519,24 +1501,6 @@
   document.getElementById("logout-btn").addEventListener("click", cerrarSesion);
   document.getElementById("header-logout-btn").addEventListener("click", cerrarSesion);
 
-  // ---------- WELCOME ----------
-  async function goToWelcome() {
-    loginScreen.classList.remove("show");
-    try {
-      const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
-      document.getElementById("welcome-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida!";
-      document.getElementById("welcome-explain").textContent = (data && data.mensaje_explicativo) || "";
-    } catch (e) {
-      document.getElementById("welcome-msg").textContent = "¡Bienvenida!";
-      document.getElementById("welcome-explain").textContent = "";
-    }
-    welcomeScreen.classList.add("show");
-  }
-  document.getElementById("continuar-btn").addEventListener("click", () => {
-    welcomeScreen.classList.remove("show");
-    showHome();
-  });
-
   // ---------- HOME + TABS ----------
   function showHome() {
     document.getElementById("patient-name").textContent = session.nombre + " " + session.apellido;
@@ -1547,14 +1511,7 @@
     initCalcio();
     initTratamientoPA();
     initMdpa("main");
-    document.querySelectorAll('input[name="mdpa-main-ctx"]').forEach(radio => {
-      radio.addEventListener("change", () => {
-        mdpaTipoActual.main = document.getElementById("mdpa-main-ctx-posparto").checked ? "posparto" : "embarazo";
-        initMdpa("main");
-      });
-    });
     initPaSuelta();
-    initInfoPanels();
     initMensajes();
     initRecomendacionSodio();
     initCurvaPonderal();
@@ -1564,8 +1521,10 @@
     initEmbarazos();
     document.getElementById("mis-datos-shortcut").addEventListener("click", () => {
       activarTab("mis-datos");
-      const btn = document.querySelector('.tab-btn[data-tab="mis-datos"]');
-      if (btn) btn.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    document.getElementById("mis-datos-volver-btn").addEventListener("click", () => {
+      activarTab("bienvenida");
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
@@ -1579,7 +1538,7 @@
   const TAB_COLORS = {
     "bienvenida":  ["#4B3585", "#2E1F4D"],
     "esta-semana": ["#C15FA0", "#8C3E75"],
-    "ocasional":   ["#7477C2", "#454890"],
+    "ocasional":   ["#C2554C", "#7A2A22"],
     "mensajes":    ["#6B8CC4", "#3E5A8C"]
   };
   function activarTab(tab) {
@@ -2124,16 +2083,7 @@
     let html = "";
 
     if (yaNacio) {
-      const pendientesCT = (ctData.items || []).filter(it => it.vigente && !it.cumplido);
-      if (pendientesCT.length) {
-        html += `<div class="md-big-card" id="md-ir-cuarto-trimestre">
-          <div class="mdb-icon" style="background:rgba(199,154,63,0.18); color:#8A6A2E;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>
-          </div>
-          <div><div class="mdb-titulo">Tenés un control pendiente</div><div class="mdb-sub">${pendientesCT[0].item}${pendientesCT.length > 1 ? ` y ${pendientesCT.length - 1} más` : ""}</div></div>
-          <div class="mdb-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
-        </div>`;
-      }
+      // Recordatorio "Tenés un control pendiente" removido de esta pantalla.
     } else {
       if (session.indicacion_aspirina) {
         const registros = (aspRes.data && aspRes.data.ok) ? aspRes.data.registros : [];
@@ -2573,7 +2523,7 @@
     const sis = parseInt(document.getElementById("pa-suelta-sis").value);
     const dia = parseInt(document.getElementById("pa-suelta-dia").value);
     if (!sis || !dia) return;
-    const contexto = document.getElementById("pa-ctx-posparto").checked ? "posparto" : "embarazo";
+    const contexto = mdpaTipoActual.main;
     const btn = document.getElementById("guardar-pa-suelta-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
     await sb.rpc("registrar_pa_suelta", { p_token: session.token, p_sistolica: sis, p_diastolica: dia, p_contexto: contexto });
@@ -2591,11 +2541,37 @@
   });
 
   // ================= MDPA (embarazo y posparto) =================
-  const mdpaState = { main: null, pp: null };
-  const mdpaPrefix = { main: "", pp: "pp-" };
-  let mdpaTipoActual = { main: "embarazo", pp: "posparto" };
+  const mdpaState = { main: null };
+  const mdpaPrefix = { main: "" };
+  let mdpaTipoActual = { main: "embarazo" };
 
-  async function initMdpa(ctx) {
+  async function determinarTipoMdpaPrincipal() {
+    const { data } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
+    return (data && data.ok && data.fecha_parto) ? "posparto" : "embarazo";
+  }
+
+  function actualizarBadgeMdpa(tipo) {
+    const badge = document.getElementById("mdpa-tipo-badge");
+    const helper = document.getElementById("mdpa-helper-text");
+    if (badge && helper) {
+      if (tipo === "posparto") {
+        badge.style.display = "inline-block";
+        badge.textContent = "posparto";
+        helper.textContent = "Mismo monitoreo que durante el embarazo, ahora para tu control posparto. Si tu médica te lo indicó, cargalo acá.";
+      } else {
+        badge.style.display = "none";
+        helper.textContent = "Cargá cada medición en el momento del día que corresponda. Si tu médica te indicó el estudio, tocá \"Cargar mediciones\".";
+      }
+    }
+    const badgePaSuelta = document.getElementById("pa-suelta-tipo-badge");
+    if (badgePaSuelta) badgePaSuelta.style.display = tipo === "posparto" ? "inline-block" : "none";
+  }
+
+  async function initMdpa(ctx, tipoOverride) {
+    if (ctx === "main") {
+      mdpaTipoActual.main = tipoOverride || await determinarTipoMdpaPrincipal();
+      actualizarBadgeMdpa(mdpaTipoActual.main);
+    }
     const pref = mdpaPrefix[ctx];
     const tipo = mdpaTipoActual[ctx];
     const { data, error } = await sb.rpc("obtener_mdpa_activo", { p_token: session.token, p_tipo: tipo });
@@ -2683,7 +2659,7 @@
     const pref = mdpaPrefix[ctx];
     const tipo = mdpaTipoActual[ctx];
     const cont = document.getElementById(pref + "mdpa-informes-historial");
-    const btn = document.getElementById(pref === "" ? "ver-mdpa-previos-btn" : "ver-pp-mdpa-previos-btn");
+    const btn = document.getElementById("ver-mdpa-previos-btn");
     if (!cont || !btn) return;
     const { data, error } = await sb.rpc("obtener_informes_mdpa", { p_token: session.token, p_tipo: tipo });
     if (error || !data || !data.ok || !data.informes.length) {
@@ -2932,19 +2908,10 @@
     initMensajes();
   });
 
-  async function initInfoPanels() {
-    const claves = ["info_alimentacion", "info_actividad_fisica", "info_pautas_alarma", "info_general"];
-    const { data } = await sb.rpc("obtener_config", { p_claves: claves });
-    if (!data) return;
-    document.getElementById("info-alimentacion-text").textContent = data.info_alimentacion || "";
-    document.getElementById("info-actividad-text").textContent = data.info_actividad_fisica || "";
-    document.getElementById("info-pautas-text").textContent = data.info_pautas_alarma || "";
-    document.getElementById("info-general-text").textContent = data.info_general || "";
-  }
-
   async function initRecomendacionSodio() {
     const { data, error } = await sb.rpc("obtener_recomendacion_sodio", { p_token: session.token });
     const cont = document.getElementById("alimentacion-sodio-banner");
+    if (!cont) return;
     if (error || !data || !data.ok) { cont.innerHTML = ""; return; }
 
     if (data.hta_cronica) {
@@ -3033,7 +3000,24 @@
       </div>`;
     return svg;
   }
+  const DIAS_FIN_PRIMER_TRIMESTRE_PP = 84; // 12 semanas posparto
+
   async function initCurvaPonderal() {
+    const { data: ctData } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
+    const yaNacio = !!(ctData && ctData.ok && ctData.fecha_parto);
+    const usarPerimetro = yaNacio && ctData.dias_desde_parto >= DIAS_FIN_PRIMER_TRIMESTRE_PP;
+
+    document.getElementById("curva-ponderal-card").style.display = usarPerimetro ? "none" : "block";
+    document.getElementById("perimetro-cintura-card").style.display = usarPerimetro ? "block" : "none";
+
+    if (usarPerimetro) {
+      initPerimetroCintura();
+    } else {
+      renderCurvaPonderal();
+    }
+  }
+
+  async function renderCurvaPonderal() {
     const { data, error } = await sb.rpc("obtener_curva_ponderal", { p_token: session.token });
     if (error || !data || !data.ok) return;
 
@@ -3128,22 +3112,58 @@
     const fecha = fechaLocalHoy();
     await sb.rpc("guardar_peso", { p_token: session.token, p_peso_kg: parseFloat(peso), p_fecha: fecha });
     document.getElementById("cp-peso").value = "";
-    initCurvaPonderal();
+    renderCurvaPonderal();
+  });
+
+  // ================= PERÍMETRO DE CINTURA (posparto, después del primer trimestre) =================
+  function clasificarPerimetroCintura(cm) {
+    if (cm == null) return null;
+    // Punto de corte de riesgo cardiometabólico aumentado en mujeres (OMS/IDF): ≥88 cm alto riesgo, ≥80 cm riesgo aumentado.
+    if (cm >= 88) return { texto: "riesgo cardiometabólico aumentado", clase: "banner-warn" };
+    if (cm >= 80) return { texto: "riesgo levemente aumentado", clase: "banner-wait" };
+    return { texto: "dentro de rango saludable", clase: "banner-ok" };
+  }
+
+  async function initPerimetroCintura() {
+    const { data, error } = await sb.rpc("obtener_perimetro_cintura", { p_token: session.token });
+    const info = document.getElementById("pc-info");
+    if (error || !data || !data.ok) {
+      info.innerHTML = "";
+      return;
+    }
+
+    const registros = data.registros || [];
+    const ultimo = registros.length ? registros[registros.length - 1] : null;
+    let html = "";
+
+    if (ultimo) {
+      const clasif = clasificarPerimetroCintura(ultimo.medida_cm);
+      html += `<div class="${clasif.clase}">Tu última medida fue <strong>${ultimo.medida_cm} cm</strong> (${ultimo.fecha}) — ${clasif.texto}.</div>`;
+    } else {
+      html += `<p class="helper" style="margin:0;">Todavía no registraste ninguna medida. Te sugerimos hacerlo una vez al mes, en la misma postura (de pie, a mitad de camino entre la última costilla y la cadera).</p>`;
+    }
+    info.innerHTML = html;
+
+    const hist = document.getElementById("pc-historial");
+    hist.innerHTML = registros.length
+      ? "<h2 style='font-size:13px;'>Historial</h2>" + registros.slice().reverse().map(r =>
+          `<div class="peso-item"><span>${r.fecha}</span><span>${r.medida_cm} cm</span></div>`
+        ).join("")
+      : "";
+  }
+  document.getElementById("guardar-pc-btn").addEventListener("click", async () => {
+    const medida = document.getElementById("pc-medida").value;
+    if (!medida) return;
+    const fecha = fechaLocalHoy();
+    await sb.rpc("guardar_perimetro_cintura", { p_token: session.token, p_medida_cm: parseFloat(medida), p_fecha: fecha });
+    document.getElementById("pc-medida").value = "";
+    initPerimetroCintura();
   });
 
   // ================= ACTIVIDAD FÍSICA =================
   const DIAS_SEMANA = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
-  const DIAS_SEMANA_LABEL = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-  const OPCIONES_ACTIVIDAD = [
-    { id: "", label: "Ninguna" },
-    { id: "caminata", label: "Caminata" },
-    { id: "natacion", label: "Natación" },
-    { id: "yoga", label: "Yoga / elongación" },
-    { id: "gimnasia", label: "Gimnasia para embarazadas" },
-    { id: "bicicleta_fija", label: "Bicicleta fija" },
-    { id: "otra", label: "Otra" }
-  ];
-  let diasActividad = {}; // { lunes: { actividad: "caminata", minutos: 30 }, ... }
+  const DIAS_SEMANA_LABEL = ["L", "M", "M", "J", "V", "S", "D"];
+  let diasActividad = {}; // { lunes: true/false, ... }
 
   function lunesDeEstaSemana() {
     const hoy = new Date();
@@ -3154,7 +3174,7 @@
   }
 
   async function initActividadFisica() {
-    DIAS_SEMANA.forEach(d => { diasActividad[d] = { actividad: "", minutos: "" }; });
+    DIAS_SEMANA.forEach(d => { diasActividad[d] = false; });
 
     const semanaInicio = lunesDeEstaSemana();
     const { data, error } = await sb.rpc("obtener_actividad_semana", { p_token: session.token, p_semana_inicio: semanaInicio });
@@ -3162,8 +3182,8 @@
     if (!error && data && data.ok) {
       if (data.dias) {
         Object.keys(data.dias).forEach(d => {
-          if (diasActividad[d] && data.dias[d]) {
-            diasActividad[d] = { actividad: data.dias[d].actividad || "", minutos: data.dias[d].minutos ?? "" };
+          if (d in diasActividad && data.dias[d]) {
+            diasActividad[d] = !!(data.dias[d].actividad);
           }
         });
       }
@@ -3178,35 +3198,24 @@
 
   function renderDiasActividad() {
     const cont = document.getElementById("dias-actividad-list");
-    cont.innerHTML = DIAS_SEMANA.map((d, i) => {
-      const est = diasActividad[d];
-      return `
-      <div class="dia-actividad-row">
-        <div class="dia-label">${DIAS_SEMANA_LABEL[i]}</div>
-        <select data-dia="${d}">
-          ${OPCIONES_ACTIVIDAD.map(o => `<option value="${o.id}" ${est.actividad === o.id ? "selected" : ""}>${o.label}</option>`).join("")}
-        </select>
-        <input type="number" data-dia="${d}" min="0" step="5" placeholder="0" value="${est.minutos}">
-        <span class="min-label">min</span>
-      </div>`;
-    }).join("");
+    const labels = DIAS_SEMANA.map((d, i) => `<div class="week-day-label">${DIAS_SEMANA_LABEL[i]}</div>`).join("");
+    const toggles = DIAS_SEMANA.map(d => `<button type="button" class="week-toggle ${diasActividad[d] ? "on" : ""}" data-dia="${d}" aria-label="${d}">${diasActividad[d] ? "✓" : ""}</button>`).join("");
+    cont.innerHTML = labels + toggles;
 
-    cont.querySelectorAll("select").forEach(sel => {
-      sel.addEventListener("change", () => {
-        diasActividad[sel.dataset.dia].actividad = sel.value;
+    cont.querySelectorAll(".week-toggle").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const d = btn.dataset.dia;
+        diasActividad[d] = !diasActividad[d];
+        btn.classList.toggle("on", diasActividad[d]);
+        btn.textContent = diasActividad[d] ? "✓" : "";
         actualizarResumenDias();
-      });
-    });
-    cont.querySelectorAll('input[type="number"]').forEach(inp => {
-      inp.addEventListener("input", () => {
-        diasActividad[inp.dataset.dia].minutos = inp.value;
       });
     });
     actualizarResumenDias();
   }
 
   function actualizarResumenDias() {
-    const activos = DIAS_SEMANA.filter(d => diasActividad[d].actividad !== "").length;
+    const activos = DIAS_SEMANA.filter(d => diasActividad[d]).length;
     document.getElementById("dias-actividad-resumen").textContent = `${activos} de 7 días activos`;
   }
 
@@ -3224,10 +3233,7 @@
     const semanaInicio = lunesDeEstaSemana();
     const diasParaGuardar = {};
     DIAS_SEMANA.forEach(d => {
-      diasParaGuardar[d] = {
-        actividad: diasActividad[d].actividad || null,
-        minutos: diasActividad[d].minutos ? parseInt(diasActividad[d].minutos) : null
-      };
+      diasParaGuardar[d] = { actividad: diasActividad[d] ? "si" : null, minutos: null };
     });
     const contabilizaPasos = false;
     const pasosPromedio = null;
@@ -3255,8 +3261,6 @@
   });
 
   // ================= CUARTO TRIMESTRE =================
-  const CATEGORIA_LABEL = { temprano: "Primeras semanas", intermedio: "De 12 semanas a 1 año", continuo: "Seguimiento continuo", rutina: "Control de rutina" };
-
   async function initCuartoTrimestre() {
     sb.rpc("obtener_config", { p_claves: ["info_cuarto_trimestre_riesgo"] }).then(({ data }) => {
       document.getElementById("ct-info-riesgo").textContent = (data && data.info_cuarto_trimestre_riesgo) || "Haber tenido hipertensión o preeclampsia en el embarazo puede aumentar el riesgo de problemas cardiovasculares en el futuro. Seguir estos controles ahora, en el posparto, es la mejor forma de cuidarte y de prevenir a tiempo — no porque algo esté mal, sino para que puedas transitar esta etapa más tranquila, cuidándote a vos para poder cuidar mejor a tu bebé.";
@@ -3275,9 +3279,9 @@
       document.getElementById("ct-parto-resumen").style.display = "none";
       document.getElementById("ct-parto-form-wrap").style.display = "block";
       cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
-      document.getElementById("pp-mdpa-card").style.display = "none";
       document.getElementById("seccion-cuarto-trimestre-hoy").style.display = "none";
       document.getElementById("seccion-embarazos-ocasional").style.display = "block";
+      initMdpa("main", "embarazo");
       return;
     }
 
@@ -3301,89 +3305,90 @@
       document.getElementById("ct-parto-resumen").style.display = "none";
       document.getElementById("ct-parto-form-wrap").style.display = "block";
     });
-    document.getElementById("pp-mdpa-card").style.display = "block";
-    initMdpa("pp");
+    initMdpa("main", "posparto");
 
-    const grupos = {};
-    data.items.forEach(it => {
-      if (!grupos[it.categoria]) grupos[it.categoria] = [];
-      grupos[it.categoria].push(it);
-    });
-
-    const vigentesAhora = data.items.filter(it => it.vigente && !it.cumplido);
+    const { data: etapasData } = await sb.rpc("obtener_etapas_cuarto_trimestre", { p_token: session.token });
+    const etapas = (etapasData && etapasData.ok && etapasData.etapas) || [];
 
     let html = `<div class="card">
       <div class="ct-dias-badge">Día ${data.dias_desde_parto} desde el parto</div>`;
 
-    if (vigentesAhora.length) {
-      html += `<div class="ct-hoy-banner">
-        <strong>Hoy te corresponde:</strong>
-        <ul>${vigentesAhora.map(it => `<li>${it.item}</li>`).join("")}</ul>
-      </div>`;
-    }
+    html += renderCtParadas(data.dias_desde_parto, data.items, etapas);
 
-    html += renderCtTimeline(data.dias_desde_parto, data.items);
-
-    Object.keys(grupos).forEach(cat => {
-      html += `<div class="ct-categoria-title">${CATEGORIA_LABEL[cat] || cat}</div>`;
-      grupos[cat].forEach(it => {
-        const cls = it.cumplido ? "cumplido" : (it.vigente ? "vigente" : "");
-        html += `<div class="ct-item-row ${cls}">
-          <button class="ct-item-check ${it.cumplido ? 'on' : ''}" data-id="${it.id}">
-            ${it.cumplido ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>' : ''}
-          </button>
-          <div>
-            <div class="ct-item-text">${it.item}</div>
-            <div class="ct-item-tag">${it.vigente ? 'Vigente ahora' : (it.cumplido ? 'Cumplido' : 'Todavía no corresponde')}</div>
-          </div>
-        </div>`;
-      });
-    });
     html += `</div>`;
     cont.innerHTML = html;
 
-    cont.querySelectorAll(".ct-item-check").forEach(btn => {
-      btn.addEventListener("click", async () => {
+    cont.querySelectorAll(".ct-parada-header").forEach(header => {
+      header.addEventListener("click", () => {
+        const body = header.nextElementSibling;
+        const abrir = body.style.display === "none";
+        body.style.display = abrir ? "block" : "none";
+        header.classList.toggle("abierta", abrir);
+      });
+    });
+
+    cont.querySelectorAll(".ct-parada-cumplir-btn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
         const nuevo = !btn.classList.contains("on");
-        btn.classList.toggle("on", nuevo);
-        await sb.rpc("marcar_item_cuarto_trimestre", { p_token: session.token, p_plan_item_id: btn.dataset.id, p_cumplido: nuevo });
+        btn.disabled = true;
+        await sb.rpc("marcar_etapa_cuarto_trimestre", { p_token: session.token, p_etapa: btn.dataset.etapa, p_cumplido: nuevo });
         initCuartoTrimestre();
       });
     });
   }
 
-  function renderCtTimeline(diasDesdeParto, items) {
-    // Escala de la línea: 0 a 365 días. Lo "continuo" (sin fin) se marca aparte.
-    const maxEscala = 365;
-    const diasClamp = Math.min(diasDesdeParto, maxEscala);
-    const pctHoy = (diasClamp / maxEscala) * 100;
+  const PARADA_INFO = {
+    primeras_semanas: { titulo: "Primeras semanas", rango: "Desde el parto hasta las 12 semanas" },
+    primeros_meses: { titulo: "Primeros meses", rango: "De las 12 semanas hasta el año" },
+    para_siempre: { titulo: "Para toda la vida", rango: "A partir del año, de forma continua" }
+  };
+  const ORDEN_PARADAS = ["primeras_semanas", "primeros_meses", "para_siempre"];
 
-    const zonas = [
-      { desde: 0, hasta: 84, color: "#F0D8A8", label: "0-12 sem" },
-      { desde: 84, hasta: 365, color: "#D9C1E8", label: "12sem-1año" }
-    ];
+  function etapaDeItem(it) {
+    if (it.ventana_fin_dias === null || it.ventana_fin_dias === undefined) return "para_siempre";
+    if (it.ventana_inicio_dias < 84) return "primeras_semanas";
+    return "primeros_meses";
+  }
 
-    const marcadores = items
-      .filter(it => it.ventana_inicio_dias != null)
-      .map(it => {
-        const inicioPct = (Math.min(it.ventana_inicio_dias, maxEscala) / maxEscala) * 100;
-        return { pct: inicioPct, item: it };
-      });
+  function etapaActualDesdeDias(dias) {
+    if (dias < 84) return "primeras_semanas";
+    if (dias < 366) return "primeros_meses";
+    return "para_siempre";
+  }
 
-    let html = `<div class="ct-timeline-wrap">
-      <div class="ct-timeline-track">`;
-    zonas.forEach(z => {
-      const left = (z.desde / maxEscala) * 100;
-      const width = ((z.hasta - z.desde) / maxEscala) * 100;
-      html += `<div class="ct-timeline-zona" style="left:${left}%; width:${width}%; background:${z.color};"></div>`;
+  function renderCtParadas(diasDesdeParto, items, etapas) {
+    const etapaActual = etapaActualDesdeDias(diasDesdeParto);
+    const porEtapa = { primeras_semanas: [], primeros_meses: [], para_siempre: [] };
+    items.forEach(it => porEtapa[etapaDeItem(it)].push(it));
+    const etapasMap = {};
+    etapas.forEach(e => etapasMap[e.etapa] = e);
+
+    let html = `<div class="ct-paradas-wrap">`;
+    ORDEN_PARADAS.forEach(key => {
+      const info = PARADA_INFO[key];
+      const cumplida = etapasMap[key] && etapasMap[key].cumplido;
+      const esActual = key === etapaActual;
+      const abierta = esActual;
+      html += `<div class="ct-parada-card ${esActual ? 'ct-parada-actual' : 'ct-parada-secundaria'} ${cumplida ? 'ct-parada-cumplida' : ''}">
+        <div class="ct-parada-header ${abierta ? 'abierta' : ''}">
+          <div>
+            <div class="ct-parada-titulo">${info.titulo}${esActual ? ' <span class="ct-parada-badge">Ahora</span>' : ''}</div>
+            <div class="ct-parada-rango">${info.rango}</div>
+          </div>
+          <svg class="ct-parada-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="ct-parada-body" style="display:${abierta ? 'block' : 'none'};">
+          <ul class="ct-parada-items">
+            ${porEtapa[key].map(it => `<li>${it.item}</li>`).join("")}
+          </ul>
+          <button class="ct-parada-cumplir-btn ${cumplida ? 'on' : ''}" data-etapa="${key}">
+            ${cumplida ? '✓ Cumplí esta etapa' : 'Marcar como cumplida'}
+          </button>
+        </div>
+      </div>`;
     });
-    marcadores.forEach(m => {
-      html += `<div class="ct-timeline-marca ${m.item.cumplido ? 'cumplido' : (m.item.vigente ? 'vigente' : '')}" style="left:${m.pct}%;" title="${m.item.item}"></div>`;
-    });
-    html += `<div class="ct-timeline-hoy" style="left:${pctHoy}%;"><span class="ct-timeline-hoy-dot"></span><span class="ct-timeline-hoy-label">Hoy</span></div>`;
-    html += `</div>
-      <div class="ct-timeline-labels"><span>Parto</span><span>3 meses</span><span>6 meses</span><span>1 año +</span></div>
-    </div>`;
+    html += `</div>`;
     return html;
   }
 
@@ -3781,24 +3786,11 @@
   });
 
   // ---------- Arranque ----------
-  // Siempre se ve primero la pantalla de bienvenida al abrir la app.
-  // Si ya había sesión guardada, se salta el login pero no la bienvenida.
+  // Si ya había sesión guardada, se salta directo el login.
   if (session && session.token) {
-    mostrarBienvenidaConSesion();
+    showHome();
   } else {
     loginScreen.classList.add("show");
-  }
-
-  async function mostrarBienvenidaConSesion() {
-    try {
-      const { data } = await sb.rpc("obtener_config", { p_claves: ["mensaje_bienvenida", "mensaje_explicativo"] });
-      document.getElementById("welcome-msg").textContent = (data && data.mensaje_bienvenida) || "¡Bienvenida!";
-      document.getElementById("welcome-explain").textContent = (data && data.mensaje_explicativo) || "";
-    } catch (e) {
-      document.getElementById("welcome-msg").textContent = "¡Bienvenida!";
-      document.getElementById("welcome-explain").textContent = "";
-    }
-    welcomeScreen.classList.add("show");
   }
 </script>
 
