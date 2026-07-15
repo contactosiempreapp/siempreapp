@@ -279,18 +279,18 @@
   .patron-resultado-badge.adecuada { background: var(--teal-light); color: var(--teal-dark); }
 
   nav.tabs {
-    display: flex; gap: 8px; overflow-x: auto; padding: 16px 16px 4px;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    display: flex; gap: 5px; overflow-x: hidden; padding: 16px 14px 4px;
   }
-  nav.tabs::-webkit-scrollbar { display: none; }
   .tab-btn {
-    flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 9px 14px 9px 11px; border-radius: 22px; border: 1.5px solid var(--gray-300);
-    background: white; color: var(--gray-600); font-size: 12.5px; font-weight: 600; font-family: 'Manrope', sans-serif;
+    flex: 1 1 0; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 8px 6px; border-radius: 22px; border: 1.5px solid var(--gray-300);
+    background: white; color: var(--gray-600); font-size: 10.5px; font-weight: 600; font-family: 'Manrope', sans-serif;
     cursor: pointer; white-space: nowrap; transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
   }
-  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .tab-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
   .tab-btn.active { background: linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0) 60%), var(--tab-accent); border-color: var(--tab-accent); color: white; box-shadow: 0 4px 12px -4px var(--tab-accent), inset 0 1px 0 rgba(255,255,255,0.3); }
-  .tab-btn-icon { padding: 9px 10px; }
+  .tab-btn-icon { flex: 0 0 auto; padding: 8px 11px; }
+  .tab-btn-icon svg { width: 16px; height: 16px; }
   .tab-btn-especial {
     background: linear-gradient(135deg, #C79A4B 0%, #8B5CB8 100%);
     border-color: transparent; color: white; font-weight: 800;
@@ -376,10 +376,27 @@
   button.secondary:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(91,62,150,0.15); }
 
   /* Embarazo actual — card cálida */
-  .embarazo-actual-card { background: linear-gradient(160deg, #FBEEE3 0%, #FDF8F3 100%); border-color: #F0D8C2; }
+  .embarazo-actual-card { background: linear-gradient(160deg, #FBEEE3 0%, #FDF8F3 100%); border-color: #F0D8C2; box-shadow: 0 10px 28px -14px rgba(199,123,74,0.35), var(--shadow-inset-top); }
+  .embarazo-actual-card input[type="date"], .embarazo-actual-card input[type="number"] {
+    background: #FFFBF6; border-color: #EAD2B8;
+  }
+  .embarazo-actual-card input[type="date"]:focus, .embarazo-actual-card input[type="number"]:focus {
+    border-color: #C77B4A; box-shadow: 0 0 0 3px rgba(199,123,74,0.14);
+  }
+  .embarazo-actual-card label { color: #7A5230; }
+  .embarazo-actual-card h2 { font-family: 'Fraunces', serif; }
   .emb-actual-header { display: flex; align-items: center; gap: 14px; }
+  .emb-illus-halo {
+    width: 68px; height: 68px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle, rgba(227,152,106,0.28) 0%, rgba(227,152,106,0) 72%);
+  }
   .emb-illus { width: 62px; height: 62px; flex-shrink: 0; }
   .emb-illus svg { width: 100%; height: 100%; }
+  .emb-divisor {
+    display: flex; align-items: center; gap: 10px; margin: 22px 0 14px;
+  }
+  .emb-divisor::before, .emb-divisor::after { content: ""; flex: 1; height: 1px; background: #EAD2B8; }
+  .emb-divisor span { font-size: 10.5px; font-weight: 700; color: #B9814F; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
   .emb-actual-sub { font-size: 12px; color: #9C6B45; font-weight: 600; }
   .fuente-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
   .fuente-opcion {
@@ -560,7 +577,7 @@
   .ver-previos-btn {
     display: flex; align-items: center; gap: 6px; background: var(--violet-light); color: var(--violet-dark);
     border: none; border-radius: 20px; font-size: 12.5px; font-weight: 700; font-family: 'Manrope', sans-serif;
-    cursor: pointer; padding: 8px 14px; margin-top: 12px;
+    cursor: pointer; padding: 8px 14px; margin-top: 12px; margin-bottom: 12px;
   }
   .ver-previos-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
@@ -928,7 +945,7 @@
 
   <nav class="tabs" id="tabs-nav">
     <button class="tab-btn" data-tab="bienvenida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>Mi día</button>
-    <button class="tab-btn" data-tab="esta-semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>Esta semana</button>
+    <button class="tab-btn" data-tab="esta-semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>Mi semana</button>
     <button class="tab-btn" data-tab="ocasional"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Mi presión arterial</button>
     <button class="tab-btn tab-btn-icon" data-tab="mensajes" aria-label="Mensajes" title="Mensajes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c0 4.42-4.03 8-9 8-1.3 0-2.53-.24-3.64-.68L4 21l1.05-3.16A7.93 7.93 0 0 1 3 12c0-4.42 4.03-8 9-8s9 3.58 9 8z"/></svg></button>
   </nav>
@@ -1070,6 +1087,18 @@
         <p class="helper">Así te avisamos cuando corresponda algo importante, sin que tengas que estar revisando la app todo el tiempo.</p>
         <button class="primary" id="notif-onboarding-si-btn" style="margin-top:10px;">Sí, activar</button>
         <button class="tertiary" id="notif-onboarding-no-btn" style="margin-top:8px;">Ahora no</button>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="notif-estado-modal">
+      <div class="modal-card" style="text-align:center;">
+        <div class="notif-icon" style="margin:0 auto 14px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </div>
+        <h2 style="margin-bottom:8px;" id="notif-estado-titulo">Notificaciones</h2>
+        <p class="helper" id="notif-estado-texto">—</p>
+        <button class="primary" id="notif-estado-primario-btn" style="margin-top:10px;">—</button>
+        <button class="tertiary" id="notif-estado-secundario-btn" style="margin-top:8px;">—</button>
       </div>
     </div>
 
@@ -1285,32 +1314,150 @@
       <button type="button" class="tertiary" id="mis-datos-volver-btn" style="margin-bottom:4px;">← Volver</button>
       <div class="card mis-datos-hero">
         <h2>Mis datos</h2>
-        <p class="helper">Completá esta sección una vez al empezar. Podés volver cuando quieras a modificarla — tu médica va a ver siempre la información más reciente.</p>
+        <p class="helper">Elegí qué querés cargar o revisar.</p>
       </div>
 
-      <div class="md-progreso-wrap">
-        <div class="md-progreso-barra"><div class="md-progreso-relleno" id="md-progreso-relleno"></div></div>
-        <div class="md-progreso-texto" id="md-progreso-texto">Paso 1 de 4</div>
+      <div class="md-big-card" id="abrir-datos-personales-btn">
+        <div class="mdb-icon" style="background:var(--violet-light); color:var(--violet-dark);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg>
+        </div>
+        <div><div class="mdb-titulo">Cargar datos personales</div><div class="mdb-sub">WhatsApp, antecedentes, estilo de vida</div></div>
+        <div class="mdb-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
 
-      <div class="md-step" data-step="1">
-        <!-- 1. Datos filiatorios -->
-        <div class="card">
-          <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Mis datos personales</h2>
-          <label for="md-whatsapp">WhatsApp</label>
-          <input type="text" id="md-whatsapp" inputmode="tel" placeholder="Ej: 11 2345 6789">
-          <label for="md-email">Correo electrónico</label>
-          <input type="text" id="md-email" inputmode="email" placeholder="tunombre@mail.com">
-          <label for="md-fecha-nac">Fecha de nacimiento</label>
-          <input type="date" id="md-fecha-nac">
-          <div class="edad-badge pill-teal" id="edad-badge" style="display:none;"></div>
-          <label for="md-ocupacion" style="margin-top:14px;">Ocupación</label>
-          <input type="text" id="md-ocupacion" placeholder="Ej: docente, comerciante, ama de casa...">
+      <div class="md-big-card" id="abrir-embarazos-btn">
+        <div class="mdb-icon" style="background:#FBEAD9; color:#C77B4A;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/></svg>
+        </div>
+        <div><div class="mdb-titulo">Mis embarazos</div><div class="mdb-sub">Embarazo actual y previos</div></div>
+        <div class="mdb-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </div>
+    </div>
+
+
+    <div class="modal-backdrop" id="datos-personales-modal">
+      <div class="modal-card" style="text-align:left;">
+        <button class="modal-close-btn" id="cerrar-datos-personales-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <h2 style="margin-bottom:14px;">Datos personales</h2>
+
+        <div class="md-progreso-wrap">
+          <div class="md-progreso-barra"><div class="md-progreso-relleno" id="md-progreso-relleno"></div></div>
+          <div class="md-progreso-texto" id="md-progreso-texto">Paso 1 de 4</div>
         </div>
 
-        <!-- Altura y peso antes del embarazo -->
-        <div class="card">
-          <h2><span class="md-icon md-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg></span>Antes de empezar el embarazo</h2>
+        <div class="md-step" data-step="1">
+          <!-- 1. Datos filiatorios -->
+          <div class="card">
+            <h2><span class="md-icon md-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Mis datos personales</h2>
+            <label for="md-whatsapp">WhatsApp</label>
+            <input type="text" id="md-whatsapp" inputmode="tel" placeholder="Ej: 11 2345 6789">
+            <label for="md-email">Correo electrónico</label>
+            <input type="text" id="md-email" inputmode="email" placeholder="tunombre@mail.com">
+            <label for="md-fecha-nac">Fecha de nacimiento</label>
+            <input type="date" id="md-fecha-nac">
+            <div class="edad-badge pill-teal" id="edad-badge" style="display:none;"></div>
+            <label for="md-ocupacion" style="margin-top:14px;">Ocupación</label>
+            <input type="text" id="md-ocupacion" placeholder="Ej: docente, comerciante, ama de casa...">
+          </div>
+        </div>
+
+        <div class="md-step" data-step="2" style="display:none;">
+          <!-- 2. Antecedentes de enfermedades previas -->
+          <div class="card">
+            <h2><span class="md-icon md-icon-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-9.5-8.6C.7 8.7 3.2 5 6.8 5c2 0 3.6 1.4 5.2 3.4C13.6 6.4 15.2 5 17.2 5c3.6 0 6.1 3.7 4.3 7.4C19 16.6 12 21 12 21z"/></svg></span>Enfermedades previas</h2>
+            <p class="helper">Marcá las que tuviste antes de este embarazo.</p>
+            <div id="grupo-clinicos"></div>
+          </div>
+        </div>
+
+        <div class="md-step" data-step="3" style="display:none;">
+          <!-- 3. Antecedentes del papá del bebé -->
+          <div class="card">
+            <h2><span class="md-icon md-icon-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Antecedentes del papá del bebé</h2>
+            <div class="check-row"><input type="checkbox" id="fam-papa-nacio-pe"><label for="fam-papa-nacio-pe" style="margin:0;">¿Sabés si el papá del bebé nació de un embarazo con preeclampsia?</label></div>
+
+            <p class="helper" style="margin-top:14px;">¿Tuvo otras parejas en las que hubo preeclampsia o hipertensión del embarazo? Agregá cada caso.</p>
+            <div id="paternos-list"></div>
+            <button type="button" class="tertiary" id="add-paterno-btn">+ Agregar otra pareja con este antecedente</button>
+          </div>
+
+          <!-- 4. Antecedentes familiares -->
+          <div class="card">
+            <h2><span class="md-icon md-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg></span>Antecedentes familiares</h2>
+            <p class="helper">De tu mamá y tus hermanas.</p>
+            <div class="check-row"><input type="checkbox" id="fam-madre-the"><label for="fam-madre-the" style="margin:0;">Mamá con hipertensión del embarazo</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-madre-pe"><label for="fam-madre-pe" style="margin:0;">Mamá con preeclampsia</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-hermana-the"><label for="fam-hermana-the" style="margin:0;">Hermana con hipertensión del embarazo</label></div>
+            <div class="check-row"><input type="checkbox" id="fam-hermana-pe"><label for="fam-hermana-pe" style="margin:0;">Hermana con preeclampsia</label></div>
+          </div>
+        </div>
+
+        <div class="md-step" data-step="4" style="display:none;">
+          <div class="card">
+            <details class="grupo">
+              <summary>Otros datos de estilo de vida</summary>
+              <div class="grupo-body" id="grupo-estilo"></div>
+            </details>
+            <button class="primary" id="guardar-datos-btn" style="margin-top:14px;">Guardar mis datos</button>
+            <p id="datos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Datos guardados ✓</p>
+          </div>
+        </div>
+
+        <div class="md-nav-row" id="md-nav-row">
+          <button class="tertiary" id="md-atras-btn" style="display:none;">← Atrás</button>
+          <button class="primary" id="md-siguiente-btn">Siguiente</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal-backdrop" id="embarazos-modal">
+      <div class="modal-card" style="text-align:left;">
+        <button class="modal-close-btn" id="cerrar-embarazos-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <h2 style="margin-bottom:14px; font-family:'Fraunces',serif; color:var(--violet-deep);">Mis embarazos</h2>
+
+        <div id="seccion-embarazos-ocasional">
+        <div class="card embarazo-actual-card" id="embarazo-actual-card">
+          <div class="emb-actual-header">
+            <div class="emb-illus-halo">
+            <div class="emb-illus">
+              <svg viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="56" r="30" fill="#FBEAD9" stroke="#C77B4A" stroke-width="2"/>
+                <path d="M50 47c-4-6-14-6-14 3 0 7 14 15 14 15s14-8 14-15c0-9-10-9-14-3z" fill="#E3986A" stroke="#C77B4A" stroke-width="1.3"/>
+                <circle cx="28" cy="28" r="2" fill="#E3986A"/>
+                <circle cx="74" cy="24" r="1.6" fill="#E3986A"/>
+                <circle cx="80" cy="46" r="1.3" fill="#E3986A"/>
+              </svg>
+            </div>
+            </div>
+            <div>
+              <h2 style="margin-bottom:2px;">Mi embarazo actual</h2>
+              <div class="emb-actual-sub">La info que va guiando el resto de la app</div>
+            </div>
+          </div>
+
+          <p class="helper" style="margin-top:14px;">Completá la fecha de última menstruación (FUM) y/o los datos de la ecografía datante. Si tu obstetra ya te indicó la fecha probable de parto, cargala también — es la que usamos con prioridad.</p>
+
+          <label for="ge-fum">Fecha de última menstruación (FUM)</label>
+          <input type="date" id="ge-fum">
+
+          <label for="ge-fecha-eco" style="margin-top:12px;">Fecha de la ecografía datante</label>
+          <input type="date" id="ge-fecha-eco">
+          <div class="fila-2col">
+            <div><label for="ge-eco-sem">Semanas (en la eco)</label><input type="number" id="ge-eco-sem" min="0" max="42"></div>
+            <div><label for="ge-eco-dias">Días</label><input type="number" id="ge-eco-dias" min="0" max="6"></div>
+          </div>
+
+          <label for="ge-fpp">Fecha probable de parto (si tu obstetra ya te la indicó)</label>
+          <input type="date" id="ge-fpp">
+          <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
+          <div class="check-row" style="margin-top:10px;"><input type="checkbox" id="ge-hta-gestacional"><label for="ge-hta-gestacional" style="margin:0;">Me diagnosticaron hipertensión gestacional en este embarazo</label></div>
+
+          <div class="emb-divisor"><span>Antes de empezar el embarazo</span></div>
           <p class="helper">Con esto calculamos tu IMC pregestacional y tu objetivo de aumento de peso — se usa después en la solapa "Curva ponderal".</p>
           <div class="fila-2col">
             <div><label for="md-altura">Altura (cm)</label><input type="number" id="md-altura" step="0.1"></div>
@@ -1318,114 +1465,16 @@
           </div>
           <div class="imc-badge" id="imc-preview-badge" style="display:none;"></div>
         </div>
-      </div>
 
-      <div class="md-step" data-step="2" style="display:none;">
-        <!-- 2. Antecedentes de enfermedades previas -->
         <div class="card">
-          <h2><span class="md-icon md-icon-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-9.5-8.6C.7 8.7 3.2 5 6.8 5c2 0 3.6 1.4 5.2 3.4C13.6 6.4 15.2 5 17.2 5c3.6 0 6.1 3.7 4.3 7.4C19 16.6 12 21 12 21z"/></svg></span>Enfermedades previas</h2>
-          <p class="helper">Marcá las que tuviste antes de este embarazo.</p>
-          <div id="grupo-clinicos"></div>
+          <h2>Embarazos previos</h2>
+          <p class="helper">Agregá uno por cada embarazo anterior, aunque no haya tenido complicaciones. Es información importante para tu seguimiento.</p>
+          <div id="previos-list"></div>
+          <button type="button" class="tertiary" id="add-previo-btn">+ Agregar otro embarazo previo</button>
+          <button class="primary" id="guardar-embarazos-btn">Guardar</button>
+          <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
         </div>
-      </div>
-
-      <div class="md-step" data-step="3" style="display:none;">
-        <!-- 3. Antecedentes del papá del bebé -->
-        <div class="card">
-          <h2><span class="md-icon md-icon-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg></span>Antecedentes del papá del bebé</h2>
-          <div class="check-row"><input type="checkbox" id="fam-papa-nacio-pe"><label for="fam-papa-nacio-pe" style="margin:0;">¿Sabés si el papá del bebé nació de un embarazo con preeclampsia?</label></div>
-
-          <p class="helper" style="margin-top:14px;">¿Tuvo otras parejas en las que hubo preeclampsia o hipertensión del embarazo? Agregá cada caso.</p>
-          <div id="paternos-list"></div>
-          <button type="button" class="tertiary" id="add-paterno-btn">+ Agregar otra pareja con este antecedente</button>
         </div>
-
-        <!-- 4. Antecedentes familiares -->
-        <div class="card">
-          <h2><span class="md-icon md-icon-pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.8-4.7-9.7-9.2C.7 7.4 3 4 6.7 4c2.1 0 3.6 1.4 5.3 3.4C13.7 5.4 15.2 4 17.3 4c3.7 0 6 3.4 4.4 7-1.9 4.5-9.7 9.2-9.7 9.2z"/></svg></span>Antecedentes familiares</h2>
-          <p class="helper">De tu mamá y tus hermanas.</p>
-          <div class="check-row"><input type="checkbox" id="fam-madre-the"><label for="fam-madre-the" style="margin:0;">Mamá con hipertensión del embarazo</label></div>
-          <div class="check-row"><input type="checkbox" id="fam-madre-pe"><label for="fam-madre-pe" style="margin:0;">Mamá con preeclampsia</label></div>
-          <div class="check-row"><input type="checkbox" id="fam-hermana-the"><label for="fam-hermana-the" style="margin:0;">Hermana con hipertensión del embarazo</label></div>
-          <div class="check-row"><input type="checkbox" id="fam-hermana-pe"><label for="fam-hermana-pe" style="margin:0;">Hermana con preeclampsia</label></div>
-        </div>
-      </div>
-
-      <div class="md-step" data-step="4" style="display:none;">
-        <div class="card">
-          <details class="grupo">
-            <summary>Otros datos de estilo de vida</summary>
-            <div class="grupo-body" id="grupo-estilo"></div>
-          </details>
-          <button class="primary" id="guardar-datos-btn" style="margin-top:14px;">Guardar mis datos</button>
-          <p id="datos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Datos guardados ✓</p>
-        </div>
-      </div>
-
-      <div class="md-nav-row" id="md-nav-row">
-        <button class="tertiary" id="md-atras-btn" style="display:none;">← Atrás</button>
-        <button class="primary" id="md-siguiente-btn">Siguiente</button>
-      </div>
-
-      <div id="seccion-embarazos-ocasional">
-      <div class="card embarazo-actual-card">
-        <div class="emb-actual-header">
-          <div class="emb-illus">
-            <svg viewBox="0 0 100 100" fill="none">
-              <circle cx="50" cy="56" r="30" fill="#FBEAD9" stroke="#C77B4A" stroke-width="2"/>
-              <path d="M50 47c-4-6-14-6-14 3 0 7 14 15 14 15s14-8 14-15c0-9-10-9-14-3z" fill="#E3986A" stroke="#C77B4A" stroke-width="1.3"/>
-              <circle cx="28" cy="28" r="2" fill="#E3986A"/>
-              <circle cx="74" cy="24" r="1.6" fill="#E3986A"/>
-              <circle cx="80" cy="46" r="1.3" fill="#E3986A"/>
-            </svg>
-          </div>
-          <div>
-            <h2 style="margin-bottom:2px;">Mi embarazo actual</h2>
-            <div class="emb-actual-sub">La info que va guiando el resto de la app</div>
-          </div>
-        </div>
-
-        <p class="helper" style="margin-top:14px;">Elegí cómo calculamos tu semana de embarazo. Si tenés la fecha de tu última menstruación (FUM), usamos esa — es el dato más preciso.</p>
-
-        <div class="fuente-selector">
-          <label class="fuente-opcion">
-            <input type="radio" name="fuente-fecha" value="fum" id="fuente-fum" checked>
-            <span>Sé mi FUM<br><small>Fecha de última menstruación</small></span>
-          </label>
-          <label class="fuente-opcion">
-            <input type="radio" name="fuente-fecha" value="eco" id="fuente-eco">
-            <span>Solo tengo la eco<br><small>Semana que indicó la ecografía</small></span>
-          </label>
-        </div>
-
-        <div id="fum-block">
-          <label for="ge-fum">Fecha de última menstruación (FUM)</label>
-          <input type="date" id="ge-fum">
-        </div>
-
-        <div id="eco-block" style="display:none;">
-          <label for="ge-fecha-eco">Fecha en que te hicieron la ecografía</label>
-          <input type="date" id="ge-fecha-eco">
-          <div class="fila-2col">
-            <div><label for="ge-eco-sem">Semana que dice la eco</label><input type="number" id="ge-eco-sem" min="0" max="42"></div>
-            <div><label for="ge-eco-dias">Días</label><input type="number" id="ge-eco-dias" min="0" max="6"></div>
-          </div>
-        </div>
-
-        <label for="ge-fpp">Fecha probable de parto (si tu obstetra ya te la indicó)</label>
-        <input type="date" id="ge-fpp">
-        <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
-        <div class="check-row" style="margin-top:10px;"><input type="checkbox" id="ge-hta-gestacional"><label for="ge-hta-gestacional" style="margin:0;">Me diagnosticaron hipertensión gestacional en este embarazo</label></div>
-      </div>
-
-      <div class="card">
-        <h2>Embarazos previos</h2>
-        <p class="helper">Agregá uno por cada embarazo anterior, aunque no haya tenido complicaciones. Es información importante para tu seguimiento.</p>
-        <div id="previos-list"></div>
-        <button type="button" class="tertiary" id="add-previo-btn">+ Agregar otro embarazo previo</button>
-        <button class="primary" id="guardar-embarazos-btn">Guardar</button>
-        <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
-      </div>
       </div>
     </div>
 
@@ -1527,6 +1576,24 @@
       activarTab("bienvenida");
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
+    document.getElementById("abrir-datos-personales-btn").addEventListener("click", () => {
+      document.getElementById("datos-personales-modal").classList.add("show");
+    });
+    document.getElementById("cerrar-datos-personales-btn").addEventListener("click", () => {
+      document.getElementById("datos-personales-modal").classList.remove("show");
+    });
+    document.getElementById("datos-personales-modal").addEventListener("click", (e) => {
+      if (e.target.id === "datos-personales-modal") document.getElementById("datos-personales-modal").classList.remove("show");
+    });
+    document.getElementById("abrir-embarazos-btn").addEventListener("click", () => {
+      document.getElementById("embarazos-modal").classList.add("show");
+    });
+    document.getElementById("cerrar-embarazos-btn").addEventListener("click", () => {
+      document.getElementById("embarazos-modal").classList.remove("show");
+    });
+    document.getElementById("embarazos-modal").addEventListener("click", (e) => {
+      if (e.target.id === "embarazos-modal") document.getElementById("embarazos-modal").classList.remove("show");
+    });
   }
 
   function setupTabs() {
@@ -1613,6 +1680,23 @@
     }
   }
 
+  async function desactivarNotificacionesPush() {
+    try {
+      const registro = await navigator.serviceWorker.register("./sw.js");
+      const existente = await registro.pushManager.getSubscription();
+      if (existente) {
+        const endpoint = existente.endpoint;
+        await existente.unsubscribe();
+        await sb.rpc("eliminar_push_subscription", { p_token: session.token, p_endpoint: endpoint });
+      }
+      actualizarIconoHeaderNotif(false);
+      return true;
+    } catch (e) {
+      console.error("Error desactivando notificaciones:", e);
+      return false;
+    }
+  }
+
   async function verificarEstadoNotificaciones() {
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
       actualizarIconoHeaderNotif(false);
@@ -1638,10 +1722,47 @@
     }
   }
 
-  document.getElementById("notif-header-btn").addEventListener("click", async () => {
-    if (!document.getElementById("notif-header-btn").classList.contains("notif-on")) {
-      await activarNotificacionesPush();
+  function abrirModalEstadoNotificaciones() {
+    const activo = document.getElementById("notif-header-btn").classList.contains("notif-on");
+    const titulo = document.getElementById("notif-estado-titulo");
+    const texto = document.getElementById("notif-estado-texto");
+    const btnPrimario = document.getElementById("notif-estado-primario-btn");
+    const btnSecundario = document.getElementById("notif-estado-secundario-btn");
+    const cerrar = () => document.getElementById("notif-estado-modal").classList.remove("show");
+
+    if (activo) {
+      titulo.textContent = "Notificaciones activadas";
+      texto.textContent = "Te avisamos cuando corresponda algo importante. ¿Querés seguir recibiéndolas o preferís desactivarlas?";
+      btnPrimario.textContent = "Continuar activadas";
+      btnPrimario.onclick = cerrar;
+      btnSecundario.textContent = "Desactivar";
+      btnSecundario.onclick = async () => {
+        btnSecundario.disabled = true; btnSecundario.textContent = "Desactivando...";
+        await desactivarNotificacionesPush();
+        btnSecundario.disabled = false; btnSecundario.textContent = "Desactivar";
+        cerrar();
+      };
+    } else {
+      titulo.textContent = "¿Activamos las notificaciones?";
+      texto.textContent = "Así te avisamos cuando corresponda algo importante, sin que tengas que estar revisando la app todo el tiempo.";
+      btnPrimario.textContent = "Sí, activar";
+      btnPrimario.onclick = async () => {
+        btnPrimario.disabled = true; btnPrimario.textContent = "Activando...";
+        await activarNotificacionesPush();
+        btnPrimario.disabled = false; btnPrimario.textContent = "Sí, activar";
+        cerrar();
+      };
+      btnSecundario.textContent = "Ahora no";
+      btnSecundario.onclick = cerrar;
     }
+    document.getElementById("notif-estado-modal").classList.add("show");
+  }
+
+  document.getElementById("notif-header-btn").addEventListener("click", () => {
+    abrirModalEstadoNotificaciones();
+  });
+  document.getElementById("notif-estado-modal").addEventListener("click", (e) => {
+    if (e.target.id === "notif-estado-modal") document.getElementById("notif-estado-modal").classList.remove("show");
   });
 
   document.getElementById("notif-onboarding-si-btn").addEventListener("click", async () => {
@@ -3281,12 +3402,14 @@
       cont.innerHTML = `<div class="card"><p class="helper" style="margin:0;">Mientras tanto, esta sección va a ir mostrando tu plan de controles apenas actives tu seguimiento arriba.</p></div>`;
       document.getElementById("seccion-cuarto-trimestre-hoy").style.display = "none";
       document.getElementById("seccion-embarazos-ocasional").style.display = "block";
+      document.getElementById("embarazo-actual-card").style.display = "block";
       initMdpa("main", "embarazo");
       return;
     }
 
     document.getElementById("seccion-cuarto-trimestre-hoy").style.display = "block";
-    document.getElementById("seccion-embarazos-ocasional").style.display = "none";
+    document.getElementById("seccion-embarazos-ocasional").style.display = "block";
+    document.getElementById("embarazo-actual-card").style.display = "none";
 
     setupCard.style.display = "block";
     const fechaFmt = new Date(data.fecha_parto + "T00:00:00").toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
@@ -3491,8 +3614,8 @@
     document.getElementById("md-progreso-texto").textContent = `Paso ${n} de ${MD_TOTAL_PASOS}`;
     document.getElementById("md-atras-btn").style.display = n === 1 ? "none" : "inline-block";
     document.getElementById("md-siguiente-btn").style.display = n === MD_TOTAL_PASOS ? "none" : "inline-block";
-    document.getElementById("panel-mis-datos").scrollTop = 0;
-    window.scrollTo(0, document.getElementById("panel-mis-datos").offsetTop - 10);
+    const modalCard = document.querySelector("#datos-personales-modal .modal-card");
+    if (modalCard) modalCard.scrollTop = 0;
   }
   document.getElementById("md-siguiente-btn").addEventListener("click", () => {
     if (mdPasoActual < MD_TOTAL_PASOS) mostrarPasoMisDatos(mdPasoActual + 1);
@@ -3547,7 +3670,7 @@
     renderPaternos();
   }
 
-  document.getElementById("guardar-datos-btn").addEventListener("click", async () => {
+  async function guardarMisDatosRPC() {
     const fechaNac = document.getElementById("md-fecha-nac").value;
     let edadCalculada = "";
     if (fechaNac) {
@@ -3587,8 +3710,6 @@
       actividad_fisica_previa: document.getElementById("es-actividad-previa").checked,
       consumo_alcohol: document.getElementById("es-alcohol").checked
     };
-    const btn = document.getElementById("guardar-datos-btn");
-    btn.disabled = true; btn.textContent = "Guardando...";
     await sb.rpc("guardar_mis_datos", {
       p_token: session.token,
       p_telefono: document.getElementById("md-whatsapp").value,
@@ -3596,6 +3717,12 @@
       p_fecha_nacimiento: fechaNac || null,
       p_clinicos: clinicos, p_familiares: familiares, p_estilo_vida: estiloVida, p_paternos: paternosList
     });
+  }
+
+  document.getElementById("guardar-datos-btn").addEventListener("click", async () => {
+    const btn = document.getElementById("guardar-datos-btn");
+    btn.disabled = true; btn.textContent = "Guardando...";
+    await guardarMisDatosRPC();
     btn.disabled = false; btn.textContent = "Guardar mis datos";
     const msg = document.getElementById("datos-guardado-msg");
     msg.style.display = "block";
@@ -3666,14 +3793,6 @@
   let diasGestacionalesActual = null;
   let fuenteGestacionalActual = null;
 
-  document.querySelectorAll('input[name="fuente-fecha"]').forEach(radio => {
-    radio.addEventListener("change", () => {
-      const esFum = document.getElementById("fuente-fum").checked;
-      document.getElementById("fum-block").style.display = esFum ? "block" : "none";
-      document.getElementById("eco-block").style.display = esFum ? "none" : "block";
-    });
-  });
-
   function calcularSemanas(fum, fppObstetra, fechaEco, ecoSemanas, ecoDias) {
     let base = null;
     let fuente = null;
@@ -3743,13 +3862,6 @@
       if (a.fpp_obstetra) document.getElementById("ge-fpp").value = a.fpp_obstetra;
       document.getElementById("ge-hta-gestacional").checked = !!a.hipertension_gestacional_actual;
 
-      // Si ya tenía cargado solo eco (sin FUM), dejamos seleccionado ese modo
-      if (!a.fum && a.fecha_eco_datante) {
-        document.getElementById("fuente-eco").checked = true;
-        document.getElementById("fum-block").style.display = "none";
-        document.getElementById("eco-block").style.display = "block";
-      }
-
       const eg = calcularEdadGestacional(a.fum, a.fpp_obstetra, a.fecha_eco_datante, a.eco_semanas, a.eco_dias);
       const badge = document.getElementById("edad-gestacional-badge");
       if (eg) { badge.textContent = "Edad gestacional actual: " + eg; badge.style.display = "inline-block"; }
@@ -3777,6 +3889,7 @@
     const btn = document.getElementById("guardar-embarazos-btn");
     btn.disabled = true; btn.textContent = "Guardando...";
     await sb.rpc("guardar_embarazos", { p_token: session.token, p_previos: previosList, p_actual: actual });
+    await guardarMisDatosRPC();
     btn.disabled = false; btn.textContent = "Guardar";
     const msg = document.getElementById("embarazos-guardado-msg");
     msg.style.display = "block";
