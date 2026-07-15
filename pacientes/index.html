@@ -279,13 +279,13 @@
   .patron-resultado-badge.adecuada { background: var(--teal-light); color: var(--teal-dark); }
 
   nav.tabs {
-    display: flex; gap: 8px; overflow-x: auto; padding: 16px 16px 4px;
+    display: flex; gap: 6px; overflow-x: hidden; padding: 16px 16px 4px;
     -webkit-overflow-scrolling: touch; scrollbar-width: none;
   }
   nav.tabs::-webkit-scrollbar { display: none; }
   .tab-btn {
-    flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 9px 14px 9px 11px; border-radius: 22px; border: 1.5px solid var(--gray-300);
-    background: white; color: var(--gray-600); font-size: 12.5px; font-weight: 600; font-family: 'Manrope', sans-serif;
+    flex: 0 0 auto; display: flex; align-items: center; gap: 5px; padding: 8px 11px 8px 9px; border-radius: 22px; border: 1.5px solid var(--gray-300);
+    background: white; color: var(--gray-600); font-size: 11.5px; font-weight: 600; font-family: 'Manrope', sans-serif;
     cursor: pointer; white-space: nowrap; transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
   }
   .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
@@ -937,7 +937,7 @@
   <nav class="tabs" id="tabs-nav">
     <button class="tab-btn" data-tab="bienvenida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>Mi día</button>
     <button class="tab-btn" data-tab="esta-semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>Esta semana</button>
-    <button class="tab-btn" data-tab="ocasional"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Mi presión arterial</button>
+    <button class="tab-btn" data-tab="ocasional"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Presión</button>
     <button class="tab-btn tab-btn-icon" data-tab="mensajes" aria-label="Mensajes" title="Mensajes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c0 4.42-4.03 8-9 8-1.3 0-2.53-.24-3.64-.68L4 21l1.05-3.16A7.93 7.93 0 0 1 3 12c0-4.42 4.03-8 9-8s9 3.58 9 8z"/></svg></button>
   </nav>
 
@@ -1305,68 +1305,26 @@
       <button type="button" class="tertiary" id="mis-datos-volver-btn" style="margin-bottom:4px;">← Volver</button>
       <div class="card mis-datos-hero">
         <h2>Mis datos</h2>
-        <p class="helper">Completá esta sección una vez al empezar. Podés volver cuando quieras a modificarla — tu médica va a ver siempre la información más reciente.</p>
+        <p class="helper">Elegí qué querés cargar o revisar.</p>
       </div>
 
-      <button type="button" class="ver-previos-btn" id="abrir-datos-personales-btn" style="margin:0 4px 16px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg>
-        <span class="vp-label">Editar datos personales</span>
-      </button>
-
-      <div id="seccion-embarazos-ocasional">
-      <div class="card embarazo-actual-card" id="embarazo-actual-card">
-        <div class="emb-actual-header">
-          <div class="emb-illus">
-            <svg viewBox="0 0 100 100" fill="none">
-              <circle cx="50" cy="56" r="30" fill="#FBEAD9" stroke="#C77B4A" stroke-width="2"/>
-              <path d="M50 47c-4-6-14-6-14 3 0 7 14 15 14 15s14-8 14-15c0-9-10-9-14-3z" fill="#E3986A" stroke="#C77B4A" stroke-width="1.3"/>
-              <circle cx="28" cy="28" r="2" fill="#E3986A"/>
-              <circle cx="74" cy="24" r="1.6" fill="#E3986A"/>
-              <circle cx="80" cy="46" r="1.3" fill="#E3986A"/>
-            </svg>
-          </div>
-          <div>
-            <h2 style="margin-bottom:2px;">Mi embarazo actual</h2>
-            <div class="emb-actual-sub">La info que va guiando el resto de la app</div>
-          </div>
+      <div class="md-big-card" id="abrir-datos-personales-btn">
+        <div class="mdb-icon" style="background:var(--violet-light); color:var(--violet-dark);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/></svg>
         </div>
-
-        <p class="helper" style="margin-top:14px;">Completá la fecha de última menstruación (FUM) y/o los datos de la ecografía datante. Si tu obstetra ya te indicó la fecha probable de parto, cargala también — es la que usamos con prioridad.</p>
-
-        <label for="ge-fum">Fecha de última menstruación (FUM)</label>
-        <input type="date" id="ge-fum">
-
-        <label for="ge-fecha-eco" style="margin-top:12px;">Fecha de la ecografía datante</label>
-        <input type="date" id="ge-fecha-eco">
-        <div class="fila-2col">
-          <div><label for="ge-eco-sem">Semanas (en la eco)</label><input type="number" id="ge-eco-sem" min="0" max="42"></div>
-          <div><label for="ge-eco-dias">Días</label><input type="number" id="ge-eco-dias" min="0" max="6"></div>
-        </div>
-
-        <label for="ge-fpp">Fecha probable de parto (si tu obstetra ya te la indicó)</label>
-        <input type="date" id="ge-fpp">
-        <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
-        <div class="check-row" style="margin-top:10px;"><input type="checkbox" id="ge-hta-gestacional"><label for="ge-hta-gestacional" style="margin:0;">Me diagnosticaron hipertensión gestacional en este embarazo</label></div>
-
-        <h2 style="margin-top:18px;"><span class="md-icon md-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg></span>Antes de empezar el embarazo</h2>
-        <p class="helper">Con esto calculamos tu IMC pregestacional y tu objetivo de aumento de peso — se usa después en la solapa "Curva ponderal".</p>
-        <div class="fila-2col">
-          <div><label for="md-altura">Altura (cm)</label><input type="number" id="md-altura" step="0.1"></div>
-          <div><label for="md-peso-preg">Peso (kg)</label><input type="number" id="md-peso-preg" step="0.1"></div>
-        </div>
-        <div class="imc-badge" id="imc-preview-badge" style="display:none;"></div>
+        <div><div class="mdb-titulo">Cargar datos personales</div><div class="mdb-sub">WhatsApp, antecedentes, estilo de vida</div></div>
+        <div class="mdb-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
 
-      <div class="card">
-        <h2>Embarazos previos</h2>
-        <p class="helper">Agregá uno por cada embarazo anterior, aunque no haya tenido complicaciones. Es información importante para tu seguimiento.</p>
-        <div id="previos-list"></div>
-        <button type="button" class="tertiary" id="add-previo-btn">+ Agregar otro embarazo previo</button>
-        <button class="primary" id="guardar-embarazos-btn">Guardar</button>
-        <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
-      </div>
+      <div class="md-big-card" id="abrir-embarazos-btn">
+        <div class="mdb-icon" style="background:#FBEAD9; color:#C77B4A;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/></svg>
+        </div>
+        <div><div class="mdb-titulo">Mis embarazos</div><div class="mdb-sub">Embarazo actual y previos</div></div>
+        <div class="mdb-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
     </div>
+
 
     <div class="modal-backdrop" id="datos-personales-modal">
       <div class="modal-card" style="text-align:left;">
@@ -1445,6 +1403,69 @@
       </div>
     </div>
 
+
+    <div class="modal-backdrop" id="embarazos-modal">
+      <div class="modal-card" style="text-align:left;">
+        <button class="modal-close-btn" id="cerrar-embarazos-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <h2 style="margin-bottom:14px; font-family:'Fraunces',serif; color:var(--violet-deep);">Mis embarazos</h2>
+
+        <div id="seccion-embarazos-ocasional">
+        <div class="card embarazo-actual-card" id="embarazo-actual-card">
+          <div class="emb-actual-header">
+            <div class="emb-illus">
+              <svg viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="56" r="30" fill="#FBEAD9" stroke="#C77B4A" stroke-width="2"/>
+                <path d="M50 47c-4-6-14-6-14 3 0 7 14 15 14 15s14-8 14-15c0-9-10-9-14-3z" fill="#E3986A" stroke="#C77B4A" stroke-width="1.3"/>
+                <circle cx="28" cy="28" r="2" fill="#E3986A"/>
+                <circle cx="74" cy="24" r="1.6" fill="#E3986A"/>
+                <circle cx="80" cy="46" r="1.3" fill="#E3986A"/>
+              </svg>
+            </div>
+            <div>
+              <h2 style="margin-bottom:2px;">Mi embarazo actual</h2>
+              <div class="emb-actual-sub">La info que va guiando el resto de la app</div>
+            </div>
+          </div>
+
+          <p class="helper" style="margin-top:14px;">Completá la fecha de última menstruación (FUM) y/o los datos de la ecografía datante. Si tu obstetra ya te indicó la fecha probable de parto, cargala también — es la que usamos con prioridad.</p>
+
+          <label for="ge-fum">Fecha de última menstruación (FUM)</label>
+          <input type="date" id="ge-fum">
+
+          <label for="ge-fecha-eco" style="margin-top:12px;">Fecha de la ecografía datante</label>
+          <input type="date" id="ge-fecha-eco">
+          <div class="fila-2col">
+            <div><label for="ge-eco-sem">Semanas (en la eco)</label><input type="number" id="ge-eco-sem" min="0" max="42"></div>
+            <div><label for="ge-eco-dias">Días</label><input type="number" id="ge-eco-dias" min="0" max="6"></div>
+          </div>
+
+          <label for="ge-fpp">Fecha probable de parto (si tu obstetra ya te la indicó)</label>
+          <input type="date" id="ge-fpp">
+          <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
+          <div class="check-row" style="margin-top:10px;"><input type="checkbox" id="ge-hta-gestacional"><label for="ge-hta-gestacional" style="margin:0;">Me diagnosticaron hipertensión gestacional en este embarazo</label></div>
+
+          <h2 style="margin-top:18px;"><span class="md-icon md-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg></span>Antes de empezar el embarazo</h2>
+          <p class="helper">Con esto calculamos tu IMC pregestacional y tu objetivo de aumento de peso — se usa después en la solapa "Curva ponderal".</p>
+          <div class="fila-2col">
+            <div><label for="md-altura">Altura (cm)</label><input type="number" id="md-altura" step="0.1"></div>
+            <div><label for="md-peso-preg">Peso (kg)</label><input type="number" id="md-peso-preg" step="0.1"></div>
+          </div>
+          <div class="imc-badge" id="imc-preview-badge" style="display:none;"></div>
+        </div>
+
+        <div class="card">
+          <h2>Embarazos previos</h2>
+          <p class="helper">Agregá uno por cada embarazo anterior, aunque no haya tenido complicaciones. Es información importante para tu seguimiento.</p>
+          <div id="previos-list"></div>
+          <button type="button" class="tertiary" id="add-previo-btn">+ Agregar otro embarazo previo</button>
+          <button class="primary" id="guardar-embarazos-btn">Guardar</button>
+          <p id="embarazos-guardado-msg" style="display:none; color:var(--teal); font-size:13px; font-weight:600; margin-top:10px;">Guardado ✓</p>
+        </div>
+        </div>
+      </div>
+    </div>
 
     <!-- MENSAJES -->
     <div class="panel" id="panel-mensajes">
@@ -1552,6 +1573,15 @@
     });
     document.getElementById("datos-personales-modal").addEventListener("click", (e) => {
       if (e.target.id === "datos-personales-modal") document.getElementById("datos-personales-modal").classList.remove("show");
+    });
+    document.getElementById("abrir-embarazos-btn").addEventListener("click", () => {
+      document.getElementById("embarazos-modal").classList.add("show");
+    });
+    document.getElementById("cerrar-embarazos-btn").addEventListener("click", () => {
+      document.getElementById("embarazos-modal").classList.remove("show");
+    });
+    document.getElementById("embarazos-modal").addEventListener("click", (e) => {
+      if (e.target.id === "embarazos-modal") document.getElementById("embarazos-modal").classList.remove("show");
     });
   }
 
