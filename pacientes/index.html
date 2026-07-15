@@ -279,18 +279,18 @@
   .patron-resultado-badge.adecuada { background: var(--teal-light); color: var(--teal-dark); }
 
   nav.tabs {
-    display: flex; gap: 6px; overflow-x: hidden; padding: 16px 16px 4px;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    display: flex; gap: 5px; overflow-x: hidden; padding: 16px 14px 4px;
   }
-  nav.tabs::-webkit-scrollbar { display: none; }
   .tab-btn {
-    flex: 0 0 auto; display: flex; align-items: center; gap: 5px; padding: 8px 11px 8px 9px; border-radius: 22px; border: 1.5px solid var(--gray-300);
-    background: white; color: var(--gray-600); font-size: 11.5px; font-weight: 600; font-family: 'Manrope', sans-serif;
+    flex: 1 1 0; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 8px 6px; border-radius: 22px; border: 1.5px solid var(--gray-300);
+    background: white; color: var(--gray-600); font-size: 10.5px; font-weight: 600; font-family: 'Manrope', sans-serif;
     cursor: pointer; white-space: nowrap; transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
   }
-  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .tab-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
   .tab-btn.active { background: linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0) 60%), var(--tab-accent); border-color: var(--tab-accent); color: white; box-shadow: 0 4px 12px -4px var(--tab-accent), inset 0 1px 0 rgba(255,255,255,0.3); }
-  .tab-btn-icon { padding: 9px 10px; }
+  .tab-btn-icon { flex: 0 0 auto; padding: 8px 11px; }
+  .tab-btn-icon svg { width: 16px; height: 16px; }
   .tab-btn-especial {
     background: linear-gradient(135deg, #C79A4B 0%, #8B5CB8 100%);
     border-color: transparent; color: white; font-weight: 800;
@@ -376,7 +376,7 @@
   button.secondary:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(91,62,150,0.15); }
 
   /* Embarazo actual — card cálida */
-  .embarazo-actual-card { background: linear-gradient(160deg, #FBEEE3 0%, #FDF8F3 100%); border-color: #F0D8C2; }
+  .embarazo-actual-card { background: linear-gradient(160deg, #FBEEE3 0%, #FDF8F3 100%); border-color: #F0D8C2; box-shadow: 0 10px 28px -14px rgba(199,123,74,0.35), var(--shadow-inset-top); }
   .embarazo-actual-card input[type="date"], .embarazo-actual-card input[type="number"] {
     background: #FFFBF6; border-color: #EAD2B8;
   }
@@ -386,8 +386,17 @@
   .embarazo-actual-card label { color: #7A5230; }
   .embarazo-actual-card h2 { font-family: 'Fraunces', serif; }
   .emb-actual-header { display: flex; align-items: center; gap: 14px; }
+  .emb-illus-halo {
+    width: 68px; height: 68px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle, rgba(227,152,106,0.28) 0%, rgba(227,152,106,0) 72%);
+  }
   .emb-illus { width: 62px; height: 62px; flex-shrink: 0; }
   .emb-illus svg { width: 100%; height: 100%; }
+  .emb-divisor {
+    display: flex; align-items: center; gap: 10px; margin: 22px 0 14px;
+  }
+  .emb-divisor::before, .emb-divisor::after { content: ""; flex: 1; height: 1px; background: #EAD2B8; }
+  .emb-divisor span { font-size: 10.5px; font-weight: 700; color: #B9814F; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
   .emb-actual-sub { font-size: 12px; color: #9C6B45; font-weight: 600; }
   .fuente-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
   .fuente-opcion {
@@ -765,6 +774,20 @@
   .check-row input[type="checkbox"] { width: 18px; height: 18px; margin: 0; flex-shrink: 0; }
   .gesta-block { border: 1px dashed var(--gray-300); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
   .gesta-block .check-row { padding: 5px 0; }
+  .embarazo-actual-card .gesta-block { border-color: #EAD2B8; background: #FFFBF6; }
+  #datos-personales-modal .card {
+    background: linear-gradient(160deg, #F3EEFC 0%, #FDFBFF 100%); border-color: #DDD0F5;
+    box-shadow: 0 10px 28px -16px rgba(91,62,150,0.28), var(--shadow-inset-top);
+  }
+  #datos-personales-modal .card input[type="text"], #datos-personales-modal .card input[type="date"],
+  #datos-personales-modal .card input[type="number"], #datos-personales-modal .card select {
+    background: #FBF9FF; border-color: #DDD0F5;
+  }
+  #datos-personales-modal .card input:focus, #datos-personales-modal .card select:focus {
+    border-color: #7C5FC4; box-shadow: 0 0 0 3px rgba(124,95,196,0.14);
+  }
+  #datos-personales-modal .card label { color: #5B3E96; }
+  #datos-personales-modal .card h2 { font-family: 'Fraunces', serif; color: #453072; }
   button.tertiary { background: none; border: 1.5px dashed var(--violet); color: var(--violet); border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; width: 100%; cursor: pointer; margin-bottom: 10px; }
   button.remove-gesta { background: none; border: none; color: var(--pink); font-size: 12px; font-weight: 700; cursor: pointer; padding: 4px 0; }
   .fila-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -936,8 +959,8 @@
 
   <nav class="tabs" id="tabs-nav">
     <button class="tab-btn" data-tab="bienvenida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/></svg>Mi día</button>
-    <button class="tab-btn" data-tab="esta-semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>Esta semana</button>
-    <button class="tab-btn" data-tab="ocasional"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Presión</button>
+    <button class="tab-btn" data-tab="esta-semana"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>Mi semana</button>
+    <button class="tab-btn" data-tab="ocasional"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg>Mi presión arterial</button>
     <button class="tab-btn tab-btn-icon" data-tab="mensajes" aria-label="Mensajes" title="Mensajes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c0 4.42-4.03 8-9 8-1.3 0-2.53-.24-3.64-.68L4 21l1.05-3.16A7.93 7.93 0 0 1 3 12c0-4.42 4.03-8 9-8s9 3.58 9 8z"/></svg></button>
   </nav>
 
@@ -1414,6 +1437,7 @@
         <div id="seccion-embarazos-ocasional">
         <div class="card embarazo-actual-card" id="embarazo-actual-card">
           <div class="emb-actual-header">
+            <div class="emb-illus-halo">
             <div class="emb-illus">
               <svg viewBox="0 0 100 100" fill="none">
                 <circle cx="50" cy="56" r="30" fill="#FBEAD9" stroke="#C77B4A" stroke-width="2"/>
@@ -1422,6 +1446,7 @@
                 <circle cx="74" cy="24" r="1.6" fill="#E3986A"/>
                 <circle cx="80" cy="46" r="1.3" fill="#E3986A"/>
               </svg>
+            </div>
             </div>
             <div>
               <h2 style="margin-bottom:2px;">Mi embarazo actual</h2>
@@ -1446,7 +1471,7 @@
           <div class="pill-teal" id="edad-gestacional-badge" style="display:none;"></div>
           <div class="check-row" style="margin-top:10px;"><input type="checkbox" id="ge-hta-gestacional"><label for="ge-hta-gestacional" style="margin:0;">Me diagnosticaron hipertensión gestacional en este embarazo</label></div>
 
-          <h2 style="margin-top:18px;"><span class="md-icon md-icon-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10.5" width="18" height="9.5" rx="2.2"/><circle cx="12" cy="15.2" r="2.3"/><path d="M9.2 10.5l1.4-4h2.8l1.4 4"/></svg></span>Antes de empezar el embarazo</h2>
+          <div class="emb-divisor"><span>Antes de empezar el embarazo</span></div>
           <p class="helper">Con esto calculamos tu IMC pregestacional y tu objetivo de aumento de peso — se usa después en la solapa "Curva ponderal".</p>
           <div class="fila-2col">
             <div><label for="md-altura">Altura (cm)</label><input type="number" id="md-altura" step="0.1"></div>
@@ -1455,7 +1480,7 @@
           <div class="imc-badge" id="imc-preview-badge" style="display:none;"></div>
         </div>
 
-        <div class="card">
+        <div class="card embarazo-actual-card">
           <h2>Embarazos previos</h2>
           <p class="helper">Agregá uno por cada embarazo anterior, aunque no haya tenido complicaciones. Es información importante para tu seguimiento.</p>
           <div id="previos-list"></div>
@@ -1880,7 +1905,10 @@
       if (!valor && valor !== 0) return;
       guardarBtn.disabled = true; guardarBtn.textContent = "Guardando...";
       await sb.rpc("registrar_pasos_diarios", { p_token: session.token, p_dia: hoyISO, p_pasos: valor });
-      mostrarToastBienvenida("¡Buenísimo! 💜", "Quedaron registrados tus pasos de hoy.");
+      const { data } = await sb.rpc("obtener_racha_pasos", { p_token: session.token });
+      const hito = mensajeParaRacha((data && data.ok) ? data.racha : 0);
+      if (hito) mostrarToastBienvenida(hito.titulo, hito.texto);
+      else mostrarToastBienvenida("¡Buenísimo! 💜", "Quedaron registrados tus pasos de hoy.");
       renderMiDia();
     });
     const editarBtn = document.getElementById("pasos-editar-btn");
@@ -1894,6 +1922,17 @@
       await sb.rpc("registrar_pasos_diarios", { p_token: session.token, p_dia: hoyISO, p_pasos: valor });
       renderMiDia();
     });
+  }
+
+  const HITOS_RACHA = {
+    7: { titulo: "¡7 días seguidos! 🎉", texto: "Una semana entera de constancia — vas muy bien." },
+    14: { titulo: "¡14 días seguidos! 🎉", texto: "Dos semanas sin cortar la racha, ¡buenísimo!" },
+    30: { titulo: "¡30 días seguidos! 🎉", texto: "Un mes entero de constancia. Estás haciendo algo grande por vos." },
+    60: { titulo: "¡60 días seguidos! 🎉", texto: "Dos meses de racha — un cuidado admirable." },
+    90: { titulo: "¡90 días seguidos! 🎉", texto: "Tres meses sin cortar la racha. ¡Impresionante constancia!" }
+  };
+  function mensajeParaRacha(racha) {
+    return HITOS_RACHA[racha] || null;
   }
 
   const TIPOS_CON_INFO = ["aspirina", "calcio"];
@@ -2191,9 +2230,10 @@
     const yaNacio = !!(ctData && ctData.fecha_parto);
 
     let html = "";
+    let hayCtPendiente = false;
 
     if (yaNacio) {
-      // Recordatorio "Tenés un control pendiente" removido de esta pantalla.
+      hayCtPendiente = (ctData.items || []).some(it => it.vigente && !it.cumplido);
     } else {
       if (session.indicacion_aspirina) {
         const registros = (aspRes.data && aspRes.data.ok) ? aspRes.data.registros : [];
@@ -2238,7 +2278,7 @@
     }
 
     const pasosYaHoy = (pasosRes.data && pasosRes.data.ok) ? pasosRes.data.registros.some(r => r.dia === hoyISO) : false;
-    const diaCompleto = !html && pasosYaHoy;
+    const diaCompleto = !html && pasosYaHoy && !hayCtPendiente;
 
     if (!html) {
       html = `<div class="md-todo-listo">
@@ -2286,7 +2326,10 @@
       for (let i = 0; i < frecuencia; i++) dosisHoy["dosis_" + (i + 1)] = true;
       const fecha = fechaLocalHoy();
       await sb.rpc("guardar_calcio_suplemento", { p_token: session.token, p_dia: fecha, p_dosis: dosisHoy });
-      mostrarToastBienvenida("¡Buenísimo! 💜", "Quedó registrado tu suplemento de hoy.");
+      const { data } = await sb.rpc("obtener_racha_calcio", { p_token: session.token });
+      const hito = mensajeParaRacha((data && data.ok) ? data.racha : 0);
+      if (hito) mostrarToastBienvenida(hito.titulo, hito.texto);
+      else mostrarToastBienvenida("¡Buenísimo! 💜", "Quedó registrado tu suplemento de hoy.");
       renderMiDia();
     });
 
@@ -2298,7 +2341,14 @@
   async function marcarAspirinaDesdeMiDia(tomada) {
     const hoyISO = fechaLocalHoy();
     await sb.rpc("registrar_aspirina", { p_token: session.token, p_dia: hoyISO, p_tomada: tomada });
-    mostrarToastBienvenida(tomada ? "¡Buenísimo! 💜" : "Listo, gracias por contarme", "Quedó registrado en tu calendario de aspirina.");
+    if (tomada) {
+      const { data } = await sb.rpc("obtener_racha_aspirina", { p_token: session.token });
+      const hito = mensajeParaRacha((data && data.ok) ? data.racha : 0);
+      if (hito) mostrarToastBienvenida(hito.titulo, hito.texto);
+      else mostrarToastBienvenida("¡Buenísimo! 💜", "Quedó registrado en tu calendario de aspirina.");
+    } else {
+      mostrarToastBienvenida("Listo, gracias por contarme", "Quedó registrado en tu calendario de aspirina.");
+    }
     renderMiDia();
   }
 
@@ -3358,6 +3408,15 @@
       p_trabajo_sedentario: trabajoSedentario, p_pausas_activas: pausasActivas
     });
     btn.disabled = false; btn.textContent = "Guardar semana";
+
+    const diasActivos = DIAS_SEMANA.filter(d => diasActividad[d]).length;
+    if (diasActivos === 7) {
+      const yaFestejadaSemana = localStorage.getItem("siempre_festejo_semana_" + semanaInicio);
+      if (!yaFestejadaSemana) {
+        localStorage.setItem("siempre_festejo_semana_" + semanaInicio, "1");
+        mostrarToastBienvenida("¡Semana completa! 🎉", "Te moviste los 7 días de la semana — un montón de constancia.");
+      }
+    }
   });
 
   document.getElementById("ct-riesgo-link").addEventListener("click", () => {
@@ -3445,6 +3504,10 @@
         const nuevo = !btn.classList.contains("on");
         btn.disabled = true;
         await sb.rpc("marcar_etapa_cuarto_trimestre", { p_token: session.token, p_etapa: btn.dataset.etapa, p_cumplido: nuevo });
+        if (nuevo) {
+          const info = PARADA_INFO[btn.dataset.etapa];
+          mostrarToastBienvenida("¡Etapa cumplida! 🎉", info ? `Completaste "${info.titulo}" — seguís cuidándote.` : "Seguís cuidándote.");
+        }
         initCuartoTrimestre();
       });
     });
