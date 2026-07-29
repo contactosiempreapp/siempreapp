@@ -970,7 +970,7 @@
   .peso-flecha { color: var(--violet); flex-shrink: 0; }
   .peso-flecha svg { width: 20px; height: 20px; }
 
-  .imc-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+  .imc-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 16px; margin-bottom: 12px; }
   .imc-cat-card {
     border: 1.5px solid var(--gray-300); border-radius: 10px; padding: 8px 4px; text-align: center; background: white;
     opacity: 0.55; position: relative;
@@ -1392,9 +1392,12 @@
         <p class="helper">Pasado el primer trimestre del posparto, te sugerimos medir tu perímetro de cintura una vez al mes en lugar del peso — es un mejor indicador de tu riesgo cardiometabólico en esta etapa.</p>
         <div id="pc-info"></div>
         <div id="pc-chart-wrap"></div>
-        <label for="pc-medida">Perímetro de cintura (cm)</label>
-        <input type="number" id="pc-medida" step="0.1">
-        <button class="secondary" id="guardar-pc-btn">Guardar medida</button>
+        <div id="pc-inactivo-msg" class="helper" style="display:none; background:var(--lila-50, #F3F1FA); border-radius:10px; padding:10px 12px; margin:10px 0;"></div>
+        <div id="pc-form">
+          <label for="pc-medida">Perímetro de cintura (cm)</label>
+          <input type="number" id="pc-medida" step="0.1">
+          <button class="secondary" id="guardar-pc-btn">Guardar medida</button>
+        </div>
         <div id="pc-historial" style="margin-top:16px;"></div>
       </div>
     </div>
@@ -3916,13 +3919,16 @@
   async function initCurvaPonderal() {
     const { data: ctData } = await sb.rpc("obtener_cuarto_trimestre", { p_token: session.token });
     const yaNacio = !!(ctData && ctData.ok && ctData.fecha_parto);
-    const usarPerimetro = yaNacio && ctData.dias_desde_parto >= DIAS_FIN_PRIMER_TRIMESTRE_PP;
+    const diasDesdeParto = yaNacio ? ctData.dias_desde_parto : 0;
 
-    document.getElementById("curva-ponderal-card").style.display = usarPerimetro ? "none" : "block";
-    document.getElementById("perimetro-cintura-card").style.display = usarPerimetro ? "block" : "none";
+    // La curva ponderal se muestra durante todo el embarazo. Apenas nace el
+    // bebé pasamos a la card de perímetro de cintura, que queda inactiva
+    // (sin poder cargar medidas) hasta cumplir el primer trimestre posparto.
+    document.getElementById("curva-ponderal-card").style.display = yaNacio ? "none" : "block";
+    document.getElementById("perimetro-cintura-card").style.display = yaNacio ? "block" : "none";
 
-    if (usarPerimetro) {
-      initPerimetroCintura();
+    if (yaNacio) {
+      initPerimetroCintura(diasDesdeParto);
     } else {
       renderCurvaPonderal();
     }
@@ -3965,7 +3971,7 @@
         { cat: "Sobrepeso", min: 7, max: 11.5 },
         { cat: "Obesidad", min: 5, max: 9 }
       ];
-      html += `<p style="font-size:11.5px;color:var(--gray-600);margin:0 0 6px;">Según el peso con el que arrancaste el embarazo, tu categoría era:</p>`;
+      html += `<p style="font-size:11.5px;color:var(--gray-600);margin:0 0 10px;">Según el peso con el que arrancaste el embarazo, tu categoría era:</p>`;
       html += `<div class="imc-cat-grid">`;
       CATEGORIAS.forEach(c => {
         const activa = c.cat === clasif.cat;
@@ -4052,7 +4058,21 @@
     return { texto: "dentro de rango saludable", clase: "banner-ok" };
   }
 
-  async function initPerimetroCintura() {
+  let pcDiasDesdeParto = 0;
+  async function initPerimetroCintura(diasDesdeParto) {
+    if (typeof diasDesdeParto === "number") pcDiasDesdeParto = diasDesdeParto;
+    const inactivo = pcDiasDesdeParto < DIAS_FIN_PRIMER_TRIMESTRE_PP;
+    const pcForm = document.getElementById("pc-form");
+    const pcInactivoMsg = document.getElementById("pc-inactivo-msg");
+    if (pcForm) pcForm.style.display = inactivo ? "none" : "block";
+    if (pcInactivoMsg) {
+      pcInactivoMsg.style.display = inactivo ? "block" : "none";
+      if (inactivo) {
+        const diasRestantes = DIAS_FIN_PRIMER_TRIMESTRE_PP - pcDiasDesdeParto;
+        pcInactivoMsg.textContent = `Por ahora no hace falta que midas tu perímetro de cintura: en los primeros meses del posparto no es un dato necesario. Vas a poder empezar a cargarlo en ${diasRestantes} día${diasRestantes === 1 ? "" : "s"}, cuando se cumpla tu primer trimestre posparto.`;
+      }
+    }
+
     const { data, error } = await sb.rpc("obtener_perimetro_cintura", { p_token: session.token });
     const info = document.getElementById("pc-info");
     if (error) console.error("Error en obtener_perimetro_cintura:", error);
@@ -4587,6 +4607,7 @@
     await sb.rpc("guardar_fecha_parto", { p_token: session.token, p_fecha_parto: fecha, p_tuvo_the: tuvoThe });
     btn.disabled = false; btn.textContent = "Activar mi seguimiento";
     initCuartoTrimestre();
+    initCurvaPonderal();
   });
 
   // ================= MIS DATOS =================
