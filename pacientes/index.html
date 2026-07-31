@@ -33,6 +33,7 @@
     --amber-light: #FBF0DF;
     --coral: #D9544A;
     --coral-light: #FBEAE8;
+    --coral-dark: #B33A31;
     --indigo: #5B5FA8;
     --indigo-light: #EDEDF7;
     --plum: #7C4E7A;
@@ -771,16 +772,45 @@
 
   .ct-periodo-card { border: 1.5px solid var(--violet-light); }
   .ct-periodo-titulo { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--violet-dark); margin-bottom: 10px; }
-  .ct-periodo-pa-box { background: var(--gray-100); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
-  .ct-periodo-pa-texto { font-size: 13px; color: var(--gray-900); font-weight: 600; line-height: 1.45; }
-  .ct-periodo-pa-estado { font-size: 12px; margin-top: 6px; font-weight: 700; }
+  .ct-periodo-pa-box {
+    position: relative; overflow: hidden; isolation: isolate;
+    background:
+      radial-gradient(120% 140% at 8% 0%, #FFE3D6 0%, rgba(255,227,214,0) 55%),
+      radial-gradient(130% 150% at 100% 15%, #F6B9C4 0%, rgba(246,185,196,0) 50%),
+      radial-gradient(140% 160% at 15% 100%, #E68A85 0%, rgba(230,138,133,0) 55%),
+      linear-gradient(155deg, #FDEEE9 0%, #FBDCD6 38%, #F3BFC0 68%, #E6A6A0 100%);
+    border: 1px solid rgba(179, 58, 49, 0.28);
+    border-radius: 16px; padding: 16px 18px; margin-bottom: 10px;
+    box-shadow: 0 6px 18px -8px rgba(179, 58, 49, 0.35), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .ct-periodo-pa-box::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: linear-gradient(120deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0.18) 55%, rgba(255,255,255,0) 75%);
+    mix-blend-mode: soft-light;
+  }
+  .ct-periodo-pa-box::after {
+    content: ""; position: absolute; top: -30%; right: -18%; width: 65%; height: 160%; z-index: 0; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 65%);
+    opacity: 0.8;
+  }
+  .ct-periodo-pa-box > * { position: relative; z-index: 1; }
+  .ct-periodo-pa-texto { font-size: 14.5px; color: var(--coral-dark); font-weight: 800; line-height: 1.4; font-family: 'Manrope', sans-serif; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
+  .ct-periodo-pa-estado { font-size: 13.5px; margin-top: 8px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
   .ct-periodo-pa-estado.ok { color: var(--teal-dark); }
-  .ct-periodo-pa-estado.pendiente { color: var(--gray-600); }
-  .ct-periodo-pa-hoy-titulo { font-size: 13px; font-weight: 700; color: var(--gray-900); margin-top: 8px; }
+  .ct-periodo-pa-estado.ok::before { content: "✓"; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: var(--teal); color: white; font-size: 11px; flex-shrink: 0; }
+  .ct-periodo-pa-estado.pendiente { color: var(--coral-dark); }
+  .ct-periodo-pa-estado.pendiente::before { content: "●"; color: var(--coral); font-size: 10px; }
+  .ct-periodo-pa-hoy-titulo { font-size: 14px; font-weight: 800; color: var(--coral-dark); margin-top: 8px; font-family: 'Manrope', sans-serif; }
   .ct-periodo-pa-puntos { display: flex; gap: 8px; margin-top: 8px; }
-  .ct-pa-punto { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--gray-300); background: white; flex-shrink: 0; transition: background 0.2s, border-color 0.2s; }
-  .ct-pa-punto.lleno { background: var(--teal); border-color: var(--teal-dark); }
-  .ct-periodo-pa-hoy-sub { font-size: 12px; margin-top: 8px; font-weight: 700; color: var(--gray-600); }
+  .ct-pa-punto { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--coral); background: rgba(255,255,255,0.75); flex-shrink: 0; transition: background 0.2s, border-color 0.2s; box-shadow: inset 0 1px 2px rgba(179,58,49,0.15); }
+  .ct-pa-punto.lleno { background: linear-gradient(160deg, #EA8A7C, var(--coral) 60%, var(--coral-dark)); border-color: var(--coral-dark); box-shadow: 0 1px 3px rgba(179,58,49,0.4); }
+  .ct-periodo-pa-hoy-sub { font-size: 12.5px; margin-top: 8px; font-weight: 700; color: var(--coral-dark); }
+  .ct-periodo-pa-controles-link {
+    display: block; width: 100%; margin-top: 10px; background: none; border: none; padding: 4px 0 0;
+    font-family: 'Manrope', sans-serif; font-size: 12.5px; font-weight: 700; color: var(--coral-dark);
+    text-decoration: underline; text-underline-offset: 2px; text-align: left; cursor: pointer; opacity: 0.85;
+  }
+  .ct-periodo-pa-controles-link:hover { opacity: 1; }
   .ct-periodo-control-box { background: var(--amber-light); border-radius: 12px; padding: 12px 14px; }
   .ct-periodo-control-texto { font-size: 13px; color: #6E4E14; font-weight: 600; line-height: 1.45; }
   .ct-periodo-porque-btn {
@@ -824,63 +854,63 @@
   .ct-hoy-banner ul { margin: 6px 0 0; padding-left: 18px; }
   .ct-hoy-banner li { margin-bottom: 3px; }
 
-  .ct-timeline-wrap { margin: 4px 0 20px; }
-  .ct-timeline-track {
-    position: relative; height: 34px; border-radius: 10px; background: var(--gray-100); overflow: visible; margin: 0 4px;
-  }
-  .ct-timeline-zona { position: absolute; top: 0; height: 100%; opacity: 0.55; }
-  .ct-timeline-zona:first-child { border-radius: 10px 0 0 10px; }
-  .ct-timeline-marca {
-    position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: white;
-    border: 2px solid var(--gray-600); transform: translate(-50%, -50%); cursor: default;
-  }
-  .ct-timeline-marca.vigente { border-color: #B8873F; background: #F0D8A8; box-shadow: 0 0 0 3px rgba(184,135,63,0.25); }
-  .ct-timeline-marca.cumplido { border-color: var(--teal); background: var(--teal); }
-  .ct-timeline-hoy { position: absolute; top: -8px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
-  .ct-timeline-hoy-dot {
-    width: 14px; height: 14px; border-radius: 50%; background: var(--violet); border: 2px solid white;
-    box-shadow: 0 0 0 3px rgba(91,62,150,0.3); animation: hoyPulse 1.8s ease-in-out infinite;
-  }
   @keyframes hoyPulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(91,62,150,0.3); } 50% { box-shadow: 0 0 0 6px rgba(91,62,150,0.15); } }
-  .ct-timeline-hoy-label { font-size: 9px; font-weight: 800; color: var(--violet-dark); margin-top: 2px; white-space: nowrap; }
-  .ct-timeline-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--gray-600); margin-top: 6px; padding: 0 4px; }
 
-  .ct-fechas-proximas-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12.5px; color: var(--gray-600); margin: 16px 4px 8px; }
-  .ct-fechas-proximas-grid { display: flex; flex-direction: column; gap: 8px; }
-  .ct-fecha-chip {
-    display: flex; align-items: center; gap: 12px; border-radius: 14px; padding: 9px 12px;
-    background: linear-gradient(160deg, #FFFFFF 0%, #F7F5FC 100%);
-    box-shadow: 0 1px 1px rgba(34,24,60,0.04), 0 3px 8px -3px rgba(34,24,60,0.14), inset 0 1px 0 rgba(255,255,255,0.7);
+  /* Línea de tiempo vertical única de controles postparto: un solo lugar
+     donde ver qué controles hay, con fecha, estado (cumplido/ahora/futuro)
+     y sin repetir la misma info en dos formatos distintos. */
+  .ct-linea-wrap { display: flex; flex-direction: column; margin: 6px 0 4px; }
+  .ct-linea-item { display: flex; gap: 14px; }
+  .ct-linea-rail { display: flex; flex-direction: column; align-items: center; width: 30px; flex-shrink: 0; }
+  .ct-linea-dot {
+    width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--gray-300); background: white; color: white; flex-shrink: 0;
   }
-  .ct-fecha-chip.vigente { background: linear-gradient(160deg, #FDF3E3 0%, #FBEACB 100%); box-shadow: 0 2px 8px -3px rgba(184,135,63,0.4), inset 0 1px 0 rgba(255,255,255,0.6); }
-  .ct-fecha-chip-fecha {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; width: 46px; height: 46px;
-    border-radius: 13px; flex-shrink: 0; color: white;
-    background: linear-gradient(160deg, #8F76C9, var(--violet) 65%, var(--violet-dark) 100%);
-    box-shadow: 0 2px 6px -1px rgba(91,62,150,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  .ct-linea-dot svg { width: 15px; height: 15px; }
+  .ct-linea-dot.cumplido { background: var(--teal); border-color: var(--teal-dark); }
+  .ct-linea-dot.vigente { background: #F0D8A8; border-color: #B8873F; box-shadow: 0 0 0 4px rgba(184,135,63,0.18); }
+  .ct-linea-dot.pendiente { background: white; border-color: var(--gray-300); }
+  .ct-linea-dot.hoy {
+    width: 14px; height: 14px; margin: 8px 0; background: var(--violet); border: 3px solid white;
+    box-shadow: 0 0 0 3px var(--violet-light), 0 0 0 4px rgba(91,62,150,0.25); animation: hoyPulse 1.8s ease-in-out infinite;
   }
-  .ct-fecha-chip.vigente .ct-fecha-chip-fecha { background: linear-gradient(160deg, #E0B366, #B8873F 65%, #8F6A2E 100%); box-shadow: 0 2px 6px -1px rgba(184,135,63,0.45), inset 0 1px 0 rgba(255,255,255,0.3); }
-  .ct-fecha-chip-dia { font-family: 'Fraunces', serif; font-weight: 700; font-size: 17px; line-height: 1; }
-  .ct-fecha-chip-mes { font-size: 9px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.04em; margin-top: 2px; opacity: 0.9; }
-  .ct-fecha-chip-texto { font-size: 12.5px; color: var(--gray-900); line-height: 1.4; font-weight: 600; }
-  .ct-fecha-chip-texto span { display: block; font-weight: 500; color: var(--gray-600); font-size: 11.5px; margin-top: 1px; }
+  .ct-linea-conector { width: 2px; flex: 1; min-height: 16px; background: var(--gray-300); margin: 2px 0; }
+  .ct-linea-contenido { flex: 1; display: flex; align-items: flex-start; gap: 12px; padding-bottom: 20px; }
+  .ct-linea-hoy-contenido { padding-bottom: 14px; align-items: center; }
+  .ct-linea-hoy-label { font-size: 11px; font-weight: 800; color: var(--violet-dark); letter-spacing: 0.03em; }
+  .ct-linea-item.ct-linea-pendiente .ct-linea-rango,
+  .ct-linea-item.ct-linea-pendiente .ct-linea-items-lista,
+  .ct-linea-item.ct-linea-pendiente .ct-linea-fecha-badge { opacity: 0.62; }
+  .ct-linea-fecha-badge {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; min-height: 44px;
+    border-radius: 12px; flex-shrink: 0; color: white; padding: 5px 7px; text-align: center;
+    background: linear-gradient(160deg, #ABA4BE, var(--gray-600) 65%, #524D5E 100%);
+    box-shadow: 0 2px 6px -1px rgba(34,24,60,0.25), inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .ct-linea-fecha-badge.vigente { background: linear-gradient(160deg, #E0B366, #B8873F 65%, #8F6A2E 100%); }
+  .ct-linea-fecha-badge.cumplido { background: linear-gradient(160deg, #4DB48C, var(--teal) 65%, var(--teal-dark) 100%); }
+  .ct-linea-periodo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11.5px; line-height: 1.2; }
+  .ct-linea-rango { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 12px; color: var(--gray-600); margin: 2px 0 4px; }
+  .ct-linea-items-lista { margin: 0; padding-left: 18px; }
+  .ct-linea-items-lista li { font-size: 13px; color: var(--gray-900); line-height: 1.5; }
+  .ct-linea-items-lista li + li { margin-top: 2px; }
+  .ct-linea-items-lista li.ct-linea-li-cumplido { text-decoration: line-through; opacity: 0.65; }
+  .ct-linea-pa-tag { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--pink-dark); font-weight: 700; margin-top: 4px; }
+  .ct-linea-pa-tag svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .ct-linea-pa-intro {
+    display: flex; align-items: center; gap: 8px; background: var(--pink-light); color: var(--pink-dark);
+    font-size: 12.5px; font-weight: 700; line-height: 1.35; border-radius: 12px; padding: 10px 12px; margin-bottom: 12px;
+  }
+  .ct-linea-pa-intro svg { width: 17px; height: 17px; flex-shrink: 0; }
 
-  .ct-paradas-wrap { display: flex; flex-direction: column; gap: 10px; }
-  .ct-parada-card { border-radius: 14px; border: 1px solid var(--gray-300); overflow: hidden; transition: border-color 0.2s; }
-  .ct-parada-secundaria { opacity: 0.72; }
-  .ct-parada-actual { border-color: var(--violet); box-shadow: 0 0 0 1px var(--violet); opacity: 1; }
-  .ct-parada-cumplida.ct-parada-actual { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal); }
-  .ct-parada-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 14px; cursor: pointer; background: var(--gray-100); }
-  .ct-parada-actual .ct-parada-header { background: var(--violet-light); }
-  .ct-parada-cumplida .ct-parada-header { background: var(--teal-light); }
-  .ct-parada-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 13.5px; color: var(--gray-900); }
-  .ct-parada-badge { display: inline-block; background: var(--violet); color: white; font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 20px; margin-left: 6px; vertical-align: 1px; }
-  .ct-parada-rango { font-size: 11.5px; color: var(--gray-600); margin-top: 2px; }
-  .ct-parada-chevron { width: 16px; height: 16px; color: var(--gray-600); flex-shrink: 0; transition: transform 0.2s; }
-  .ct-parada-header.abierta .ct-parada-chevron { transform: rotate(180deg); }
-  .ct-parada-body { padding: 4px 14px 14px; }
-  .ct-parada-items { margin: 6px 0 12px; padding-left: 18px; }
-  .ct-parada-items li { font-size: 12.5px; color: var(--gray-900); line-height: 1.5; margin-bottom: 3px; }
+  .ct-linea-continuo { margin-top: 2px; background: var(--gray-100); border-radius: 14px; padding: 14px 16px; }
+  .ct-linea-continuo-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12.5px; color: var(--gray-600); margin-bottom: 6px; }
+  .ct-linea-continuo-lista { margin: 0; padding-left: 18px; }
+  .ct-linea-continuo-lista li { font-size: 12.5px; color: var(--gray-900); line-height: 1.5; margin-bottom: 3px; }
+
+  .ct-etapa-actual-box { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--gray-300); }
+  .ct-etapa-actual-titulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 13px; color: var(--gray-900); }
+  .ct-etapa-actual-rango { font-size: 11.5px; color: var(--gray-600); margin: 2px 0 10px; }
   .ct-parada-cumplir-btn { width: 100%; border: none; border-radius: 10px; padding: 10px; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 12.5px; cursor: pointer; background: var(--violet); color: white; }
   .ct-parada-cumplir-btn.on { background: var(--teal-light); color: var(--teal-dark); }
 
@@ -1421,6 +1451,7 @@
         <div class="modal-card pa-alerta-modal-card" style="text-align:center;">
           <div id="pa-alerta-modal-contenido"></div>
           <button type="button" class="primary" id="pa-alerta-modal-ok-btn">Ya consulté / ya la vi</button>
+          <button type="button" class="secondary" id="pa-alerta-modal-confundi-btn" style="display:none; margin-top:8px;">Me confundí, no tengo síntomas</button>
         </div>
       </div>
 
@@ -2998,6 +3029,7 @@
     const contenidoHtml = clasif.porSintomas ? renderAlertaSintomas(clasif.sintomas, sis, dia) : renderNivelBanner(clasif, sis, dia);
     localStorage.setItem("siempre_pa_alerta_nivel", clasif.nivel);
     localStorage.setItem("siempre_pa_alerta_html", contenidoHtml);
+    localStorage.setItem("siempre_pa_alerta_por_sintomas", clasif.porSintomas ? "1" : "0");
     // "Última alerta que tuve": registro persistente e independiente del
     // popup — no se borra al confirmar "ya consulté", solo se reemplaza
     // cuando una toma nueva dispara otra alerta.
@@ -3013,6 +3045,7 @@
   function desactivarAlertaPA() {
     localStorage.removeItem("siempre_pa_alerta_nivel");
     localStorage.removeItem("siempre_pa_alerta_html");
+    localStorage.removeItem("siempre_pa_alerta_por_sintomas");
     document.getElementById("pa-alerta-modal").classList.remove("show");
     document.documentElement.style.removeProperty("--alerta-color");
     // Se limpia también el resultado en línea: una vez confirmado, no debe
@@ -3021,6 +3054,30 @@
     const resultado = document.getElementById("pa-suelta-resultado");
     if (resultado) resultado.innerHTML = `<p class="helper" style="margin:6px 0 0;">Confirmaste que ya lo viste. Cuando cargues una nueva toma, se actualiza acá.</p>`;
   }
+  // Cuando la alerta se disparó por un síntoma marcado por error: se
+  // desmarca el síntoma, se corrige el registro (sin síntomas) y se cierra
+  // la alerta igual que con "ya la vi" — los bloques de carga de PA quedan
+  // reanudados y listos para una nueva toma.
+  async function confundidoSintomaPA() {
+    const ultimaRaw = localStorage.getItem("siempre_pa_ultima_alerta");
+    let sis = null, dia = null;
+    if (ultimaRaw) {
+      try { const info = JSON.parse(ultimaRaw); sis = info.sis ?? null; dia = info.dia ?? null; } catch (e) {}
+    }
+    limpiarSintomas();
+    if (sis != null && dia != null) {
+      try {
+        await sb.rpc("registrar_pa_suelta", {
+          p_token: session.token, p_sistolica: sis, p_diastolica: dia, p_contexto: mdpaTipoActual.main,
+          p_sintomas: [], p_confirma_id: null, p_toma_medicacion: tomaMedicacionPA
+        });
+      } catch (e) { console.error("Error corrigiendo síntoma marcado por error:", e); }
+    }
+    localStorage.removeItem("siempre_pa_ultima_alerta");
+    renderUltimaAlertaPA();
+    desactivarAlertaPA();
+    initPaSuelta();
+  }
   function mostrarModalAlertaPA() {
     const nivel = localStorage.getItem("siempre_pa_alerta_nivel");
     const html = localStorage.getItem("siempre_pa_alerta_html");
@@ -3028,8 +3085,11 @@
     document.documentElement.style.setProperty("--alerta-color", ALERTA_PA_COLORES[nivel]);
     document.getElementById("pa-alerta-modal-contenido").innerHTML = html;
     document.getElementById("pa-alerta-modal").classList.add("show");
+    const porSintomas = localStorage.getItem("siempre_pa_alerta_por_sintomas") === "1";
+    document.getElementById("pa-alerta-modal-confundi-btn").style.display = porSintomas ? "block" : "none";
   }
   document.getElementById("pa-alerta-modal-ok-btn").addEventListener("click", desactivarAlertaPA);
+  document.getElementById("pa-alerta-modal-confundi-btn").addEventListener("click", confundidoSintomaPA);
 
   // Línea discreta y persistente con la última alerta registrada — a
   // diferencia del popup, esta no se cierra ni se borra sola; se va
@@ -3055,15 +3115,17 @@
   // (ver aplicarSintomasClasif). Quedan guardados en la columna `sintomas`.
   function actualizarIconoSintoma(btn) {
     const img = btn.querySelector(".sintoma-icono-img");
-    if (!img) return;
-    const activo = btn.classList.contains("activo");
-    img.src = "data:image/png;base64," + (activo ? img.dataset.blanco : img.dataset.gris);
+    if (!img || !img.dataset.gris) return;
+    // Se mantiene siempre el ícono visible (aunque el botón esté "activo"),
+    // porque la variante clara queda casi invisible sobre el fondo coral.
+    img.src = "data:image/png;base64," + img.dataset.gris;
   }
   let sintomasSeleccionados = [];
   document.querySelectorAll("#sintomas-alarma-grid .sintoma-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const s = btn.dataset.sintoma;
-      if (sintomasSeleccionados.includes(s)) {
+      const recienMarcado = !sintomasSeleccionados.includes(s);
+      if (!recienMarcado) {
         sintomasSeleccionados = sintomasSeleccionados.filter(x => x !== s);
         btn.classList.remove("activo");
       } else {
@@ -3076,8 +3138,35 @@
       if (pendienteConfirmacionPA && sintomasSeleccionados.length) {
         bloquearInputsPaSuelta(false);
       }
+      // Transversal de verdad: apenas se marca (no al desmarcar) un síntoma,
+      // la alerta se dispara sola, sin esperar a que se cargue/reguarde una
+      // toma de PA. Usa la PA que haya en pantalla si la hay (o ninguna).
+      if (recienMarcado) {
+        dispararAlertaPorSintomaInmediato();
+      }
     });
   });
+  async function dispararAlertaPorSintomaInmediato() {
+    const sisRaw = parseInt(document.getElementById("pa-suelta-sis").value);
+    const diaRaw = parseInt(document.getElementById("pa-suelta-dia").value);
+    const sis = Number.isFinite(sisRaw) ? sisRaw : null;
+    const dia = Number.isFinite(diaRaw) ? diaRaw : null;
+    const contexto = mdpaTipoActual.main;
+    const sintomas = sintomasSeleccionados.slice();
+    const confirmaId = pendienteConfirmacionPA ? pendienteConfirmacionPA.id : null;
+    try {
+      await sb.rpc("registrar_pa_suelta", {
+        p_token: session.token, p_sistolica: sis, p_diastolica: dia, p_contexto: contexto,
+        p_sintomas: sintomas, p_confirma_id: confirmaId, p_toma_medicacion: tomaMedicacionPA
+      });
+    } catch (e) { console.error("Error registrando síntoma de alarma:", e); }
+    const clasif = contexto === "posparto" ? clasificarPAPosparto(sis, dia, sintomas) : clasificarPA(sis, dia, sintomas);
+    if (pendienteConfirmacionPA) ocultarBloqueConfirmatorio();
+    document.getElementById("pa-suelta-sis").value = "";
+    document.getElementById("pa-suelta-dia").value = "";
+    mostrarResultadoActual(clasif, sis, dia);
+    initPaSuelta();
+  }
   function limpiarSintomas() {
     sintomasSeleccionados = [];
     document.querySelectorAll("#sintomas-alarma-grid .sintoma-btn.activo").forEach(b => {
@@ -4346,10 +4435,10 @@
     let html = "";
     html += await renderPeriodoActualPosparto(data.fecha_parto, data.dias_desde_parto, data.rama);
 
-    const detalleHtml = renderCtTimelineYFechas(data.fecha_parto, data.dias_desde_parto, data.items) + renderCtParadas(data.dias_desde_parto, data.items, etapas);
+    const detalleHtml = renderCtLineaTiempo(data.fecha_parto, data.dias_desde_parto, data.items) + renderCtMarcarEtapa(data.dias_desde_parto, etapas);
     html += `<div class="card">
       <details class="pa-suelta-lista-details" id="ct-detalle-controles-details">
-        <summary>¿Querés saber cuáles van a ser tus controles?</summary>
+        <summary style="display:none;"></summary>
         ${detalleHtml}
       </details>
     </div>`;
@@ -4358,6 +4447,14 @@
 
     const irPaBtn = document.getElementById("ct-periodo-ir-pa-btn");
     if (irPaBtn) irPaBtn.addEventListener("click", () => activarTab("ocasional"));
+    const irControlesBtn = document.getElementById("ct-periodo-ir-controles-btn");
+    if (irControlesBtn) irControlesBtn.addEventListener("click", () => {
+      const detalle = document.getElementById("ct-detalle-controles-details");
+      if (detalle) {
+        detalle.open = true;
+        detalle.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
     const porQueBtn = document.getElementById("ct-periodo-porque-btn");
     if (porQueBtn) porQueBtn.addEventListener("click", () => {
       const texto = document.getElementById("ct-periodo-porque-texto");
@@ -4366,28 +4463,19 @@
       porQueBtn.textContent = abierto ? "¿Por qué?" : "Ocultar";
     });
 
-    cont.querySelectorAll(".ct-parada-header").forEach(header => {
-      header.addEventListener("click", () => {
-        const body = header.nextElementSibling;
-        const abrir = body.style.display === "none";
-        body.style.display = abrir ? "block" : "none";
-        header.classList.toggle("abierta", abrir);
-      });
-    });
-
-    cont.querySelectorAll(".ct-parada-cumplir-btn").forEach(btn => {
-      btn.addEventListener("click", async (e) => {
-        e.stopPropagation();
-        const nuevo = !btn.classList.contains("on");
-        btn.disabled = true;
-        await sb.rpc("marcar_etapa_cuarto_trimestre", { p_token: session.token, p_etapa: btn.dataset.etapa, p_cumplido: nuevo });
+    const etapaBtn = document.getElementById("ct-etapa-cumplir-btn");
+    if (etapaBtn) {
+      etapaBtn.addEventListener("click", async () => {
+        const nuevo = !etapaBtn.classList.contains("on");
+        etapaBtn.disabled = true;
+        await sb.rpc("marcar_etapa_cuarto_trimestre", { p_token: session.token, p_etapa: etapaBtn.dataset.etapa, p_cumplido: nuevo });
         if (nuevo) {
-          const info = PARADA_INFO[btn.dataset.etapa];
+          const info = PARADA_INFO[etapaBtn.dataset.etapa];
           mostrarToastBienvenida("¡Etapa cumplida! 🎉", info ? `Completaste "${info.titulo}" — seguís cuidándote.` : "Seguís cuidándote.");
         }
         initCuartoTrimestre();
       });
-    });
+    }
   }
 
   // Períodos de seguimiento posparto en palabras simples, según "Pacientes
@@ -4400,6 +4488,17 @@
   // de hipertensión del embarazo / preeclampsia (data.rama === "A_con_THE").
   // Es la cantidad que se compara contra las tomas cargadas HOY (no el total
   // acumulado del período), para que quede claro cuántas faltan en el día.
+  // Etiquetas cortas de período, usadas en la línea de tiempo de controles
+  // en vez de una fecha puntual (menos exigente si no se cumple justo ese día).
+  const PERIODO_CORTO = {
+    dia0_2: "Días 0-2",
+    dia3_5: "Días 3-5",
+    sem2_8: "Semana 2-8",
+    sem8_12: "Semana 8-12",
+    meses6_12: "Meses 6-12",
+    anio1_mas: "Después del año"
+  };
+
   const POSPARTO_PERIODOS = [
     { id: "dia0_2", diasInicio: 0, diasFin: 2, nombre: "Primeros días",
       frecuenciaPA: "Medite la presión todos los días. Si tuviste presión alta o preeclampsia, medila 4 veces por día.",
@@ -4478,7 +4577,8 @@
       <div class="ct-periodo-pa-box">
         <div class="ct-periodo-pa-texto">${periodo.frecuenciaPA}</div>
         ${progresoHtml}
-        <button type="button" class="primary" id="ct-periodo-ir-pa-btn" style="margin-top:10px;">Cargar mi presión</button>
+        <button type="button" class="primary" id="ct-periodo-ir-pa-btn" style="margin-top:10px; background:linear-gradient(160deg, #EA7A6C 0%, var(--coral) 55%, var(--coral-dark) 100%); box-shadow:0 3px 10px -4px rgba(179,58,49,0.4);">Cargar mi presión</button>
+        <button type="button" class="ct-periodo-pa-controles-link" id="ct-periodo-ir-controles-btn">¿Querés saber cuáles van a ser tus controles?</button>
       </div>
       ${periodo.controlMedico ? `<div class="ct-periodo-control-box">
         <div class="ct-periodo-control-texto">📋 Te corresponde un control médico en este período.</div>
@@ -4493,13 +4593,6 @@
     primeros_meses: { titulo: "Primeros meses", rango: "De las 12 semanas hasta el año" },
     para_siempre: { titulo: "Para toda la vida", rango: "A partir del año, de forma continua" }
   };
-  const ORDEN_PARADAS = ["primeras_semanas", "primeros_meses", "para_siempre"];
-
-  function etapaDeItem(it) {
-    if (it.ventana_fin_dias === null || it.ventana_fin_dias === undefined) return "para_siempre";
-    if (it.ventana_inicio_dias < 84) return "primeras_semanas";
-    return "primeros_meses";
-  }
 
   function etapaActualDesdeDias(dias) {
     if (dias < 84) return "primeras_semanas";
@@ -4507,95 +4600,117 @@
     return "para_siempre";
   }
 
-  // Timeline visual + tarjetas de fecha de los próximos controles, calculadas
-  // en base a la fecha real de parto (no solo el rango relativo en semanas).
-  function renderCtTimelineYFechas(fechaPartoISO, diasDesdeParto, items) {
-    const TOTAL_DIAS = Math.max(400, diasDesdeParto + 30);
-    const zonas = [
-      { desde: 0, hasta: 84, color: "#EAD9C4" },
-      { desde: 84, hasta: 366, color: "#D8E7F5" },
-      { desde: 366, hasta: TOTAL_DIAS, color: "#DCEEE4" }
-    ];
-    const pct = d => Math.min(100, Math.max(0, (d / TOTAL_DIAS) * 100));
-
-    const zonasHtml = zonas.map(z =>
-      `<div class="ct-timeline-zona" style="left:${pct(z.desde).toFixed(2)}%; width:${(pct(z.hasta) - pct(z.desde)).toFixed(2)}%; background:${z.color};"></div>`
-    ).join("");
-
-    const marcas = (items || []).filter(it => it.ventana_inicio_dias != null).map(it => {
-      const cls = it.cumplido ? "cumplido" : (it.vigente ? "vigente" : "");
-      return `<div class="ct-timeline-marca ${cls}" style="left:${pct(it.ventana_inicio_dias).toFixed(2)}%;" title="${it.item}"></div>`;
-    }).join("");
-
-    const hoyPct = pct(diasDesdeParto);
-    const track = `<div class="ct-timeline-wrap">
-      <div class="ct-timeline-track">
-        ${zonasHtml}
-        ${marcas}
-        <div class="ct-timeline-hoy" style="left:${hoyPct.toFixed(2)}%;">
-          <div class="ct-timeline-hoy-dot"></div>
-          <div class="ct-timeline-hoy-label">Hoy</div>
-        </div>
-      </div>
-      <div class="ct-timeline-labels"><span>Parto</span><span>1 año</span><span>Para siempre</span></div>
-    </div>`;
-
+  // Línea de tiempo vertical única con todos los controles ordenados por
+  // fecha, cada uno como un "paso" con ícono + fecha + texto. Reemplaza lo
+  // que antes era un timeline horizontal (con sus propias tarjetas de
+  // fecha) MÁS un acordeón por etapas que repetía la misma lista de
+  // controles: ahora es una sola fuente de información, más simple de leer
+  // de un vistazo.
+  // Calcula, según la fecha de parto, la fecha real estimada de un período
+  // (por ej. "entre el 31 de julio y el 2 de agosto").
+  function formatearRangoPeriodo(fechaPartoISO, diasInicio, diasFin) {
     const fechaParto = new Date(fechaPartoISO + "T00:00:00");
-    const proximos = (items || [])
-      .filter(it => it.ventana_inicio_dias != null && !it.cumplido)
-      .sort((a, b) => a.ventana_inicio_dias - b.ventana_inicio_dias)
-      .slice(0, 4)
-      .map(it => {
-        const f = new Date(fechaParto);
-        f.setDate(f.getDate() + it.ventana_inicio_dias);
-        const dia = f.getDate();
-        const mes = f.toLocaleDateString("es-AR", { month: "short" }).replace(".", "");
-        return `<div class="ct-fecha-chip ${it.vigente ? 'vigente' : ''}">
-          <div class="ct-fecha-chip-fecha"><span class="ct-fecha-chip-dia">${dia}</span><span class="ct-fecha-chip-mes">${mes}</span></div>
-          <div class="ct-fecha-chip-texto">${it.item}</div>
-        </div>`;
-      }).join("");
-
-    const fechasHtml = proximos
-      ? `<div class="ct-fechas-proximas-title">Próximos controles</div><div class="ct-fechas-proximas-grid">${proximos}</div>`
-      : `<p class="helper" style="margin-top:14px;">Ya marcaste todos los controles de esta etapa 🎉</p>`;
-
-    return track + fechasHtml;
+    const fechaDeDias = dias => { const f = new Date(fechaParto); f.setDate(f.getDate() + dias); return f; };
+    const formatoLargo = f => f.toLocaleDateString("es-AR", { day: "numeric", month: "long" });
+    if (diasFin == null) return `A partir del ${formatoLargo(fechaDeDias(diasInicio))}`;
+    const fi = fechaDeDias(diasInicio);
+    const ff = fechaDeDias(diasFin);
+    if (diasInicio === diasFin) return `El ${formatoLargo(fi)}`;
+    return `Entre el ${formatoLargo(fi)} y el ${formatoLargo(ff)}`;
   }
 
-  function renderCtParadas(diasDesdeParto, items, etapas) {
-    const etapaActual = etapaActualDesdeDias(diasDesdeParto);
-    const porEtapa = { primeras_semanas: [], primeros_meses: [], para_siempre: [] };
-    items.forEach(it => porEtapa[etapaDeItem(it)].push(it));
-    const etapasMap = {};
-    etapas.forEach(e => etapasMap[e.etapa] = e);
+  function renderCtLineaTiempo(fechaPartoISO, diasDesdeParto, items) {
+    const conFecha = (items || [])
+      .filter(it => it.ventana_inicio_dias != null)
+      .sort((a, b) => a.ventana_inicio_dias - b.ventana_inicio_dias);
+    const sinFecha = (items || []).filter(it => it.ventana_inicio_dias == null);
 
-    let html = `<div class="ct-paradas-wrap">`;
-    ORDEN_PARADAS.forEach(key => {
-      const info = PARADA_INFO[key];
-      const cumplida = etapasMap[key] && etapasMap[key].cumplido;
-      const esActual = key === etapaActual;
-      const abierta = esActual;
-      html += `<div class="ct-parada-card ${esActual ? 'ct-parada-actual' : 'ct-parada-secundaria'} ${cumplida ? 'ct-parada-cumplida' : ''}">
-        <div class="ct-parada-header ${abierta ? 'abierta' : ''}">
+    // Agrupamos todos los controles que caen en el mismo período (mismo
+    // rango que usamos para el período actual), para verlos juntos con
+    // la fecha estimada de ese período según la fecha de parto.
+    const grupos = [];
+    const gruposPorId = {};
+    conFecha.forEach(it => {
+      const periodo = obtenerPeriodoPosparto(it.ventana_inicio_dias);
+      if (!gruposPorId[periodo.id]) {
+        gruposPorId[periodo.id] = { periodo, items: [] };
+        grupos.push(gruposPorId[periodo.id]);
+      }
+      gruposPorId[periodo.id].items.push(it);
+    });
+
+    // Insertamos el paso "Hoy" en su lugar cronológico real, entre los
+    // grupos ya pasados y los que todavía faltan.
+    const pasos = [];
+    let hoyInsertado = false;
+    grupos.forEach(g => {
+      if (!hoyInsertado && g.periodo.diasInicio > diasDesdeParto) {
+        pasos.push({ tipo: "hoy" });
+        hoyInsertado = true;
+      }
+      pasos.push({ tipo: "grupo", grupo: g });
+    });
+    if (!hoyInsertado) pasos.push({ tipo: "hoy" });
+
+    const pasoHtml = (p, esUltimo) => {
+      const conector = esUltimo ? "" : `<div class="ct-linea-conector"></div>`;
+      if (p.tipo === "hoy") {
+        return `<div class="ct-linea-item">
+          <div class="ct-linea-rail"><div class="ct-linea-dot hoy"></div>${conector}</div>
+          <div class="ct-linea-contenido ct-linea-hoy-contenido"><div class="ct-linea-hoy-label">● HOY</div></div>
+        </div>`;
+      }
+      const g = p.grupo;
+      const todosCumplidos = g.items.every(it => it.cumplido);
+      const algunoVigente = g.items.some(it => it.vigente);
+      const estado = todosCumplidos ? "cumplido" : (algunoVigente ? "vigente" : "pendiente");
+      const periodoTexto = PERIODO_CORTO[g.periodo.id] || g.periodo.nombre;
+      const rangoTexto = formatearRangoPeriodo(fechaPartoISO, g.periodo.diasInicio, g.periodo.diasFin);
+      const check = estado === "cumplido"
+        ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 13 10 18 19 7"/></svg>`
+        : "";
+      const itemsHtml = g.items.map(it => `<li${it.cumplido ? ' class="ct-linea-li-cumplido"' : ''}>${it.item}</li>`).join("");
+      return `<div class="ct-linea-item ct-linea-${estado}">
+        <div class="ct-linea-rail"><div class="ct-linea-dot ${estado}">${check}</div>${conector}</div>
+        <div class="ct-linea-contenido">
+          <div class="ct-linea-fecha-badge ${estado}"><span class="ct-linea-periodo">${periodoTexto}</span></div>
           <div>
-            <div class="ct-parada-titulo">${info.titulo}${esActual ? ' <span class="ct-parada-badge">Ahora</span>' : ''}</div>
-            <div class="ct-parada-rango">${info.rango}</div>
+            <div class="ct-linea-rango">${rangoTexto}</div>
+            <ul class="ct-linea-items-lista">${itemsHtml}</ul>
           </div>
-          <svg class="ct-parada-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-        </div>
-        <div class="ct-parada-body" style="display:${abierta ? 'block' : 'none'};">
-          <ul class="ct-parada-items">
-            ${porEtapa[key].map(it => `<li>${it.item}</li>`).join("")}
-          </ul>
-          <button class="ct-parada-cumplir-btn ${cumplida ? 'on' : ''}" data-etapa="${key}">
-            ${cumplida ? '✓ Cumplí esta etapa' : 'Marcar como cumplida'}
-          </button>
         </div>
       </div>`;
-    });
-    html += `</div>`;
+    };
+
+    let html = `<div class="ct-linea-pa-intro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg><span>En cada uno de estos controles también se evalúa tu presión arterial.</span></div>
+    <p class="helper" style="margin:0 0 12px;">Además, en todas las etapas seguí midiendo tu presión en casa (arriba tenés cuántas veces por día).</p>`;
+    html += `<div class="ct-linea-wrap">${pasos.map((p, i) => pasoHtml(p, i === pasos.length - 1)).join("")}</div>`;
+
+    if (sinFecha.length) {
+      html += `<div class="ct-linea-continuo">
+        <div class="ct-linea-continuo-titulo">De acá en adelante, para siempre</div>
+        <ul class="ct-linea-continuo-lista">${sinFecha.map(it => `<li>${it.item}</li>`).join("")}</ul>
+      </div>`;
+    }
+
     return html;
+  }
+
+  // Acción única para marcar la etapa en la que está la paciente HOY como
+  // cumplida (reemplaza los 3 botones repetidos por etapa que había antes).
+  function renderCtMarcarEtapa(diasDesdeParto, etapas) {
+    const etapaActual = etapaActualDesdeDias(diasDesdeParto);
+    const info = PARADA_INFO[etapaActual];
+    const etapasMap = {};
+    (etapas || []).forEach(e => etapasMap[e.etapa] = e);
+    const cumplida = etapasMap[etapaActual] && etapasMap[etapaActual].cumplido;
+    return `<div class="ct-etapa-actual-box">
+      <div class="ct-etapa-actual-titulo">Etapa actual: ${info.titulo}</div>
+      <div class="ct-etapa-actual-rango">${info.rango}</div>
+      <button type="button" class="ct-parada-cumplir-btn ${cumplida ? 'on' : ''}" id="ct-etapa-cumplir-btn" data-etapa="${etapaActual}">
+        ${cumplida ? '✓ Cumplí esta etapa' : 'Marcar como cumplida'}
+      </button>
+    </div>`;
   }
 
   document.getElementById("ct-guardar-parto-btn").addEventListener("click", async () => {
