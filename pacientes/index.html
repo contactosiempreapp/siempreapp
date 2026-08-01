@@ -857,7 +857,8 @@
   .ct-hoy-banner ul { margin: 6px 0 0; padding-left: 18px; }
   .ct-hoy-banner li { margin-bottom: 3px; }
 
-  @keyframes hoyPulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(91,62,150,0.3); } 50% { box-shadow: 0 0 0 6px rgba(91,62,150,0.15); } }
+  @keyframes hoyPulse { 0%, 100% { box-shadow: 0 0 0 4px rgba(91,62,150,0.35); } 50% { box-shadow: 0 0 0 9px rgba(91,62,150,0.12); } }
+  @keyframes vigentePulse { 0%, 100% { box-shadow: 0 0 0 4px rgba(184,135,63,0.22); } 50% { box-shadow: 0 0 0 7px rgba(184,135,63,0.08); } }
 
   /* Línea de tiempo vertical única de controles postparto: un solo lugar
      donde ver qué controles hay, con fecha, estado (cumplido/ahora/futuro)
@@ -868,30 +869,45 @@
   .ct-linea-dot {
     width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
     border: 2px solid var(--gray-300); background: white; color: white; flex-shrink: 0;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   }
   .ct-linea-dot svg { width: 15px; height: 15px; }
-  .ct-linea-dot.cumplido { background: var(--teal); border-color: var(--teal-dark); }
-  .ct-linea-dot.vigente { background: #F0D8A8; border-color: #B8873F; box-shadow: 0 0 0 4px rgba(184,135,63,0.18); }
+  .ct-linea-dot.cumplido { background: #A9CFC0; border-color: #7FAF9B; color: #FFFFFF; }
+  .ct-linea-dot.vigente {
+    width: 34px; height: 34px; background: #E8B94F; border-color: #B8873F; color: #5B420F;
+    box-shadow: 0 0 0 4px rgba(184,135,63,0.22); animation: vigentePulse 2.2s ease-in-out infinite;
+  }
   .ct-linea-dot.pendiente { background: white; border-color: var(--gray-300); }
   .ct-linea-dot.hoy {
-    width: 14px; height: 14px; margin: 8px 0; background: var(--violet); border: 3px solid white;
-    box-shadow: 0 0 0 3px var(--violet-light), 0 0 0 4px rgba(91,62,150,0.25); animation: hoyPulse 1.8s ease-in-out infinite;
+    width: 20px; height: 20px; margin: 5px 0; background: var(--violet); border: 4px solid white;
+    box-shadow: 0 0 0 4px var(--violet-light), 0 0 0 6px rgba(91,62,150,0.3); animation: hoyPulse 1.6s ease-in-out infinite;
   }
   .ct-linea-conector { width: 2px; flex: 1; min-height: 16px; background: var(--gray-300); margin: 2px 0; }
   .ct-linea-contenido { flex: 1; display: flex; align-items: flex-start; gap: 12px; padding-bottom: 20px; }
   .ct-linea-hoy-contenido { padding-bottom: 14px; align-items: center; }
-  .ct-linea-hoy-label { font-size: 11px; font-weight: 800; color: var(--violet-dark); letter-spacing: 0.03em; }
+  .ct-linea-hoy-label { font-size: 12.5px; font-weight: 800; color: var(--violet-dark); letter-spacing: 0.04em; }
   .ct-linea-item.ct-linea-pendiente .ct-linea-rango,
   .ct-linea-item.ct-linea-pendiente .ct-linea-items-lista,
   .ct-linea-item.ct-linea-pendiente .ct-linea-fecha-badge { opacity: 0.62; }
+  /* Los controles ya cumplidos quedan con el color "apagado", para que
+     resalte visualmente el que está vigente ahora. */
+  .ct-linea-item.ct-linea-cumplido .ct-linea-rango,
+  .ct-linea-item.ct-linea-cumplido .ct-linea-items-lista,
+  .ct-linea-item.ct-linea-cumplido .ct-linea-fecha-badge { opacity: 0.55; filter: saturate(0.6); }
+  .ct-linea-item.ct-linea-vigente .ct-linea-rango,
+  .ct-linea-item.ct-linea-vigente .ct-linea-items-lista { opacity: 1; }
   .ct-linea-fecha-badge {
     display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; min-height: 44px;
     border-radius: 12px; flex-shrink: 0; color: white; padding: 5px 7px; text-align: center;
     background: linear-gradient(160deg, #ABA4BE, var(--gray-600) 65%, #524D5E 100%);
     box-shadow: 0 2px 6px -1px rgba(34,24,60,0.25), inset 0 1px 0 rgba(255,255,255,0.25);
   }
-  .ct-linea-fecha-badge.vigente { background: linear-gradient(160deg, #E0B366, #B8873F 65%, #8F6A2E 100%); }
-  .ct-linea-fecha-badge.cumplido { background: linear-gradient(160deg, #4DB48C, var(--teal) 65%, var(--teal-dark) 100%); }
+  .ct-linea-fecha-badge.vigente {
+    background: linear-gradient(160deg, #F0C876, #B8873F 65%, #8F6A2E 100%);
+    box-shadow: 0 3px 10px -2px rgba(184,135,63,0.45), inset 0 1px 0 rgba(255,255,255,0.35);
+    transform: scale(1.06);
+  }
+  .ct-linea-fecha-badge.cumplido { background: linear-gradient(160deg, #9FC7B7, #7FAF9B 65%, #63917D 100%); }
   .ct-linea-periodo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11.5px; line-height: 1.2; }
   .ct-linea-rango { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 12px; color: var(--gray-600); margin: 2px 0 4px; }
   .ct-linea-items-lista { margin: 0; padding-left: 18px; }
@@ -4626,6 +4642,20 @@
       gruposPorId[periodo.id].items.push(it);
     });
 
+    // Los controles "de ahí en adelante, para siempre" (sin fecha puntual,
+    // típicamente los de después del año) los sumamos como el último paso
+    // de la MISMA línea de tiempo, en vez de dejarlos en una caja aparte:
+    // así no se pierden de vista una vez que se pasa el año de posparto.
+    if (sinFecha.length) {
+      const periodoFinal = obtenerPeriodoPosparto(Math.max(diasDesdeParto, 366));
+      if (!gruposPorId[periodoFinal.id]) {
+        gruposPorId[periodoFinal.id] = { periodo: periodoFinal, items: [] };
+        grupos.push(gruposPorId[periodoFinal.id]);
+      }
+      sinFecha.forEach(it => gruposPorId[periodoFinal.id].items.push(it));
+      grupos.sort((a, b) => a.periodo.diasInicio - b.periodo.diasInicio);
+    }
+
     // Insertamos el paso "Hoy" en su lugar cronológico real, entre los
     // grupos ya pasados y los que todavía faltan.
     const pasos = [];
@@ -4672,13 +4702,6 @@
     let html = `<div class="ct-linea-pa-intro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12c0 4.3-8.5 8.3-8.5 8.3s-8.5-4-8.5-8.3c0-3.1 2.2-5.2 5-5.2 1.3 0 2.5.6 3.5 1.6 1-1 2.2-1.6 3.5-1.6 2.8 0 5 2.1 5 5.2z"/><path d="M5.5 12.3h2.2l1.4-3 2 5 1.4-2h3.2"/></svg><span>En cada uno de estos controles también se evalúa tu presión arterial.</span></div>
     <p class="helper" style="margin:0 0 12px;">Además, en todas las etapas seguí midiendo tu presión en casa (arriba tenés cuántas veces por día).</p>`;
     html += `<div class="ct-linea-wrap">${pasos.map((p, i) => pasoHtml(p, i === pasos.length - 1)).join("")}</div>`;
-
-    if (sinFecha.length) {
-      html += `<div class="ct-linea-continuo">
-        <div class="ct-linea-continuo-titulo">De acá en adelante, para siempre</div>
-        <ul class="ct-linea-continuo-lista">${sinFecha.map(it => `<li>${it.item}</li>`).join("")}</ul>
-      </div>`;
-    }
 
     return html;
   }
