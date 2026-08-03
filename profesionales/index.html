@@ -42,7 +42,7 @@
   body { margin: 0; background: var(--bg); color: var(--gray-900); min-height: 100vh; }
   .screen { max-width: 420px; margin: 0 auto; min-height: 100vh; display: none; flex-direction: column; justify-content: center; padding: 32px 24px; }
   .screen.show { display: flex; }
-  #dashboard-screen.show, #pacientes-screen.show, #ficha-screen.show, #estadisticas-screen.show { display: block; max-width: 900px; padding: 0; justify-content: flex-start; }
+  #dashboard-screen.show, #pacientes-screen.show, #ficha-screen.show, #estadisticas-screen.show, #buscar-screen.show { display: block; max-width: 900px; padding: 0; justify-content: flex-start; }
 
   .logo-mark {
     width: 56px; height: 56px; border-radius: 16px;
@@ -54,10 +54,11 @@
   p.tagline { text-align: center; color: var(--gray-600); font-size: 13px; margin: 0 0 28px; }
 
   label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-900); margin-bottom: 6px; }
-  input[type="text"], input[type="email"], input[type="password"], select {
+  input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="number"], input[type="tel"], select {
     width: 100%; padding: 12px 14px; border: 1.5px solid var(--gray-300); border-radius: 10px;
-    font-size: 15px; margin-bottom: 14px; background: white; font-family: inherit;
+    font-size: 15px; margin-bottom: 14px; background: white; font-family: inherit; box-sizing: border-box;
   }
+  input[type="date"] { min-height: 46px; }
   input:focus, select:focus { outline: none; border-color: var(--violet); }
   button.primary {
     width: 100%; padding: 13px; background: linear-gradient(135deg, var(--violet), var(--violet-deep));
@@ -75,7 +76,7 @@
   header.top-bar {
     background: linear-gradient(135deg, var(--violet), var(--violet-deep)); color: white;
     padding: 18px 28px; display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 6px 18px -8px rgba(34,24,60,0.4);
+    box-shadow: 0 6px 18px -8px rgba(34,24,60,0.4); flex-wrap: wrap; row-gap: 14px;
   }
   .top-bar-brand { display: flex; align-items: center; gap: 14px; }
   .mini-logo {
@@ -103,7 +104,7 @@
   header.top-bar .top-nav-btn.activo { color: var(--violet-deep); background: white; }
   header.top-bar .top-nav-btn.activo:hover { background: white; }
 
-  @media (max-width: 640px) {
+  @media (max-width: 880px) {
     header.top-bar { flex-direction: column; align-items: stretch; gap: 14px; padding: 16px 18px; }
     .top-bar-brand { justify-content: flex-start; }
     header.top-bar .top-nav {
@@ -204,6 +205,10 @@
   .detalle-dia-row .no { color: #B23B32; font-weight: 700; }
   .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
   .tag-positivo { background: var(--pink-light); color: #B23B5A; font-size: 12.5px; font-weight: 600; padding: 6px 12px; border-radius: 20px; }
+  .pill-teal {
+    display: inline-flex; align-items: center; background: var(--teal-light); color: var(--teal-dark);
+    font-size: 12.5px; font-weight: 700; padding: 6px 12px; border-radius: 20px; margin: 4px 0;
+  }
   .sin-antecedentes { color: var(--gray-600); font-size: 13px; }
   .med-actual { display: flex; align-items: center; gap: 12px; background: var(--violet-light); border-radius: 12px; padding: 12px 14px; }
   .med-actual .m-nombre { font-weight: 700; color: var(--gray-900); font-size: 14px; }
@@ -260,6 +265,18 @@
   }
   .editar-datos-body textarea { min-height: 50px; resize: vertical; }
   .fila-2col-prof { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .bf-subtitulo {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12.5px; letter-spacing: .03em;
+    text-transform: uppercase; color: var(--violet); margin: 20px 0 10px; padding-top: 14px;
+    border-top: 1px solid var(--gray-200);
+  }
+  .resumen-card .bf-subtitulo:first-of-type { border-top: none; padding-top: 0; margin-top: 12px; }
+  .bf-check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+  .bf-check { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--gray-700); cursor: pointer; }
+  .bf-check input { width: 16px; height: 16px; flex-shrink: 0; }
+  @media (max-width: 640px) { .bf-check-grid { grid-template-columns: 1fr; } }
+  .fila-pill-boton { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .fila-pill-boton button.primary { width: auto; margin: 0; padding: 9px 18px; }
   .editar-subtitulo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12px; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.03em; margin: 6px 0 10px; }
   .check-grid-prof { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-bottom: 12px; }
   .check-row-prof { display: flex; align-items: center; gap: 8px; font-size: 12.5px; padding: 4px 0; }
@@ -671,9 +688,11 @@
   <main class="dash-main">
     <div class="resumen-card">
       <div class="section-title">Filtros</div>
+
+      <div class="bf-subtitulo">General</div>
       <div class="fila-2col-prof">
         <div>
-          <label>Aspirina</label>
+          <label>Aspirina (AAS)</label>
           <select id="bf-aspirina"><option value="">Cualquiera</option><option value="true">Con indicación</option><option value="false">Sin indicación</option></select>
         </div>
         <div>
@@ -688,12 +707,73 @@
         </div>
         <div>
           <label>Presión arterial</label>
-          <select id="bf-pa-alerta"><option value="">Cualquiera</option><option value="true">Con alerta activa (últimos 7 días)</option></select>
+          <select id="bf-pa-alerta">
+            <option value="">Cualquiera</option>
+            <option value="alguna">Tuvo alguna alerta</option>
+            <option value="severa">Tuvo alerta severa</option>
+            <option value="ninguna">Nunca tuvo alerta</option>
+          </select>
         </div>
       </div>
-      <label>Buscar por nombre o DNI (opcional)</label>
+
+      <div class="bf-subtitulo">Embarazo actual</div>
+      <div class="fila-2col-prof">
+        <div>
+          <label>Trimestre actual</label>
+          <select id="bf-trimestre"><option value="">Cualquiera</option><option value="1">1º trimestre</option><option value="2">2º trimestre</option><option value="3">3º trimestre</option></select>
+        </div>
+        <div>
+          <label>Preeclampsia en este embarazo</label>
+          <select id="bf-preeclampsia-actual"><option value="">Cualquiera</option><option value="true">Sí</option><option value="false">No</option></select>
+        </div>
+      </div>
+      <div class="fila-2col-prof">
+        <div>
+          <label>Edad materna, desde</label>
+          <input type="number" id="bf-edad-min" min="10" max="60" placeholder="Ej: 18">
+        </div>
+        <div>
+          <label>Edad materna, hasta</label>
+          <input type="number" id="bf-edad-max" min="10" max="60" placeholder="Ej: 35">
+        </div>
+      </div>
+
+      <div class="bf-subtitulo">Antecedentes clínicos</div>
+      <div class="bf-check-grid">
+        <label class="bf-check"><input type="checkbox" id="bf-ant-hta_cronica"> HTA crónica</label>
+        <label class="bf-check"><input type="checkbox" id="bf-ant-diabetes_pregestacional"> Diabetes pregestacional</label>
+        <label class="bf-check"><input type="checkbox" id="bf-ant-enfermedad_renal_cronica"> Enfermedad renal crónica</label>
+        <label class="bf-check"><input type="checkbox" id="bf-ant-enfermedad_autoinmune"> Enfermedad autoinmune</label>
+        <label class="bf-check"><input type="checkbox" id="bf-ant-sop"> Síndrome de ovario poliquístico</label>
+        <label class="bf-check"><input type="checkbox" id="bf-ant-embarazo_multiple"> Embarazo múltiple</label>
+        <label class="bf-check"><input type="checkbox" id="bf-ant-nuliparidad"> Nuliparidad</label>
+        <label class="bf-check"><input type="checkbox" id="bf-ant-preeclampsia_previa"> Preeclampsia previa</label>
+      </div>
+      <p class="stat-secundario" style="margin:4px 0 0;">Se filtran solo los antecedentes que marques (los que dejes sin marcar no restringen la búsqueda).</p>
+
+      <div class="bf-subtitulo">Actividad física</div>
+      <div class="fila-2col-prof">
+        <div>
+          <label>Promedio de pasos diarios, mínimo</label>
+          <input type="number" id="bf-pasos-min" min="0" step="500" placeholder="Ej: 5000">
+        </div>
+        <div>
+          <label>Trabajo sedentario</label>
+          <select id="bf-trabajo-sedentario"><option value="">Cualquiera</option><option value="true">Sí</option><option value="false">No</option></select>
+        </div>
+      </div>
+      <div class="fila-2col-prof">
+        <div>
+          <label>Hace pausas activas</label>
+          <select id="bf-pausas-activas"><option value="">Cualquiera</option><option value="true">Sí</option><option value="false">No</option></select>
+        </div>
+        <div></div>
+      </div>
+
+      <label style="margin-top:14px;">Buscar por nombre o DNI (opcional)</label>
       <input type="text" id="bf-texto" placeholder="...">
-      <button class="primary" id="bf-buscar-btn" style="width:auto; padding:12px 22px;">Buscar</button>
+      <button class="primary" id="bf-buscar-btn" style="width:auto; padding:12px 22px; margin-top:14px;">Buscar</button>
+      <p class="stat-secundario" style="margin:8px 0 0;">Los estudios complementarios (laboratorio, etc.) todavía no se pueden filtrar acá — los sumamos cuando esa sección esté terminada.</p>
     </div>
 
     <div class="resumen-card" id="buscar-resultados-wrap" style="display:none;">
@@ -1501,6 +1581,7 @@
   }
 
   function parseBool(v) { return v === "" ? null : v === "true"; }
+  function parseIntOrNull(v) { return v === "" || v == null ? null : parseInt(v, 10); }
 
   document.getElementById("bf-buscar-btn").addEventListener("click", async () => {
     const btn = document.getElementById("bf-buscar-btn");
@@ -1509,8 +1590,23 @@
       p_toma_aspirina: parseBool(document.getElementById("bf-aspirina").value),
       p_toma_calcio: parseBool(document.getElementById("bf-calcio").value),
       p_farmaco_id: document.getElementById("bf-farmaco").value || null,
-      p_pa_alerta: parseBool(document.getElementById("bf-pa-alerta").value),
-      p_texto: document.getElementById("bf-texto").value.trim()
+      p_pa_alerta: document.getElementById("bf-pa-alerta").value || null,
+      p_texto: document.getElementById("bf-texto").value.trim(),
+      p_preeclampsia_actual: parseBool(document.getElementById("bf-preeclampsia-actual").value),
+      p_trimestre: parseIntOrNull(document.getElementById("bf-trimestre").value),
+      p_edad_min: parseIntOrNull(document.getElementById("bf-edad-min").value),
+      p_edad_max: parseIntOrNull(document.getElementById("bf-edad-max").value),
+      p_hta_cronica: document.getElementById("bf-ant-hta_cronica").checked ? true : null,
+      p_diabetes_pregestacional: document.getElementById("bf-ant-diabetes_pregestacional").checked ? true : null,
+      p_enfermedad_renal_cronica: document.getElementById("bf-ant-enfermedad_renal_cronica").checked ? true : null,
+      p_enfermedad_autoinmune: document.getElementById("bf-ant-enfermedad_autoinmune").checked ? true : null,
+      p_sop: document.getElementById("bf-ant-sop").checked ? true : null,
+      p_embarazo_multiple: document.getElementById("bf-ant-embarazo_multiple").checked ? true : null,
+      p_nuliparidad: document.getElementById("bf-ant-nuliparidad").checked ? true : null,
+      p_preeclampsia_previa: document.getElementById("bf-ant-preeclampsia_previa").checked ? true : null,
+      p_pasos_min: parseIntOrNull(document.getElementById("bf-pasos-min").value),
+      p_trabajo_sedentario: parseBool(document.getElementById("bf-trabajo-sedentario").value),
+      p_pausas_activas: parseBool(document.getElementById("bf-pausas-activas").value)
     });
     btn.disabled = false; btn.textContent = "Buscar";
 
@@ -1530,18 +1626,24 @@
       lista.innerHTML = `<p style="padding:16px; font-size:13px; color:var(--gray-600);">Sin resultados para estos filtros.</p>`;
       return;
     }
-    lista.innerHTML = pacientes.map(p => `
+    lista.innerHTML = pacientes.map(p => {
+      const chips = [
+        p.indicacion_aspirina ? "AAS" : null,
+        p.indicacion_calcio ? "Calcio" : null,
+        p.farmaco_actual || null,
+        p.semana_gestacional_actual != null ? `Sem. ${p.semana_gestacional_actual}` : null,
+        p.preeclampsia_actual ? "Preeclampsia actual" : null
+      ].filter(Boolean).join(" · ");
+      return `
       <div class="pac-row" data-id="${p.id}">
         <div>
           <div class="p-nombre">${p.apellido}, ${p.nombre}</div>
-          <div class="p-detalle">DNI ${p.dni}
-            ${p.indicacion_aspirina ? " · Aspirina" : ""}${p.indicacion_calcio ? " · Calcio" : ""}
-            ${p.farmaco_actual ? " · " + p.farmaco_actual : ""}
-          </div>
+          <div class="p-detalle">DNI ${p.dni}${chips ? " · " + chips : ""}</div>
         </div>
-        <div class="p-inst" style="color:${p.pa_alerta_activa ? '#B23B32' : 'var(--violet)'};">${p.pa_alerta_activa ? "⚠ Alerta PA" : ""}</div>
+        <div class="p-inst" style="color:${p.pa_alguna_severa ? '#B23B32' : (p.pa_alguna_alerta ? '#C97A2E' : 'var(--violet)')};">${p.pa_alguna_severa ? "⚠ Alerta severa" : (p.pa_alguna_alerta ? "⚠ Tuvo alerta" : "")}</div>
       </div>
-    `).join("");
+    `;
+    }).join("");
     lista.querySelectorAll(".pac-row").forEach(row => {
       row.addEventListener("click", () => abrirFicha(row.dataset.id));
     });
@@ -1551,8 +1653,17 @@
     if (!ultimoResultadoBusqueda.length) return;
     const filas = ultimoResultadoBusqueda.map(p => ({
       dni: p.dni, apellido: p.apellido, nombre: p.nombre,
+      edad_materna: p.edad_materna, semana_gestacional_actual: p.semana_gestacional_actual,
+      trimestre: p.semana_gestacional_actual == null ? "" : (p.semana_gestacional_actual < 14 ? 1 : (p.semana_gestacional_actual < 28 ? 2 : 3)),
       indicacion_aspirina: p.indicacion_aspirina, indicacion_calcio: p.indicacion_calcio,
-      farmaco_actual: p.farmaco_actual || "", pa_alerta_activa: p.pa_alerta_activa
+      farmaco_actual: p.farmaco_actual || "",
+      preeclampsia_actual: p.preeclampsia_actual, preeclampsia_previa: p.preeclampsia_previa,
+      hta_cronica: p.hta_cronica, diabetes_pregestacional: p.diabetes_pregestacional,
+      enfermedad_renal_cronica: p.enfermedad_renal_cronica, enfermedad_autoinmune: p.enfermedad_autoinmune,
+      sindrome_ovario_poliquistico: p.sindrome_ovario_poliquistico, embarazo_multiple: p.embarazo_multiple,
+      nuliparidad: p.nuliparidad, pasos_promedio: p.pasos_promedio,
+      trabajo_sedentario: p.trabajo_sedentario, pausas_activas: p.pausas_activas,
+      pa_alguna_alerta: p.pa_alguna_alerta, pa_alguna_severa: p.pa_alguna_severa
     }));
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(filas);
@@ -1998,17 +2109,23 @@
       </div>
       <label>Fecha probable de parto (según obstetra)</label>
       <input type="date" id="emb-fpp" value="${g.fpp_obstetra || ''}">
-      ${eg ? `<div class="pill-teal" style="display:inline-block; margin-top:8px;">Edad gestacional actual: ${eg.semanas}s ${eg.dias}d</div>` : ''}
+      ${eg ? `<div class="pill-teal" style="margin-top:8px;">Edad gestacional actual: ${eg.semanas}s ${eg.dias}d</div>` : ''}
       <div class="indicacion-toggle-row" style="margin-top:10px;"><input type="checkbox" id="emb-hta-gestacional" ${g.hipertension_gestacional_actual ? 'checked' : ''}><label style="margin:0;">Hipertensión gestacional en este embarazo</label></div>
+      <div class="indicacion-toggle-row" style="margin-top:6px;"><input type="checkbox" id="emb-preeclampsia-actual" ${g.preeclampsia_actual ? 'checked' : ''}><label style="margin:0;">Preeclampsia en este embarazo</label></div>
+      <div id="emb-preeclampsia-semana-wrap" style="display:${g.preeclampsia_actual ? 'block' : 'none'}; margin-top:8px;">
+        <label>Semana de diagnóstico</label>
+        <input type="number" id="emb-preeclampsia-semana" min="0" max="42" value="${g.preeclampsia_semana_dx != null ? g.preeclampsia_semana_dx : ''}">
+      </div>
 
       <div class="editar-subtitulo" style="margin-top:16px;">Antes de empezar el embarazo</div>
       <div class="fila-2col-prof">
         <div><label>Altura (cm)</label><input type="number" step="0.1" id="emb-altura" value="${c.altura_pregestacional_cm || ''}"></div>
         <div><label>Peso (kg)</label><input type="number" step="0.1" id="emb-peso-preg" value="${c.peso_pregestacional_kg || ''}"></div>
       </div>
-      ${imc ? `<div class="pill-teal" style="display:inline-block;">IMC pregestacional: ${imc}</div>` : ''}
-
-      <button class="primary" id="guardar-gestacion-btn" style="width:auto; padding:9px 18px; margin-top:14px;">Guardar</button>
+      <div class="fila-pill-boton">
+        ${imc ? `<div class="pill-teal">IMC pregestacional: ${imc}</div>` : `<span></span>`}
+        <button class="primary" id="guardar-gestacion-btn">Guardar</button>
+      </div>
       <p class="guardado-ok" id="gestacion-guardado-msg">Guardado ✓</p>
     </div>`;
 
@@ -2021,6 +2138,10 @@
     </div>`;
 
     document.getElementById("ficha-embarazo-content").innerHTML = html;
+
+    document.getElementById("emb-preeclampsia-actual").addEventListener("change", (e) => {
+      document.getElementById("emb-preeclampsia-semana-wrap").style.display = e.target.checked ? "block" : "none";
+    });
 
     let previosList = previos.map(p => ({ ...p }));
     function renderPreviosProf() {
@@ -2077,6 +2198,10 @@
         fpp_obstetra: fpp,
         fuente_fpp_vigente: fpp ? "OBSTETRA" : (fum ? "FUM" : (fechaEco ? "ECO" : null)),
         hipertension_gestacional_actual: document.getElementById("emb-hta-gestacional").checked,
+        preeclampsia_actual: document.getElementById("emb-preeclampsia-actual").checked,
+        preeclampsia_semana_dx: document.getElementById("emb-preeclampsia-actual").checked
+          ? (document.getElementById("emb-preeclampsia-semana").value || null)
+          : null,
         fecha_parto_real: g.fecha_parto_real || null,
         bebe_vivio: g.bebe_vivio != null ? g.bebe_vivio : null
       });
@@ -2161,6 +2286,8 @@
         eco_semanas: g.eco_semanas || null, eco_dias: g.eco_dias || null,
         fpp_obstetra: g.fpp_obstetra || null, fuente_fpp_vigente: g.fuente_fpp_vigente || null,
         hipertension_gestacional_actual: g.hipertension_gestacional_actual || false,
+        preeclampsia_actual: g.preeclampsia_actual || false,
+        preeclampsia_semana_dx: g.preeclampsia_semana_dx != null ? g.preeclampsia_semana_dx : null,
         fecha_parto_real: yaOcurrio ? (document.getElementById("parto-fecha-input").value || null) : null,
         bebe_vivio: yaOcurrio && bebeVivioVal !== "" ? (bebeVivioVal === "true") : null
       });
